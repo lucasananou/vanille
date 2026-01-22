@@ -18,7 +18,7 @@ interface PageProps {
 // Helper to fetch collection
 async function getCollection(slug: string) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/store/collections/${slug}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/store/collections/${slug}`, {
             next: { revalidate: 3600 }
         });
         if (!res.ok) return null;
