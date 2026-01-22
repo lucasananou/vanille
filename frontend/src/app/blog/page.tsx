@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import Image from 'next/image';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
 
 export default function BlogPage() {
@@ -20,10 +21,12 @@ export default function BlogPage() {
                     {BLOG_POSTS.map((post) => (
                         <article key={post.slug} className="group flex flex-col">
                             <Link href={`/${post.slug}`} className="relative h-64 w-full overflow-hidden rounded-lg bg-zinc-100 mb-6">
-                                <img
+                                <Image
                                     src={post.coverImage}
                                     alt={post.title}
-                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 />
                             </Link>
                             <div className="flex flex-col flex-1">

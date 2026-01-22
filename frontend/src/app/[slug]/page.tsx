@@ -4,6 +4,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import Image from 'next/image';
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
 import CollectionPage from '@/components/templates/collection-page';
@@ -123,10 +124,13 @@ export default async function Page({ params }: PageProps) {
                     {/* Cover Image */}
                     <div className="max-w-5xl mx-auto px-6 mb-12">
                         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm">
-                            <img
+                            <Image
                                 src={post.coverImage}
                                 alt={post.title}
-                                className="absolute inset-0 w-full h-full object-cover"
+                                fill
+                                className="object-cover"
+                                sizes="100vw"
+                                priority
                             />
                         </div>
                     </div>
@@ -166,10 +170,12 @@ export default async function Page({ params }: PageProps) {
                                     {relatedPosts.map((related) => (
                                         <Link key={related.slug} href={`/${related.slug}`} className="group block">
                                             <div className="relative aspect-[3/2] overflow-hidden rounded-sm mb-4 bg-zinc-200">
-                                                <img
+                                                <Image
                                                     src={related.coverImage}
                                                     alt={related.title}
-                                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                    fill
+                                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                                    sizes="(max-width: 768px) 100vw, 33vw"
                                                 />
                                             </div>
                                             <h3 className="text-lg font-medium text-zinc-900 group-hover:text-[#a1b8ff] transition-colors mb-2">
