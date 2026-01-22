@@ -108,20 +108,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {!isOutOfStock && (
                         <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20 flex gap-2">
                             <span
-                                role="button"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-
-                                    const hasVariants = (product.variants?.length ?? 0) > 0 || (product.options?.length ?? 0) > 0;
-                                    if (hasVariants) {
-                                        setIsQuickViewOpen(true);
-                                        return;
-                                    }
-
-                                    console.log('Add to cart regarding simple product', product.id);
-                                    // TODO: Implement direct add to cart for simple products
-                                }}
                                 className="flex-1 flex items-center justify-center bg-white text-zinc-900 text-[10px] font-bold uppercase py-3 rounded-sm shadow-lg hover:bg-zinc-50 tracking-widest cursor-pointer"
                             >
                                 {(product.variants?.length ?? 0) > 0 || (product.options?.length ?? 0) > 0

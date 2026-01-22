@@ -2,13 +2,16 @@
 
 // Ensure API_URL has protocol, default to http for localhost
 const getApiUrl = () => {
-    const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    // Production Railway URL
+    const railwayUrl = 'https://tsniout-production.up.railway.app';
+    const envUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    // If URL doesn't start with http:// or https://, add https://
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        return `https://${url}`;
+    // If we are on the production domain, force railway URL if env is not set
+    if (typeof window !== 'undefined' && (window.location.hostname.includes('tsniout-shop.fr') || window.location.hostname.includes('vercel.app'))) {
+        return envUrl || railwayUrl;
     }
-    return url;
+
+    return envUrl || railwayUrl || 'http://localhost:3001';
 };
 
 const API_URL = getApiUrl();

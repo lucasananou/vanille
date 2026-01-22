@@ -9,9 +9,22 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // Enable CORS
-  const corsOrigins = configService.get<string>('CORS_ORIGIN', 'http://localhost:3000,https://tsniout.vercel.app,https://www.tsniout-shop.fr');
+  const corsOrigins = configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
   // Support multiple origins separated by comma
   const allowedOrigins = corsOrigins.split(',').map(origin => origin.trim());
+
+  // Add production domains if not present
+  const productionDomains = [
+    'https://tsniout-shop.fr',
+    'https://www.tsniout-shop.fr',
+    'https://tsniout.vercel.app'
+  ];
+
+  productionDomains.forEach(domain => {
+    if (!allowedOrigins.includes(domain)) {
+      allowedOrigins.push(domain);
+    }
+  });
 
   app.enableCors({
     origin: (origin, callback) => {
