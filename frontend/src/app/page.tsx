@@ -135,6 +135,7 @@ export default async function Home() {
               alt="Mère et fille travaillant dans l'atelier"
               fill
               className="object-cover grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
           <div className="flex flex-col justify-center">

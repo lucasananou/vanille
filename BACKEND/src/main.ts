@@ -9,15 +9,15 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // Enable CORS
-  const corsOrigins = configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
+  const corsOrigins = configService.get<string>('CORS_ORIGIN', 'http://localhost:3000,https://tsniout.vercel.app,https://www.tsniout-shop.fr');
   // Support multiple origins separated by comma
   const allowedOrigins = corsOrigins.split(',').map(origin => origin.trim());
-  
+
   app.enableCors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      
+
       if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
         callback(null, true);
       } else {

@@ -249,6 +249,7 @@ function CategoryTile({ category, onClose }: { category: { name: string, slug: s
                     alt={category.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 50vw, 25vw"
                 />
             ) : (
                 <div className="absolute inset-0 bg-zinc-100 flex items-center justify-center text-zinc-300">

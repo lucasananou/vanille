@@ -75,6 +75,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                                 alt={product.title}
                                 fill
                                 className={`object-cover object-center ${isOutOfStock ? 'opacity-60 grayscale' : ''}`}
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             />
 
                             {/* Secondary Image (Visible on hover) */}
@@ -84,6 +85,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                                     alt={product.title}
                                     fill
                                     className={`object-cover object-center opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100 ${isOutOfStock ? 'grayscale' : ''}`}
+                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                 />
                             )}
                         </>
