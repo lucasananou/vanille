@@ -1,4 +1,4 @@
-import { Controller, Post, Headers, Req, HttpCode } from '@nestjs/common';
+import { Controller, Post, Headers, Req, HttpCode, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
 import Stripe from 'stripe';
@@ -7,17 +7,30 @@ import { OrdersService } from './orders.service';
 @ApiTags('Webhooks')
 @Controller('webhooks')
 export class WebhooksController {
-    private stripe: Stripe;
-    private webhookSecret: string;
+    private stripe: Stripe | null = null;
+    private webhookSecret: string | null = null;
+    private stripeSecretKey: string | null = null;
 
     constructor(
         private ordersService: OrdersService,
         private configService: ConfigService,
     ) {
-        this.stripe = new Stripe(this.configService.get<string>('STRIPE_SECRET_KEY') || '', {
-            apiVersion: '2025-12-15.clover',
-        });
-        this.webhookSecret = this.configService.get<string>('STRIPE_WEBHOOK_SECRET') || '';
+        this.stripeSecretKey = this.configService.get<string>('STRIPE_SECRET_KEY') || null;
+        this.webhookSecret = this.configService.get<string>('STRIPE_WEBHOOK_SECRET') || null;
+    }
+
+    private getStripe(): Stripe {
+        if (!this.stripeSecretKey) {
+            throw new ServiceUnavailableException(
+                'Stripe webhooks are not configured: missing STRIPE_SECRET_KEY environment variable.',
+            );
+        }
+        if (!this.stripe) {
+            this.stripe = new Stripe(this.stripeSecretKey, {
+                apiVersion: '2025-12-15.clover',
+            });
+        }
+        return this.stripe;
     }
 
     @Post('stripe')
@@ -25,9 +38,15 @@ export class WebhooksController {
     async handleStripeWebhook(@Headers('stripe-signature') signature: string, @Req() req: any) {
         let event: Stripe.Event;
 
+        if (!this.webhookSecret) {
+            throw new ServiceUnavailableException(
+                'Stripe webhooks are not configured: missing STRIPE_WEBHOOK_SECRET environment variable.',
+            );
+        }
+
         try {
             // Verify webhook signature
-            event = this.stripe.webhooks.constructEvent(
+            event = this.getStripe().webhooks.constructEvent(
                 req.rawBody || req.body,
                 signature,
                 this.webhookSecret,

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,7 +9,8 @@ import { OrderStatus } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
-    private stripe: Stripe;
+    private stripe: Stripe | null = null;
+    private stripeSecretKey: string | null = null;
 
     constructor(
         private prisma: PrismaService,
@@ -17,9 +18,21 @@ export class OrdersService {
         private cartService: CartService,
         private configService: ConfigService,
     ) {
-        this.stripe = new Stripe(this.configService.get<string>('STRIPE_SECRET_KEY') || '', {
-            apiVersion: '2025-12-15.clover',
-        });
+        this.stripeSecretKey = this.configService.get<string>('STRIPE_SECRET_KEY') || null;
+    }
+
+    private getStripe(): Stripe {
+        if (!this.stripeSecretKey) {
+            throw new ServiceUnavailableException(
+                'Stripe is not configured: missing STRIPE_SECRET_KEY environment variable.',
+            );
+        }
+        if (!this.stripe) {
+            this.stripe = new Stripe(this.stripeSecretKey, {
+                apiVersion: '2025-12-15.clover',
+            });
+        }
+        return this.stripe;
     }
 
     async createOrderFromCart(createOrderDto: CreateOrderDto) {
@@ -155,7 +168,7 @@ export class OrdersService {
     async createPaymentIntent(orderId: string) {
         const order = await this.findOne(orderId);
 
-        const paymentIntent = await this.stripe.paymentIntents.create({
+        const paymentIntent = await this.getStripe().paymentIntents.create({
             amount: order.total,
             currency: 'usd',
             metadata: { orderId: order.id },
