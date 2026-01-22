@@ -36,13 +36,10 @@ export default function ProductGallery({ images, title }: ProductGalleryProps) {
                 className="relative w-full aspect-[4/5] bg-zinc-50 overflow-hidden rounded-sm group cursor-zoom-in"
                 onClick={() => setIsZoomed(true)}
             >
-                <Image
+                <img
                     src={getImageUrl(images[selectedImage])}
                     alt={`${title} - image ${selectedImage + 1}`}
-                    fill
-                    className="object-cover object-center"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 800px"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
                 />
 
                 {/* Index Badge */}
@@ -91,12 +88,10 @@ export default function ProductGallery({ images, title }: ProductGalleryProps) {
                                 : 'hover:opacity-80'
                                 }`}
                         >
-                            <Image
+                            <img
                                 src={getImageUrl(image)}
                                 alt={`${title} mini-${idx + 1}`}
-                                fill
-                                className="object-cover object-center"
-                                sizes="100px"
+                                className="absolute inset-0 h-full w-full object-cover object-center"
                             />
                         </button>
                     ))}
@@ -119,12 +114,10 @@ export default function ProductGallery({ images, title }: ProductGalleryProps) {
 
                     <div className="flex-1 w-full h-full relative flex items-center justify-center bg-white">
                         <div className="relative w-full h-full max-w-5xl max-h-[90vh] p-4">
-                            <Image
+                            <img
                                 src={getImageUrl(images[selectedImage])}
                                 alt={`${title} zoomed`}
-                                fill
-                                className="object-contain"
-                                sizes="100vw"
+                                className="w-full h-full object-contain"
                             />
                         </div>
 
