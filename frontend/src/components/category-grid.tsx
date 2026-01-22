@@ -35,10 +35,12 @@ export default function CategoryGrid() {
                         href={category.href}
                         className="group relative block h-[300px] w-full overflow-hidden bg-zinc-100"
                     >
-                        <img
+                        <Image
                             src={category.image}
                             alt={category.title}
-                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, 33vw"
                         />
 
                         {/* Overlay */}

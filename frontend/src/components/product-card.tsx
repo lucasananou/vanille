@@ -70,18 +70,23 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {product.images && product.images.length > 0 ? (
                         <>
                             {/* Primary Image (Always visible, behind) */}
-                            <img
+                            <Image
                                 src={getImageUrl(product.images[0])}
                                 alt={product.title}
-                                className={`absolute inset-0 h-full w-full object-cover object-center ${isOutOfStock ? 'opacity-60 grayscale' : ''}`}
+                                fill
+                                className={`object-cover object-center ${isOutOfStock ? 'opacity-60 grayscale' : ''}`}
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                loading="lazy"
                             />
 
                             {/* Secondary Image (Visible on hover) */}
                             {product.images[1] && (
-                                <img
+                                <Image
                                     src={getImageUrl(product.images[1])}
                                     alt={product.title}
-                                    className={`absolute inset-0 h-full w-full object-cover object-center opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100 ${isOutOfStock ? 'grayscale' : ''}`}
+                                    fill
+                                    className={`object-cover object-center opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100 ${isOutOfStock ? 'grayscale' : ''}`}
+                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                 />
                             )}
                         </>
