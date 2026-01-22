@@ -32,7 +32,7 @@ import { PaymentsModule } from './payments/payments.module';
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'public'),
+      rootPath: join(__dirname, '..', '..', 'public'),
       serveRoot: '/',
     }),
     PrismaModule,

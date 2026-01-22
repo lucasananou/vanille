@@ -467,11 +467,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <section className="mt-20 border-t border-zinc-100 pt-16">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div className="relative h-[400px] w-full overflow-hidden rounded-sm bg-zinc-100">
-                            <Image
+                            <img
                                 src="/story-image.png"
                                 alt="Mère et fille travaillant dans l'atelier"
-                                fill
-                                className="object-cover grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
+                                className="absolute inset-0 h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
                             />
                         </div>
                         <div className="flex flex-col justify-center">
