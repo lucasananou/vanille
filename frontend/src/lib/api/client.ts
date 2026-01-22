@@ -1,6 +1,16 @@
 // API Client base configuration
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+// Ensure API_URL has protocol, default to http for localhost
+const getApiUrl = () => {
+    const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    // If URL doesn't start with http:// or https://, add https://
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        return `https://${url}`;
+    }
+    return url;
+};
+
+const API_URL = getApiUrl();
 
 export class ApiError extends Error {
     constructor(public statusCode: number, message: string) {
