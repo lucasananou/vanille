@@ -33,7 +33,7 @@ import { PaymentsModule } from './payments/payments.module';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public'),
-      serveRoot: '/public',
+      serveRoot: '/',
     }),
     PrismaModule,
     MailModule,
