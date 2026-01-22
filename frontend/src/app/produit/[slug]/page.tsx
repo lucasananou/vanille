@@ -105,6 +105,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
         return date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
     };
 
+    const HEBREW_NAMES = [
+        "Hanna C.", "Lea V.", "Rachel M.", "Sarah B.", "Rivka L.",
+        "Chana B.", "Esther M.", "Ruth A.", "Miriam S.", "Devorah K.",
+        "Shira P.", "Aviva G.", "Noa K.", "Maya L.", "Talia R.",
+        "Adina S.", "Batsheva D.", "Elisheva F.", "Hadassah T.", "Na'ama J."
+    ];
+
+    const getPersistentName = (id: string) => {
+        let hash = 0;
+        for (let i = 0; i < id.length; i++) {
+            hash = id.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const index = Math.abs(hash) % HEBREW_NAMES.length;
+        return HEBREW_NAMES[index];
+    };
+
     const deliveryStart = getDeliveryDate(4);
     const deliveryEnd = getDeliveryDate(5);
 
@@ -410,7 +426,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                                             <div className="flex justify-between items-start mb-2">
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-base font-bold text-zinc-900">
-                                                        {review.customer ? `${review.customer.firstName} ${review.customer.lastName.charAt(0)}.` : 'Anonyme'}
+                                                        {review.customer ? `${review.customer.firstName} ${review.customer.lastName.charAt(0)}.` : getPersistentName(review.id)}
                                                     </span>
                                                     {review.verifiedPurchase && (
                                                         <span className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded font-medium tracking-tight">Achat vérifié</span>
