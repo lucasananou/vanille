@@ -55,13 +55,10 @@ export default async function Home() {
             </div>
           </div>
           <div className="relative h-96 w-full bg-zinc-200 md:h-auto">
-            <Image
+            <img
               src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2670&auto=format&fit=crop"
               alt="Femme élégante en robe tsniout"
-              fill
-              className="object-cover object-center"
-              priority
-              sizes="(max-width: 768px) 100vw, 50vw"
+              className="absolute inset-0 h-full w-full object-cover object-center"
             />
           </div>
         </div>
@@ -130,12 +127,10 @@ export default async function Home() {
       <section className="bg-zinc-50 py-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2 lg:gap-24 lg:items-center">
           <div className="relative h-[500px] w-full overflow-hidden">
-            <Image
+            <img
               src="/story-image.png"
               alt="Mère et fille travaillant dans l'atelier"
-              fill
-              className="object-cover grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="absolute inset-0 h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
             />
           </div>
           <div className="flex flex-col justify-center">
