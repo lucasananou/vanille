@@ -1,5 +1,6 @@
 [phases.setup]
-nixPkgs = ["nodejs-22_x"]
+# nixpkgs uses attributes like nodejs_18 / nodejs_20 / nodejs_22 (not nodejs-22_x)
+nixPkgs = ["nodejs_22"]
 
 [phases.install]
 cmds = [
