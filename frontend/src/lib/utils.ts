@@ -2,8 +2,8 @@ export function getImageUrl(path: string | undefined | null) {
     if (!path) return '/placeholder.png';
     if (path.startsWith('http')) return path;
 
-    // Fixed production API URL
-    const apiUrl = 'https://www.tsniout-shop.fr';
+    // Use environment variable for API URL
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
     return `${apiUrl}${cleanPath}`;
 }

@@ -2,16 +2,7 @@
 
 // Ensure API_URL has protocol, default to http for localhost
 const getApiUrl = () => {
-    // Priority to production URL, then env, then fallback
-    const productionUrl = 'https://www.tsniout-shop.fr';
-    const envUrl = process.env.NEXT_PUBLIC_API_URL;
-
-    // In production (Vercel), we want the real API
-    if (typeof window !== 'undefined' && window.location.hostname.includes('tsniout')) {
-        return productionUrl;
-    }
-
-    const url = envUrl || productionUrl;
+    const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
     // If URL doesn't start with http:// or https://, add https://
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
