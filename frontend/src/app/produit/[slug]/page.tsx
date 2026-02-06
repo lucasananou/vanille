@@ -308,16 +308,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         <div className="mb-8 bg-zinc-50/70 p-5 rounded-lg border border-zinc-100/50">
                             <div className="space-y-2">
                                 <p className="text-sm text-zinc-600">
-                                    <span className="font-semibold text-zinc-900">Coupe :</span> normale
+                                    <span className="font-semibold text-zinc-900">Coupe :</span> {product.details?.cut || 'normale'}
                                 </p>
                                 <p className="text-sm text-zinc-600 leading-relaxed">
-                                    <span className="font-semibold text-zinc-900">Matière :</span> tissu fluide et agréable à porter ✨
+                                    <span className="font-semibold text-zinc-900">Matière :</span> {product.details?.material || 'tissu fluide et agréable à porter ✨'}
                                 </p>
                                 <p className="text-sm text-zinc-600">
-                                    Le modèle mesure 1m72 et porte du S
+                                    {product.details?.modelInfo || 'Le modèle mesure 1m72 et porte du S'}
                                 </p>
                                 <p className="text-xs text-amber-700 italic flex items-center gap-1.5 pt-1">
-                                    💡 Si tu hésites entre deux tailles : prends la plus grande
+                                    💡 {product.details?.advice || 'Si tu hésites entre deux tailles : prends la plus grande'}
                                 </p>
                             </div>
                         </div>

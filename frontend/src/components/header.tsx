@@ -20,7 +20,7 @@ export default function Header() {
     // Prevent hydration mismatch by rendering a consistent shell on server
     const navLinks = mounted ? (
         <>
-            <Link href="/jupe-longue-tsniout" className="hover:text-zinc-900 transition-colors">Jupe Tsniout</Link>
+            <Link href="/jupe-tsniout" className="hover:text-zinc-900 transition-colors">Jupe Tsniout</Link>
             <Link href="/robe-tsniout" className="hover:text-zinc-900 transition-colors">Robe Tsniout</Link>
             <Link href="/veste-tsniout" className="hover:text-zinc-900 transition-colors">Veste Tsniout</Link>
             <Link href="/pull-chemisier" className="hover:text-zinc-900 transition-colors">Pull</Link>

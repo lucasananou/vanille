@@ -29,6 +29,12 @@ export interface Product {
     variants?: ProductVariant[];
     options?: ProductOption[];
     reviews?: Review[];
+    details?: {
+        cut?: string;
+        material?: string;
+        modelInfo?: string;
+        advice?: string;
+    };
 }
 
 export interface ProductOption {

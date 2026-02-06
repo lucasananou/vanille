@@ -93,6 +93,11 @@ export class CreateProductDto {
     @Type(() => ProductVariantDto)
     @IsOptional()
     variants?: ProductVariantDto[];
+
+    @ApiPropertyOptional({ example: { cut: 'normal', material: 'cotton' } })
+    @IsObject()
+    @IsOptional()
+    details?: Record<string, any>;
 }
 
 export class ProductOptionDto {
