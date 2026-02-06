@@ -1,85 +1,88 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import MobileMenu from './mobile-menu';
-import CartButton from './cart-button';
+import { useCart } from '@/lib/cart-context';
+import { useState, useEffect } from 'react';
 
-import SearchOverlay from './search-overlay';
+const VanillaIcon = () => (
+    <svg className="w-5 h-5 text-gold-500" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+    </svg>
+);
+
+const CartIcon = () => (
+    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    </svg>
+);
+
+const ArrowRightIcon = () => (
+    <svg className="w-4 h-4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
+    </svg>
+);
 
 export default function Header() {
-    const [mounted, setMounted] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const { itemCount, openCart } = useCart();
+    const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Prevent hydration mismatch by rendering a consistent shell on server
-    const navLinks = mounted ? (
-        <>
-            <Link href="/jupe-tsniout" className="hover:text-zinc-900 transition-colors">Jupe Tsniout</Link>
-            <Link href="/robe-tsniout" className="hover:text-zinc-900 transition-colors">Robe Tsniout</Link>
-            <Link href="/veste-tsniout" className="hover:text-zinc-900 transition-colors">Veste Tsniout</Link>
-            <Link href="/pull-chemisier" className="hover:text-zinc-900 transition-colors">Pull</Link>
-            <Link href="/chemisier" className="hover:text-zinc-900 transition-colors">Chemisier</Link>
-            <Link href="/collier" className="hover:text-zinc-900 transition-colors">Bijoux</Link>
-            <Link href="/blog" className="hover:text-[#a1b8ff] transition-colors font-medium">Blog</Link>
-        </>
-    ) : null;
     return (
-        <>
-            <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
-            <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-            <nav className="sticky top-0 z-50 w-full border-b border-zinc-100 bg-white/90 backdrop-blur-xl">
-                <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-                    {/* Mobile Menu */}
-                    <button
-                        className="block lg:hidden text-zinc-500 hover:text-zinc-900"
-                        onClick={() => setIsMobileMenuOpen(true)}
-                    >
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+        <header className={`sticky top-0 z-50 transition-all duration-300 border-b ${scrolled
+            ? 'bg-jungle-900/80 backdrop-blur border-vanilla-100/10 py-2'
+            : 'bg-transparent border-transparent py-4'
+            } text-vanilla-50`}>
+            <div className="mx-auto max-w-7xl px-4 flex items-center justify-between gap-3">
+                {/* Brand */}
+                <Link href="/" className="flex items-center gap-3 rounded-2xl px-2 py-1 focus-ring group">
+                    <div className="w-10 h-10 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center transition-all duration-300">
+                        <VanillaIcon />
+                    </div>
+                    <div className="leading-tight">
+                        <p className="font-display text-lg">MSV Nosy-Be</p>
+                        <p className="text-xs text-vanilla-100/70">Vanille de Madagascar</p>
+                    </div>
+                </Link>
 
-                    {/* Brand Logo */}
-                    <Link href="/" className="flex items-center group">
-                        <Image
-                            src="/logo.png"
-                            alt="Tsniout - Marque israélienne"
-                            width={180}
-                            height={60}
-                            className="object-contain"
-                        />
+                {/* Nav */}
+                <nav className="hidden lg:flex items-center gap-1 text-sm font-medium" aria-label="Navigation principale">
+                    <Link className="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="/">Accueil</Link>
+                    <Link className="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="/shop">Boutique</Link>
+                    <Link className="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="/about">À propos</Link>
+                    <Link className="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="/contact">Contact</Link>
+                </nav>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2">
+                    <Link href="/shop" className="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                        Boutique
+                        <ArrowRightIcon />
                     </Link>
 
-                    {/* Desktop Navigation Links */}
-                    <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-zinc-500">
-                        {navLinks}
-                    </div>
-
-                    {/* User Actions */}
-                    <div className="flex items-center gap-5">
-                        <button
-                            className="hidden sm:block p-1 text-zinc-400 hover:text-zinc-900 transition-colors"
-                            onClick={() => setIsSearchOpen(true)}
-                        >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </button>
-                        <Link href="/account" className="hidden sm:block p-1 text-zinc-400 hover:text-zinc-900 transition-colors">
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                        </Link>
-                        <CartButton />
-                    </div>
+                    {/* Cart button */}
+                    <button
+                        onClick={openCart}
+                        className="relative inline-flex items-center justify-center w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+                        aria-label="Ouvrir le panier"
+                    >
+                        <CartIcon />
+                        <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold grid place-items-center
+                                 bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900">
+                            {itemCount}
+                        </span>
+                    </button>
                 </div>
-            </nav>
-        </>
+            </div>
+        </header>
     );
 }

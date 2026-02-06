@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0E1B14" />
+  <title>MSV Nosy-Be — Vanille de Madagascar (Accueil)</title>
+  <meta name="description"
+    content="Vanille de Nosy-Be (Madagascar) — arôme intense, sélection TK (Noir) / Gourmet, conditionnement premium. Découvrez la boutique." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          },
+          colors: {
+            obsidian: '#07100C',
+            jungle: {
+              950: '#06110D',
+              900: '#0E1B14',
+              800: '#13261C',
+              700: '#183023',
+              600: '#1E3C2B',
+            },
+            vanilla: {
+              50: '#FBF7EF',
+              100: '#F6EEDC',
+              200: '#EEDDBD',
+              300: '#E2CFA7',
+            },
+            cacao: {
+              900: '#1A1210',
+              800: '#2A1F1A',
+              700: '#3C2E27',
+              600: '#5A514A',
+            },
+            gold: {
+              500: '#D7A84A',
+              600: '#C79637',
+              700: '#B6842B',
+            }
+          },
+          boxShadow: {
+            soft: '0 14px 40px rgba(7,16,12,.18)',
+            lift: '0 22px 70px rgba(7,16,12,.28)',
+            glow: '0 0 0 1px rgba(215,168,74,.22), 0 18px 60px rgba(215,168,74,.18)',
+          },
+          borderRadius: {
+            xxl: '1.5rem',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Icons -->
+  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+  <style>
+    /* Subtle grain without images */
+    .grain::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
+      background-size: 3px 3px;
+      opacity: .14;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    .shine {
+      background: radial-gradient(1200px 420px at 20% 10%, rgba(215, 168, 74, .24), transparent 55%),
+        radial-gradient(900px 420px at 80% 15%, rgba(246, 238, 220, .10), transparent 60%),
+        radial-gradient(900px 540px at 70% 90%, rgba(215, 168, 74, .14), transparent 60%),
+        linear-gradient(180deg, rgba(14, 27, 20, .96), rgba(14, 27, 20, .86));
+    }
+
+    .glass {
+      background: rgba(246, 238, 220, .06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(246, 238, 220, .16);
+    }
+
+    .focus-ring:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(215, 168, 74, .35);
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .rm-anim {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      html:focus-within {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+
+  <!-- Optional: JSON-LD (edit with real info) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"MSV Nosy-Be",
+    "url":"https://msvanillenosybe.com/",
+    "sameAs":[
+      "https://www.instagram.com/",
+      "https://www.facebook.com/"
+    ]
+  }
+  </script>
+</head>
+
+<body class="bg-jungle-900 text-vanilla-50 font-sans antialiased">
+
+  <!-- Skip link -->
+  <a href="#content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-vanilla-50 focus:text-jungle-900 focus:px-4 focus:py-2 focus:rounded-full">
+    Aller au contenu
+  </a>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 border-b border-vanilla-100/10 bg-jungle-900/70 backdrop-blur">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-3 group focus-ring rounded-2xl px-2 py-1">
+        <div
+          class="w-10 h-10 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center  group-hover: transition rm-anim">
+          <span class="iconify text-gold-500 text-xl" data-icon="mdi:vanilla"></span>
+        </div>
+        <div class="leading-tight">
+          <p class="font-display text-lg text-vanilla-50">MSV Nosy-Be</p>
+          <p class="text-xs text-vanilla-100/70">Vanille de Madagascar</p>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1 text-sm" aria-label="Navigation principale">
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="#signature">Signature</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="#collection">Collection</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="#terroir">Terroir</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="#avis">Avis</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="shop.html"
+          class="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+          Boutique
+          <span class="iconify" data-icon="mdi:arrow-right"></span>
+        </a>
+
+        <button id="btnMenu"
+          class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+          aria-expanded="false" aria-controls="mobileMenu" aria-label="Ouvrir le menu">
+          <span class="iconify text-vanilla-50 text-xl" data-icon="mdi:menu"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div id="overlay" class="hidden fixed inset-0 bg-obsidian/60 z-50"></div>
+  <aside id="mobileMenu"
+    class="fixed right-0 top-0 bottom-0 w-[86%] max-w-sm translate-x-full z-[60] transition rm-anim bg-jungle-900 border-l border-vanilla-100/10">
+    <div class="p-5 flex items-center justify-between border-b border-vanilla-100/10">
+      <p class="font-display text-xl">Menu</p>
+      <button id="btnClose" class="w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+        aria-label="Fermer le menu">
+        <span class="iconify text-xl" data-icon="mdi:close"></span>
+      </button>
+    </div>
+    <nav class="p-5 space-y-2">
+      <a class="block px-4 py-3 rounded-2xl glass hover:bg-vanilla-50/10 focus-ring" href="#signature">Signature</a>
+      <a class="block px-4 py-3 rounded-2xl glass hover:bg-vanilla-50/10 focus-ring" href="#collection">Collection</a>
+      <a class="block px-4 py-3 rounded-2xl glass hover:bg-vanilla-50/10 focus-ring" href="#terroir">Terroir</a>
+      <a class="block px-4 py-3 rounded-2xl glass hover:bg-vanilla-50/10 focus-ring" href="#avis">Avis</a>
+      <a class="block px-4 py-3 rounded-2xl bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 font-semibold  focus-ring"
+        href="shop.html">
+        Aller à la boutique
+      </a>
+    </nav>
+  </aside>
+
+  <main id="content">
+
+    <!-- HERO (Exotic / Premium) -->
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 shine grain" aria-hidden="true"></div>
+
+      <!-- Decorative halos -->
+      <div
+        class="absolute -top-24 -left-24 w-[34rem] h-[34rem] rounded-full bg-gold-500/10 blur-3xl rm-anim animate-[pulse_7s_ease-in-out_infinite]">
+      </div>
+      <div
+        class="absolute -bottom-36 -right-28 w-[40rem] h-[40rem] rounded-full bg-vanilla-50/10 blur-3xl rm-anim animate-[pulse_9s_ease-in-out_infinite]">
+      </div>
+
+      <div class="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-20 lg:pb-24">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+
+          <!-- Copy -->
+          <div>
+            <div class="inline-flex items-center gap-2 rounded-full glass px-4 py-2 ">
+              <span class="iconify text-gold-500" data-icon="mdi:sparkles"></span>
+              <span class="text-sm font-semibold">Nosy-Be • Madagascar</span>
+              <span class="text-sm text-vanilla-100/70">• Arôme intense & raffiné</span>
+            </div>
+
+            <h1 class="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl leading-[1.05]">
+              La vanille qui
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">transforme</span>
+              vos desserts.
+            </h1>
+
+            <p class="mt-5 text-lg text-vanilla-100/80 max-w-xl">
+              Gousses sélectionnées (TK Noir / Gourmet selon lots), conditionnement premium,
+              pensées pour la pâtisserie, l’extrait maison et les cadeaux gourmands.
+            </p>
+
+            <div class="mt-7 flex flex-col sm:flex-row gap-3">
+              <a href="shop.html"
+                class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+                Découvrir la boutique
+                <span class="iconify" data-icon="mdi:arrow-right"></span>
+              </a>
+              <a href="#collection"
+                class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring">
+                Voir la sélection
+                <span class="iconify" data-icon="mdi:compass-outline"></span>
+              </a>
+            </div>
+
+            <!-- Micro trust row -->
+            <div class="mt-8 grid sm:grid-cols-3 gap-3 max-w-xl">
+              <div class="rounded-2xl glass p-4 ">
+                <p class="text-xs text-vanilla-100/70">Qualité</p>
+                <p class="mt-1 font-semibold">TK Noir / Gourmet</p>
+              </div>
+              <div class="rounded-2xl glass p-4 ">
+                <p class="text-xs text-vanilla-100/70">Conditionnement</p>
+                <p class="mt-1 font-semibold">Sous-vide / Tube</p>
+              </div>
+              <div class="rounded-2xl glass p-4 ">
+                <p class="text-xs text-vanilla-100/70">Tailles</p>
+                <p class="mt-1 font-semibold">10–18 cm</p>
+              </div>
+            </div>
+
+            <p class="mt-4 text-xs text-vanilla-100/60">
+              * Remplace/valide chaque affirmation (naturel, taux de vanilline, etc.) selon vos preuves et fiches
+              produit.
+            </p>
+          </div>
+
+          <!-- Visual block (exotic packshot style) -->
+          <div class="relative">
+            <div
+              class="rounded-[28px] border border-vanilla-100/15  overflow-hidden bg-gradient-to-b from-vanilla-50/10 to-jungle-900/10">
+              <!-- Replace with real hero image -->
+              <div class="aspect-[4/3] relative">
+                <img src="assets/hero-vanille.jpg" alt="Photo macro de gousses de vanille (à remplacer)"
+                  class="absolute inset-0 w-full h-full object-cover opacity-80"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+                <div style="display:none"
+                  class="absolute inset-0 grid place-items-center bg-gradient-to-b from-vanilla-50/10 to-jungle-900/20">
+                  <div class="text-center px-8">
+                    <div
+                      class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 ">
+                      <span class="iconify text-gold-500 text-3xl" data-icon="mdi:camera-outline"></span>
+                    </div>
+                    <p class="mt-4 text-sm font-semibold">Visuel hero (placeholder)</p>
+                    <p class="text-xs text-vanilla-100/70 mt-1">Ajoutez une photo macro très premium.</p>
+                  </div>
+                </div>
+
+                <!-- Floating chips -->
+                <div class="absolute inset-0 p-5">
+                  <div
+                    class="absolute top-5 left-5 rounded-2xl glass px-4 py-3  rm-anim animate-[float_7s_ease-in-out_infinite]">
+                    <p class="text-xs text-vanilla-100/70">Profil</p>
+                    <p class="text-sm font-semibold">Gourmand • Chaud • Floral</p>
+                  </div>
+                  <div
+                    class="absolute bottom-5 left-5 rounded-2xl glass px-4 py-3  rm-anim animate-[float_8s_ease-in-out_infinite] [animation-delay:-1.3s]">
+                    <p class="text-xs text-vanilla-100/70">Origine</p>
+                    <p class="text-sm font-semibold">Terroir de Nosy-Be</p>
+                  </div>
+                  <div
+                    class="absolute bottom-5 right-5 rounded-2xl bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 px-4 py-3  rm-anim animate-[float_9s_ease-in-out_infinite] [animation-delay:-2.1s]">
+                    <p class="text-xs/none font-semibold">Sélection</p>
+                    <p class="text-sm font-extrabold mt-1">TK Noir / Gourmet</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-6 border-t border-vanilla-100/10">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <span class="iconify text-gold-500 text-xl" data-icon="mdi:seal-variant"></span>
+                    <p class="text-sm text-vanilla-100/80">
+                      Packshot + macro = effet “luxe immédiat”.
+                      <span class="text-vanilla-50 font-semibold">C’est là que le site passe à 10k€.</span>
+                    </p>
+                  </div>
+                  <a href="#signature"
+                    class="hidden sm:inline-flex items-center gap-2 text-sm font-semibold hover:underline focus-ring rounded-full px-3 py-2">
+                    Voir la signature <span class="iconify" data-icon="mdi:arrow-down"></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Decorative leaf stroke -->
+            <div class="pointer-events-none absolute -right-10 -top-10 opacity-30 blur-[1px]" aria-hidden="true">
+              <svg width="260" height="260" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M210 60C175 70 148 92 124 126C100 160 86 188 52 210" stroke="#D7A84A" stroke-width="2"
+                  stroke-linecap="round" />
+                <path d="M208 62C180 102 164 132 150 162C136 192 112 214 80 230" stroke="#F6EEDC" stroke-opacity=".55"
+                  stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SIGNATURE -->
+    <section id="signature" class="bg-vanilla-50 text-cacao-900">
+      <div class="mx-auto max-w-7xl px-4 py-16">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+          <div>
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-cacao-800/80">
+              <span class="iconify text-gold-600" data-icon="mdi:leaf"></span>
+              Signature MSV Nosy-Be
+            </p>
+            <h2 class="mt-3 font-display text-3xl sm:text-4xl">
+              Une vanille <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-cacao-900">exigeante</span>.
+              Un rendu <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-cacao-900 to-gold-600">inoubliable</span>.
+            </h2>
+            <p class="mt-4 text-cacao-600 max-w-2xl">
+              Ici, on vend une sensation : l’odeur, la chaleur, le “wow” à l’ouverture du tube.
+              Remplace ce texte par tes preuves (analyses, photos, process, traçabilité).
+            </p>
+          </div>
+
+          <a href="shop.html"
+            class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+            Voir les produits
+            <span class="iconify" data-icon="mdi:storefront-outline"></span>
+          </a>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <!-- Card -->
+          <article
+            class="rounded-xxl bg-white border border-vanilla-200  p-6 hover: transition rm-anim">
+            <div class="w-12 h-12 rounded-2xl bg-vanilla-100 border border-vanilla-200 grid place-items-center">
+              <span class="iconify text-jungle-800 text-2xl" data-icon="mdi:shield-star-outline"></span>
+            </div>
+            <h3 class="mt-4 font-display text-xl">Sélection qualité</h3>
+            <p class="mt-2 text-sm text-cacao-600">TK (Noir) / Gourmet selon lots. Tri + contrôle (à détailler).</p>
+          </article>
+
+          <article
+            class="rounded-xxl bg-white border border-vanilla-200  p-6 hover: transition rm-anim">
+            <div class="w-12 h-12 rounded-2xl bg-vanilla-100 border border-vanilla-200 grid place-items-center">
+              <span class="iconify text-jungle-800 text-2xl" data-icon="mdi:archive-outline"></span>
+            </div>
+            <h3 class="mt-4 font-display text-xl">Conservation premium</h3>
+            <p class="mt-2 text-sm text-cacao-600">Sous-vide pour stabilité, tube pour l’expérience cadeau.</p>
+          </article>
+
+          <article
+            class="rounded-xxl bg-white border border-vanilla-200  p-6 hover: transition rm-anim">
+            <div class="w-12 h-12 rounded-2xl bg-vanilla-100 border border-vanilla-200 grid place-items-center">
+              <span class="iconify text-jungle-800 text-2xl" data-icon="mdi:flask-outline"></span>
+            </div>
+            <h3 class="mt-4 font-display text-xl">Riche en arômes</h3>
+            <p class="mt-2 text-sm text-cacao-600">Un parfum chaud & intense (ajoute tes données si tu en as).</p>
+          </article>
+
+          <article
+            class="rounded-xxl bg-white border border-vanilla-200  p-6 hover: transition rm-anim">
+            <div class="w-12 h-12 rounded-2xl bg-vanilla-100 border border-vanilla-200 grid place-items-center">
+              <span class="iconify text-jungle-800 text-2xl" data-icon="mdi:silverware-fork-knife"></span>
+            </div>
+            <h3 class="mt-4 font-display text-xl">Pensée cuisine</h3>
+            <p class="mt-2 text-sm text-cacao-600">Pâtisserie, glaces, rhum arrangé, extrait maison.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLLECTION -->
+    <section id="collection" class="relative bg-jungle-900">
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div
+          class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-vanilla-100/20 to-transparent">
+        </div>
+      </div>
+
+      <div class="mx-auto max-w-7xl px-4 py-16">
+        <div class="grid lg:grid-cols-2 gap-8 items-end">
+          <div>
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
+              <span class="iconify text-gold-500" data-icon="mdi:diamonds"></span>
+              Collection
+            </p>
+            <h2 class="mt-3 font-display text-3xl sm:text-4xl">Choisis ta longueur. Ressens la différence.</h2>
+            <p class="mt-4 text-vanilla-100/75 max-w-2xl">
+              Une grille simple : plus c’est long, plus c’est premium (et parfait en cadeau).
+              Ajuste ces cartes avec tes vrais prix, photos et stocks.
+            </p>
+          </div>
+
+          <div class="flex lg:justify-end">
+            <a href="shop.html"
+              class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+              Aller à la boutique
+              <span class="iconify" data-icon="mdi:arrow-right"></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <!-- Product card -->
+          <article
+            class="group rounded-xxl border border-vanilla-100/12 bg-vanilla-50/5  hover: transition rm-anim overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs text-vanilla-100/70">10–13 cm</p>
+                  <h3 class="mt-2 font-display text-2xl">TK Noir</h3>
+                  <p class="mt-2 text-sm text-vanilla-100/75">Usage quotidien, desserts, infusion.</p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 grid place-items-center">
+                  <span class="iconify text-gold-500 text-2xl" data-icon="mdi:ruler"></span>
+                </div>
+              </div>
+
+              <ul class="mt-5 space-y-2 text-sm text-vanilla-100/80">
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Sous-vide ou Tube</li>
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Arôme gourmand</li>
+              </ul>
+
+              <div class="mt-6 flex gap-3">
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+                  Voir
+                  <span class="iconify" data-icon="mdi:arrow-right"></span>
+                </a>
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  focus-ring">
+                  Acheter
+                </a>
+              </div>
+            </div>
+            <div
+              class="h-1 bg-gradient-to-r from-transparent via-gold-500/80 to-transparent opacity-0 group-hover:opacity-100 transition rm-anim">
+            </div>
+          </article>
+
+          <article
+            class="group rounded-xxl border border-vanilla-100/12 bg-vanilla-50/5  hover: transition rm-anim overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs text-vanilla-100/70">14–15 cm</p>
+                  <h3 class="mt-2 font-display text-2xl">L’équilibre</h3>
+                  <p class="mt-2 text-sm text-vanilla-100/75">Le best-seller : pâtisserie & extrait maison.</p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 grid place-items-center">
+                  <span class="iconify text-gold-500 text-2xl" data-icon="mdi:star-four-points-outline"></span>
+                </div>
+              </div>
+              <ul class="mt-5 space-y-2 text-sm text-vanilla-100/80">
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Souple & parfumée</li>
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Tube parfait en cadeau</li>
+              </ul>
+              <div class="mt-6 flex gap-3">
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+                  Voir
+                  <span class="iconify" data-icon="mdi:arrow-right"></span>
+                </a>
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  focus-ring">
+                  Acheter
+                </a>
+              </div>
+            </div>
+            <div
+              class="h-1 bg-gradient-to-r from-transparent via-gold-500/80 to-transparent opacity-0 group-hover:opacity-100 transition rm-anim">
+            </div>
+          </article>
+
+          <article
+            class="group rounded-xxl border border-vanilla-100/12 bg-vanilla-50/5  hover: transition rm-anim overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs text-vanilla-100/70">16 cm</p>
+                  <h3 class="mt-2 font-display text-2xl">Pâtisserie fine</h3>
+                  <p class="mt-2 text-sm text-vanilla-100/75">Pour entremets, crèmes, glaces.</p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 grid place-items-center">
+                  <span class="iconify text-gold-500 text-2xl" data-icon="mdi:silverware-variant"></span>
+                </div>
+              </div>
+              <ul class="mt-5 space-y-2 text-sm text-vanilla-100/80">
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Intensité aromatique</li>
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Présentation premium</li>
+              </ul>
+              <div class="mt-6 flex gap-3">
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+                  Voir
+                  <span class="iconify" data-icon="mdi:arrow-right"></span>
+                </a>
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  focus-ring">
+                  Acheter
+                </a>
+              </div>
+            </div>
+            <div
+              class="h-1 bg-gradient-to-r from-transparent via-gold-500/80 to-transparent opacity-0 group-hover:opacity-100 transition rm-anim">
+            </div>
+          </article>
+
+          <article
+            class="group rounded-xxl border border-vanilla-100/12 bg-gradient-to-b from-gold-500/15 to-vanilla-50/5  hover: transition rm-anim overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs text-vanilla-100/70">17–18 cm</p>
+                  <h3 class="mt-2 font-display text-2xl">Le premium</h3>
+                  <p class="mt-2 text-sm text-vanilla-100/75">Le “wow” immédiat à l’ouverture du tube.</p>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 grid place-items-center">
+                  <span class="iconify text-gold-500 text-2xl" data-icon="mdi:gift-outline"></span>
+                </div>
+              </div>
+              <ul class="mt-5 space-y-2 text-sm text-vanilla-100/80">
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Cadeau gourmand</li>
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Pour chefs & passionnés</li>
+              </ul>
+              <div class="mt-6 flex gap-3">
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+                  Voir
+                  <span class="iconify" data-icon="mdi:arrow-right"></span>
+                </a>
+                <a href="shop.html"
+                  class="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  focus-ring">
+                  Acheter
+                </a>
+              </div>
+            </div>
+            <div class="h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-60"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TERROIR / STORY -->
+    <section id="terroir" class="bg-vanilla-50 text-cacao-900">
+      <div class="mx-auto max-w-7xl px-4 py-16">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-cacao-800/80">
+              <span class="iconify text-gold-600" data-icon="mdi:map-marker-radius-outline"></span>
+              Terroir & histoire
+            </p>
+            <h2 class="mt-3 font-display text-3xl sm:text-4xl">Nosy-Be, l’île qui parfume tout.</h2>
+            <p class="mt-4 text-cacao-600">
+              Ici tu racontes le vrai : culture, récolte, affinage, tri, et ce qui rend votre vanille différente.
+              Le texte doit être concret (preuves, photos, étapes). C’est ce qui fait “site premium”.
+            </p>
+
+            <div class="mt-6 grid sm:grid-cols-2 gap-4">
+              <div class="rounded-xxl bg-white border border-vanilla-200  p-5">
+                <p class="text-sm font-semibold flex items-center gap-2">
+                  <span class="iconify text-jungle-800" data-icon="mdi:hand-heart-outline"></span>
+                  Filière & engagement
+                </p>
+                <p class="mt-2 text-sm text-cacao-600">Explique qui produit, comment, et pourquoi ça compte.</p>
+              </div>
+              <div class="rounded-xxl bg-white border border-vanilla-200  p-5">
+                <p class="text-sm font-semibold flex items-center gap-2">
+                  <span class="iconify text-jungle-800" data-icon="mdi:calendar-check-outline"></span>
+                  Affinage
+                </p>
+                <p class="mt-2 text-sm text-cacao-600">Décris le temps, les contrôles, et la constance.</p>
+              </div>
+            </div>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+              <a href="about.html"
+                class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-cacao-900 bg-white border border-vanilla-200  hover: transition rm-anim focus-ring">
+                Lire l’histoire
+                <span class="iconify" data-icon="mdi:book-open-outline"></span>
+              </a>
+              <a href="shop.html"
+                class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+                Acheter maintenant
+                <span class="iconify" data-icon="mdi:arrow-right"></span>
+              </a>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div
+              class="rounded-[28px] bg-jungle-900 text-vanilla-50 border border-jungle-800  overflow-hidden">
+              <div class="p-6">
+                <p class="text-sm font-semibold text-vanilla-100/80">Le process (à personnaliser)</p>
+                <h3 class="mt-2 font-display text-2xl">De la fleur au tube.</h3>
+              </div>
+              <div class="px-6 pb-6 grid gap-3">
+                <div class="rounded-2xl bg-vanilla-50/7 border border-vanilla-100/12 p-4">
+                  <p class="text-sm font-semibold flex items-center gap-2">
+                    <span class="iconify text-gold-500" data-icon="mdi:flower-outline"></span> Pollinisation & récolte
+                  </p>
+                  <p class="mt-2 text-sm text-vanilla-100/75">Décris l’artisanat et la période.</p>
+                </div>
+                <div class="rounded-2xl bg-vanilla-50/7 border border-vanilla-100/12 p-4">
+                  <p class="text-sm font-semibold flex items-center gap-2">
+                    <span class="iconify text-gold-500" data-icon="mdi:fireplace"></span> Étuvage & séchage
+                  </p>
+                  <p class="mt-2 text-sm text-vanilla-100/75">Décris les étapes (photos = impact premium).</p>
+                </div>
+                <div class="rounded-2xl bg-vanilla-50/7 border border-vanilla-100/12 p-4">
+                  <p class="text-sm font-semibold flex items-center gap-2">
+                    <span class="iconify text-gold-500" data-icon="mdi:shield-check-outline"></span> Tri & sélection
+                  </p>
+                  <p class="mt-2 text-sm text-vanilla-100/75">Explique TK/Gourmet, critères, contrôle.</p>
+                </div>
+              </div>
+              <div class="border-t border-vanilla-100/10 p-6 flex items-center justify-between gap-4">
+                <p class="text-sm text-vanilla-100/75">Ajoute une vidéo courte : coupe d’une gousse → grains.</p>
+                <a href="contact.html" class="text-sm font-semibold hover:underline focus-ring rounded-full px-3 py-2">
+                  Demander conseil
+                </a>
+              </div>
+            </div>
+
+            <div
+              class="absolute -bottom-8 -left-8 w-44 h-44 rounded-full bg-gold-500/12 blur-2xl rm-anim animate-[pulse_7s_ease-in-out_infinite]"
+              aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section id="avis" class="bg-jungle-900">
+      <div class="mx-auto max-w-7xl px-4 py-16">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+          <div>
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
+              <span class="iconify text-gold-500" data-icon="mdi:comment-quote-outline"></span>
+              Preuve sociale
+            </p>
+            <h2 class="mt-3 font-display text-3xl sm:text-4xl">Quand la vanille devient une addiction.</h2>
+            <p class="mt-4 text-vanilla-100/75 max-w-2xl">
+              Remplace ces témoignages par de vrais avis clients (avec source).
+              Un site “10k€” = preuves + photos + cohérence visuelle.
+            </p>
+          </div>
+          <div class="rounded-xxl glass px-5 py-4 ">
+            <p class="text-xs text-vanilla-100/70">Note</p>
+            <p class="text-lg font-semibold flex items-center gap-2">
+              ★★★★☆ <span class="text-vanilla-100/75 text-sm font-medium">(placeholder)</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-3 gap-6">
+          <article class="rounded-xxl glass p-6  hover: transition rm-anim">
+            <p class="text-sm text-vanilla-100/85">“Parfum incroyable. On sent la différence dès la première crème.”</p>
+            <p class="mt-4 text-sm font-semibold">— Client(e) #1</p>
+            <p class="text-xs text-vanilla-100/60 mt-1">Pâtisserie maison</p>
+          </article>
+          <article class="rounded-xxl glass p-6  hover: transition rm-anim">
+            <p class="text-sm text-vanilla-100/85">“Le tube fait vraiment cadeau premium. Service impeccable.”</p>
+            <p class="mt-4 text-sm font-semibold">— Client(e) #2</p>
+            <p class="text-xs text-vanilla-100/60 mt-1">Cadeau gourmand</p>
+          </article>
+          <article class="rounded-xxl glass p-6  hover: transition rm-anim">
+            <p class="text-sm text-vanilla-100/85">“Idéal pour extrait maison. Résultat puissant, très rond.”</p>
+            <p class="mt-4 text-sm font-semibold">— Client(e) #3</p>
+            <p class="text-xs text-vanilla-100/60 mt-1">Extrait / rhum arrangé</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-obsidian via-jungle-900 to-jungle-900" aria-hidden="true">
+      </div>
+      <div class="absolute inset-0 grain opacity-60" aria-hidden="true"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 py-16">
+        <div
+          class="rounded-[28px] border border-vanilla-100/12 bg-gradient-to-b from-vanilla-50/8 to-vanilla-50/4  overflow-hidden">
+          <div class="p-8 lg:p-12 grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <p class="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
+                <span class="iconify text-gold-500" data-icon="mdi:sparkles"></span>
+                Prêt à passer au niveau au-dessus ?
+              </p>
+              <h2 class="mt-3 font-display text-3xl sm:text-4xl">
+                Faites sentir la vanille <span
+                  class="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 to-vanilla-100">avant</span> même
+                de goûter.
+              </h2>
+              <p class="mt-4 text-vanilla-100/75">
+                Clique, choisis ta longueur, et reçois une vanille qui change tout.
+              </p>
+
+              <div class="mt-7 flex flex-col sm:flex-row gap-3">
+                <a href="shop.html"
+                  class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+                  Acheter maintenant
+                  <span class="iconify" data-icon="mdi:arrow-right"></span>
+                </a>
+                <a href="contact.html"
+                  class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring">
+                  Besoin d’un conseil ?
+                  <span class="iconify" data-icon="mdi:message-text-outline"></span>
+                </a>
+              </div>
+            </div>
+
+            <div class="rounded-xxl bg-vanilla-50/6 border border-vanilla-100/12 p-6 ">
+              <p class="text-sm font-semibold text-vanilla-50">Pour un rendu “10k€” assuré :</p>
+              <ul class="mt-4 space-y-3 text-sm text-vanilla-100/80">
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> 6–10 photos macro ultra premium (packshot + grains).
+                </li>
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> 1 vidéo courte (coupe → grains → infusion).</li>
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Des preuves : analyses, process, traçabilité, avis.
+                </li>
+                <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                    data-icon="mdi:check-circle-outline"></span> Une page “Marque / Histoire” béton + FAQ livraison.
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-vanilla-100/10 bg-jungle-900">
+    <div class="mx-auto max-w-7xl px-4 py-10">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <p class="font-display text-xl">MSV Nosy-Be</p>
+          <p class="mt-2 text-sm text-vanilla-100/70">Vanille de Madagascar — expérience premium.</p>
+          <div class="mt-4 inline-flex items-center gap-2 text-sm text-vanilla-100/80">
+            <span class="iconify text-gold-500" data-icon="mdi:leaf"></span>
+            <span>Remplace par tes engagements (certif, etc.).</span>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm font-semibold">Liens</p>
+          <ul class="mt-3 space-y-2 text-sm text-vanilla-100/70">
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="shop.html">Boutique</a></li>
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="about.html">À propos</a></li>
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold">Infos</p>
+          <ul class="mt-3 space-y-2 text-sm text-vanilla-100/70">
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="#">Livraison (à créer)</a></li>
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="#">Retours (à créer)</a></li>
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="#">FAQ (à créer)</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold">Réseaux</p>
+          <ul class="mt-3 space-y-2 text-sm text-vanilla-100/70">
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="#"
+                aria-disabled="true">Instagram (lien)</a></li>
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="#"
+                aria-disabled="true">Facebook (lien)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="mt-10 pt-6 border-t border-vanilla-100/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <p class="text-xs text-vanilla-100/60">© <span id="year"></span> MSV Nosy-Be • Design premium (template). À
+          personnaliser avec vos contenus réels.</p>
+        <p class="text-xs text-vanilla-100/60">Site : <span class="text-vanilla-50/90">version home only</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu
+    const btnMenu = document.getElementById('btnMenu');
+    const btnClose = document.getElementById('btnClose');
+    const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('overlay');
+
+    function openMenu() {
+      menu.classList.remove('translate-x-full');
+      overlay.classList.remove('hidden');
+      btnMenu.setAttribute('aria-expanded', 'true');
+    }
+    function closeMenu() {
+      menu.classList.add('translate-x-full');
+      overlay.classList.add('hidden');
+      btnMenu.setAttribute('aria-expanded', 'false');
+    }
+
+    btnMenu?.addEventListener('click', () => {
+      const expanded = btnMenu.getAttribute('aria-expanded') === 'true';
+      expanded ? closeMenu() : openMenu();
+    });
+    btnClose?.addEventListener('click', closeMenu);
+    overlay?.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+    // Smooth scroll (respect reduced motion)
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
+  </script>
+
+</body>
+
+</html>

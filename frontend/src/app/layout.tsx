@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import { AuthProvider } from "@/lib/auth-context";
@@ -13,16 +13,16 @@ const inter = Inter({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-serif",
+  weight: ["600", "700"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Tsniout Shop | Mode, Élégance & Pudeur",
-  description: "Découvrez notre collection de vêtements tsniout : robes fluides, jupes longues et chemisiers élégants. La mode modeste sans compromis sur le style.",
+  title: "MSV Nosy-Be — Vanille de Madagascar",
+  description: "Vanille de Nosy-Be (Madagascar) — arôme intense, sélection TK (Noir) / Gourmet, conditionnement premium. Découvrez la boutique.",
 };
 
 export default function RootLayout({
@@ -31,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="antialiased selection:bg-amber-700 selection:text-white font-sans">
+    <html lang="fr" className={`${inter.variable} ${fraunces.variable}`}>
+      <body className="antialiased bg-jungle-900 text-vanilla-50 font-sans">
         <AuthProvider>
           <CartProvider>
             {children}

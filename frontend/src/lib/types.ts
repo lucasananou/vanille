@@ -35,6 +35,13 @@ export interface Product {
         modelInfo?: string;
         advice?: string;
     };
+    // Vanille Nosy-Be specific
+    subtitle?: string;
+    size?: string;
+    grade?: string;
+    packaging_options?: string[];
+    bullets?: string[];
+    price_label?: string;
 }
 
 export interface ProductOption {

@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0E1B14" />
+  <title>Boutique — MSV Nosy-Be | Vanille de Madagascar</title>
+  <meta name="description"
+    content="Boutique MSV Nosy-Be : vanille de Madagascar (Nosy-Be). Sélection premium, formats sous-vide / tube, packs. Filtrez et ajoutez au panier." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          },
+          colors: {
+            obsidian: '#07100C',
+            jungle: {
+              950: '#06110D',
+              900: '#0E1B14',
+              800: '#13261C',
+              700: '#183023',
+            },
+            vanilla: {
+              50: '#FBF7EF',
+              100: '#F6EEDC',
+              200: '#EEDDBD',
+              300: '#E2CFA7',
+            },
+            cacao: {
+              900: '#1A1210',
+              800: '#2A1F1A',
+              700: '#3C2E27',
+              600: '#5A514A',
+            },
+            gold: {
+              500: '#D7A84A',
+              600: '#C79637',
+              700: '#B6842B',
+            }
+          },
+          boxShadow: {
+            soft: '0 14px 40px rgba(7,16,12,.18)',
+            lift: '0 22px 70px rgba(7,16,12,.28)',
+            glow: '0 0 0 1px rgba(215,168,74,.22), 0 18px 60px rgba(215,168,74,.18)',
+          },
+          borderRadius: { xxl: '1.5rem' }
+        }
+      }
+    }
+  </script>
+
+  <!-- Icons -->
+  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+  <style>
+    .glass {
+      background: rgba(246, 238, 220, .06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(246, 238, 220, .16);
+    }
+
+    .focus-ring:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(215, 168, 74, .35);
+    }
+
+    .grain::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
+      background-size: 3px 3px;
+      opacity: .14;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    .shine {
+      background: radial-gradient(1200px 420px at 20% 10%, rgba(215, 168, 74, .24), transparent 55%),
+        radial-gradient(900px 420px at 80% 15%, rgba(246, 238, 220, .10), transparent 60%),
+        linear-gradient(180deg, rgba(14, 27, 20, .96), rgba(14, 27, 20, .86));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rm-anim {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      html:focus-within {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-jungle-900 text-vanilla-50 font-sans antialiased">
+  <!-- Skip -->
+  <a href="#content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-vanilla-50 focus:text-jungle-900 focus:px-4 focus:py-2 focus:rounded-full">
+    Aller au contenu
+  </a>
+
+  <!-- =========================
+  HEADER + PANIER COULISSANT
+  ========================== -->
+  <header class="sticky top-0 z-50 bg-jungle-900/70 backdrop-blur border-b border-vanilla-100/10">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-3 rounded-2xl px-2 py-1 focus-ring">
+        <div
+          class="w-10 h-10 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center ">
+          <span class="iconify text-gold-500 text-xl" data-icon="mdi:vanilla"></span>
+        </div>
+        <div class="leading-tight">
+          <p class="font-display text-lg text-vanilla-50">MSV Nosy-Be</p>
+          <p class="text-xs text-vanilla-100/70">Boutique premium</p>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1 text-sm" aria-label="Navigation principale">
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="index.html">Accueil</a>
+        <a class="px-4 py-2 rounded-full bg-vanilla-50/10 focus-ring" href="shop.html" aria-current="page">Boutique</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="about.html">À propos</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="contact.html">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button id="filterBtnMobile"
+          class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+          aria-haspopup="dialog" aria-controls="filterDrawer" aria-expanded="false" aria-label="Ouvrir les filtres">
+          <span class="iconify text-vanilla-50 text-xl" data-icon="mdi:tune-variant"></span>
+        </button>
+
+        <button id="cartBtn"
+          class="relative inline-flex items-center justify-center w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+          aria-haspopup="dialog" aria-controls="cartDrawer" aria-expanded="false" aria-label="Ouvrir le panier">
+          <span class="iconify text-vanilla-50 text-xl" data-icon="mdi:cart-outline"></span>
+          <span id="cartBadge" class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold grid place-items-center
+                   bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 ">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cart overlay + drawer -->
+  <div id="cartOverlay" class="hidden fixed inset-0 z-[60] bg-obsidian/60"></div>
+  <aside id="cartDrawer" class="fixed right-0 top-0 bottom-0 z-[70] w-[92%] max-w-md translate-x-full transition rm-anim
+           bg-jungle-900 border-l border-vanilla-100/10">
+    <div class="h-full flex flex-col">
+      <div class="p-5 flex items-center justify-between border-b border-vanilla-100/10">
+        <div>
+          <p class="font-display text-xl text-vanilla-50">Votre panier</p>
+          <p class="text-xs text-vanilla-100/70">Finalisez en 2 minutes</p>
+        </div>
+        <button id="cartClose" class="w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+          aria-label="Fermer le panier">
+          <span class="iconify text-xl text-vanilla-50" data-icon="mdi:close"></span>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-auto p-5">
+        <div id="cartEmpty" class="hidden rounded-xxl glass p-6 text-center">
+          <div
+            class="inline-flex w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 items-center justify-center">
+            <span class="iconify text-gold-500 text-2xl" data-icon="mdi:cart-outline"></span>
+          </div>
+          <p class="mt-4 font-semibold text-vanilla-50">Panier vide</p>
+          <p class="mt-1 text-sm text-vanilla-100/70">Ajoutez vos gousses préférées.</p>
+        </div>
+
+        <div id="cartItems" class="space-y-4"></div>
+      </div>
+
+      <div class="p-5 border-t border-vanilla-100/10">
+        <div class="rounded-xxl glass p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-vanilla-100/75">Sous-total</p>
+            <p id="cartSubtotal" class="text-lg font-semibold text-vanilla-50">0,00 €</p>
+          </div>
+          <p class="mt-1 text-xs text-vanilla-100/60">Livraison & taxes calculées au paiement.</p>
+
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <a href="cart.html"
+              class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+              Voir panier <span class="iconify" data-icon="mdi:arrow-right"></span>
+            </a>
+            <a href="checkout.html"
+              class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+              Commander <span class="iconify" data-icon="mdi:lock-outline"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================
+  HERO BOUTIQUE
+  ========================== -->
+  <main id="content">
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 shine grain" aria-hidden="true"></div>
+      <div
+        class="absolute -top-24 -left-24 w-[34rem] h-[34rem] rounded-full bg-gold-500/10 blur-3xl rm-anim animate-[pulse_7s_ease-in-out_infinite]">
+      </div>
+
+      <div class="relative mx-auto max-w-7xl px-4 pt-10 pb-10 lg:pt-14">
+        <div class="grid lg:grid-cols-12 gap-8 items-end">
+          <div class="lg:col-span-7">
+            <div class="inline-flex items-center gap-2 rounded-full glass px-4 py-2 ">
+              <span class="iconify text-gold-500" data-icon="mdi:map-marker-radius-outline"></span>
+              <span class="text-sm font-semibold">Nosy-Be • Madagascar</span>
+              <span class="text-sm text-vanilla-100/70">• Sélection premium</span>
+            </div>
+
+            <h1 class="mt-5 font-display text-3xl sm:text-4xl lg:text-5xl leading-[1.06]">
+              Boutique <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">MSV</span>
+              <span class="block text-vanilla-100/85 text-xl sm:text-2xl font-sans mt-2">Choisis ta longueur. Ressens le
+                “wow”.</span>
+            </h1>
+
+            <p class="mt-4 text-vanilla-100/80 max-w-2xl">
+              Filtre par grade, longueur et conditionnement. Ajoute au panier en un clic.
+              <span class="text-vanilla-100/60">(Produits/visuels/prix : à adapter à ton catalogue réel.)</span>
+            </p>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="rounded-[28px] glass  p-4 sm:p-5">
+              <label class="text-xs text-vanilla-100/70" for="searchInput">Rechercher</label>
+              <div class="mt-2 flex items-center gap-2">
+                <span class="iconify text-vanilla-100/70 text-xl" data-icon="mdi:magnify"></span>
+                <input id="searchInput" type="search" placeholder="Ex: 14–15 cm, tube, gourmet…"
+                  class="w-full bg-transparent text-vanilla-50 placeholder:text-vanilla-100/50 outline-none focus:ring-0" />
+              </div>
+
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 p-3">
+                  <p class="text-xs text-vanilla-100/70">Résultats</p>
+                  <p class="mt-1 text-lg font-semibold" id="resultsCount">0</p>
+                </div>
+                <div class="rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 p-3">
+                  <p class="text-xs text-vanilla-100/70">Tri</p>
+                  <select id="sortSelect"
+                    class="mt-1 w-full bg-transparent text-vanilla-50 text-sm font-semibold outline-none focus:ring-0">
+                    <option value="featured">Sélection</option>
+                    <option value="priceAsc">Prix ↑</option>
+                    <option value="priceDesc">Prix ↓</option>
+                    <option value="nameAsc">Nom A→Z</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span
+                  class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-vanilla-50/10 border border-vanilla-100/12">
+                  <span class="iconify text-gold-500" data-icon="mdi:archive-outline"></span> Tube / Sous-vide
+                </span>
+                <span
+                  class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-vanilla-50/10 border border-vanilla-100/12">
+                  <span class="iconify text-gold-500" data-icon="mdi:ruler"></span> 10–18 cm
+                </span>
+                <span
+                  class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-vanilla-50/10 border border-vanilla-100/12">
+                  <span class="iconify text-gold-500" data-icon="mdi:gift-outline"></span> Packs cadeaux
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+    CONTENT: Filters + Grid
+    ========================== -->
+    <section class="mx-auto max-w-7xl px-4 pb-16 pt-8">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <!-- Filters (desktop) -->
+        <aside class="hidden lg:block lg:col-span-3">
+          <div class="sticky top-24 rounded-[28px] glass  p-5">
+            <div class="flex items-center justify-between">
+              <p class="font-display text-xl">Filtres</p>
+              <button id="resetBtn"
+                class="text-xs font-semibold px-3 py-2 rounded-full bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+                Réinitialiser
+              </button>
+            </div>
+
+            <div class="mt-5 space-y-6">
+              <!-- Grade -->
+              <div>
+                <p class="text-sm font-semibold">Grade</p>
+                <div class="mt-3 space-y-2">
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="grade" value="TK Noir">
+                    <span>TK Noir</span>
+                  </label>
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="grade" value="Gourmet">
+                    <span>Gourmet</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Longueur -->
+              <div>
+                <p class="text-sm font-semibold">Longueur</p>
+                <div class="mt-3 space-y-2">
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="length" value="10-13">
+                    <span>10–13 cm</span>
+                  </label>
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="length" value="14-15">
+                    <span>14–15 cm</span>
+                  </label>
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="length" value="16">
+                    <span>16 cm</span>
+                  </label>
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="length" value="17-18">
+                    <span>17–18 cm</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Format -->
+              <div>
+                <p class="text-sm font-semibold">Conditionnement</p>
+                <div class="mt-3 space-y-2">
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="format" value="Tube">
+                    <span>Tube (cadeau)</span>
+                  </label>
+                  <label class="flex items-center gap-2 text-sm">
+                    <input class="accent-[#D7A84A]" type="checkbox" name="format" value="Sous-vide">
+                    <span>Sous-vide</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Price range -->
+              <div>
+                <p class="text-sm font-semibold">Prix</p>
+                <div class="mt-3 space-y-3">
+                  <div class="flex items-center gap-2">
+                    <input id="minPrice" type="number" inputmode="decimal" placeholder="Min"
+                      class="w-1/2 rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 px-3 py-2 text-sm outline-none focus-ring" />
+                    <input id="maxPrice" type="number" inputmode="decimal" placeholder="Max"
+                      class="w-1/2 rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 px-3 py-2 text-sm outline-none focus-ring" />
+                  </div>
+                  <p class="text-xs text-vanilla-100/60">Astuce : mets tes vraies plages (ex: 19–79).</p>
+                </div>
+              </div>
+
+              <!-- Trust -->
+              <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                <p class="text-sm font-semibold">Expérience premium</p>
+                <ul class="mt-3 space-y-2 text-xs text-vanilla-100/75">
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:check-circle-outline"></span> Panier coulissant + checkout</li>
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:check-circle-outline"></span> Visuels macro (packshot)</li>
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:check-circle-outline"></span> Story + preuves + FAQ</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Grid -->
+        <div class="lg:col-span-9">
+          <div class="flex items-center justify-between gap-4">
+            <p class="text-sm text-vanilla-100/75">
+              <span class="font-semibold text-vanilla-50" id="activeFiltersText">Aucun filtre</span>
+            </p>
+
+            <button id="resetBtnTop"
+              class="lg:hidden text-xs font-semibold px-3 py-2 rounded-full bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+              Réinitialiser
+            </button>
+          </div>
+
+          <div id="grid" class="mt-6 grid sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+
+          <!-- Empty state -->
+          <div id="emptyState" class="hidden mt-10 rounded-[28px] glass  p-8 text-center">
+            <div
+              class="inline-flex w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 items-center justify-center">
+              <span class="iconify text-gold-500 text-2xl" data-icon="mdi:filter-off-outline"></span>
+            </div>
+            <p class="mt-4 font-display text-2xl">Aucun résultat</p>
+            <p class="mt-2 text-sm text-vanilla-100/70">Essaie de retirer un filtre ou change ta recherche.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================
+  FILTER DRAWER (mobile)
+  ========================== -->
+  <div id="filterOverlay" class="hidden fixed inset-0 z-[60] bg-obsidian/60"></div>
+  <aside id="filterDrawer" class="fixed left-0 top-0 bottom-0 z-[70] w-[92%] max-w-md -translate-x-full transition rm-anim
+           bg-jungle-900 border-r border-vanilla-100/10">
+    <div class="h-full flex flex-col">
+      <div class="p-5 flex items-center justify-between border-b border-vanilla-100/10">
+        <p class="font-display text-xl text-vanilla-50">Filtres</p>
+        <button id="filterClose"
+          class="w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+          aria-label="Fermer les filtres">
+          <span class="iconify text-xl text-vanilla-50" data-icon="mdi:close"></span>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-auto p-5">
+        <!-- On réutilise les mêmes inputs en "miroir" via JS -->
+        <div id="mobileFiltersMount" class="space-y-6"></div>
+      </div>
+
+      <div class="p-5 border-t border-vanilla-100/10">
+        <button id="applyMobileFilters"
+          class="w-full inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900
+                 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+          Voir les résultats
+          <span class="iconify" data-icon="mdi:arrow-right"></span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================
+  TOAST
+  ========================== -->
+  <div id="toast" class="pointer-events-none fixed bottom-5 left-1/2 -translate-x-1/2 z-[80] hidden">
+    <div class="rounded-full glass  px-4 py-3 flex items-center gap-2">
+      <span class="iconify text-gold-500 text-xl" data-icon="mdi:check-circle-outline"></span>
+      <p class="text-sm font-semibold text-vanilla-50" id="toastText">Ajouté au panier</p>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // DATA (à remplacer par ton catalogue réel)
+    // =========================
+    const PRODUCTS = [
+      {
+        id: "tk-noir-10-13-tube",
+        name: "Vanille TK Noir",
+        subtitle: "10–13 cm • Tube",
+        grade: "TK Noir",
+        length: "10-13",
+        format: "Tube",
+        pack: "Pack découverte",
+        price: 29.00,
+        compareAt: 35.00,
+        badge: "Sélection",
+        image: "assets/p-tk-10-13.jpg"
+      },
+      {
+        id: "gourmet-14-15-tube",
+        name: "Vanille Gourmet",
+        subtitle: "14–15 cm • Tube",
+        grade: "Gourmet",
+        length: "14-15",
+        format: "Tube",
+        pack: "Best-seller",
+        price: 39.00,
+        compareAt: 49.00,
+        badge: "Best-seller",
+        image: "assets/p-gourmet-14-15.jpg"
+      },
+      {
+        id: "tk-noir-14-15-sousvide",
+        name: "Vanille TK Noir",
+        subtitle: "14–15 cm • Sous-vide",
+        grade: "TK Noir",
+        length: "14-15",
+        format: "Sous-vide",
+        pack: "Cuisine",
+        price: 34.00,
+        compareAt: null,
+        badge: "Intense",
+        image: "assets/p-tk-14-15.jpg"
+      },
+      {
+        id: "gourmet-16-tube",
+        name: "Vanille Gourmet",
+        subtitle: "16 cm • Tube",
+        grade: "Gourmet",
+        length: "16",
+        format: "Tube",
+        pack: "Pâtisserie fine",
+        price: 49.00,
+        compareAt: null,
+        badge: "Premium",
+        image: "assets/p-gourmet-16.jpg"
+      },
+      {
+        id: "gourmet-17-18-tube",
+        name: "Vanille Gourmet",
+        subtitle: "17–18 cm • Tube",
+        grade: "Gourmet",
+        length: "17-18",
+        format: "Tube",
+        pack: "Cadeau",
+        price: 69.00,
+        compareAt: 79.00,
+        badge: "Cadeau",
+        image: "assets/p-gourmet-17-18.jpg"
+      },
+      {
+        id: "tk-noir-16-sousvide",
+        name: "Vanille TK Noir",
+        subtitle: "16 cm • Sous-vide",
+        grade: "TK Noir",
+        length: "16",
+        format: "Sous-vide",
+        pack: "Extrait maison",
+        price: 44.00,
+        compareAt: null,
+        badge: "Extrait",
+        image: "assets/p-tk-16.jpg"
+      }
+    ];
+
+    // =========================
+    // HELPERS
+    // =========================
+    const fmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+
+    function esc(str) {
+      return String(str).replace(/[&<>"']/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[s]));
+    }
+    function byId(id) { return document.getElementById(id); }
+
+    // =========================
+    // CART (localStorage)
+    // =========================
+    const CART_KEYS = ["msv_cart", "cart"];
+    function resolveCartKey() {
+      for (const k of CART_KEYS) if (localStorage.getItem(k)) return k;
+      return CART_KEYS[0];
+    }
+    const CART_KEY = resolveCartKey();
+
+    function safeParse(v, fb) { try { return JSON.parse(v); } catch { return fb; } }
+    function normalize(raw) {
+      if (!raw) return [];
+      if (Array.isArray(raw)) return raw;
+      if (Array.isArray(raw.items)) return raw.items;
+      if (Array.isArray(raw.cart)) return raw.cart;
+      if (Array.isArray(raw.products)) return raw.products;
+      return [];
+    }
+    function getCart() {
+      const raw = safeParse(localStorage.getItem(CART_KEY), null);
+      return normalize(raw).map(it => ({
+        id: it.id ?? it.sku ?? it.slug ?? String(Math.random()),
+        name: it.name ?? it.title ?? "Produit",
+        price: Number(it.price ?? it.unitPrice ?? 0),
+        qty: Math.max(1, Number(it.qty ?? it.quantity ?? 1)),
+        image: it.image ?? it.img ?? it.thumbnail ?? ""
+      }));
+    }
+    function setCart(items) { localStorage.setItem(CART_KEY, JSON.stringify(items)); }
+    function cartCount(items) { return items.reduce((s, it) => s + (it.qty || 0), 0); }
+    function cartSubtotal(items) { return items.reduce((s, it) => s + (it.price * it.qty), 0); }
+
+    function addToCart(product, qty = 1) {
+      const items = getCart();
+      const idx = items.findIndex(x => x.id === product.id);
+      if (idx >= 0) items[idx].qty += qty;
+      else items.push({ id: product.id, name: product.name + " — " + product.subtitle, price: product.price, qty, image: product.image || "" });
+      setCart(items);
+      renderCart();
+      toast(`Ajouté : ${product.name}`);
+    }
+
+    // =========================
+    // CART UI
+    // =========================
+    const cartBtn = byId("cartBtn");
+    const cartBadge = byId("cartBadge");
+    const cartOverlay = byId("cartOverlay");
+    const cartDrawer = byId("cartDrawer");
+    const cartClose = byId("cartClose");
+    const cartItemsEl = byId("cartItems");
+    const cartEmptyEl = byId("cartEmpty");
+    const cartSubtotalEl = byId("cartSubtotal");
+
+    function openCart() {
+      cartDrawer.classList.remove("translate-x-full");
+      cartOverlay.classList.remove("hidden");
+      cartBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+    function closeCart() {
+      cartDrawer.classList.add("translate-x-full");
+      cartOverlay.classList.add("hidden");
+      cartBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+
+    function renderCart() {
+      const items = getCart();
+      cartBadge.textContent = String(cartCount(items));
+      cartSubtotalEl.textContent = fmt.format(cartSubtotal(items) || 0);
+
+      const empty = items.length === 0;
+      cartEmptyEl.classList.toggle("hidden", !empty);
+      cartItemsEl.classList.toggle("hidden", empty);
+
+      if (empty) { cartItemsEl.innerHTML = ""; return; }
+
+      cartItemsEl.innerHTML = items.map((it, idx) => `
+        <article class="rounded-xxl glass p-4 ">
+          <div class="flex gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 overflow-hidden flex-shrink-0 grid place-items-center">
+              ${it.image ? `<img src="${it.image}" alt="${esc(it.name)}" class="w-full h-full object-cover" onerror="this.remove(); this.parentElement.innerHTML='<span class=&quot;iconify text-gold-500 text-2xl&quot; data-icon=&quot;mdi:vanilla&quot;></span>';">`
+          : `<span class="iconify text-gold-500 text-2xl" data-icon="mdi:vanilla"></span>`}
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-semibold text-vanilla-50 truncate">${esc(it.name)}</p>
+                  <p class="text-sm text-vanilla-100/70">${fmt.format(it.price || 0)} <span class="text-xs">/ unité</span></p>
+                </div>
+                <button class="p-2 rounded-xl hover:bg-vanilla-50/10 focus-ring"
+                  data-action="remove" data-index="${idx}" aria-label="Supprimer">
+                  <span class="iconify text-vanilla-100 text-xl" data-icon="mdi:trash-outline"></span>
+                </button>
+              </div>
+
+              <div class="mt-3 flex items-center justify-between gap-3">
+                <div class="inline-flex items-center rounded-full bg-vanilla-50/8 border border-vanilla-100/12 overflow-hidden">
+                  <button class="w-10 h-9 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
+                    data-action="dec" data-index="${idx}" aria-label="Diminuer">
+                    <span class="iconify text-vanilla-50" data-icon="mdi:minus"></span>
+                  </button>
+                  <span class="px-3 text-sm font-semibold text-vanilla-50">${it.qty}</span>
+                  <button class="w-10 h-9 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
+                    data-action="inc" data-index="${idx}" aria-label="Augmenter">
+                    <span class="iconify text-vanilla-50" data-icon="mdi:plus"></span>
+                  </button>
+                </div>
+
+                <p class="text-sm font-semibold text-vanilla-50">${fmt.format((it.price || 0) * (it.qty || 0))}</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function mutateCart(mutator) {
+      const items = getCart();
+      mutator(items);
+      const cleaned = items
+        .map(it => ({ ...it, qty: Math.max(0, Number(it.qty || 0)) }))
+        .filter(it => it.qty > 0);
+      setCart(cleaned);
+      renderCart();
+    }
+
+    cartBtn.addEventListener("click", () => {
+      const expanded = cartBtn.getAttribute("aria-expanded") === "true";
+      expanded ? closeCart() : openCart();
+      renderCart();
+    });
+    cartClose.addEventListener("click", closeCart);
+    cartOverlay.addEventListener("click", closeCart);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
+
+    cartItemsEl.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const action = btn.getAttribute("data-action");
+      const index = Number(btn.getAttribute("data-index"));
+
+      mutateCart((items) => {
+        if (!items[index]) return;
+        if (action === "remove") items.splice(index, 1);
+        if (action === "inc") items[index].qty += 1;
+        if (action === "dec") items[index].qty = Math.max(0, items[index].qty - 1);
+      });
+    });
+
+    window.addEventListener("storage", (e) => {
+      if (CART_KEYS.includes(e.key)) renderCart();
+    });
+
+    // =========================
+    // FILTERS + RENDER GRID
+    // =========================
+    const gridEl = byId("grid");
+    const emptyStateEl = byId("emptyState");
+    const resultsCountEl = byId("resultsCount");
+    const searchInput = byId("searchInput");
+    const sortSelect = byId("sortSelect");
+    const activeFiltersText = byId("activeFiltersText");
+
+    const minPriceEl = byId("minPrice");
+    const maxPriceEl = byId("maxPrice");
+
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(i => i.value);
+    }
+
+    function buildActiveFiltersLabel(state) {
+      const parts = [];
+      if (state.q) parts.push(`“${state.q}”`);
+      if (state.grades.length) parts.push(state.grades.join(", "));
+      if (state.lengths.length) parts.push(state.lengths.map(x => ({
+        "10-13": "10–13 cm", "14-15": "14–15 cm", "16": "16 cm", "17-18": "17–18 cm"
+      }[x] || x)).join(", "));
+      if (state.formats.length) parts.push(state.formats.join(", "));
+      if (state.minPrice != null || state.maxPrice != null) {
+        const a = state.minPrice != null ? state.minPrice : "—";
+        const b = state.maxPrice != null ? state.maxPrice : "—";
+        parts.push(`Prix ${a} → ${b}`);
+      }
+      return parts.length ? parts.join(" • ") : "Aucun filtre";
+    }
+
+    function applyFilters() {
+      const q = (searchInput.value || "").trim().toLowerCase();
+      const grades = getCheckedValues("grade");
+      const lengths = getCheckedValues("length");
+      const formats = getCheckedValues("format");
+      const minPrice = minPriceEl.value ? Number(minPriceEl.value) : null;
+      const maxPrice = maxPriceEl.value ? Number(maxPriceEl.value) : null;
+
+      let list = PRODUCTS.slice();
+
+      if (q) {
+        list = list.filter(p =>
+          (p.name + " " + p.subtitle + " " + p.grade + " " + p.format + " " + (p.pack || ""))
+            .toLowerCase().includes(q)
+        );
+      }
+      if (grades.length) list = list.filter(p => grades.includes(p.grade));
+      if (lengths.length) list = list.filter(p => lengths.includes(p.length));
+      if (formats.length) list = list.filter(p => formats.includes(p.format));
+
+      if (minPrice != null) list = list.filter(p => Number(p.price || 0) >= minPrice);
+      if (maxPrice != null) list = list.filter(p => Number(p.price || 0) <= maxPrice);
+
+      // Sorting
+      const sort = sortSelect.value;
+      if (sort === "priceAsc") list.sort((a, b) => (a.price || 0) - (b.price || 0));
+      if (sort === "priceDesc") list.sort((a, b) => (b.price || 0) - (a.price || 0));
+      if (sort === "nameAsc") list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+      // featured: keep order
+
+      const state = { q, grades, lengths, formats, minPrice, maxPrice };
+      activeFiltersText.textContent = buildActiveFiltersLabel(state);
+
+      renderGrid(list);
+    }
+
+    function renderGrid(list) {
+      resultsCountEl.textContent = String(list.length);
+      emptyStateEl.classList.toggle("hidden", list.length !== 0);
+
+      gridEl.innerHTML = list.map(p => `
+        <article class="group rounded-[28px] border border-vanilla-100/12 bg-vanilla-50/5  hover: transition rm-anim overflow-hidden">
+          <a href="product.html?id=${encodeURIComponent(p.id)}" class="block focus-ring">
+            <div class="relative aspect-[4/3] bg-vanilla-50/8 border-b border-vanilla-100/10 overflow-hidden">
+              <img src="${esc(p.image || "")}" alt="${esc(p.name)}"
+                class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition rm-anim"
+                onerror="this.remove(); this.parentElement.innerHTML += '<div class=&quot;absolute inset-0 grid place-items-center&quot;><span class=&quot;iconify text-gold-500 text-5xl&quot; data-icon=&quot;mdi:vanilla&quot;></span></div>';" />
+              <div class="absolute top-4 left-4 flex gap-2">
+                <span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-jungle-900/70 border border-vanilla-100/15">
+                  <span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-500"></span>
+                  ${esc(p.grade)}
+                </span>
+              </div>
+              <div class="absolute top-4 right-4">
+                <span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 ">
+                  ${esc(p.badge || "Premium")}
+                </span>
+              </div>
+              <div class="absolute bottom-4 left-4 right-4">
+                <div class="rounded-2xl bg-jungle-900/65 border border-vanilla-100/12 px-3 py-2 flex items-center justify-between">
+                  <p class="text-xs text-vanilla-100/70">${esc(p.subtitle)}</p>
+                  <span class="iconify text-gold-500 text-lg" data-icon="mdi:arrow-right"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <h3 class="font-display text-xl text-vanilla-50 leading-tight">${esc(p.name)}</h3>
+                  <p class="mt-1 text-sm text-vanilla-100/70">${esc(p.pack || "Pack premium")}</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-lg font-semibold text-vanilla-50">${fmt.format(p.price || 0)}</p>
+                  ${p.compareAt ? `<p class="text-xs text-vanilla-100/60 line-through">${fmt.format(p.compareAt)}</p>` : `<p class="text-xs text-vanilla-100/60">&nbsp;</p>`}
+                </div>
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-vanilla-50/10 border border-vanilla-100/12">
+                  <span class="iconify text-gold-500" data-icon="mdi:ruler"></span>
+                  ${esc({
+        "10-13": "10–13 cm", "14-15": "14–15 cm", "16": "16 cm", "17-18": "17–18 cm"
+      }[p.length] || p.length)}
+                </span>
+                <span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-vanilla-50/10 border border-vanilla-100/12">
+                  <span class="iconify text-gold-500" data-icon="mdi:archive-outline"></span>
+                  ${esc(p.format)}
+                </span>
+              </div>
+
+              <div class="mt-5 grid grid-cols-2 gap-3">
+                <button
+                  class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold
+                         bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring"
+                  type="button"
+                  data-quickview="${esc(p.id)}">
+                  Détails
+                  <span class="iconify" data-icon="mdi:information-outline"></span>
+                </button>
+
+                <button
+                  class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900
+                         bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring"
+                  type="button"
+                  data-add="${esc(p.id)}">
+                  Ajouter
+                  <span class="iconify" data-icon="mdi:cart-plus"></span>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <div class="h-1 bg-gradient-to-r from-transparent via-gold-500/80 to-transparent opacity-0 group-hover:opacity-100 transition rm-anim"></div>
+        </article>
+      `).join("");
+
+      // wire buttons
+      gridEl.querySelectorAll("button[data-add]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.getAttribute("data-add");
+          const p = PRODUCTS.find(x => x.id === id);
+          if (!p) return;
+          addToCart(p, 1);
+          openCart();
+        });
+      });
+
+      gridEl.querySelectorAll("button[data-quickview]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.getAttribute("data-quickview");
+          window.location.href = `product.html?id=${encodeURIComponent(id)}`;
+        });
+      });
+    }
+
+    // =========================
+    // RESET
+    // =========================
+    function resetFilters() {
+      document.querySelectorAll('input[name="grade"], input[name="length"], input[name="format"]').forEach(i => i.checked = false);
+      searchInput.value = "";
+      minPriceEl.value = "";
+      maxPriceEl.value = "";
+      sortSelect.value = "featured";
+      applyFilters();
+    }
+
+    byId("resetBtn").addEventListener("click", resetFilters);
+    byId("resetBtnTop").addEventListener("click", resetFilters);
+
+    // =========================
+    // MOBILE FILTER DRAWER (clone desktop filters)
+    // =========================
+    const filterBtnMobile = byId("filterBtnMobile");
+    const filterOverlay = byId("filterOverlay");
+    const filterDrawer = byId("filterDrawer");
+    const filterClose = byId("filterClose");
+    const applyMobileFilters = byId("applyMobileFilters");
+    const mobileFiltersMount = byId("mobileFiltersMount");
+
+    function openFilters() {
+      filterDrawer.classList.remove("-translate-x-full");
+      filterOverlay.classList.remove("hidden");
+      filterBtnMobile.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+    function closeFilters() {
+      filterDrawer.classList.add("-translate-x-full");
+      filterOverlay.classList.add("hidden");
+      filterBtnMobile.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+
+    function mountMobileFilters() {
+      // clone the sticky filters block (only the inside of it)
+      const desktop = document.querySelector('aside.lg\\:block .sticky');
+      if (!desktop) return;
+
+      // Create a clean clone of filter inputs
+      const clone = desktop.cloneNode(true);
+      // remove sticky / header row buttons to avoid duplicates
+      clone.classList.remove("sticky", "top-24");
+      const headerRow = clone.querySelector(".flex.items-center.justify-between");
+      if (headerRow) headerRow.remove();
+
+      // Put into mount
+      mobileFiltersMount.innerHTML = "";
+      mobileFiltersMount.appendChild(clone);
+
+      // Sync: bind cloned inputs to the real inputs (simple mirror)
+      // Strategy: When mobile checkbox changes, change the first matching desktop input by name/value.
+      mobileFiltersMount.querySelectorAll('input[type="checkbox"]').forEach(m => {
+        m.addEventListener("change", () => {
+          const name = m.getAttribute("name");
+          const value = m.value;
+          const desktopInput = document.querySelector(`input[name="${name}"][value="${CSS.escape(value)}"]`);
+          if (desktopInput) desktopInput.checked = m.checked;
+        });
+      });
+
+      // mirror price inputs
+      const mMin = mobileFiltersMount.querySelector("#minPrice");
+      const mMax = mobileFiltersMount.querySelector("#maxPrice");
+      if (mMin) mMin.addEventListener("input", () => { minPriceEl.value = mMin.value; });
+      if (mMax) mMax.addEventListener("input", () => { maxPriceEl.value = mMax.value; });
+
+      // mirror reset
+      const mReset = mobileFiltersMount.querySelector("#resetBtn");
+      if (mReset) {
+        mReset.addEventListener("click", (e) => {
+          e.preventDefault();
+          resetFilters();
+          // reflect in mobile UI
+          mobileFiltersMount.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+          if (mMin) mMin.value = "";
+          if (mMax) mMax.value = "";
+        });
+      }
+    }
+
+    filterBtnMobile.addEventListener("click", () => {
+      const expanded = filterBtnMobile.getAttribute("aria-expanded") === "true";
+      expanded ? closeFilters() : (mountMobileFilters(), openFilters());
+    });
+    filterClose.addEventListener("click", closeFilters);
+    filterOverlay.addEventListener("click", closeFilters);
+    applyMobileFilters.addEventListener("click", () => { applyFilters(); closeFilters(); });
+
+    // =========================
+    // TOAST
+    // =========================
+    const toastEl = byId("toast");
+    const toastText = byId("toastText");
+    let toastTimer = null;
+    function toast(msg) {
+      toastText.textContent = msg;
+      toastEl.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.add("hidden"), 1800);
+    }
+
+    // =========================
+    // LIVE BINDINGS
+    // =========================
+    searchInput.addEventListener("input", applyFilters);
+    sortSelect.addEventListener("change", applyFilters);
+    document.querySelectorAll('input[name="grade"], input[name="length"], input[name="format"]').forEach(i => {
+      i.addEventListener("change", applyFilters);
+    });
+    minPriceEl.addEventListener("input", applyFilters);
+    maxPriceEl.addEventListener("input", applyFilters);
+
+    // Boot
+    renderCart();
+    applyFilters();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0E1B14" />
+  <title>Produit — MSV Nosy-Be | Vanille de Madagascar</title>
+  <meta name="description"
+    content="Fiche produit MSV Nosy-Be : vanille de Madagascar (Nosy-Be). Sélection premium, détails, conseils d'usage, ajout au panier." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          },
+          colors: {
+            obsidian: '#07100C',
+            jungle: {
+              950: '#06110D',
+              900: '#0E1B14',
+              800: '#13261C',
+              700: '#183023',
+            },
+            vanilla: {
+              50: '#FBF7EF',
+              100: '#F6EEDC',
+              200: '#EEDDBD',
+              300: '#E2CFA7',
+            },
+            cacao: {
+              900: '#1A1210',
+              800: '#2A1F1A',
+              700: '#3C2E27',
+              600: '#5A514A',
+            },
+            gold: {
+              500: '#D7A84A',
+              600: '#C79637',
+              700: '#B6842B',
+            }
+          },
+          boxShadow: {
+            soft: '0 14px 40px rgba(7,16,12,.18)',
+            lift: '0 22px 70px rgba(7,16,12,.28)',
+            glow: '0 0 0 1px rgba(215,168,74,.22), 0 18px 60px rgba(215,168,74,.18)',
+          },
+          borderRadius: { xxl: '1.5rem' }
+        }
+      }
+    }
+  </script>
+
+  <!-- Icons -->
+  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+  <style>
+    .glass {
+      background: rgba(246, 238, 220, .06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(246, 238, 220, .16);
+    }
+
+    .focus-ring:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(215, 168, 74, .35);
+    }
+
+    .grain::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
+      background-size: 3px 3px;
+      opacity: .14;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    .shine {
+      background: radial-gradient(1200px 420px at 20% 10%, rgba(215, 168, 74, .24), transparent 55%),
+        radial-gradient(900px 420px at 80% 15%, rgba(246, 238, 220, .10), transparent 60%),
+        linear-gradient(180deg, rgba(14, 27, 20, .96), rgba(14, 27, 20, .86));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rm-anim {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      html:focus-within {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-jungle-900 text-vanilla-50 font-sans antialiased">
+  <a href="#content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-vanilla-50 focus:text-jungle-900 focus:px-4 focus:py-2 focus:rounded-full">
+    Aller au contenu
+  </a>
+
+  <!-- =========================
+  HEADER + PANIER COULISSANT (compact)
+  ========================== -->
+  <header class="sticky top-0 z-50 bg-jungle-900/70 backdrop-blur border-b border-vanilla-100/10">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-3 rounded-2xl px-2 py-1 focus-ring">
+        <div
+          class="w-10 h-10 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center ">
+          <span class="iconify text-gold-500 text-xl" data-icon="mdi:vanilla"></span>
+        </div>
+        <div class="leading-tight">
+          <p class="font-display text-lg text-vanilla-50">MSV Nosy-Be</p>
+          <p class="text-xs text-vanilla-100/70">Fiche produit</p>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1 text-sm" aria-label="Navigation principale">
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="index.html">Accueil</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="shop.html">Boutique</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="about.html">À propos</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="contact.html">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="shop.html"
+          class="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+          Retour boutique
+          <span class="iconify" data-icon="mdi:arrow-right"></span>
+        </a>
+
+        <button id="cartBtn"
+          class="relative inline-flex items-center justify-center w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+          aria-haspopup="dialog" aria-controls="cartDrawer" aria-expanded="false" aria-label="Ouvrir le panier">
+          <span class="iconify text-vanilla-50 text-xl" data-icon="mdi:cart-outline"></span>
+          <span id="cartBadge" class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold grid place-items-center
+                   bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 ">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cart overlay + drawer -->
+  <div id="cartOverlay" class="hidden fixed inset-0 z-[60] bg-obsidian/60"></div>
+  <aside id="cartDrawer" class="fixed right-0 top-0 bottom-0 z-[70] w-[92%] max-w-md translate-x-full transition rm-anim
+           bg-jungle-900 border-l border-vanilla-100/10">
+    <div class="h-full flex flex-col">
+      <div class="p-5 flex items-center justify-between border-b border-vanilla-100/10">
+        <div>
+          <p class="font-display text-xl text-vanilla-50">Votre panier</p>
+          <p class="text-xs text-vanilla-100/70">Finalisez en 2 minutes</p>
+        </div>
+        <button id="cartClose" class="w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
+          aria-label="Fermer le panier">
+          <span class="iconify text-xl text-vanilla-50" data-icon="mdi:close"></span>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-auto p-5">
+        <div id="cartEmpty" class="hidden rounded-xxl glass p-6 text-center">
+          <div
+            class="inline-flex w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 items-center justify-center">
+            <span class="iconify text-gold-500 text-2xl" data-icon="mdi:cart-outline"></span>
+          </div>
+          <p class="mt-4 font-semibold text-vanilla-50">Panier vide</p>
+          <p class="mt-1 text-sm text-vanilla-100/70">Ajoutez vos gousses préférées.</p>
+        </div>
+
+        <div id="cartItems" class="space-y-4"></div>
+      </div>
+
+      <div class="p-5 border-t border-vanilla-100/10">
+        <div class="rounded-xxl glass p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-vanilla-100/75">Sous-total</p>
+            <p id="cartSubtotal" class="text-lg font-semibold text-vanilla-50">0,00 €</p>
+          </div>
+          <p class="mt-1 text-xs text-vanilla-100/60">Livraison & taxes calculées au paiement.</p>
+
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <a href="cart.html"
+              class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+              Voir panier <span class="iconify" data-icon="mdi:arrow-right"></span>
+            </a>
+            <a href="checkout.html"
+              class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+              Commander <span class="iconify" data-icon="mdi:lock-outline"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================
+  CONTENT
+  ========================== -->
+  <main id="content">
+
+    <!-- Hero product -->
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 shine grain" aria-hidden="true"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 pt-10 pb-10">
+        <!-- Breadcrumbs -->
+        <nav aria-label="Fil d'ariane" class="text-sm text-vanilla-100/70">
+          <ol class="flex flex-wrap items-center gap-2">
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="index.html">Accueil</a></li>
+            <li class="opacity-60">/</li>
+            <li><a class="hover:text-vanilla-50 focus-ring rounded-full px-2 py-1" href="shop.html">Boutique</a></li>
+            <li class="opacity-60">/</li>
+            <li class="text-vanilla-50 font-semibold" id="crumbName">Produit</li>
+          </ol>
+        </nav>
+
+        <div class="mt-6 grid lg:grid-cols-12 gap-10 items-start">
+          <!-- Gallery -->
+          <div class="lg:col-span-7">
+            <div class="rounded-[28px] border border-vanilla-100/12 bg-vanilla-50/5  overflow-hidden">
+              <div class="aspect-[4/3] relative bg-vanilla-50/8">
+                <img id="mainImg" src="" alt="" class="absolute inset-0 w-full h-full object-cover opacity-95"
+                  onerror="this.remove(); this.parentElement.innerHTML += '<div class=&quot;absolute inset-0 grid place-items-center&quot;><span class=&quot;iconify text-gold-500 text-6xl&quot; data-icon=&quot;mdi:vanilla&quot;></span></div>';">
+                <div class="absolute top-4 left-4 flex gap-2">
+                  <span id="badgeGrade"
+                    class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-jungle-900/70 border border-vanilla-100/15">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-500"></span>
+                    Grade
+                  </span>
+                </div>
+                <div class="absolute top-4 right-4">
+                  <span id="badgeTag"
+                    class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 ">
+                    Premium
+                  </span>
+                </div>
+              </div>
+
+              <div class="p-4 border-t border-vanilla-100/10">
+                <div class="grid grid-cols-4 gap-3">
+                  <button
+                    class="thumb rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 overflow-hidden focus-ring"
+                    data-img="">
+                    <div class="aspect-square grid place-items-center">
+                      <span class="iconify text-gold-500 text-2xl" data-icon="mdi:image-outline"></span>
+                    </div>
+                  </button>
+                  <button
+                    class="thumb rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 overflow-hidden focus-ring"
+                    data-img="">
+                    <div class="aspect-square grid place-items-center">
+                      <span class="iconify text-gold-500 text-2xl" data-icon="mdi:image-outline"></span>
+                    </div>
+                  </button>
+                  <button
+                    class="thumb rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 overflow-hidden focus-ring"
+                    data-img="">
+                    <div class="aspect-square grid place-items-center">
+                      <span class="iconify text-gold-500 text-2xl" data-icon="mdi:image-outline"></span>
+                    </div>
+                  </button>
+                  <button
+                    class="thumb rounded-2xl bg-vanilla-50/8 border border-vanilla-100/12 overflow-hidden focus-ring"
+                    data-img="">
+                    <div class="aspect-square grid place-items-center">
+                      <span class="iconify text-gold-500 text-2xl" data-icon="mdi:image-outline"></span>
+                    </div>
+                  </button>
+                </div>
+                <p class="mt-3 text-xs text-vanilla-100/60">
+                  Astuce 10k€ : 1 packshot tube + 2 macros (grains/coupe) + 1 photo “usage” (crème/glace).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buy box -->
+          <div class="lg:col-span-5">
+            <div class="rounded-[28px] glass  p-6">
+              <div
+                class="inline-flex items-center gap-2 rounded-full bg-vanilla-50/10 border border-vanilla-100/12 px-3 py-1.5 text-xs font-semibold">
+                <span class="iconify text-gold-500" data-icon="mdi:map-marker-radius-outline"></span>
+                Nosy-Be • Madagascar
+              </div>
+
+              <h1 class="mt-4 font-display text-3xl sm:text-4xl leading-[1.06]" id="productName">Vanille</h1>
+              <p class="mt-2 text-vanilla-100/75" id="productSubtitle">—</p>
+
+              <div class="mt-5 flex items-end justify-between gap-4">
+                <div>
+                  <p class="text-xs text-vanilla-100/60">Prix</p>
+                  <div class="flex items-end gap-3">
+                    <p class="text-3xl font-semibold text-vanilla-50" id="price">0,00 €</p>
+                    <p class="text-sm text-vanilla-100/60 line-through hidden" id="compareAt">0,00 €</p>
+                  </div>
+                </div>
+                <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-3">
+                  <p class="text-xs text-vanilla-100/60">Stock</p>
+                  <p class="text-sm font-semibold text-vanilla-50" id="stockText">En stock</p>
+                </div>
+              </div>
+
+              <!-- Variant (simple) -->
+              <div class="mt-6">
+                <p class="text-sm font-semibold">Conditionnement</p>
+                <div class="mt-3 grid grid-cols-2 gap-3" id="variantButtons"></div>
+                <p class="mt-2 text-xs text-vanilla-100/60">Ici tu peux brancher tes variantes réelles (tube/sous-vide,
+                  quantité, etc.).</p>
+              </div>
+
+              <!-- Quantity + Add -->
+              <div class="mt-6 grid grid-cols-3 gap-3 items-center">
+                <div class="col-span-1">
+                  <p class="text-xs text-vanilla-100/60">Quantité</p>
+                  <div
+                    class="mt-2 inline-flex w-full items-center justify-between rounded-full bg-vanilla-50/8 border border-vanilla-100/12 overflow-hidden">
+                    <button id="qtyDec" class="w-10 h-10 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
+                      aria-label="Diminuer">
+                      <span class="iconify text-vanilla-50" data-icon="mdi:minus"></span>
+                    </button>
+                    <span id="qtyVal" class="text-sm font-semibold text-vanilla-50">1</span>
+                    <button id="qtyInc" class="w-10 h-10 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
+                      aria-label="Augmenter">
+                      <span class="iconify text-vanilla-50" data-icon="mdi:plus"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="col-span-2">
+                  <button id="addToCartBtn"
+                    class="w-full inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900
+                           bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+                    Ajouter au panier
+                    <span class="iconify" data-icon="mdi:cart-plus"></span>
+                  </button>
+                  <p class="mt-2 text-xs text-vanilla-100/60">Paiement sécurisé (à brancher) • Livraison (à préciser)
+                  </p>
+                </div>
+              </div>
+
+              <!-- Trust bullets -->
+              <div class="mt-6 rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                <p class="text-sm font-semibold">Pourquoi c’est premium</p>
+                <ul class="mt-3 space-y-2 text-sm text-vanilla-100/80">
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:check-circle-outline"></span> Sélection & tri (à détailler)</li>
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:check-circle-outline"></span> Tube cadeau / sous-vide stable</li>
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:check-circle-outline"></span> Intensité aromatique “wow”</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Mini upsell -->
+            <div class="mt-6 rounded-[28px] border border-vanilla-100/12 bg-vanilla-50/5  overflow-hidden">
+              <div class="p-6">
+                <p class="text-sm font-semibold text-vanilla-50">Suggestion (upsell)</p>
+                <p class="mt-2 text-sm text-vanilla-100/75">Ajoute un tube cadeau premium pour offrir (ou te faire
+                  plaisir).</p>
+                <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                  <a href="shop.html"
+                    class="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+                    Voir les packs
+                    <span class="iconify" data-icon="mdi:gift-outline"></span>
+                  </a>
+                  <a href="checkout.html"
+                    class="inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600  hover: transition rm-anim focus-ring">
+                    Commander maintenant
+                    <span class="iconify" data-icon="mdi:lock-outline"></span>
+                  </a>
+                </div>
+              </div>
+              <div class="h-1 bg-gradient-to-r from-transparent via-gold-500/80 to-transparent opacity-60"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Details -->
+    <section class="mx-auto max-w-7xl px-4 pb-16">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <!-- Tabs -->
+        <div class="lg:col-span-8">
+          <div class="rounded-[28px] glass  p-6">
+            <div class="flex flex-wrap gap-2" role="tablist" aria-label="Informations produit">
+              <button
+                class="tabBtn focus-ring rounded-full px-4 py-2 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12"
+                data-tab="desc" role="tab" aria-selected="true">
+                Description
+              </button>
+              <button
+                class="tabBtn focus-ring rounded-full px-4 py-2 text-sm font-semibold bg-transparent border border-vanilla-100/12 hover:bg-vanilla-50/10"
+                data-tab="usage" role="tab" aria-selected="false">
+                Conseils d’usage
+              </button>
+              <button
+                class="tabBtn focus-ring rounded-full px-4 py-2 text-sm font-semibold bg-transparent border border-vanilla-100/12 hover:bg-vanilla-50/10"
+                data-tab="specs" role="tab" aria-selected="false">
+                Fiche technique
+              </button>
+              <button
+                class="tabBtn focus-ring rounded-full px-4 py-2 text-sm font-semibold bg-transparent border border-vanilla-100/12 hover:bg-vanilla-50/10"
+                data-tab="shipping" role="tab" aria-selected="false">
+                Livraison & retours
+              </button>
+            </div>
+
+            <div class="mt-6">
+              <div id="tab-desc" class="tabPanel">
+                <h2 class="font-display text-2xl">Une vanille qui change le résultat.</h2>
+                <p class="mt-3 text-vanilla-100/80">
+                  Décris avec du concret : texture, souplesse, parfum, notes (floral/caramel/chaud),
+                  et pourquoi ce lot est supérieur. Les “preuves” font premium : photos macro, process, analyses.
+                </p>
+                <div class="mt-5 grid sm:grid-cols-2 gap-4">
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="text-sm font-semibold">Profil aromatique</p>
+                    <p class="mt-2 text-sm text-vanilla-100/80">Gourmand • Chaud • Rond (à ajuster)</p>
+                  </div>
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="text-sm font-semibold">Idéal pour</p>
+                    <p class="mt-2 text-sm text-vanilla-100/80">Crèmes, glaces, ganaches, extrait maison</p>
+                  </div>
+                </div>
+              </div>
+
+              <div id="tab-usage" class="tabPanel hidden">
+                <h2 class="font-display text-2xl">Conseils d’usage (chef mode).</h2>
+                <ol class="mt-3 space-y-3 text-sm text-vanilla-100/80">
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:numeric-1-circle-outline"></span> Coupe la gousse en deux, gratte les grains.</li>
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:numeric-2-circle-outline"></span> Infuse la gousse fendue dans un liquide chaud
+                    (lait/crème).</li>
+                  <li class="flex gap-2"><span class="iconify text-gold-500 mt-0.5"
+                      data-icon="mdi:numeric-3-circle-outline"></span> Récupère la gousse : sucre vanillé, rhum arrangé,
+                    extrait.</li>
+                </ol>
+              </div>
+
+              <div id="tab-specs" class="tabPanel hidden">
+                <h2 class="font-display text-2xl">Fiche technique</h2>
+                <div class="mt-4 grid sm:grid-cols-2 gap-4 text-sm">
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="text-xs text-vanilla-100/60">Origine</p>
+                    <p class="mt-1 font-semibold">Nosy-Be, Madagascar</p>
+                  </div>
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="text-xs text-vanilla-100/60">Grade</p>
+                    <p class="mt-1 font-semibold" id="specGrade">—</p>
+                  </div>
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="text-xs text-vanilla-100/60">Longueur</p>
+                    <p class="mt-1 font-semibold" id="specLength">—</p>
+                  </div>
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="text-xs text-vanilla-100/60">Conditionnement</p>
+                    <p class="mt-1 font-semibold" id="specFormat">—</p>
+                  </div>
+                </div>
+              </div>
+
+              <div id="tab-shipping" class="tabPanel hidden">
+                <h2 class="font-display text-2xl">Livraison & retours</h2>
+                <div class="mt-4 space-y-3 text-sm text-vanilla-100/80">
+                  <p>Ajoute tes règles réelles : délais, transporteurs, seuil livraison offerte, retours, contact.</p>
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="font-semibold">Livraison</p>
+                    <p class="mt-1">Délais : <span class="text-vanilla-50">X–Y jours</span> (à préciser)</p>
+                  </div>
+                  <div class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                    <p class="font-semibold">Retours</p>
+                    <p class="mt-1">Sous <span class="text-vanilla-50">14 jours</span> (à valider) + conditions</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar: FAQ + reassurance -->
+        <aside class="lg:col-span-4">
+          <div class="rounded-[28px] glass  p-6">
+            <p class="font-display text-xl">FAQ express</p>
+
+            <div class="mt-5 space-y-3">
+              <details class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                <summary class="cursor-pointer text-sm font-semibold focus-ring rounded-xl px-2 py-1">Quelle différence
+                  TK / Gourmet ?</summary>
+                <p class="mt-2 text-sm text-vanilla-100/80">Explique clairement tes critères (souplesse, humidité,
+                  usage, prix).</p>
+              </details>
+              <details class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                <summary class="cursor-pointer text-sm font-semibold focus-ring rounded-xl px-2 py-1">Comment conserver
+                  ?</summary>
+                <p class="mt-2 text-sm text-vanilla-100/80">Au sec, à l’abri de la lumière, température stable. Évite le
+                  frigo.</p>
+              </details>
+              <details class="rounded-xxl bg-vanilla-50/8 border border-vanilla-100/12 p-4">
+                <summary class="cursor-pointer text-sm font-semibold focus-ring rounded-xl px-2 py-1">Combien de temps
+                  ça dure ?</summary>
+                <p class="mt-2 text-sm text-vanilla-100/80">Précise selon ton conditionnement, en restant factuel.</p>
+              </details>
+            </div>
+
+            <div
+              class="mt-6 rounded-xxl bg-gradient-to-b from-gold-500/15 to-vanilla-50/5 border border-vanilla-100/12 p-4">
+              <p class="text-sm font-semibold">Besoin d’un conseil ?</p>
+              <p class="mt-1 text-sm text-vanilla-100/80">On te guide selon ton usage (pâtisserie, extrait, cadeau).</p>
+              <a href="contact.html"
+                class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring">
+                Contacter MSV
+                <span class="iconify" data-icon="mdi:message-text-outline"></span>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="pointer-events-none fixed bottom-5 left-1/2 -translate-x-1/2 z-[80] hidden">
+    <div class="rounded-full glass  px-4 py-3 flex items-center gap-2">
+      <span class="iconify text-gold-500 text-xl" data-icon="mdi:check-circle-outline"></span>
+      <p class="text-sm font-semibold text-vanilla-50" id="toastText">Ajouté au panier</p>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // CATALOGUE (doit matcher shop.html)
+    // =========================
+    const PRODUCTS = [
+      {
+        id: "tk-noir-10-13-tube",
+        name: "Vanille TK Noir",
+        subtitle: "10–13 cm • Tube",
+        grade: "TK Noir",
+        length: "10-13",
+        format: "Tube",
+        tag: "Sélection",
+        price: 29.00,
+        compareAt: 35.00,
+        stock: true,
+        images: ["assets/p-tk-10-13.jpg", "assets/p-tk-10-13-2.jpg", "assets/p-tk-10-13-3.jpg", "assets/p-tk-10-13-4.jpg"]
+      },
+      {
+        id: "gourmet-14-15-tube",
+        name: "Vanille Gourmet",
+        subtitle: "14–15 cm • Tube",
+        grade: "Gourmet",
+        length: "14-15",
+        format: "Tube",
+        tag: "Best-seller",
+        price: 39.00,
+        compareAt: 49.00,
+        stock: true,
+        images: ["assets/p-gourmet-14-15.jpg", "assets/p-gourmet-14-15-2.jpg", "assets/p-gourmet-14-15-3.jpg", "assets/p-gourmet-14-15-4.jpg"]
+      },
+      {
+        id: "tk-noir-14-15-sousvide",
+        name: "Vanille TK Noir",
+        subtitle: "14–15 cm • Sous-vide",
+        grade: "TK Noir",
+        length: "14-15",
+        format: "Sous-vide",
+        tag: "Intense",
+        price: 34.00,
+        compareAt: null,
+        stock: true,
+        images: ["assets/p-tk-14-15.jpg", "assets/p-tk-14-15-2.jpg", "assets/p-tk-14-15-3.jpg", "assets/p-tk-14-15-4.jpg"]
+      },
+      {
+        id: "gourmet-16-tube",
+        name: "Vanille Gourmet",
+        subtitle: "16 cm • Tube",
+        grade: "Gourmet",
+        length: "16",
+        format: "Tube",
+        tag: "Premium",
+        price: 49.00,
+        compareAt: null,
+        stock: true,
+        images: ["assets/p-gourmet-16.jpg", "assets/p-gourmet-16-2.jpg", "assets/p-gourmet-16-3.jpg", "assets/p-gourmet-16-4.jpg"]
+      },
+      {
+        id: "gourmet-17-18-tube",
+        name: "Vanille Gourmet",
+        subtitle: "17–18 cm • Tube",
+        grade: "Gourmet",
+        length: "17-18",
+        format: "Tube",
+        tag: "Cadeau",
+        price: 69.00,
+        compareAt: 79.00,
+        stock: true,
+        images: ["assets/p-gourmet-17-18.jpg", "assets/p-gourmet-17-18-2.jpg", "assets/p-gourmet-17-18-3.jpg", "assets/p-gourmet-17-18-4.jpg"]
+      },
+      {
+        id: "tk-noir-16-sousvide",
+        name: "Vanille TK Noir",
+        subtitle: "16 cm • Sous-vide",
+        grade: "TK Noir",
+        length: "16",
+        format: "Sous-vide",
+        tag: "Extrait",
+        price: 44.00,
+        compareAt: null,
+        stock: true,
+        images: ["assets/p-tk-16.jpg", "assets/p-tk-16-2.jpg", "assets/p-tk-16-3.jpg", "assets/p-tk-16-4.jpg"]
+      }
+    ];
+
+    // =========================
+    // HELPERS
+    // =========================
+    const fmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+    const $ = (id) => document.getElementById(id);
+    function esc(str) { return String(str).replace(/[&<>"']/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[s])); }
+
+    function getQueryParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+
+    // =========================
+    // CART (same logic as others)
+    // =========================
+    const CART_KEYS = ["msv_cart", "cart"];
+    function resolveCartKey() { for (const k of CART_KEYS) if (localStorage.getItem(k)) return k; return CART_KEYS[0]; }
+    const CART_KEY = resolveCartKey();
+    function safeParse(v, fb) { try { return JSON.parse(v); } catch { return fb; } }
+    function normalize(raw) {
+      if (!raw) return [];
+      if (Array.isArray(raw)) return raw;
+      if (Array.isArray(raw.items)) return raw.items;
+      if (Array.isArray(raw.cart)) return raw.cart;
+      if (Array.isArray(raw.products)) return raw.products;
+      return [];
+    }
+    function getCart() {
+      const raw = safeParse(localStorage.getItem(CART_KEY), null);
+      return normalize(raw).map(it => ({
+        id: it.id ?? it.sku ?? it.slug ?? String(Math.random()),
+        name: it.name ?? it.title ?? "Produit",
+        price: Number(it.price ?? it.unitPrice ?? 0),
+        qty: Math.max(1, Number(it.qty ?? it.quantity ?? 1)),
+        image: it.image ?? it.img ?? it.thumbnail ?? ""
+      }));
+    }
+    function setCart(items) { localStorage.setItem(CART_KEY, JSON.stringify(items)); }
+    function cartCount(items) { return items.reduce((s, it) => s + (it.qty || 0), 0); }
+    function cartSubtotal(items) { return items.reduce((s, it) => s + (it.price * it.qty), 0); }
+
+    // =========================
+    // CART UI
+    // =========================
+    const cartBtn = $("cartBtn");
+    const cartBadge = $("cartBadge");
+    const cartOverlay = $("cartOverlay");
+    const cartDrawer = $("cartDrawer");
+    const cartClose = $("cartClose");
+    const cartItemsEl = $("cartItems");
+    const cartEmptyEl = $("cartEmpty");
+    const cartSubtotalEl = $("cartSubtotal");
+
+    function openCart() {
+      cartDrawer.classList.remove("translate-x-full");
+      cartOverlay.classList.remove("hidden");
+      cartBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+    function closeCart() {
+      cartDrawer.classList.add("translate-x-full");
+      cartOverlay.classList.add("hidden");
+      cartBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+
+    function renderCart() {
+      const items = getCart();
+      cartBadge.textContent = String(cartCount(items));
+      cartSubtotalEl.textContent = fmt.format(cartSubtotal(items) || 0);
+
+      const empty = items.length === 0;
+      cartEmptyEl.classList.toggle("hidden", !empty);
+      cartItemsEl.classList.toggle("hidden", empty);
+      if (empty) { cartItemsEl.innerHTML = ""; return; }
+
+      cartItemsEl.innerHTML = items.map((it, idx) => `
+        <article class="rounded-xxl glass p-4 ">
+          <div class="flex gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 overflow-hidden flex-shrink-0 grid place-items-center">
+              ${it.image ? `<img src="${it.image}" alt="${esc(it.name)}" class="w-full h-full object-cover" onerror="this.remove(); this.parentElement.innerHTML='<span class=&quot;iconify text-gold-500 text-2xl&quot; data-icon=&quot;mdi:vanilla&quot;></span>';">`
+          : `<span class="iconify text-gold-500 text-2xl" data-icon="mdi:vanilla"></span>`}
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-semibold text-vanilla-50 truncate">${esc(it.name)}</p>
+                  <p class="text-sm text-vanilla-100/70">${fmt.format(it.price || 0)} <span class="text-xs">/ unité</span></p>
+                </div>
+                <button class="p-2 rounded-xl hover:bg-vanilla-50/10 focus-ring"
+                  data-action="remove" data-index="${idx}" aria-label="Supprimer">
+                  <span class="iconify text-vanilla-100 text-xl" data-icon="mdi:trash-outline"></span>
+                </button>
+              </div>
+
+              <div class="mt-3 flex items-center justify-between gap-3">
+                <div class="inline-flex items-center rounded-full bg-vanilla-50/8 border border-vanilla-100/12 overflow-hidden">
+                  <button class="w-10 h-9 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
+                    data-action="dec" data-index="${idx}" aria-label="Diminuer">
+                    <span class="iconify text-vanilla-50" data-icon="mdi:minus"></span>
+                  </button>
+                  <span class="px-3 text-sm font-semibold text-vanilla-50">${it.qty}</span>
+                  <button class="w-10 h-9 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
+                    data-action="inc" data-index="${idx}" aria-label="Augmenter">
+                    <span class="iconify text-vanilla-50" data-icon="mdi:plus"></span>
+                  </button>
+                </div>
+                <p class="text-sm font-semibold text-vanilla-50">${fmt.format((it.price || 0) * (it.qty || 0))}</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function mutateCart(mutator) {
+      const items = getCart();
+      mutator(items);
+      const cleaned = items
+        .map(it => ({ ...it, qty: Math.max(0, Number(it.qty || 0)) }))
+        .filter(it => it.qty > 0);
+      setCart(cleaned);
+      renderCart();
+    }
+
+    cartBtn.addEventListener("click", () => {
+      const expanded = cartBtn.getAttribute("aria-expanded") === "true";
+      expanded ? closeCart() : openCart();
+      renderCart();
+    });
+    cartClose.addEventListener("click", closeCart);
+    cartOverlay.addEventListener("click", closeCart);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
+
+    cartItemsEl.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const action = btn.getAttribute("data-action");
+      const index = Number(btn.getAttribute("data-index"));
+      mutateCart((items) => {
+        if (!items[index]) return;
+        if (action === "remove") items.splice(index, 1);
+        if (action === "inc") items[index].qty += 1;
+        if (action === "dec") items[index].qty = Math.max(0, items[index].qty - 1);
+      });
+    });
+
+    window.addEventListener("storage", (e) => { if (CART_KEYS.includes(e.key)) renderCart(); });
+
+    // =========================
+    // TOAST
+    // =========================
+    const toastEl = $("toast");
+    const toastText = $("toastText");
+    let toastTimer = null;
+    function toast(msg) {
+      toastText.textContent = msg;
+      toastEl.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.add("hidden"), 1700);
+    }
+
+    // =========================
+    // PRODUCT PAGE LOGIC
+    // =========================
+    const id = getQueryParam("id") || PRODUCTS[0].id;
+    const product = PRODUCTS.find(p => p.id === id) || PRODUCTS[0];
+
+    // Fill UI
+    $("productName").textContent = product.name;
+    $("crumbName").textContent = product.name;
+    $("productSubtitle").textContent = product.subtitle;
+    $("badgeGrade").innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-500"></span> ${esc(product.grade)}`;
+    $("badgeTag").textContent = product.tag || "Premium";
+
+    $("price").textContent = fmt.format(product.price || 0);
+    if (product.compareAt) {
+      $("compareAt").classList.remove("hidden");
+      $("compareAt").textContent = fmt.format(product.compareAt);
+    }
+
+    $("stockText").textContent = product.stock ? "En stock" : "Rupture";
+    $("specGrade").textContent = product.grade || "—";
+    $("specLength").textContent = ({
+      "10-13": "10–13 cm", "14-15": "14–15 cm", "16": "16 cm", "17-18": "17–18 cm"
+    }[product.length] || product.length || "—");
+    $("specFormat").textContent = product.format || "—";
+
+    // Images
+    const imgs = Array.isArray(product.images) && product.images.length ? product.images : [product.image].filter(Boolean);
+    const mainImg = $("mainImg");
+    mainImg.src = imgs[0] || "";
+    mainImg.alt = product.name;
+
+    // Fill thumbs
+    const thumbBtns = Array.from(document.querySelectorAll(".thumb"));
+    thumbBtns.forEach((btn, i) => {
+      const src = imgs[i] || "";
+      btn.dataset.img = src;
+      btn.innerHTML = src
+        ? `<div class="aspect-square"><img src="${esc(src)}" alt="Miniature ${i + 1}" class="w-full h-full object-cover"></div>`
+        : `<div class="aspect-square grid place-items-center"><span class="iconify text-gold-500 text-2xl" data-icon="mdi:image-outline"></span></div>`;
+    });
+
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest(".thumb");
+      if (!b) return;
+      const src = b.dataset.img;
+      if (!src) return;
+      mainImg.src = src;
+    });
+
+    // Variants (simple demo)
+    const variantButtons = $("variantButtons");
+    const variants = [
+      { key: "Tube", label: "Tube (cadeau)", icon: "mdi:gift-outline" },
+      { key: "Sous-vide", label: "Sous-vide", icon: "mdi:archive-outline" }
+    ];
+    let selectedFormat = product.format || "Tube";
+
+    function renderVariants() {
+      variantButtons.innerHTML = variants.map(v => {
+        const active = v.key === selectedFormat;
+        return `
+          <button type="button" data-variant="${esc(v.key)}"
+            class="inline-flex items-center justify-between gap-2 rounded-2xl px-4 py-3 text-sm font-semibold border
+                  ${active ? 'bg-gradient-to-b from-gold-500/20 to-vanilla-50/5 border-gold-500/40 ' : 'bg-vanilla-50/8 border-vanilla-100/12 hover:bg-vanilla-50/12'}
+                  focus-ring">
+            <span class="inline-flex items-center gap-2">
+              <span class="iconify text-gold-500 text-xl" data-icon="${v.icon}"></span>
+              ${v.label}
+            </span>
+            ${active ? `<span class="iconify text-gold-500" data-icon="mdi:check-circle-outline"></span>` : ``}
+          </button>
+        `;
+      }).join("");
+    }
+    renderVariants();
+
+    variantButtons.addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-variant]");
+      if (!b) return;
+      selectedFormat = b.dataset.variant;
+      $("specFormat").textContent = selectedFormat;
+      renderVariants();
+      toast(`Format : ${selectedFormat}`);
+    });
+
+    // Quantity
+    let qty = 1;
+    const qtyVal = $("qtyVal");
+    $("qtyDec").addEventListener("click", () => { qty = Math.max(1, qty - 1); qtyVal.textContent = String(qty); });
+    $("qtyInc").addEventListener("click", () => { qty = Math.min(99, qty + 1); qtyVal.textContent = String(qty); });
+
+    // Add to cart
+    $("addToCartBtn").addEventListener("click", () => {
+      if (!product.stock) {
+        toast("Rupture — bientôt de retour");
+        return;
+      }
+      const items = getCart();
+      // We incorporate variant in name (simple demo)
+      const cartId = `${product.id}__${selectedFormat}`;
+      const name = `${product.name} — ${product.subtitle} — ${selectedFormat}`;
+      const idx = items.findIndex(x => x.id === cartId);
+      if (idx >= 0) items[idx].qty += qty;
+      else items.push({ id: cartId, name, price: product.price, qty, image: (imgs[0] || product.image || "") });
+      setCart(items);
+      renderCart();
+      toast("Ajouté au panier");
+      openCart();
+    });
+
+    // Tabs
+    const tabBtns = Array.from(document.querySelectorAll(".tabBtn"));
+    const panels = {
+      desc: $("tab-desc"),
+      usage: $("tab-usage"),
+      specs: $("tab-specs"),
+      shipping: $("tab-shipping")
+    };
+
+    function setTab(key) {
+      tabBtns.forEach(b => {
+        const active = b.dataset.tab === key;
+        b.setAttribute("aria-selected", active ? "true" : "false");
+        b.className = "tabBtn focus-ring rounded-full px-4 py-2 text-sm font-semibold border " + (
+          active
+            ? "bg-vanilla-50/10 border-vanilla-100/12"
+            : "bg-transparent border-vanilla-100/12 hover:bg-vanilla-50/10"
+        );
+      });
+      Object.entries(panels).forEach(([k, el]) => el.classList.toggle("hidden", k !== key));
+    }
+    tabBtns.forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
+
+    // Boot
+    renderCart();
+  </script>
+</body>
+
+</html>

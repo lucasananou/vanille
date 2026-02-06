@@ -1,179 +1,168 @@
 'use client';
 
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useCart } from '@/lib/cart-context';
-import { getImageUrl } from '@/lib/utils';
+
+const CartIcon = () => (
+    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="8" cy="21" r="1" />
+        <circle cx="19" cy="21" r="1" />
+        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.56-6.43H5.91" />
+    </svg>
+);
+
+const TrashIcon = () => (
+    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
+    </svg>
+);
 
 export default function CartPage() {
-    const { items, removeItem, updateQuantity, clearCart, total, itemCount } = useCart();
-
-    if (items.length === 0) {
-        return (
-            <div className="min-h-screen bg-white">
-                {/* Simple Nav */}
-                <nav className="border-b border-zinc-100">
-                    <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-                        <Link href="/" className="text-xl font-medium tracking-tight text-zinc-900 uppercase hover:text-[#a1b8ff] transition-colors">
-                            Tsniout
-                        </Link>
-                    </div>
-                </nav>
-
-                {/* Empty Cart */}
-                <div className="mx-auto max-w-7xl px-6 py-24 text-center">
-                    <svg className="mx-auto h-24 w-24 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    <h1 className="mt-6 text-2xl font-medium text-zinc-900">Votre panier est vide</h1>
-                    <p className="mt-2 text-zinc-500">Commencez vos achats pour ajouter des articles à votre panier.</p>
-                    <Link
-                        href="/"
-                        className="mt-8 inline-flex items-center gap-2 bg-zinc-900 px-8 py-3 text-sm font-medium text-white transition hover:bg-zinc-800"
-                    >
-                        Continuer mes achats
-                    </Link>
-                </div>
-            </div>
-        );
-    }
+    const { items, removeItem, updateQuantity, clearCart, total } = useCart();
+    const isEmpty = items.length === 0;
+    const fmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
     return (
-        <div className="min-h-screen bg-white">
-            {/* Simple Nav */}
-            <nav className="border-b border-zinc-100">
-                <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-                    <Link href="/" className="text-xl font-medium tracking-tight text-zinc-900 uppercase hover:text-[#a1b8ff] transition-colors">
-                        Tsniout
-                    </Link>
-                </div>
-            </nav>
+        <div className="flex flex-col min-h-screen bg-jungle-900 text-vanilla-50 font-sans antialiased">
+            <Header />
 
-            <div className="mx-auto max-w-7xl px-6 py-12">
-                <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-                    {/* Cart Items */}
-                    <div className="lg:col-span-2">
-                        <div className="flex items-center justify-between border-b border-zinc-200 pb-6">
-                            <h1 className="text-2xl font-medium text-zinc-900">Panier ({itemCount} article{itemCount > 1 ? 's' : ''})</h1>
-                            <button
-                                onClick={clearCart}
-                                className="text-sm text-zinc-500 hover:text-red-600 transition"
-                            >
-                                Vider le panier
-                            </button>
+            <main className="flex-grow">
+                <section className="relative overflow-hidden py-10 lg:py-16">
+                    <div className="absolute inset-0 grain opacity-40" aria-hidden="true"></div>
+                    <div className="mx-auto max-w-7xl px-4 relative">
+                        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                            <div>
+                                <h1 className="font-display text-4xl sm:text-5xl italic">Mon Panier</h1>
+                                <p className="text-vanilla-100/70 mt-3 text-lg">Vérifiez vos articles avant la dégustation.</p>
+                            </div>
+                            {!isEmpty && (
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={clearCart}
+                                        className="inline-flex items-center justify-center gap-2 rounded-full border border-vanilla-100/10 px-5 py-2.5 text-sm font-semibold hover:bg-vanilla-50/10 transition-all"
+                                    >
+                                        Vider
+                                    </button>
+                                    <Link
+                                        href="/checkout"
+                                        className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all font-bold"
+                                    >
+                                        Finaliser la commande
+                                    </Link>
+                                </div>
+                            )}
                         </div>
 
-                        <div className="mt-8 space-y-6">
-                            {items.map((item) => (
-                                <div key={item.id} className="flex gap-6 border-b border-zinc-100 pb-6">
-                                    {/* Product Image */}
-                                    <div className="relative h-32 w-24 flex-shrink-0 overflow-hidden bg-zinc-100">
-                                        {item.product.images?.[0] ? (
-                                            <Image
-                                                src={getImageUrl(item.product.images[0])}
-                                                alt={item.product.title}
-                                                fill
-                                                className="object-cover"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full items-center justify-center text-zinc-400 text-xs">
-                                                Pas d'image
-                                            </div>
-                                        )}
-                                    </div>
+                        {isEmpty ? (
+                            <div className="mt-12 p-12 rounded-3xl glass border border-vanilla-100/10 text-center">
+                                <div className="w-20 h-20 rounded-full bg-vanilla-50/5 border border-vanilla-100/10 grid place-items-center mx-auto mb-6 text-gold-500">
+                                    <CartIcon />
+                                </div>
+                                <h2 className="font-display text-2xl text-white">Votre panier est vide</h2>
+                                <p className="text-vanilla-100/60 mt-3">Laissez-vous tenter par nos gousses de vanille d'exception.</p>
+                                <Link
+                                    href="/"
+                                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-3 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all font-bold"
+                                >
+                                    Découvrir la collection
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="mt-12 space-y-6">
+                                <div className="grid gap-6">
+                                    {items.map((item) => (
+                                        <div key={item.id} className="p-6 rounded-3xl glass border border-vanilla-100/10 hover:border-vanilla-100/20 transition-all group">
+                                            <div className="flex flex-col md:flex-row md:items-center gap-6">
+                                                <div className="flex items-center gap-6 flex-1">
+                                                    <div className="w-24 h-24 rounded-2xl bg-vanilla-50/5 border border-vanilla-100/15 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform" aria-hidden="true">
+                                                        <div className="text-gold-500">
+                                                            <svg className="w-10 h-10" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="font-display text-2xl truncate text-white">{item.product.title}</p>
+                                                        {item.variant && (
+                                                            <p className="text-sm text-vanilla-100/60 mt-1">
+                                                                Edition : <span className="text-vanilla-100">{item.variant.title}</span>
+                                                            </p>
+                                                        )}
+                                                        <p className="text-sm font-semibold text-gold-500 mt-2">
+                                                            {fmt.format(item.price / 100)} / unité
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                    {/* Product Info */}
-                                    <div className="flex flex-1 flex-col">
-                                        <div className="flex justify-between">
-                                            <div>
-                                                <Link
-                                                    href={`/produit/${item.product.slug}`}
-                                                    className="text-base font-medium text-zinc-900 hover:text-[#a1b8ff]"
-                                                >
-                                                    {item.product.title}
-                                                </Link>
-                                                {item.variant && (
-                                                    <p className="mt-1 text-sm text-zinc-500">{item.variant.title}</p>
-                                                )}
-                                                <p className="mt-1 text-sm text-zinc-400">REF : {item.product.sku}</p>
+                                                <div className="flex items-center justify-between md:justify-end gap-10 border-t md:border-t-0 border-vanilla-100/10 pt-6 md:pt-0">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="flex items-center rounded-2xl bg-vanilla-50/5 border border-vanilla-100/10 overflow-hidden">
+                                                            <button
+                                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                                className="w-10 h-10 flex items-center justify-center hover:bg-vanilla-50/10 transition-colors text-lg"
+                                                            >
+                                                                −
+                                                            </button>
+                                                            <input
+                                                                type="number"
+                                                                min="1"
+                                                                value={item.quantity}
+                                                                onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 1)}
+                                                                className="w-12 bg-transparent text-center text-sm font-bold focus:outline-none"
+                                                            />
+                                                            <button
+                                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                                className="w-10 h-10 flex items-center justify-center hover:bg-vanilla-50/10 transition-colors text-lg"
+                                                            >
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="text-right min-w-[120px]">
+                                                        <p className="text-2xl font-display text-white">
+                                                            {fmt.format((item.price / 100) * item.quantity)}
+                                                        </p>
+                                                    </div>
+
+                                                    <button
+                                                        onClick={() => removeItem(item.id)}
+                                                        className="p-3 rounded-2xl hover:bg-red-500/10 text-vanilla-100/40 hover:text-red-500 transition-all border border-transparent hover:border-red-500/20"
+                                                        aria-label="Supprimer"
+                                                    >
+                                                        <TrashIcon />
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <p className="text-base font-medium text-zinc-900">
-                                                {((item.price / 100) * item.quantity).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
-                                            </p>
                                         </div>
+                                    ))}
+                                </div>
 
-                                        {/* Quantity & Remove */}
-                                        <div className="mt-4 flex items-center gap-4">
-                                            <div className="flex items-center border border-zinc-200 rounded">
-                                                <button
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    className="px-3 py-1 hover:bg-zinc-100 transition"
-                                                >
-                                                    −
-                                                </button>
-                                                <span className="px-4 py-1 text-sm font-medium">{item.quantity}</span>
-                                                <button
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    className="px-3 py-1 hover:bg-zinc-100 transition"
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
-
-                                            <button
-                                                onClick={() => removeItem(item.id)}
-                                                className="text-sm text-zinc-500 hover:text-red-600 transition"
-                                            >
-                                                Supprimer
-                                            </button>
-                                        </div>
+                                <div className="mt-12 p-8 rounded-3xl glass border border-vanilla-100/10 flex flex-col sm:flex-row items-center justify-between gap-8">
+                                    <div className="text-center sm:text-left">
+                                        <p className="text-vanilla-100/40 text-xs uppercase tracking-widest font-bold">Total Estimé</p>
+                                        <p className="text-4xl sm:text-5xl font-display mt-2 text-transparent bg-clip-text bg-gradient-to-r from-gold-500 back to-vanilla-100">{fmt.format(total / 100)}</p>
+                                        <p className="text-vanilla-100/40 text-xs mt-2">Livraison offerte dès 80€ d'achat.</p>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Order Summary */}
-                    <div className="lg:col-span-1">
-                        <div className="sticky top-6 rounded-lg border border-zinc-200 p-6">
-                            <h2 className="text-lg font-medium text-zinc-900">Récapitulatif de la commande</h2>
-
-                            <div className="mt-6 space-y-4">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-zinc-600">Sous-total</span>
-                                    <span className="font-medium text-zinc-900">{(total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-zinc-600">Livraison</span>
-                                    <span className="text-zinc-500">Calculée à l'étape suivante</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-zinc-600">Taxes</span>
-                                    <span className="text-zinc-500">Calculées à l'étape suivante</span>
-                                </div>
-
-                                <div className="border-t border-zinc-200 pt-4">
-                                    <div className="flex justify-between">
-                                        <span className="text-base font-medium text-zinc-900">Total</span>
-                                        <span className="text-xl font-medium text-zinc-900">{(total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
-                                    </div>
+                                    <Link
+                                        href="/checkout"
+                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-12 py-5 text-lg font-bold text-jungle-900 hover:opacity-90 transition-all hover:scale-[1.02]"
+                                    >
+                                        Commander maintenant
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </Link>
                                 </div>
                             </div>
-
-                            <button className="mt-6 w-full bg-zinc-900 py-3 text-sm font-medium uppercase tracking-widest text-white transition hover:bg-zinc-800">
-                                Passer à la caisse
-                            </button>
-
-                            <Link
-                                href="/"
-                                className="mt-4 block text-center text-sm text-zinc-600 hover:text-zinc-900"
-                            >
-                                Continuer mes achats
-                            </Link>
-                        </div>
+                        )}
                     </div>
-                </div>
-            </div>
+                </section>
+            </main>
+
+            <Footer />
         </div>
     );
 }
