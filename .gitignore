@@ -12,6 +12,7 @@ coverage
 .turbo
 .next
 **/.next
+**/public/uploads
 
 # Specifics
 wc-product-export-*.csv
