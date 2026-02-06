@@ -1,775 +1,653 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#FBF7F0" />
+  <meta name="theme-color" content="#0E1B14" />
+  <title>Panier — MSV Nosy-Be</title>
+  <meta name="description"
+    content="Votre panier MSV Nosy-Be : ajustez les quantités, appliquez un code promo et finalisez votre commande." />
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
-        display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
-      },
-      colors: {
-        cream: {
-          50: '#FBF7F0',
-          100: '#F7EEDF',
-          200: '#F1E2C9',
-        },
-        cocoa: {
-          900: '#1B1410',
-          800: '#2A1F19',
-          700: '#3B2B22',
-          600: '#5B5148',
-        },
-        ambergold: {
-          500: '#D7A84A',
-          600: '#C79637',
-        },
-        deepgreen: {
-          800: '#1F3A2E',
-          900: '#13261F',
-        }
-      },
-      boxShadow: {
-        soft: '0 10px 30px rgba(27,20,16,.10)',
-        lift: '0 18px 50px rgba(27,20,16,.14)',
-      },
-      borderRadius: {
-        xl2: '1.25rem',
-      }
-    }
-  }
-}
-</script>
-
-  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
-  <title>Panier — MSV Nosy‑Be</title>
-  <meta name="description" content="Panier (template) avec quantité, suppression, bouton checkout." />
-</head>
-<body class="bg-cream-50 text-cocoa-900 font-sans antialiased">
-
-<header class="sticky top-0 z-30 bg-cream-50/90 backdrop-blur border-b border-cream-200">
-  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
-    <a href="index.html" class="flex items-center gap-3 group">
-      <div class="w-10 h-10 rounded-2xl bg-white border border-cream-200 flex items-center justify-center  group-hover: transition-shadow" aria-hidden="true">
-        <span class="iconify text-cocoa-800 text-lg" data-icon="mdi:vanilla"></span>
-      </div>
-      <div class="leading-tight">
-        <p class="font-display text-lg text-cocoa-900">MSV Nosy‑Be</p>
-        <p class="text-xs text-cocoa-600">Vanille de Madagascar</p>
-      </div>
-    </a>
-
-    <nav class="hidden lg:flex items-center gap-2" aria-label="Navigation principale">
-      <a class="px-3 py-2 rounded-full text-sm font-semibold transition-colors text-cocoa-700 hover:bg-cream-100" href="shop.html">Boutique</a>
-      <a class="px-3 py-2 rounded-full text-sm font-semibold transition-colors text-cocoa-700 hover:bg-cream-100" href="about.html">À propos</a>
-      <a class="px-3 py-2 rounded-full text-sm font-semibold transition-colors text-cocoa-700 hover:bg-cream-100" href="contact.html">Contact</a>
-      <a class="px-3 py-2 rounded-full text-sm font-semibold transition-colors text-cocoa-700 hover:bg-cream-100" href="b2b.html">B2B / Devis</a>
-    </nav>
-
-    <div class="flex items-center gap-2">
-      <button type="button" data-msv-cart-open class="relative inline-flex items-center gap-2 rounded-full bg-ambergold-500 px-4 py-2.5 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500" aria-label="Ouvrir le panier">
-        <span class="iconify" data-icon="mdi:cart-outline"></span>
-        <span class="hidden sm:inline">Panier</span>
-        <span data-msv-cart-count class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-cocoa-900 text-white text-xs font-bold flex items-center justify-center">0</span>
-      </button>
-
-      <button id="msvMobileBtn" class="lg:hidden p-2.5 rounded-2xl border border-cream-200 bg-white hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500" aria-label="Ouvrir le menu" aria-expanded="false">
-        <span class="iconify text-cocoa-800" data-icon="mdi:menu"></span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<main>
-<section class="bg-cream-50">
-  <div class="mx-auto max-w-6xl px-4 pt-10 pb-14">
-    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-      <div>
-        <h1 class="font-display text-4xl text-cocoa-900">Panier</h1>
-        <p class="text-cocoa-600 mt-2">Template statique : configurez vos prix et votre paiement.</p>
-      </div>
-      <div class="flex gap-3">
-        <button id="msvClearCart" class="inline-flex items-center justify-center gap-2 rounded-full border border-cocoa-900/20 bg-white px-5 py-2.5 text-sm font-semibold text-cocoa-900 hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-          <span class="iconify" data-icon="mdi:trash-can-outline"></span> Vider
-        </button>
-        <a href="checkout.html" class="inline-flex items-center justify-center gap-2 rounded-full bg-ambergold-500 px-5 py-2.5 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-          Commander <span class="iconify" data-icon="mdi:arrow-right"></span>
-        </a>
-      </div>
-    </div>
-
-    <div id="msvCartPageEmpty" class="hidden mt-8 p-6 rounded-2xl bg-white border border-cream-200 ">
-      <p class="font-semibold text-cocoa-900">Votre panier est vide.</p>
-      <p class="text-sm text-cocoa-600 mt-2">Commencez par choisir une taille et un conditionnement.</p>
-      <a href="shop.html" class="mt-4 inline-flex items-center gap-2 rounded-full bg-ambergold-500 px-6 py-3 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-        Aller à la boutique <span class="iconify" data-icon="mdi:arrow-right"></span>
-      </a>
-    </div>
-
-    <div id="msvCartPageItems" class="mt-8 space-y-4"></div>
-  </div>
-</section>
-
-</main>
-
-<footer class="border-t border-cream-200 bg-cream-50">
-  <div class="mx-auto max-w-6xl px-4 py-10">
-    <div class="grid md:grid-cols-4 gap-8">
-      <div>
-        <p class="font-display text-xl text-cocoa-900">MSV Nosy‑Be</p>
-        <p class="text-sm text-cocoa-600 mt-2">Vanille de Madagascar — e‑commerce (template).</p>
-        <div class="mt-4 flex items-center gap-2 text-cocoa-700">
-          <span class="iconify" data-icon="mdi:leaf"></span>
-          <span class="text-sm">100% naturel (à confirmer / compléter)</span>
-        </div>
-      </div>
-      <div>
-        <p class="text-sm font-semibold text-cocoa-900">Boutique</p>
-        <ul class="mt-3 space-y-2 text-sm">
-          <li><a class="text-cocoa-700 hover:underline" href="shop.html">Tous les produits</a></li>
-          <li><a class="text-cocoa-700 hover:underline" href="shop.html#tailles">Tailles</a></li>
-          <li><a class="text-cocoa-700 hover:underline" href="b2b.html">B2B / Devis</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-sm font-semibold text-cocoa-900">Infos</p>
-        <ul class="mt-3 space-y-2 text-sm">
-          <li><a class="text-cocoa-700 hover:underline" href="about.html">À propos</a></li>
-          <li><a class="text-cocoa-700 hover:underline" href="contact.html">Contact</a></li>
-          <li><a class="text-cocoa-700 hover:underline" href="checkout.html">Commande</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-sm font-semibold text-cocoa-900">Légal</p>
-        <ul class="mt-3 space-y-2 text-sm">
-          <li><a class="text-cocoa-700 hover:underline" href="#" aria-disabled="true">Mentions légales (placeholder)</a></li>
-          <li><a class="text-cocoa-700 hover:underline" href="#" aria-disabled="true">CGV (placeholder)</a></li>
-          <li><a class="text-cocoa-700 hover:underline" href="#" aria-disabled="true">Confidentialité (placeholder)</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="mt-10 pt-6 border-t border-cream-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-      <p class="text-xs text-cocoa-600">© <span id="msvYear"></span> MSV Nosy‑Be — Template statique. Remplir prix, livraison, paiement, mentions.</p>
-      <div class="flex items-center gap-3 text-cocoa-600">
-        <span class="text-xs">Réseaux :</span>
-        <a class="hover:underline text-xs" href="#" aria-disabled="true">Instagram (placeholder)</a>
-        <a class="hover:underline text-xs" href="#" aria-disabled="true">Facebook (placeholder)</a>
-      </div>
-    </div>
-  </div>
   <script>
-    document.getElementById('msvYear').textContent = new Date().getFullYear();
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          },
+          colors: {
+            obsidian: '#07100C',
+            jungle: {
+              950: '#06110D',
+              900: '#0E1B14',
+              800: '#13261C',
+              700: '#183023',
+            },
+            vanilla: {
+              50: '#FBF7EF',
+              100: '#F6EEDC',
+              200: '#EEDDBD',
+              300: '#E2CFA7',
+            },
+            cacao: {
+              950: '#120C0A',
+              900: '#1A1210',
+              800: '#2A1F1A',
+              700: '#3C2E27',
+              600: '#5A514A',
+              500: '#6E625A',
+              400: '#8A7E76',
+            },
+            gold: {
+              500: '#D7A84A',
+              600: '#C79637',
+              700: '#B6842B',
+            }
+          },
+          boxShadow: {
+            soft: '0 14px 40px rgba(7,16,12,.16)',
+            lift: '0 22px 70px rgba(7,16,12,.22)',
+            glow: '0 0 0 1px rgba(215,168,74,.20), 0 18px 60px rgba(215,168,74,.16)',
+          },
+          borderRadius: { xxl: '1.5rem' }
+        }
+      }
+    }
   </script>
-</footer>
 
+  <!-- Icons -->
+  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
 
-  <!-- Mobile menu overlay -->
-  <div id="msvMobileOverlay" class="hidden fixed inset-0 bg-cocoa-900/50 z-40" aria-hidden="true"></div>
-  <aside id="msvMobilePanel" class="fixed right-0 top-0 bottom-0 w-[86%] max-w-sm bg-cream-50 z-50  border-l border-cream-200 translate-x-full transition-transform" aria-label="Menu mobile">
-    <div class="p-5 flex items-center justify-between border-b border-cream-200">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-white border border-cream-200 flex items-center justify-center " aria-hidden="true">
-          <span class="iconify text-cocoa-800" data-icon="mdi:vanilla"></span>
+  <style>
+    .glass-dark {
+      background: rgba(246, 238, 220, .06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(246, 238, 220, .16);
+    }
+
+    .card-light {
+      background: rgba(255, 255, 255, .72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 18, 16, .08);
+    }
+
+    .focus-ring:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(215, 168, 74, .35);
+    }
+
+    .grain::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
+      background-size: 3px 3px;
+      opacity: .14;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    .hero {
+      background:
+        radial-gradient(1200px 420px at 18% 10%, rgba(215, 168, 74, .22), transparent 55%),
+        radial-gradient(900px 420px at 80% 20%, rgba(246, 238, 220, .10), transparent 60%),
+        linear-gradient(180deg, rgba(14, 27, 20, .96), rgba(14, 27, 20, .86));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rm-anim {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-vanilla-50 text-cacao-900 font-sans antialiased">
+  <a href="#content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-white focus:text-cacao-900 focus:px-4 focus:py-2 focus:rounded-full">
+    Aller au contenu
+  </a>
+
+  <!-- =========================
+  HEADER (exotique) — le reste en light
+  ========================== -->
+  <header class="sticky top-0 z-50 border-b border-vanilla-100/15 bg-jungle-900/70 backdrop-blur">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-3 rounded-2xl px-2 py-1 focus-ring">
+        <div
+          class="w-10 h-10 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center shadow-soft">
+          <span class="iconify text-gold-500 text-xl" data-icon="mdi:vanilla"></span>
         </div>
-        <div>
-          <p class="font-display text-lg text-cocoa-900 leading-tight">MSV Nosy‑Be</p>
-          <p class="text-xs text-cocoa-600">Vanille de Madagascar</p>
+        <div class="leading-tight">
+          <p class="font-display text-lg text-vanilla-50">MSV Nosy-Be</p>
+          <p class="text-xs text-vanilla-100/70">Panier</p>
         </div>
-      </div>
-      <button class="p-2 rounded-xl hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500" id="msvMobileBtnClose" onclick="document.getElementById('msvMobileBtn').click()" aria-label="Fermer">
-        <span class="iconify" data-icon="mdi:close"></span>
-      </button>
-    </div>
-    <nav class="p-5 space-y-2">
-      <a class="block px-4 py-3 rounded-2xl bg-white border border-cream-200 hover:bg-cream-100 font-semibold text-cocoa-900" href="shop.html">Boutique</a>
-      <a class="block px-4 py-3 rounded-2xl bg-white border border-cream-200 hover:bg-cream-100 font-semibold text-cocoa-900" href="about.html">À propos</a>
-      <a class="block px-4 py-3 rounded-2xl bg-white border border-cream-200 hover:bg-cream-100 font-semibold text-cocoa-900" href="contact.html">Contact</a>
-      <a class="block px-4 py-3 rounded-2xl bg-white border border-cream-200 hover:bg-cream-100 font-semibold text-cocoa-900" href="b2b.html">B2B / Devis</a>
-    </nav>
-    <div class="p-5 border-t border-cream-200">
-      <a href="cart.html" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-ambergold-500 px-5 py-3 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-        <span class="iconify" data-icon="mdi:cart-outline"></span> Voir le panier
       </a>
-      <p class="text-xs text-cocoa-600 mt-3">Infos (téléphone / livraison / paiement) à compléter.</p>
-    </div>
-  </aside>
 
-  <!-- Cart drawer overlay -->
-  <div id="msvCartOverlay" class="hidden fixed inset-0 bg-cocoa-900/50 z-40" aria-hidden="true"></div>
-  <aside id="msvCartDrawer" class="fixed right-0 top-0 bottom-0 w-[92%] max-w-md bg-cream-50 z-50  border-l border-cream-200 translate-x-full transition-transform" aria-label="Panier">
-    <div class="p-5 flex items-start justify-between gap-4 border-b border-cream-200">
-      <div>
-        <p class="font-display text-xl text-cocoa-900">Panier</p>
-        <p class="text-sm text-cocoa-600 mt-1">Démo statique (prix à configurer).</p>
-      </div>
-      <button class="p-2 rounded-xl hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500" data-msv-cart-close aria-label="Fermer le panier">
-        <span class="iconify" data-icon="mdi:close"></span>
-      </button>
-    </div>
-    <div class="p-5 space-y-4 overflow-auto h-[calc(100%-210px)]">
-      <div id="msvCartEmpty" class="hidden p-5 rounded-2xl bg-white border border-cream-200 ">
-        <p class="font-semibold text-cocoa-900">Votre panier est vide.</p>
-        <p class="text-sm text-cocoa-600 mt-1">Découvrez nos gousses et packs.</p>
-        <a href="shop.html" class="mt-4 inline-flex items-center gap-2 rounded-full bg-ambergold-500 px-5 py-2.5 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-          Aller à la boutique <span class="iconify" data-icon="mdi:arrow-right"></span>
+      <nav class="hidden lg:flex items-center gap-1 text-sm text-vanilla-100/85" aria-label="Navigation principale">
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="index.html">Accueil</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="shop.html">Boutique</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="about.html">À propos</a>
+        <a class="px-4 py-2 rounded-full hover:bg-vanilla-50/10 focus-ring" href="contact.html">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="shop.html"
+          class="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900
+                 bg-gradient-to-b from-gold-500 to-gold-600 shadow-glow hover:shadow-lift transition rm-anim focus-ring">
+          Continuer mes achats
+          <span class="iconify" data-icon="mdi:arrow-right"></span>
         </a>
+        <span
+          class="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold glass-dark text-vanilla-50">
+          <span class="iconify text-gold-500" data-icon="mdi:lock-outline"></span>
+          Checkout sécurisé <span class="text-vanilla-100/60">(à connecter)</span>
+        </span>
       </div>
-      <div id="msvCartItems" class="space-y-3"></div>
     </div>
-    <div class="p-5 border-t border-cream-200 space-y-3">
-      <a href="checkout.html" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-cocoa-900 px-5 py-3 text-sm font-semibold text-white  hover:bg-cocoa-800 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-        <span class="iconify" data-icon="mdi:credit-card-outline"></span> Passer à la commande
-      </a>
-      <a href="cart.html" class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-cocoa-900/20 bg-white px-5 py-3 text-sm font-semibold text-cocoa-900 hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-        Voir le panier
-      </a>
-      <p class="text-xs text-cocoa-600">Ajoutez Stripe/WooCommerce pour un paiement réel.</p>
-    </div>
-  </aside>
+  </header>
 
-  <!-- Toast -->
-  <div id="msvToast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] px-4 py-3 rounded-full bg-cocoa-900 text-white text-sm  opacity-0 translate-y-3 pointer-events-none transition-all">
-    Ajouté au panier.
+  <!-- =========================
+  HERO (optionnel, premium + conversion)
+  ========================== -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 hero grain" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-7xl px-4 py-10">
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full glass-dark px-4 py-2 shadow-soft text-vanilla-50">
+            <span class="iconify text-gold-500" data-icon="mdi:check-decagram-outline"></span>
+            <span class="text-sm font-semibold">Dernière étape avant le goût.</span>
+            <span class="text-sm text-vanilla-100/70">Votre sélection est prête.</span>
+          </div>
+          <h1 class="mt-4 font-display text-3xl sm:text-4xl text-vanilla-50 leading-[1.06]">
+            Votre panier
+          </h1>
+          <p class="mt-3 text-sm text-vanilla-100/75 max-w-2xl">
+            Ajustez les quantités, puis finalisez. <span class="text-vanilla-50 font-semibold">Astuce</span> : un tube
+            cadeau + une longueur supérieure = effet “wow” garanti en recette.
+          </p>
+        </div>
+
+        <!-- Free shipping progress (configurable, sans promesse factuelle) -->
+        <div class="rounded-[22px] glass-dark p-4 w-full lg:w-[420px]">
+          <div class="flex items-center justify-between gap-3">
+            <p class="text-sm font-semibold text-vanilla-50">Objectif panier</p>
+            <p id="goalText" class="text-xs text-vanilla-100/70">—</p>
+          </div>
+          <div class="mt-3 h-2 rounded-full bg-vanilla-50/10 overflow-hidden">
+            <div id="goalBar" class="h-full w-0 bg-gradient-to-r from-gold-500 to-gold-600 transition rm-anim"></div>
+          </div>
+          <p class="mt-2 text-xs text-vanilla-100/60">
+            <span class="iconify align-[-2px] text-gold-500" data-icon="mdi:information-outline"></span>
+            Paramètre marketing : seuil “livraison offerte” configurable (sinon, ignore ce bloc).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+  CART PAGE (LIGHT)
+  ========================== -->
+  <main id="content" class="mx-auto max-w-7xl px-4 py-10">
+    <div class="grid lg:grid-cols-12 gap-8 items-start">
+      <!-- Left: items -->
+      <section class="lg:col-span-8">
+        <div class="flex items-center justify-between gap-4">
+          <h2 class="font-display text-2xl">Articles</h2>
+          <button id="clearCartBtn"
+            class="text-sm font-semibold text-cacao-700 hover:text-cacao-900 underline underline-offset-4 focus-ring rounded-full px-2 py-1">
+            Vider le panier
+          </button>
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="hidden mt-6 rounded-[28px] card-light shadow-soft p-7">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-vanilla-100 border border-cacao-900/10 grid place-items-center">
+              <span class="iconify text-gold-600 text-3xl" data-icon="mdi:cart-outline"></span>
+            </div>
+            <div class="flex-1">
+              <p class="text-lg font-semibold">Votre panier est vide.</p>
+              <p class="mt-1 text-sm text-cacao-700">Choisissez une longueur, un grade, et repartez avec une vanille
+                premium.</p>
+            </div>
+            <a href="shop.html"
+              class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900
+                     bg-gradient-to-b from-gold-500 to-gold-600 shadow-glow hover:shadow-lift transition rm-anim focus-ring">
+              Aller à la boutique
+              <span class="iconify" data-icon="mdi:arrow-right"></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Items list -->
+        <div id="itemsList" class="mt-6 space-y-4"></div>
+
+        <!-- Upsell (conversion) -->
+        <div class="mt-8 rounded-[28px] card-light shadow-soft overflow-hidden">
+          <div class="p-7">
+            <p class="text-sm font-semibold text-cacao-900">Petit + qui augmente la satisfaction</p>
+            <div class="mt-4 grid sm:grid-cols-2 gap-4">
+              <div class="rounded-xxl bg-white/70 border border-cacao-900/10 p-4">
+                <div class="flex items-start gap-3">
+                  <span class="iconify text-gold-600 text-2xl mt-0.5" data-icon="mdi:gift-outline"></span>
+                  <div>
+                    <p class="font-semibold">Tube cadeau premium</p>
+                    <p class="mt-1 text-sm text-cacao-700">Parfait pour offrir (ou stocker proprement). <span
+                        class="text-cacao-500">(à relier à un produit réel)</span></p>
+                  </div>
+                </div>
+              </div>
+              <div class="rounded-xxl bg-white/70 border border-cacao-900/10 p-4">
+                <div class="flex items-start gap-3">
+                  <span class="iconify text-gold-600 text-2xl mt-0.5" data-icon="mdi:chef-hat"></span>
+                  <div>
+                    <p class="font-semibold">Conseil “chef”</p>
+                    <p class="mt-1 text-sm text-cacao-700">1 gousse = 1 crème + sucre vanillé avec la gousse. Zéro
+                      perte.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-col sm:flex-row gap-3">
+              <a href="shop.html"
+                class="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold bg-white/80 border border-cacao-900/10 hover:bg-white focus-ring">
+                Ajouter un produit
+                <span class="iconify" data-icon="mdi:plus"></span>
+              </a>
+              <a href="about.html"
+                class="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold bg-white/80 border border-cacao-900/10 hover:bg-white focus-ring">
+                Voir le système de production
+                <span class="iconify" data-icon="mdi:factory"></span>
+              </a>
+            </div>
+          </div>
+          <div class="h-1 bg-gradient-to-r from-transparent via-gold-500/70 to-transparent"></div>
+        </div>
+      </section>
+
+      <!-- Right: summary -->
+      <aside class="lg:col-span-4">
+        <div class="lg:sticky lg:top-24 space-y-4">
+          <div class="rounded-[28px] card-light shadow-lift p-6">
+            <div class="flex items-center justify-between">
+              <h3 class="font-display text-xl">Récapitulatif</h3>
+              <span
+                class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-vanilla-100 border border-cacao-900/10">
+                <span class="iconify text-gold-600" data-icon="mdi:shield-check-outline"></span>
+                Confiance <span class="text-cacao-500">(à confirmer)</span>
+              </span>
+            </div>
+
+            <div class="mt-5 space-y-3 text-sm">
+              <div class="flex items-center justify-between">
+                <p class="text-cacao-700">Sous-total</p>
+                <p class="font-semibold" id="subtotal">0,00 €</p>
+              </div>
+              <div class="flex items-center justify-between">
+                <p class="text-cacao-700">Livraison</p>
+                <p class="text-cacao-700" id="shippingLine">Calculée à l’étape suivante</p>
+              </div>
+              <div class="flex items-center justify-between">
+                <p class="text-cacao-700">Taxes</p>
+                <p class="text-cacao-700" id="taxLine">Selon destination</p>
+              </div>
+
+              <div class="pt-3 border-t border-cacao-900/10 flex items-center justify-between">
+                <p class="text-cacao-900 font-semibold">Total estimé</p>
+                <p class="text-xl font-semibold" id="total">0,00 €</p>
+              </div>
+            </div>
+
+            <!-- CTA checkout -->
+            <button id="checkoutBtn"
+              class="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900
+                     bg-gradient-to-b from-gold-500 to-gold-600 shadow-glow hover:shadow-lift transition rm-anim focus-ring">
+              Passer au paiement
+              <span class="iconify" data-icon="mdi:lock-outline"></span>
+            </button>
+            <p class="mt-2 text-xs text-cacao-600">
+              Paiement sécurisé (à connecter) • Vous pourrez confirmer l’adresse et la livraison au checkout.
+            </p>
+
+            <!-- Express checkout placeholders -->
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <button
+                class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-white/80 border border-cacao-900/10 hover:bg-white focus-ring">
+                <span class="iconify text-cacao-700" data-icon="mdi:apple"></span>
+                Apple Pay
+              </button>
+              <button
+                class="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-white/80 border border-cacao-900/10 hover:bg-white focus-ring">
+                <span class="iconify text-cacao-700" data-icon="mdi:paypal"></span>
+                PayPal
+              </button>
+            </div>
+            <p class="mt-2 text-[11px] text-cacao-500">Boutons express = placeholders UI (à brancher si dispo).</p>
+
+            <!-- Coupon (no fake discount) -->
+            <details class="mt-5 rounded-xxl bg-white/75 border border-cacao-900/10 p-4">
+              <summary class="cursor-pointer text-sm font-semibold focus-ring rounded-xl px-2 py-1">
+                Vous avez un code promo ?
+              </summary>
+              <div class="mt-3 flex gap-2">
+                <input id="couponInput" type="text" placeholder="Entrer le code"
+                  class="w-full rounded-full px-4 py-2.5 text-sm bg-white border border-cacao-900/10 focus-ring" />
+                <button id="applyCouponBtn"
+                  class="rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-100 border border-cacao-900/10 hover:bg-vanilla-200 focus-ring">
+                  Appliquer
+                </button>
+              </div>
+              <p id="couponMsg" class="mt-2 text-xs text-cacao-600"></p>
+            </details>
+
+            <!-- Trust row (no promises) -->
+            <div class="mt-5 grid grid-cols-3 gap-3 text-xs">
+              <div class="rounded-xxl bg-white/70 border border-cacao-900/10 p-3 text-center">
+                <span class="iconify text-gold-600 text-xl" data-icon="mdi:truck-outline"></span>
+                <p class="mt-1 font-semibold">Livraison</p>
+                <p class="text-cacao-500">à préciser</p>
+              </div>
+              <div class="rounded-xxl bg-white/70 border border-cacao-900/10 p-3 text-center">
+                <span class="iconify text-gold-600 text-xl" data-icon="mdi:restore"></span>
+                <p class="mt-1 font-semibold">Retours</p>
+                <p class="text-cacao-500">à préciser</p>
+              </div>
+              <div class="rounded-xxl bg-white/70 border border-cacao-900/10 p-3 text-center">
+                <span class="iconify text-gold-600 text-xl" data-icon="mdi:chat-outline"></span>
+                <p class="mt-1 font-semibold">Support</p>
+                <p class="text-cacao-500">contact</p>
+              </div>
+            </div>
+
+            <div class="mt-5 flex items-center justify-between text-xs text-cacao-500">
+              <div class="flex items-center gap-2">
+                <span class="iconify" data-icon="mdi:credit-card-outline"></span>
+                <span>Paiements</span>
+              </div>
+              <div class="flex items-center gap-2 text-lg">
+                <span class="iconify" data-icon="mdi:visa"></span>
+                <span class="iconify" data-icon="mdi:mastercard"></span>
+                <span class="iconify" data-icon="mdi:credit-card-outline"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reassurance note -->
+          <div class="rounded-[28px] bg-white/70 border border-cacao-900/10 p-5">
+            <p class="text-sm font-semibold">Mini check anti-abandon</p>
+            <ul class="mt-3 space-y-2 text-sm text-cacao-700">
+              <li class="flex gap-2"><span class="iconify text-gold-600 mt-0.5"
+                  data-icon="mdi:check-circle-outline"></span> Votre panier est sauvegardé automatiquement.</li>
+              <li class="flex gap-2"><span class="iconify text-gold-600 mt-0.5"
+                  data-icon="mdi:check-circle-outline"></span> Vous confirmerez la livraison au paiement.</li>
+              <li class="flex gap-2"><span class="iconify text-gold-600 mt-0.5"
+                  data-icon="mdi:check-circle-outline"></span> Besoin d’aide ? <a
+                  class="underline underline-offset-4 font-semibold focus-ring rounded px-1"
+                  href="contact.html">Contactez-nous</a>.</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Mobile sticky CTA (conversion) -->
+  <div id="mobileBar"
+    class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/85 backdrop-blur border-t border-cacao-900/10">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+      <div>
+        <p class="text-xs text-cacao-600">Total estimé</p>
+        <p class="text-base font-semibold" id="mobileTotal">0,00 €</p>
+      </div>
+      <button id="mobileCheckoutBtn" class="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-jungle-900
+               bg-gradient-to-b from-gold-500 to-gold-600 shadow-glow focus-ring">
+        Payer
+        <span class="iconify" data-icon="mdi:lock-outline"></span>
+      </button>
+    </div>
   </div>
 
+  <script>
+    // =========================
+    // CONFIG (conversion)
+    // =========================
+    // Mets 0 si tu ne veux pas afficher le "seuil" dans le hero.
+    const FREE_SHIPPING_THRESHOLD = 0; // ex: 79
+    const CHECKOUT_URL = "checkout.html"; // à brancher
 
-<script>
-/** ================================
- *  MSV Vanilla Demo Store (static)
- *  - Cart in localStorage
- *  - Product rendering (shop/product)
- *  ================================= */
-const MSV = (() => {
-  const CART_KEY = 'msv_cart_v1';
-  const CATALOG = [{"id": "tk-noir-10-13", "name": "Vanille TK (Noir) — 10–13 cm", "subtitle": "Arôme intense, usage quotidien", "price": "—", "size": "10–13 cm", "grade": "TK (Noir)", "packaging": ["Sous-vide", "Tube"], "bullets": ["Sélection TK (Noir) / Gourmet (selon lot)", "Idéal pour desserts, infusion, cuisine", "Conditionnement au choix : Sous‑vide ou Tube"]}, {"id": "tk-noir-14-15", "name": "Vanille TK (Noir) — 14–15 cm", "subtitle": "Équilibre longueur / puissance aromatique", "price": "—", "size": "14–15 cm", "grade": "TK (Noir)", "packaging": ["Sous-vide", "Tube"], "bullets": ["Longueur polyvalente (pâtisserie, extrait maison)", "Gousses souples, parfum gourmand", "Conditionnement au choix : Sous‑vide ou Tube"]}, {"id": "tk-noir-16", "name": "Vanille TK (Noir) — 16 cm", "subtitle": "Pour pâtisserie fine & cadeaux gourmands", "price": "—", "size": "16 cm", "grade": "TK (Noir)", "packaging": ["Sous-vide", "Tube"], "bullets": ["Longueur premium (présentation & intensité)", "Parfait pour entremets, crèmes, glaces", "Conditionnement au choix : Sous‑vide ou Tube"]}, {"id": "tk-noir-17-18", "name": "Vanille TK (Noir) — 17–18 cm", "subtitle": "Format premium (pro & passionnés)", "price": "—", "size": "17–18 cm", "grade": "TK (Noir)", "packaging": ["Sous-vide", "Tube"], "bullets": ["Longue gousse, expérience haut de gamme", "Pour pâtissiers, chefs, cadeaux", "Conditionnement au choix : Sous‑vide ou Tube"]}, {"id": "pack-decouverte", "name": "Pack Découverte — tailles assorties", "subtitle": "Tester plusieurs longueurs (mix)", "price": "—", "size": "Assorti", "grade": "Assorti", "packaging": ["Sous-vide"], "bullets": ["Assortiment de gousses (tailles variées)", "Pour trouver votre profil aromatique", "Conditionnement sous‑vide (conservation)"]}, {"id": "pack-pro", "name": "Pack Pro — volume", "subtitle": "Pour restauration & pâtisserie", "price": "Devis", "size": "Volume", "grade": "TK (Noir) / Assorti", "packaging": ["Sous-vide"], "bullets": ["Volumes adaptés aux pros", "Demande de devis rapide (B2B)", "Conditionnement sous‑vide"]}];
+    // =========================
+    // CART STORAGE (compatible avec tes pages précédentes)
+    // =========================
+    const CART_KEYS = ["msv_cart", "cart"];
+    const fmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+    const $ = (id) => document.getElementById(id);
 
-  function moneyLabel(item) {
-    if (item.price && item.price !== '—') return item.price;
-    return 'Prix sur demande';
-  }
+    function safeParse(v, fb) { try { return JSON.parse(v); } catch { return fb; } }
+    function resolveCartKey() { for (const k of CART_KEYS) if (localStorage.getItem(k)) return k; return CART_KEYS[0]; }
+    const CART_KEY = resolveCartKey();
 
-  function loadCart() {
-    try {
-      const raw = localStorage.getItem(CART_KEY);
-      const cart = raw ? JSON.parse(raw) : { items: [] };
-      if (!cart.items) cart.items = [];
-      return cart;
-    } catch (e) {
-      return { items: [] };
-    }
-  }
-
-  function saveCart(cart) {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    emitCartUpdated();
-  }
-
-  function emitCartUpdated() {
-    document.dispatchEvent(new CustomEvent('msv:cart-updated', { detail: getCartSummary() }));
-  }
-
-  function getCartSummary() {
-    const cart = loadCart();
-    const count = cart.items.reduce((acc, it) => acc + (it.qty || 1), 0);
-    return { count };
-  }
-
-  function addToCart(productId, options = { packaging: 'Sous-vide' }, qty = 1) {
-    const cart = loadCart();
-    const existing = cart.items.find(it => it.productId === productId && it.packaging === options.packaging);
-    if (existing) existing.qty += qty;
-    else cart.items.push({ productId, packaging: options.packaging, qty });
-    saveCart(cart);
-  }
-
-  function removeFromCart(index) {
-    const cart = loadCart();
-    cart.items.splice(index, 1);
-    saveCart(cart);
-  }
-
-  function setQty(index, qty) {
-    const cart = loadCart();
-    if (!cart.items[index]) return;
-    cart.items[index].qty = Math.max(1, Number(qty || 1));
-    saveCart(cart);
-  }
-
-  function clearCart() {
-    saveCart({ items: [] });
-  }
-
-  function findProduct(id) {
-    return CATALOG.find(p => p.id === id) || null;
-  }
-
-  function qs(name) {
-    const u = new URL(window.location.href);
-    return u.searchParams.get(name);
-  }
-
-  function fmtEscape(str) {
-    return (str || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  }
-
-  function initHeader() {
-    const btn = document.getElementById('msvMobileBtn');
-    const panel = document.getElementById('msvMobilePanel');
-    const overlay = document.getElementById('msvMobileOverlay');
-    if (btn && panel && overlay) {
-      const open = () => {
-        panel.classList.remove('translate-x-full');
-        overlay.classList.remove('hidden');
-        overlay.setAttribute('aria-hidden', 'false');
-        btn.setAttribute('aria-expanded', 'true');
-      };
-      const close = () => {
-        panel.classList.add('translate-x-full');
-        overlay.classList.add('hidden');
-        overlay.setAttribute('aria-hidden', 'true');
-        btn.setAttribute('aria-expanded', 'false');
-      };
-      btn.addEventListener('click', () => (btn.getAttribute('aria-expanded') === 'true' ? close() : open()));
-      overlay.addEventListener('click', close);
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    function normalize(raw) {
+      if (!raw) return [];
+      if (Array.isArray(raw)) return raw;
+      if (Array.isArray(raw.items)) return raw.items;
+      if (Array.isArray(raw.cart)) return raw.cart;
+      if (Array.isArray(raw.products)) return raw.products;
+      return [];
     }
 
-    const updateBadge = () => {
-      const { count } = getCartSummary();
-      document.querySelectorAll('[data-msv-cart-count]').forEach(el => {
-        el.textContent = String(count);
-        el.classList.toggle('hidden', count === 0);
-      });
-    };
-    updateBadge();
-    document.addEventListener('msv:cart-updated', updateBadge);
-  }
+    function getCart() {
+      const raw = safeParse(localStorage.getItem(CART_KEY), null);
+      return normalize(raw).map(it => ({
+        id: it.id ?? it.sku ?? it.slug ?? String(Math.random()),
+        name: it.name ?? it.title ?? "Produit",
+        price: Number(it.price ?? it.unitPrice ?? 0),
+        qty: Math.max(1, Number(it.qty ?? it.quantity ?? 1)),
+        image: it.image ?? it.img ?? it.thumbnail ?? ""
+      }));
+    }
 
-  function initCartDrawer() {
-    const openBtn = document.querySelector('[data-msv-cart-open]');
-    const drawer = document.getElementById('msvCartDrawer');
-    const overlay = document.getElementById('msvCartOverlay');
-    const closeBtn = document.querySelector('[data-msv-cart-close]');
-    const list = document.getElementById('msvCartItems');
-    const empty = document.getElementById('msvCartEmpty');
+    function setCart(items) { localStorage.setItem(CART_KEY, JSON.stringify(items)); }
+    function cartCount(items) { return items.reduce((s, it) => s + (it.qty || 0), 0); }
+    function cartSubtotal(items) { return items.reduce((s, it) => s + (it.price * it.qty), 0); }
+    function esc(str) {
+      return String(str).replace(/[&<>"']/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[s]));
+    }
 
-    if (!drawer || !overlay || !list || !empty) return;
+    // =========================
+    // UI refs
+    // =========================
+    const itemsList = $("itemsList");
+    const emptyState = $("emptyState");
+    const subtotalEl = $("subtotal");
+    const totalEl = $("total");
+    const mobileTotalEl = $("mobileTotal");
 
-    const open = () => {
-      drawer.classList.remove('translate-x-full');
-      overlay.classList.remove('hidden');
-      overlay.setAttribute('aria-hidden', 'false');
+    const clearCartBtn = $("clearCartBtn");
+    const checkoutBtn = $("checkoutBtn");
+    const mobileCheckoutBtn = $("mobileCheckoutBtn");
+
+    const couponInput = $("couponInput");
+    const applyCouponBtn = $("applyCouponBtn");
+    const couponMsg = $("couponMsg");
+
+    // Hero goal
+    const goalText = $("goalText");
+    const goalBar = $("goalBar");
+
+    // =========================
+    // Render cart items (conversion UX)
+    // =========================
+    function render() {
+      const items = getCart();
+      const empty = items.length === 0;
+
+      emptyState.classList.toggle("hidden", !empty);
+      itemsList.classList.toggle("hidden", empty);
+      clearCartBtn.disabled = empty;
+      clearCartBtn.classList.toggle("opacity-50", empty);
+
+      // Totals
+      const subtotal = cartSubtotal(items);
+      // Pas de fausses taxes/livraison : on garde "estimé" = sous-total
+      subtotalEl.textContent = fmt.format(subtotal || 0);
+      totalEl.textContent = fmt.format(subtotal || 0);
+      mobileTotalEl.textContent = fmt.format(subtotal || 0);
+
+      // Hero threshold (optional)
+      if (FREE_SHIPPING_THRESHOLD > 0) {
+        const pct = Math.max(0, Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+        goalBar.style.width = pct + "%";
+        if (subtotal >= FREE_SHIPPING_THRESHOLD) {
+          goalText.textContent = "Seuil atteint (configurable)";
+        } else {
+          const missing = FREE_SHIPPING_THRESHOLD - subtotal;
+          goalText.textContent = "Encore " + fmt.format(missing) + " (configurable)";
+        }
+      } else {
+        goalBar.style.width = "0%";
+        goalText.textContent = "Livraison calculée au checkout";
+      }
+
+      if (empty) {
+        itemsList.innerHTML = "";
+        return;
+      }
+
+      itemsList.innerHTML = items.map((it, idx) => {
+        const lineTotal = (it.price || 0) * (it.qty || 0);
+        return `
+          <article class="rounded-[28px] card-light shadow-soft p-5">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div class="flex items-center gap-4 flex-1 min-w-0">
+                <div class="w-20 h-20 rounded-2xl bg-white/70 border border-cacao-900/10 overflow-hidden grid place-items-center flex-shrink-0">
+                  ${it.image
+            ? `<img src="${it.image}" alt="${esc(it.name)}" class="w-full h-full object-cover" onerror="this.remove(); this.parentElement.innerHTML='<span class=&quot;iconify text-gold-600 text-3xl&quot; data-icon=&quot;mdi:vanilla&quot;></span>';">`
+            : `<span class="iconify text-gold-600 text-3xl" data-icon="mdi:vanilla"></span>`
+          }
+                </div>
+
+                <div class="min-w-0">
+                  <p class="font-semibold text-cacao-900 truncate">${esc(it.name)}</p>
+                  <p class="mt-1 text-sm text-cacao-700">${fmt.format(it.price || 0)} <span class="text-xs text-cacao-500">/ unité</span></p>
+
+                  <!-- micro reassurance -->
+                  <div class="mt-2 flex flex-wrap gap-2 text-xs">
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 bg-vanilla-100 border border-cacao-900/10">
+                      <span class="iconify text-gold-600" data-icon="mdi:check-circle-outline"></span>
+                      Sélection premium
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 bg-vanilla-100 border border-cacao-900/10">
+                      <span class="iconify text-gold-600" data-icon="mdi:archive-outline"></span>
+                      Conditionné avec soin
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between sm:justify-end gap-4">
+                <!-- Qty control -->
+                <div class="inline-flex items-center rounded-full bg-white/75 border border-cacao-900/10 overflow-hidden">
+                  <button class="w-11 h-10 grid place-items-center hover:bg-vanilla-100 focus-ring"
+                    data-action="dec" data-index="${idx}" aria-label="Diminuer">
+                    <span class="iconify text-cacao-800" data-icon="mdi:minus"></span>
+                  </button>
+                  <span class="px-4 text-sm font-semibold text-cacao-900">${it.qty}</span>
+                  <button class="w-11 h-10 grid place-items-center hover:bg-vanilla-100 focus-ring"
+                    data-action="inc" data-index="${idx}" aria-label="Augmenter">
+                    <span class="iconify text-cacao-800" data-icon="mdi:plus"></span>
+                  </button>
+                </div>
+
+                <div class="text-right min-w-[110px]">
+                  <p class="text-xs text-cacao-600">Total</p>
+                  <p class="text-base font-semibold text-cacao-900">${fmt.format(lineTotal || 0)}</p>
+                </div>
+
+                <button class="p-2 rounded-2xl hover:bg-vanilla-100 focus-ring"
+                  data-action="remove" data-index="${idx}" aria-label="Supprimer">
+                  <span class="iconify text-cacao-700 text-xl" data-icon="mdi:trash-outline"></span>
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function mutate(mutator) {
+      const items = getCart();
+      mutator(items);
+      const cleaned = items
+        .map(it => ({ ...it, qty: Math.max(0, Number(it.qty || 0)) }))
+        .filter(it => it.qty > 0);
+      setCart(cleaned);
       render();
-      const focusTarget = drawer.querySelector('button, a, input, select, textarea');
-      if (focusTarget) focusTarget.focus();
-    };
-
-    const close = () => {
-      drawer.classList.add('translate-x-full');
-      overlay.classList.add('hidden');
-      overlay.setAttribute('aria-hidden', 'true');
-      if (openBtn) openBtn.focus();
-    };
-
-    function render() {
-      const cart = loadCart();
-      list.innerHTML = '';
-      if (!cart.items.length) {
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-
-      cart.items.forEach((it, idx) => {
-        const p = findProduct(it.productId);
-        if (!p) return;
-
-        const row = document.createElement('div');
-        row.className = 'flex gap-3 p-3 rounded-2xl border border-cream-200 bg-white [0_8px_24px_rgba(27,20,16,.06)]';
-
-        row.innerHTML = `
-          <div class="w-16 h-16 rounded-xl bg-cream-100 flex items-center justify-center shrink-0" aria-hidden="true">
-            <span class="iconify text-cocoa-700" data-icon="mdi:vanilla"></span>
-          </div>
-          <div class="min-w-0 flex-1">
-            <div class="flex items-start justify-between gap-3">
-              <div class="min-w-0">
-                <p class="font-semibold text-cocoa-900 leading-tight">${fmtEscape(p.name)}</p>
-                <p class="text-sm text-cocoa-600 mt-0.5">Conditionnement : <span class="font-medium">${fmtEscape(it.packaging)}</span></p>
-                <p class="text-sm text-cocoa-600 mt-0.5">${fmtEscape(moneyLabel(p))}</p>
-              </div>
-              <button class="p-2 rounded-xl hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500" aria-label="Supprimer" data-msv-remove="${idx}">
-                <span class="iconify" data-icon="mdi:trash-can-outline"></span>
-              </button>
-            </div>
-
-            <div class="flex items-center justify-between mt-3 gap-3">
-              <label class="text-sm text-cocoa-600" for="qty_${idx}">Qté</label>
-              <div class="flex items-center gap-2">
-                <input id="qty_${idx}" class="w-20 rounded-xl border border-cream-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ambergold-500"
-                  type="number" min="1" value="${it.qty || 1}" data-msv-qty="${idx}" />
-                <a href="product.html?id=${encodeURIComponent(p.id)}" class="text-sm font-semibold text-deepgreen-800 hover:underline">Détails</a>
-              </div>
-            </div>
-          </div>
-        `;
-        list.appendChild(row);
-      });
-
-      list.querySelectorAll('[data-msv-remove]').forEach(btn => {
-        btn.addEventListener('click', () => removeFromCart(Number(btn.getAttribute('data-msv-remove'))));
-      });
-      list.querySelectorAll('[data-msv-qty]').forEach(inp => {
-        inp.addEventListener('change', () => setQty(Number(inp.getAttribute('data-msv-qty')), inp.value));
-      });
     }
 
-    openBtn && openBtn.addEventListener('click', open);
-    closeBtn && closeBtn.addEventListener('click', close);
-    overlay.addEventListener('click', close);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
-    document.addEventListener('msv:cart-updated', render);
-  }
-
-  function mountShop() {
-    const root = document.getElementById('msvShopGrid');
-    if (!root) return;
-
-    const filterSize = document.getElementById('filterSize');
-    const filterGrade = document.getElementById('filterGrade');
-    const filterPack = document.getElementById('filterPack');
-    const sortBy = document.getElementById('sortBy');
-    const resultCount = document.getElementById('msvResultCount');
-
-    function applyFilters(items) {
-      const size = filterSize?.value || 'all';
-      const grade = filterGrade?.value || 'all';
-      const pack = filterPack?.value || 'all';
-
-      let out = items.slice();
-      if (size !== 'all') out = out.filter(p => p.size === size);
-      if (grade !== 'all') out = out.filter(p => p.grade === grade);
-      if (pack !== 'all') out = out.filter(p => (p.packaging || []).includes(pack));
-
-      const s = sortBy?.value || 'featured';
-      if (s === 'name_asc') out.sort((a,b) => a.name.localeCompare(b.name));
-      if (s === 'name_desc') out.sort((a,b) => b.name.localeCompare(a.name));
-      return out;
-    }
-
-    function card(p) {
-      const packOptions = (p.packaging || []).map(x => `<option value="${fmtEscape(x)}">${fmtEscape(x)}</option>`).join('');
-      const badgeA = p.grade ? `<span class="inline-flex items-center gap-1 rounded-full bg-cream-100 border border-cream-200 px-3 py-1 text-xs font-semibold text-cocoa-800">
-        <span class="iconify" data-icon="mdi:shield-star-outline"></span>${fmtEscape(p.grade)}
-      </span>` : '';
-      const badgeB = p.size ? `<span class="inline-flex items-center gap-1 rounded-full bg-cream-100 border border-cream-200 px-3 py-1 text-xs font-semibold text-cocoa-800">
-        <span class="iconify" data-icon="mdi:ruler"></span>${fmtEscape(p.size)}
-      </span>` : '';
-      const bullets = (p.bullets || []).slice(0,3).map(b => `
-        <li class="flex gap-2">
-          <span class="iconify mt-0.5 text-deepgreen-800" data-icon="mdi:check-circle-outline"></span>
-          <span>${fmtEscape(b)}</span>
-        </li>
-      `).join('');
-
-      return `
-        <article class="group rounded-2xl bg-white border border-cream-200  hover: transition-shadow overflow-hidden">
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <div class="flex flex-wrap gap-2 mb-3">${badgeA}${badgeB}</div>
-                <h3 class="font-display text-xl text-cocoa-900 leading-tight">${fmtEscape(p.name)}</h3>
-                <p class="text-sm text-cocoa-600 mt-2">${fmtEscape(p.subtitle || '')}</p>
-              </div>
-              <div class="w-16 h-16 rounded-2xl bg-cream-100 border border-cream-200 flex items-center justify-center shrink-0" aria-hidden="true">
-                <span class="iconify text-cocoa-700 text-2xl" data-icon="mdi:vanilla"></span>
-              </div>
-            </div>
-
-            <ul class="mt-4 space-y-2 text-sm text-cocoa-700">
-              ${bullets}
-            </ul>
-
-            <div class="mt-5 flex items-center justify-between gap-3">
-              <div>
-                <p class="text-xs text-cocoa-600">Prix</p>
-                <p class="font-semibold text-cocoa-900">${fmtEscape(moneyLabel(p))}</p>
-              </div>
-              <a href="product.html?id=${encodeURIComponent(p.id)}" class="inline-flex items-center gap-2 rounded-full border border-cocoa-900/20 bg-white px-4 py-2 text-sm font-semibold text-cocoa-900 hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-                Voir
-                <span class="iconify" data-icon="mdi:arrow-right"></span>
-              </a>
-            </div>
-
-            <div class="mt-4 flex flex-col sm:flex-row gap-3">
-              <label class="sr-only" for="pack_${p.id}">Conditionnement</label>
-              <select id="pack_${p.id}" class="flex-1 rounded-xl border border-cream-200 bg-white px-3 py-2 text-sm text-cocoa-800 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-                ${packOptions}
-              </select>
-              <button class="msvAdd flex items-center justify-center gap-2 rounded-full bg-ambergold-500 px-5 py-2.5 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500"
-                data-msv-add="${fmtEscape(p.id)}">
-                <span class="iconify" data-icon="mdi:cart-plus"></span>
-                Ajouter
-              </button>
-            </div>
-          </div>
-          <div class="h-1 bg-gradient-to-r from-ambergold-500 via-cream-200 to-deepgreen-800 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
-        </article>
-      `;
-    }
-
-    function render() {
-      const filtered = applyFilters(CATALOG);
-      root.innerHTML = filtered.map(card).join('');
-      if (resultCount) resultCount.textContent = String(filtered.length);
-
-      root.querySelectorAll('[data-msv-add]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-msv-add');
-          const sel = document.getElementById('pack_' + id);
-          const packaging = sel ? sel.value : 'Sous-vide';
-          addToCart(id, { packaging }, 1);
-          toast('Ajouté au panier.');
-        });
+    // =========================
+    // Events
+    // =========================
+    itemsList.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const action = btn.getAttribute("data-action");
+      const index = Number(btn.getAttribute("data-index"));
+      mutate((items) => {
+        if (!items[index]) return;
+        if (action === "remove") items.splice(index, 1);
+        if (action === "inc") items[index].qty += 1;
+        if (action === "dec") items[index].qty = Math.max(0, items[index].qty - 1);
       });
-    }
-
-    [filterSize, filterGrade, filterPack, sortBy].forEach(el => el && el.addEventListener('change', render));
-    render();
-  }
-
-  function mountProduct() {
-    const mount = document.getElementById('msvProductMount');
-    if (!mount) return;
-    const id = qs('id') || 'tk-noir-14-15';
-    const p = findProduct(id);
-    if (!p) {
-      mount.innerHTML = `<div class="p-8 rounded-2xl bg-white border border-cream-200 ">
-        <h1 class="font-display text-2xl text-cocoa-900">Produit introuvable</h1>
-        <p class="text-cocoa-600 mt-2">Retourner à la <a class="text-deepgreen-800 font-semibold hover:underline" href="shop.html">boutique</a>.</p>
-      </div>`;
-      return;
-    }
-
-    const packOptions = (p.packaging || []).map(x => `<option value="${fmtEscape(x)}">${fmtEscape(x)}</option>`).join('');
-
-    mount.innerHTML = `
-      <div class="grid lg:grid-cols-2 gap-8">
-        <div class="rounded-2xl bg-white border border-cream-200  overflow-hidden">
-          <div class="aspect-[4/3] bg-cream-100 flex items-center justify-center">
-            <div class="text-center px-6">
-              <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-cream-200 " aria-hidden="true">
-                <span class="iconify text-cocoa-700 text-2xl" data-icon="mdi:vanilla"></span>
-              </div>
-              <p class="mt-4 text-sm text-cocoa-600">Image produit (placeholder)</p>
-              <p class="text-xs text-cocoa-600 mt-1">Ajoutez vos photos macro / packshots.</p>
-            </div>
-          </div>
-          <div class="p-5 border-t border-cream-200">
-            <div class="flex flex-wrap gap-2">
-              <span class="inline-flex items-center gap-1 rounded-full bg-cream-100 border border-cream-200 px-3 py-1 text-xs font-semibold text-cocoa-800"><span class="iconify" data-icon="mdi:shield-star-outline"></span>${fmtEscape(p.grade)}</span>
-              <span class="inline-flex items-center gap-1 rounded-full bg-cream-100 border border-cream-200 px-3 py-1 text-xs font-semibold text-cocoa-800"><span class="iconify" data-icon="mdi:ruler"></span>${fmtEscape(p.size)}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-5">
-          <div>
-            <nav class="text-sm text-cocoa-600" aria-label="Fil d'ariane">
-              <a class="hover:underline" href="index.html">Accueil</a>
-              <span aria-hidden="true"> / </span>
-              <a class="hover:underline" href="shop.html">Boutique</a>
-              <span aria-hidden="true"> / </span>
-              <span class="text-cocoa-800 font-medium">${fmtEscape(p.name)}</span>
-            </nav>
-            <h1 class="font-display text-3xl lg:text-4xl text-cocoa-900 mt-3 leading-tight">${fmtEscape(p.name)}</h1>
-            <p class="text-cocoa-600 mt-2">${fmtEscape(p.subtitle || '')}</p>
-          </div>
-
-          <div class="rounded-2xl bg-white border border-cream-200  p-5">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <p class="text-xs text-cocoa-600">Prix</p>
-                <p class="text-xl font-semibold text-cocoa-900">${fmtEscape(moneyLabel(p))}</p>
-                <p class="text-xs text-cocoa-600 mt-1">Ajoutez votre grille tarifaire pour activer un vrai checkout.</p>
-              </div>
-              <div class="text-right">
-                <p class="text-xs text-cocoa-600">Disponibilité</p>
-                <p class="text-sm font-semibold text-deepgreen-800">En stock (placeholder)</p>
-              </div>
-            </div>
-
-            <div class="grid sm:grid-cols-2 gap-3 mt-4">
-              <div>
-                <label class="text-sm font-semibold text-cocoa-900" for="msvPack">Conditionnement</label>
-                <select id="msvPack" class="mt-2 w-full rounded-xl border border-cream-200 bg-white px-3 py-2 text-sm text-cocoa-800 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-                  ${packOptions}
-                </select>
-              </div>
-              <div>
-                <label class="text-sm font-semibold text-cocoa-900" for="msvQty">Quantité</label>
-                <input id="msvQty" type="number" min="1" value="1"
-                  class="mt-2 w-full rounded-xl border border-cream-200 bg-white px-3 py-2 text-sm text-cocoa-800 focus:outline-none focus:ring-2 focus:ring-ambergold-500" />
-              </div>
-            </div>
-
-            <div class="mt-4 flex flex-col sm:flex-row gap-3">
-              <button id="msvAddBtn" class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-ambergold-500 px-6 py-3 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-                <span class="iconify" data-icon="mdi:cart-plus"></span> Ajouter au panier
-              </button>
-              <a href="cart.html" class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-cocoa-900/20 bg-white px-6 py-3 text-sm font-semibold text-cocoa-900 hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-                <span class="iconify" data-icon="mdi:cart-outline"></span> Voir le panier
-              </a>
-            </div>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-4">
-            <section class="rounded-2xl bg-white border border-cream-200  p-5">
-              <h2 class="font-display text-xl text-cocoa-900">Conseils d’usage</h2>
-              <ul class="mt-3 space-y-2 text-sm text-cocoa-700">
-                <li class="flex gap-2"><span class="iconify mt-0.5 text-deepgreen-800" data-icon="mdi:check-circle-outline"></span><span>Fendez la gousse, grattez les grains, infusez dans une base chaude.</span></li>
-                <li class="flex gap-2"><span class="iconify mt-0.5 text-deepgreen-800" data-icon="mdi:check-circle-outline"></span><span>Réutilisez la gousse pour sucre vanillé / rhum / extrait.</span></li>
-                <li class="flex gap-2"><span class="iconify mt-0.5 text-deepgreen-800" data-icon="mdi:check-circle-outline"></span><span>Stockage : à l’abri de la lumière, température stable.</span></li>
-              </ul>
-              <p class="text-xs text-cocoa-600 mt-3">Infos à personnaliser selon vos pratiques.</p>
-            </section>
-
-            <section class="rounded-2xl bg-white border border-cream-200  p-5">
-              <h2 class="font-display text-xl text-cocoa-900">Conditionnement</h2>
-              <div class="mt-3 space-y-3 text-sm text-cocoa-700">
-                <div class="p-3 rounded-2xl bg-cream-100 border border-cream-200">
-                  <p class="font-semibold text-cocoa-900">Sous‑vide</p>
-                  <p class="text-cocoa-700 mt-1">Optimisé pour la conservation (humidité stable). Idéal pour stock & expédition.</p>
-                </div>
-                <div class="p-3 rounded-2xl bg-cream-100 border border-cream-200">
-                  <p class="font-semibold text-cocoa-900">Tube</p>
-                  <p class="text-cocoa-700 mt-1">Présentation premium, pratique à offrir. Parfait pour petites quantités.</p>
-                </div>
-              </div>
-            </section>
-          </div>
-
-          <section class="rounded-2xl bg-deepgreen-900 text-white p-6 ">
-            <h2 class="font-display text-2xl">Besoin de volume (B2B) ?</h2>
-            <p class="text-white/80 mt-2">Restauration, pâtisserie, épicerie fine : demandez un devis rapide.</p>
-            <a href="b2b.html" class="mt-4 inline-flex items-center gap-2 rounded-full bg-ambergold-500 px-5 py-2.5 text-sm font-semibold text-cocoa-900  hover:bg-ambergold-600 focus:outline-none focus:ring-2 focus:ring-ambergold-500">
-              Demander un devis <span class="iconify" data-icon="mdi:arrow-right"></span>
-            </a>
-          </section>
-        </div>
-      </div>
-    `;
-
-    const addBtn = document.getElementById('msvAddBtn');
-    addBtn.addEventListener('click', () => {
-      const packaging = document.getElementById('msvPack').value || 'Sous-vide';
-      const qty = Number(document.getElementById('msvQty').value || 1);
-      addToCart(p.id, { packaging }, Math.max(1, qty));
-      toast('Ajouté au panier.');
-    });
-  }
-
-  function mountCartPage() {
-    const list = document.getElementById('msvCartPageItems');
-    if (!list) return;
-    const empty = document.getElementById('msvCartPageEmpty');
-    const clearBtn = document.getElementById('msvClearCart');
-
-    function render() {
-      const cart = loadCart();
-      list.innerHTML = '';
-      if (!cart.items.length) {
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-
-      cart.items.forEach((it, idx) => {
-        const p = findProduct(it.productId);
-        if (!p) return;
-        const row = document.createElement('div');
-        row.className = 'p-4 rounded-2xl bg-white border border-cream-200 ';
-        row.innerHTML = `
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div class="flex items-start gap-3">
-              <div class="w-14 h-14 rounded-2xl bg-cream-100 border border-cream-200 flex items-center justify-center shrink-0" aria-hidden="true">
-                <span class="iconify text-cocoa-700 text-xl" data-icon="mdi:vanilla"></span>
-              </div>
-              <div class="min-w-0">
-                <p class="font-semibold text-cocoa-900">${fmtEscape(p.name)}</p>
-                <p class="text-sm text-cocoa-600 mt-1">Conditionnement : <span class="font-medium">${fmtEscape(it.packaging)}</span></p>
-                <p class="text-sm text-cocoa-600 mt-1">${fmtEscape(moneyLabel(p))}</p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <label class="text-sm text-cocoa-600" for="cart_qty_${idx}">Qté</label>
-              <input id="cart_qty_${idx}" type="number" min="1" value="${it.qty || 1}"
-                class="w-24 rounded-xl border border-cream-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ambergold-500" data-msv-qty="${idx}" />
-              <button class="p-2 rounded-xl hover:bg-cream-100 focus:outline-none focus:ring-2 focus:ring-ambergold-500" aria-label="Supprimer" data-msv-remove="${idx}">
-                <span class="iconify" data-icon="mdi:trash-can-outline"></span>
-              </button>
-            </div>
-          </div>
-        `;
-        list.appendChild(row);
-      });
-
-      list.querySelectorAll('[data-msv-remove]').forEach(btn => {
-        btn.addEventListener('click', () => removeFromCart(Number(btn.getAttribute('data-msv-remove'))));
-      });
-      list.querySelectorAll('[data-msv-qty]').forEach(inp => {
-        inp.addEventListener('change', () => setQty(Number(inp.getAttribute('data-msv-qty')), inp.value));
-      });
-    }
-
-    clearBtn && clearBtn.addEventListener('click', () => {
-      clearCart();
-      toast('Panier vidé.');
     });
 
-    document.addEventListener('msv:cart-updated', render);
+    clearCartBtn.addEventListener("click", () => {
+      setCart([]);
+      render();
+    });
+
+    function goCheckout() {
+      const items = getCart();
+      if (!items.length) return;
+      window.location.href = CHECKOUT_URL;
+    }
+
+    checkoutBtn.addEventListener("click", goCheckout);
+    mobileCheckoutBtn.addEventListener("click", goCheckout);
+
+    applyCouponBtn.addEventListener("click", () => {
+      const code = (couponInput.value || "").trim();
+      if (!code) {
+        couponMsg.textContent = "Entrez un code puis appliquez.";
+        return;
+      }
+      // Pas de fausse réduction : on garde un message neutre.
+      couponMsg.textContent = "Code enregistré. (La réduction doit être appliquée côté checkout/paiement.)";
+    });
+
+    window.addEventListener("storage", (e) => {
+      if (CART_KEYS.includes(e.key)) render();
+    });
+
+    // Boot
     render();
-  }
-
-  function toast(message) {
-    const el = document.getElementById('msvToast');
-    if (!el) return;
-    el.textContent = message;
-    el.classList.remove('opacity-0','translate-y-3','pointer-events-none');
-    el.classList.add('opacity-100','translate-y-0');
-    clearTimeout(window.__msvToastT);
-    window.__msvToastT = setTimeout(() => {
-      el.classList.add('opacity-0','translate-y-3','pointer-events-none');
-      el.classList.remove('opacity-100','translate-y-0');
-    }, 2200);
-  }
-
-  function init() {
-    initHeader();
-    initCartDrawer();
-    mountShop();
-    mountProduct();
-    mountCartPage();
-    emitCartUpdated();
-  }
-
-  return {
-    init, addToCart, loadCart, clearCart, findProduct
-  };
-})();
-
-document.addEventListener('DOMContentLoaded', MSV.init);
-</script>
-
+  </script>
 </body>
+
 </html>

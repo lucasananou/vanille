@@ -267,9 +267,11 @@ export default function ShopPage() {
                                             >
                                                 <div className="relative aspect-square rounded-[1.6rem] bg-vanilla-50 flex items-center justify-center overflow-hidden border border-vanilla-100">
                                                     <div className="absolute inset-0 bg-gradient-to-tr from-vanilla-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                    <div className="transform group-hover:scale-110 transition-transform duration-700">
-                                                        <VanillaIcon />
-                                                    </div>
+                                                    <img
+                                                        src={p.images[0]}
+                                                        alt={p.title}
+                                                        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                    />
                                                     <div className="absolute top-4 left-4">
                                                         <span className="bg-white/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-jungle-800 border border-vanilla-100">
                                                             {p.grade}

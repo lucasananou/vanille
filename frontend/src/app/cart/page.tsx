@@ -5,164 +5,269 @@ import Footer from '@/components/footer';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 
-const CartIcon = () => (
-    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="8" cy="21" r="1" />
-        <circle cx="19" cy="21" r="1" />
-        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.56-6.43H5.91" />
-    </svg>
-);
-
-const TrashIcon = () => (
-    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
-    </svg>
-);
-
 export default function CartPage() {
     const { items, removeItem, updateQuantity, clearCart, total } = useCart();
     const isEmpty = items.length === 0;
     const fmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
+    // Mock constants for progress bar
+    const FREE_SHIPPING_THRESHOLD = 80;
+    const subtotal = total / 100;
+    const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+    const missingForFree = FREE_SHIPPING_THRESHOLD - subtotal;
+
     return (
-        <div className="flex flex-col min-h-screen bg-jungle-900 text-vanilla-50 font-sans antialiased">
+        <div className="flex flex-col min-h-screen bg-vanilla-50 text-cacao-900 font-sans antialiased">
             <Header />
 
             <main className="flex-grow">
-                <section className="relative overflow-hidden py-10 lg:py-16">
-                    <div className="absolute inset-0 grain opacity-40" aria-hidden="true"></div>
-                    <div className="mx-auto max-w-7xl px-4 relative">
+                {/* HERO SECTION */}
+                <section className="relative overflow-hidden" style={{ backgroundColor: '#0a2c1d' }}>
+                    <div className="absolute inset-0 shine grain" aria-hidden="true"></div>
+                    <div className="relative mx-auto max-w-7xl px-4 py-10 lg:py-16">
                         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
                             <div>
-                                <h1 className="font-display text-4xl sm:text-5xl italic">Mon Panier</h1>
-                                <p className="text-vanilla-100/70 mt-3 text-lg">Vérifiez vos articles avant la dégustation.</p>
+                                <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-vanilla-50 border border-vanilla-100/15">
+                                    <span className="iconify text-gold-500" data-icon="mdi:check-decagram-outline"></span>
+                                    <span className="text-sm font-semibold italic">Dernière étape avant le goût.</span>
+                                </div>
+                                <h1 className="mt-6 font-display text-4xl sm:text-5xl italic text-vanilla-50 leading-[1.06]">
+                                    Votre panier
+                                </h1>
+                                <p className="mt-3 text-lg text-vanilla-100/75 max-w-2xl">
+                                    Ajustez les quantités, puis finalisez. <span className="text-vanilla-50 font-semibold italic underline decoration-gold-500 underline-offset-4">Astuce</span> : un tube cadeau + une longueur supérieure = effet “wow” garanti.
+                                </p>
                             </div>
+
+                            {/* Free shipping progress */}
                             {!isEmpty && (
-                                <div className="flex items-center gap-4">
-                                    <button
-                                        onClick={clearCart}
-                                        className="inline-flex items-center justify-center gap-2 rounded-full border border-vanilla-100/10 px-5 py-2.5 text-sm font-semibold hover:bg-vanilla-50/10 transition-all"
-                                    >
-                                        Vider
-                                    </button>
-                                    <Link
-                                        href="/checkout"
-                                        className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all font-bold"
-                                    >
-                                        Finaliser la commande
-                                    </Link>
+                                <div className="rounded-3xl glass p-6 w-full lg:w-[420px] text-vanilla-50 border border-vanilla-100/15">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <p className="text-sm font-semibold">Objectif livraison offerte</p>
+                                        <p className="text-xs text-vanilla-100/70">
+                                            {subtotal >= FREE_SHIPPING_THRESHOLD ? "Seuil atteint !" : `Encore ${fmt.format(missingForFree)}`}
+                                        </p>
+                                    </div>
+                                    <div className="mt-3 h-2 rounded-full bg-vanilla-50/10 overflow-hidden">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-gold-500 to-gold-600 transition-all duration-700"
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+                                    <p className="mt-3 text-xs text-vanilla-100/60 leading-relaxed italic">
+                                        Paramètre marketing : seuil “livraison offerte” configurable.
+                                    </p>
                                 </div>
                             )}
                         </div>
+                    </div>
+                </section>
 
-                        {isEmpty ? (
-                            <div className="mt-12 p-12 rounded-3xl glass border border-vanilla-100/10 text-center">
-                                <div className="w-20 h-20 rounded-full bg-vanilla-50/5 border border-vanilla-100/10 grid place-items-center mx-auto mb-6 text-gold-500">
-                                    <CartIcon />
-                                </div>
-                                <h2 className="font-display text-2xl text-white">Votre panier est vide</h2>
-                                <p className="text-vanilla-100/60 mt-3">Laissez-vous tenter par nos gousses de vanille d'exception.</p>
-                                <Link
-                                    href="/"
-                                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-3 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all font-bold"
-                                >
-                                    Découvrir la collection
-                                </Link>
+                <div className="mx-auto max-w-7xl px-4 py-10 lg:py-16">
+                    <div className="grid lg:grid-cols-12 gap-12 items-start">
+                        {/* LEFT: ITEMS */}
+                        <section className="lg:col-span-8">
+                            <div className="flex items-center justify-between gap-4">
+                                <h2 className="font-display text-3xl italic">Articles</h2>
+                                {!isEmpty && (
+                                    <button
+                                        onClick={clearCart}
+                                        className="text-sm font-bold uppercase tracking-widest text-cacao-600 hover:text-cacao-900 transition-colors border-b-2 border-transparent hover:border-gold-500 pb-1"
+                                    >
+                                        Vider le panier
+                                    </button>
+                                )}
                             </div>
-                        ) : (
-                            <div className="mt-12 space-y-6">
-                                <div className="grid gap-6">
+
+                            {isEmpty ? (
+                                <div className="mt-8 rounded-[32px] bg-white border border-cacao-900/5 p-10 text-center">
+                                    <div className="w-16 h-16 rounded-2xl bg-vanilla-100 border border-cacao-900/10 grid place-items-center mx-auto mb-6 text-gold-500">
+                                        <svg className="w-8 h-8" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
+                                    </div>
+                                    <h3 className="font-display text-2xl italic">Votre panier est vide</h3>
+                                    <p className="mt-3 text-cacao-600">Choisissez une longueur, un grade, et repartez avec une vanille premium.</p>
+                                    <Link
+                                        href="/shop"
+                                        className="mt-8 inline-flex items-center gap-2 rounded-full bg-jungle-900 px-8 py-3.5 text-sm font-bold text-vanilla-50 hover:bg-jungle-800 transition-all shadow-none"
+                                    >
+                                        Aller à la boutique
+                                        <svg className="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                                    </Link>
+                                </div>
+                            ) : (
+                                <div className="mt-8 space-y-6">
                                     {items.map((item) => (
-                                        <div key={item.id} className="p-6 rounded-3xl glass border border-vanilla-100/10 hover:border-vanilla-100/20 transition-all group">
-                                            <div className="flex flex-col md:flex-row md:items-center gap-6">
-                                                <div className="flex items-center gap-6 flex-1">
-                                                    <div className="w-24 h-24 rounded-2xl bg-vanilla-50/5 border border-vanilla-100/15 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform" aria-hidden="true">
-                                                        <div className="text-gold-500">
-                                                            <svg className="w-10 h-10" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                                            </svg>
-                                                        </div>
+                                        <article key={item.id} className="rounded-[32px] bg-white border border-cacao-900/5 p-6 hover:border-gold-500/20 transition-all group relative overflow-hidden shadow-none">
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+                                                <div className="flex items-center gap-6 flex-1 min-w-0">
+                                                    <div className="w-24 h-24 rounded-[24px] bg-vanilla-50 border border-cacao-900/10 overflow-hidden flex-shrink-0 relative group-hover:scale-105 transition-transform duration-500">
+                                                        <img
+                                                            src={item.product.images[0]}
+                                                            alt={item.product.title}
+                                                            className="w-full h-full object-cover"
+                                                        />
                                                     </div>
-                                                    <div className="min-w-0 flex-1">
-                                                        <p className="font-display text-2xl truncate text-white">{item.product.title}</p>
-                                                        {item.variant && (
-                                                            <p className="text-sm text-vanilla-100/60 mt-1">
-                                                                Edition : <span className="text-vanilla-100">{item.variant.title}</span>
-                                                            </p>
-                                                        )}
-                                                        <p className="text-sm font-semibold text-gold-500 mt-2">
-                                                            {fmt.format(item.price / 100)} / unité
+
+                                                    <div className="min-w-0">
+                                                        <h3 className="font-display text-xl text-jungle-950 truncate">{item.product.title}</h3>
+                                                        <p className="mt-1 text-sm font-bold tracking-tight text-gold-600">
+                                                            {fmt.format(item.price / 100)} <span className="text-[10px] uppercase font-bold text-cacao-400">/ unité</span>
                                                         </p>
+
+                                                        <div className="mt-3 flex flex-wrap gap-2">
+                                                            <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 bg-vanilla-100 border border-cacao-900/5 text-[10px] font-bold uppercase tracking-widest text-jungle-800 shadow-none">
+                                                                <span className="w-1 h-1 rounded-full bg-gold-600"></span>
+                                                                Sélection premium
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center justify-between md:justify-end gap-10 border-t md:border-t-0 border-vanilla-100/10 pt-6 md:pt-0">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="flex items-center rounded-2xl bg-vanilla-50/5 border border-vanilla-100/10 overflow-hidden">
-                                                            <button
-                                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                                className="w-10 h-10 flex items-center justify-center hover:bg-vanilla-50/10 transition-colors text-lg"
-                                                            >
-                                                                −
-                                                            </button>
-                                                            <input
-                                                                type="number"
-                                                                min="1"
-                                                                value={item.quantity}
-                                                                onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 1)}
-                                                                className="w-12 bg-transparent text-center text-sm font-bold focus:outline-none"
-                                                            />
-                                                            <button
-                                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                                className="w-10 h-10 flex items-center justify-center hover:bg-vanilla-50/10 transition-colors text-lg"
-                                                            >
-                                                                +
-                                                            </button>
-                                                        </div>
+                                                <div className="flex items-center justify-between sm:justify-end gap-10 border-t sm:border-t-0 border-cacao-900/5 pt-5 sm:pt-0">
+                                                    {/* Qty control */}
+                                                    <div className="inline-flex items-center rounded-full bg-vanilla-50 border border-cacao-900/10 p-1 shadow-none">
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                            className="w-9 h-9 rounded-full grid place-items-center hover:bg-white hover:text-gold-600 transition-all font-bold"
+                                                        >
+                                                            −
+                                                        </button>
+                                                        <span className="px-4 text-sm font-bold text-jungle-900 min-w-[3ch] text-center">{item.quantity}</span>
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                            className="w-9 h-9 rounded-full grid place-items-center hover:bg-white hover:text-gold-600 transition-all font-bold"
+                                                        >
+                                                            +
+                                                        </button>
                                                     </div>
 
-                                                    <div className="text-right min-w-[120px]">
-                                                        <p className="text-2xl font-display text-white">
-                                                            {fmt.format((item.price / 100) * item.quantity)}
-                                                        </p>
+                                                    <div className="text-right min-w-[100px]">
+                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-cacao-400">Total</p>
+                                                        <p className="text-xl font-display text-jungle-950">{fmt.format((item.price / 100) * item.quantity)}</p>
                                                     </div>
 
                                                     <button
                                                         onClick={() => removeItem(item.id)}
-                                                        className="p-3 rounded-2xl hover:bg-red-500/10 text-vanilla-100/40 hover:text-red-500 transition-all border border-transparent hover:border-red-500/20"
+                                                        className="w-10 h-10 rounded-full grid place-items-center hover:bg-red-50 text-cacao-400 hover:text-red-600 transition-all border border-transparent hover:border-red-100"
                                                         aria-label="Supprimer"
                                                     >
-                                                        <TrashIcon />
+                                                        <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" /></svg>
                                                     </button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </article>
                                     ))}
+
+                                    {/* Upsell box */}
+                                    <div className="mt-12 rounded-[32px] bg-gradient-to-br from-white to-vanilla-50 border border-cacao-900/5 p-8 relative overflow-hidden shadow-none">
+                                        <div className="relative z-10">
+                                            <p className="text-sm font-bold uppercase tracking-widest text-gold-600">Le saviez-vous ?</p>
+                                            <div className="mt-4 grid sm:grid-cols-2 gap-8 text-sm">
+                                                <div className="flex gap-4">
+                                                    <div className="w-10 h-10 rounded-xl bg-gold-100 border border-gold-200 flex items-center justify-center shrink-0">
+                                                        <svg className="w-5 h-5 text-gold-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.82-8.82 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+                                                    </div>
+                                                    <p className="text-cacao-700 leading-relaxed font-medium italic">
+                                                        Découvrez nos tubes cadeaux premium pour une conservation optimale et un style unique.
+                                                    </p>
+                                                </div>
+                                                <div className="flex gap-4">
+                                                    <div className="w-10 h-10 rounded-xl bg-gold-100 border border-gold-200 flex items-center justify-center shrink-0">
+                                                        <svg className="w-5 h-5 text-gold-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.5 2 7a7 7 0 0 1-7 7c-1 0-1.83-.1-2.61-.3C12.6 18.2 11.5 19.3 11 20z" /><path d="M11 20A7 7 0 0 1 4 13c0-2.5 1-4.5 3-7 2 2.5 3.5 3 7 4.1" /></svg>
+                                                    </div>
+                                                    <p className="text-cacao-700 leading-relaxed font-medium italic">
+                                                        Anti-gaspi : une gousse épuisée peut encore parfumer votre bocal de sucre pendant des mois.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </section>
+
+                        {/* RIGHT: SUMMARY */}
+                        <aside className="lg:col-span-4">
+                            <div className="lg:sticky lg:top-24 space-y-6">
+                                <div className="rounded-[40px] bg-jungle-900 p-8 text-vanilla-50 relative overflow-hidden shadow-none border border-vanilla-100/10">
+                                    <div className="absolute inset-0 shine opacity-50 pointer-events-none"></div>
+                                    <div className="relative z-10">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="font-display text-2xl italic">Récapitulatif</h3>
+                                            <div className="w-8 h-8 rounded-full bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center">
+                                                <svg className="w-4 h-4 text-gold-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-10 space-y-4 text-sm font-medium">
+                                            <div className="flex items-center justify-between border-b border-vanilla-100/5 pb-4">
+                                                <p className="text-vanilla-100/60 uppercase tracking-widest text-[10px] font-bold">Produits</p>
+                                                <p className="font-bold">{fmt.format(subtotal)}</p>
+                                            </div>
+                                            <div className="flex items-center justify-between border-b border-vanilla-100/5 pb-4">
+                                                <p className="text-vanilla-100/60 uppercase tracking-widest text-[10px] font-bold">Livraison</p>
+                                                <p className="italic text-vanilla-100/50">A l'étape suivante</p>
+                                            </div>
+                                            <div className="pt-4 flex items-center justify-between">
+                                                <p className="text-xl italic font-display">Total estimé</p>
+                                                <p className="text-3xl font-display text-gold-500">{fmt.format(subtotal)}</p>
+                                            </div>
+                                        </div>
+
+                                        <Link
+                                            href="/checkout"
+                                            className="mt-10 w-full inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-4 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all hover:scale-[1.02] uppercase tracking-widest shadow-none"
+                                        >
+                                            Passer au paiement
+                                            <svg className="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                                        </Link>
+
+                                        <div className="mt-6 flex items-center justify-center gap-4 text-vanilla-100/30 text-2xl">
+                                            <svg className="w-8 h-8" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="mt-12 p-8 rounded-3xl glass border border-vanilla-100/10 flex flex-col sm:flex-row items-center justify-between gap-8">
-                                    <div className="text-center sm:text-left">
-                                        <p className="text-vanilla-100/40 text-xs uppercase tracking-widest font-bold">Total Estimé</p>
-                                        <p className="text-4xl sm:text-5xl font-display mt-2 text-transparent bg-clip-text bg-gradient-to-r from-gold-500 back to-vanilla-100">{fmt.format(total / 100)}</p>
-                                        <p className="text-vanilla-100/40 text-xs mt-2">Livraison offerte dès 80€ d'achat.</p>
-                                    </div>
-                                    <Link
-                                        href="/checkout"
-                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-12 py-5 text-lg font-bold text-jungle-900 hover:opacity-90 transition-all hover:scale-[1.02]"
-                                    >
-                                        Commander maintenant
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </Link>
+                                {/* Anti-abandon Check */}
+                                <div className="rounded-[32px] bg-vanilla-100/50 border border-cacao-900/5 p-6 shadow-none">
+                                    <h4 className="text-xs font-bold uppercase tracking-widest text-jungle-900">Engagement Qualité</h4>
+                                    <ul className="mt-4 space-y-3 text-[13px] text-cacao-700 font-medium italic">
+                                        <li className="flex gap-2">
+                                            <svg className="w-4 h-4 text-gold-600 shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                                            Panier sauvegardé automatiquement
+                                        </li>
+                                        <li className="flex gap-2">
+                                            <svg className="w-4 h-4 text-gold-600 shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                                            Paiement 100% sécurisé
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                        )}
+                        </aside>
                     </div>
-                </section>
+                </div>
             </main>
 
             <Footer />
+
+            {/* Mobile sticky CTA */}
+            {!isEmpty && (
+                <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/85 backdrop-blur-md border-t border-cacao-900/5 p-4 safe-area-pb shadow-none">
+                    <div className="flex items-center justify-between gap-4">
+                        <div>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-cacao-400">Total estimé</p>
+                            <p className="text-xl font-display text-jungle-950 leading-none mt-0.5">{fmt.format(subtotal)}</p>
+                        </div>
+                        <Link
+                            href="/checkout"
+                            className="inline-flex items-center justify-center gap-2 rounded-full bg-jungle-900 px-8 py-3.5 text-sm font-bold text-vanilla-50 uppercase tracking-widest transition-all shadow-none"
+                        >
+                            Payer
+                            <svg className="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                        </Link>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

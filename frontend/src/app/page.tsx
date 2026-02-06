@@ -119,7 +119,7 @@ export default function HomePage() {
       <Header />
       <main id="content">
         {/* HERO */}
-        <section className="relative overflow-hidden">
+        <section className="relative overflow-hidden" style={{ backgroundColor: '#0a2c1d' }}>
           <div className="absolute inset-0 shine grain" aria-hidden="true"></div>
 
           {/* Decorative halos */}
@@ -179,27 +179,22 @@ export default function HomePage() {
               <div className="relative">
                 <div className="rounded-[28px] border border-vanilla-100/15 overflow-hidden bg-gradient-to-b from-vanilla-50/10 to-jungle-900/10">
                   <div className="aspect-[4/3] relative">
-                    <div className="absolute inset-0 grid place-items-center bg-gradient-to-b from-vanilla-50/10 to-jungle-900/20">
-                      <div className="text-center px-8">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15">
-                          <div className="text-gold-500">
-                            <VanillaIcon />
-                          </div>
-                        </div>
-                        <p className="mt-4 text-sm font-semibold text-white">Visuel hero</p>
-                        <p className="text-xs text-vanilla-100/70 mt-1">L'excellence au bout des doigts.</p>
-                      </div>
-                    </div>
+                    <img
+                      src="/photos produit vanille/Galerie photos qui sommes nous/Triage et calibrage.jpg"
+                      alt="Triage et calibrage de la vanille MSV Nosy-Be"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-jungle-900/40 via-transparent to-transparent"></div>
 
                     {/* Floating chips */}
                     <div className="absolute inset-0 p-5">
-                      <div className="absolute top-5 left-5 rounded-2xl glass px-4 py-3 border border-vanilla-100/10 animate-float">
+                      <div className="absolute top-5 left-5 rounded-2xl bg-jungle-900/90 backdrop-blur-sm px-4 py-3 border border-vanilla-100/10 animate-float shadow-lg">
                         <p className="text-xs text-vanilla-100/70">Profil</p>
-                        <p className="text-sm font-semibold">Gourmand • Chaud • Floral</p>
+                        <p className="text-sm font-semibold text-vanilla-50">Gourmand • Chaud • Floral</p>
                       </div>
-                      <div className="absolute bottom-5 left-5 rounded-2xl glass px-4 py-3 border border-vanilla-100/10 animate-float [animation-delay:-1.3s]">
+                      <div className="absolute bottom-5 left-5 rounded-2xl bg-jungle-900/90 backdrop-blur-sm px-4 py-3 border border-vanilla-100/10 animate-float [animation-delay:-1.3s] shadow-lg">
                         <p className="text-xs text-vanilla-100/70">Origine</p>
-                        <p className="text-sm font-semibold">Terroir de Nosy-Be</p>
+                        <p className="text-sm font-semibold text-vanilla-50">Terroir de Nosy-Be</p>
                       </div>
                       <div className="absolute bottom-5 right-5 rounded-2xl bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 px-4 py-3 animate-float [animation-delay:-2.1s]">
                         <p className="text-xs/none font-semibold">Sélection</p>
@@ -447,7 +442,7 @@ export default function HomePage() {
         </section>
 
         {/* NEW PRODUCTS SECTION - UNDER REVIEWS */}
-        <section className="bg-vanilla-50 text-jungle-900 overflow-hidden py-16 lg:py-24">
+        <section className="relative text-jungle-900 overflow-hidden py-16 lg:py-24" style={{ backgroundImage: "url('/bg-vanille.jpg')", backgroundSize: 'cover', backgroundPosition: 'right center', backgroundRepeat: 'no-repeat' }}>
           <div className="mx-auto max-w-7xl px-4">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div>
@@ -472,9 +467,11 @@ export default function HomePage() {
                 >
                   <div className="relative aspect-square rounded-[1.6rem] bg-vanilla-50 flex items-center justify-center overflow-hidden border border-vanilla-100">
                     <div className="absolute inset-0 bg-gradient-to-tr from-vanilla-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="transform group-hover:scale-110 transition-transform duration-700">
-                      <VanillaIcon />
-                    </div>
+                    <img
+                      src={p.images[0]}
+                      alt={p.title}
+                      className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    />
                     <div className="absolute top-4 left-4">
                       <span className="bg-white/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-jungle-800 border border-vanilla-100">
                         {p.grade}

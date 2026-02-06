@@ -64,13 +64,17 @@ export default function AboutPage() {
 
                             <div className="relative">
                                 <div className="rounded-[3rem] border border-vanilla-100/10 bg-vanilla-50/5 overflow-hidden p-3 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] relative">
-                                    <div className="w-full h-full rounded-[2.5rem] bg-jungle-950/40 flex items-center justify-center relative overflow-hidden">
-                                        <div className="absolute inset-0 grid place-items-center opacity-20">
-                                            <VanillaIcon />
-                                        </div>
-                                        <div className="relative text-center px-8">
-                                            <p className="font-display text-3xl italic text-vanilla-50">L&apos;art de l&apos;affinage</p>
-                                            <p className="mt-4 text-sm text-vanilla-100/60 max-w-xs">Chaque lot est scruté, senti et sélectionné avec une rigueur absolue.</p>
+                                    <div className="w-full h-full rounded-[2.5rem] bg-jungle-950/40 relative overflow-hidden">
+                                        <img
+                                            src="/photos produit vanille/Galerie photos qui sommes nous/PDG sur le terrain.jpg"
+                                            alt="L'art de l'affinage"
+                                            className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                        />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="relative text-center px-8">
+                                                <p className="font-display text-3xl italic text-vanilla-50">L&apos;art de l&apos;affinage</p>
+                                                <p className="mt-4 text-sm text-vanilla-100/60 max-w-xs">Chaque lot est scruté, senti et sélectionné avec une rigueur absolue.</p>
+                                            </div>
                                         </div>
                                     </div>
 

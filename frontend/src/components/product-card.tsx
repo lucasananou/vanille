@@ -41,7 +41,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                         )}
 
                         {/* Rating Badge (Now on image) */}
-                        <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded-sm shadow-sm select-none">
+                        <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded-sm select-none">
                             <svg className="w-3 h-3 text-amber-500 fill-current" viewBox="0 0 24 24">
                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                             </svg>
@@ -58,7 +58,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                                 e.stopPropagation();
                                 console.log('Add to wishlist', product.id);
                             }}
-                            className="rounded-full bg-white p-1.5 text-zinc-400 hover:text-red-500 transition-colors shadow-sm"
+                            className="rounded-full bg-white p-1.5 text-zinc-400 hover:text-red-500 transition-colors"
                         >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -98,7 +98,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                     {/* Clean Bottom Overlay (Sparkle Icon) */}
                     <div className="absolute bottom-2 right-2 z-10 opacity-70">
-                        <svg className="w-4 h-4 text-white drop-shadow-md" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
                         </svg>
                     </div>
@@ -108,7 +108,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {!isOutOfStock && (
                         <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20 flex gap-2">
                             <span
-                                className="flex-1 flex items-center justify-center bg-white text-zinc-900 text-[10px] font-bold uppercase py-3 rounded-sm shadow-lg hover:bg-zinc-50 tracking-widest cursor-pointer"
+                                className="flex-1 flex items-center justify-center bg-white text-zinc-900 text-[10px] font-bold uppercase py-3 rounded-sm hover:bg-zinc-50 tracking-widest cursor-pointer"
                             >
                                 {(product.variants?.length ?? 0) > 0 || (product.options?.length ?? 0) > 0
                                     ? 'Choisir'
@@ -120,7 +120,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                                     e.stopPropagation();
                                     setIsQuickViewOpen(true);
                                 }}
-                                className="flex items-center justify-center w-10 bg-white text-zinc-900 rounded-sm shadow-lg hover:bg-zinc-50 cursor-pointer transition-colors"
+                                className="flex items-center justify-center w-10 bg-white text-zinc-900 rounded-sm hover:bg-zinc-50 cursor-pointer transition-colors"
                                 aria-label="Aperçu rapide"
                             >
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

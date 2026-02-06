@@ -6,11 +6,11 @@
 
   --color-obsidian: #07100C;
 
-  --color-jungle-950: #06110D;
-  --color-jungle-900: #0E1B14;
-  --color-jungle-800: #13261C;
-  --color-jungle-700: #183023;
-  --color-jungle-600: #1E3C2B;
+  --color-jungle-950: #051a11;
+  --color-jungle-900: #0a2c1d;
+  --color-jungle-800: #14402d;
+  --color-jungle-700: #1e523b;
+  --color-jungle-600: #2a664a;
 
   --color-vanilla-50: #FBF7EF;
   --color-vanilla-100: #F6EEDC;
@@ -108,10 +108,10 @@ input[type=number]::-webkit-outer-spin-button {
 
 /* Shine background */
 .shine {
-  background: radial-gradient(1200px 420px at 20% 10%, rgba(215, 168, 74, 0.24), transparent 55%),
-    radial-gradient(900px 420px at 80% 15%, rgba(246, 238, 220, 0.1), transparent 60%),
-    radial-gradient(900px 540px at 70% 90%, rgba(215, 168, 74, 0.14), transparent 60%),
-    linear-gradient(180deg, rgba(14, 27, 20, 0.96), rgba(14, 27, 20, 0.86));
+  background: radial-gradient(1200px 420px at 20% 10%, rgba(30, 60, 43, 0.4), transparent 55%),
+    radial-gradient(900px 420px at 80% 15%, rgba(215, 168, 74, 0.1), transparent 60%),
+    radial-gradient(900px 540px at 70% 90%, rgba(30, 60, 43, 0.3), transparent 60%),
+    linear-gradient(180deg, #0a2417, #06150e);
 }
 
 .focus-ring:focus-visible {
@@ -135,9 +135,17 @@ input[type=number]::-webkit-outer-spin-button {
   animation: float 7s ease-in-out infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .rm-anim {
-    animation: none !important;
-    transition: none !important;
-  }
+
+/* Manual Overrides for Development Reliability */
+.hero-green {
+  background-color: #0a2c1d !important;
+}
+
+.header-green {
+  background-color: #0a2c1d !important;
+}
+
+.header-green-scrolled {
+  background-color: rgba(20, 64, 45, 0.9) !important;
+  backdrop-filter: blur(8px);
 }

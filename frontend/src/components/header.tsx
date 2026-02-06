@@ -38,10 +38,10 @@ export default function Header() {
     }, []);
 
     return (
-        <header className={`sticky top-0 z-50 transition-all duration-300 border-b ${scrolled
-            ? 'bg-jungle-900/80 backdrop-blur border-vanilla-100/10 py-2'
-            : 'bg-transparent border-transparent py-4'
-            } text-vanilla-50`}>
+        <header
+            className="sticky top-0 z-50 transition-all duration-300 border-b border-vanilla-100/10 py-2 text-vanilla-50"
+            style={{ backgroundColor: '#0a2c1d' }}
+        >
             <div className="mx-auto max-w-7xl px-4 flex items-center justify-between gap-3">
                 {/* Brand */}
                 <Link href="/" className="flex items-center gap-3 rounded-2xl px-2 py-1 focus-ring group">

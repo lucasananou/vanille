@@ -86,7 +86,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     return (
         <div className="fixed inset-0 z-[60] flex flex-col bg-white/95 backdrop-blur-xl animate-in fade-in duration-200">
             {/* Header / Input Area */}
-            <div className="w-full border-b border-zinc-100 bg-white shadow-sm">
+            <div className="w-full border-b border-zinc-100 bg-white">
                 <div className="max-w-7xl mx-auto px-6 h-28 flex items-center gap-6">
                     <form onSubmit={handleSubmit} className="flex-1 flex items-center gap-4">
                         <svg className="w-6 h-6 text-zinc-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -241,7 +241,7 @@ function CategoryTile({ category, onClose }: { category: { name: string, slug: s
         <Link
             href={category.href}
             onClick={onClose}
-            className="group relative overflow-hidden rounded-lg aspect-[4/3] bg-zinc-50 shadow-sm hover:shadow-md transition-all"
+            className="group relative overflow-hidden rounded-lg aspect-[4/3] bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all"
         >
             {image ? (
                 <Image
@@ -257,7 +257,7 @@ function CategoryTile({ category, onClose }: { category: { name: string, slug: s
                 </div>
             )}
             <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors z-10">
-                <span className="text-white font-bold uppercase tracking-wider text-sm md:text-base border-b-2 border-transparent group-hover:border-white transition-all pb-1 shadow-sm">
+                <span className="text-white font-bold uppercase tracking-wider text-sm md:text-base border-b-2 border-transparent group-hover:border-white transition-all pb-1">
                     {category.name}
                 </span>
             </div>

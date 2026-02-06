@@ -6,6 +6,8 @@ import Footer from '@/components/footer';
 import { CATALOG, findProduct } from '@/lib/products-data';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useCart } from '@/lib/cart-context';
+import type { Product } from '@/lib/types';
 
 // Icons
 const VanillaIcon = () => (
@@ -34,6 +36,32 @@ export default function ProductDetailPage() {
     const [qty, setQty] = useState(1);
     const [selectedFormat, setSelectedFormat] = useState(product.packaging[0] || 'Tube');
     const [activeTab, setActiveTab] = useState('desc');
+    const { addItem, openCart } = useCart();
+
+    if (!product) return <div>Produit non trouvé</div>;
+
+    // Map to Product type for the cart
+    const cartProduct: Product = {
+        id: product.id,
+        title: product.title,
+        price: product.id === 'pack-pro' ? 0 : 2500,
+        sku: product.id.toUpperCase(),
+        slug: product.id,
+        stock: 100,
+        images: product.images,
+        tags: ['vanille'],
+        published: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        subtitle: product.subtitle,
+        grade: product.grade,
+        size: product.size,
+    };
+
+    const handleAddToCart = () => {
+        addItem(cartProduct, qty);
+        openCart();
+    };
 
     return (
         <div className="flex flex-col min-h-screen bg-vanilla-50 font-sans antialiased text-jungle-900">
@@ -67,9 +95,11 @@ export default function ProductDetailPage() {
                             <div className="lg:col-span-7">
                                 <div className="rounded-[2.5rem] border border-vanilla-200 bg-white overflow-hidden">
                                     <div className="aspect-[4/3] relative bg-vanilla-100/30 flex items-center justify-center">
-                                        <div className="transform scale-[2] opacity-80 group-hover:scale-[2.1] transition-transform duration-700">
-                                            <VanillaIcon />
-                                        </div>
+                                        <img
+                                            src={product.images[0]}
+                                            alt={product.title}
+                                            className="absolute inset-0 w-full h-full object-contain"
+                                        />
                                         <div className="absolute top-4 left-4 flex gap-2">
                                             <span className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold bg-white/80 border border-vanilla-200 backdrop-blur text-jungle-800">
                                                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-gold-500"></span>
@@ -85,14 +115,16 @@ export default function ProductDetailPage() {
 
                                     <div className="p-4 border-t border-vanilla-100">
                                         <div className="grid grid-cols-4 gap-4">
-                                            {[1, 2, 3, 4].map((i) => (
+                                            {product.images.map((img, i) => (
                                                 <button
                                                     key={i}
                                                     className="rounded-2xl bg-vanilla-50 border border-vanilla-200 overflow-hidden focus-ring aspect-square flex items-center justify-center hover:bg-white hover:border-gold-500/30 transition-all"
                                                 >
-                                                    <svg className="w-6 h-6 text-gold-500/20" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                        <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                                                    </svg>
+                                                    <img
+                                                        src={img}
+                                                        alt={`${product.title} - view ${i + 1}`}
+                                                        className="w-full h-full object-cover"
+                                                    />
                                                 </button>
                                             ))}
                                         </div>
@@ -164,7 +196,10 @@ export default function ProductDetailPage() {
                                         </div>
 
                                         <div className="col-span-8 self-end">
-                                            <button className="w-full inline-flex items-center justify-center gap-3 rounded-full px-6 py-4 text-sm font-bold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition-all hover:scale-[1.02] active:scale-98">
+                                            <button
+                                                onClick={handleAddToCart}
+                                                className="w-full inline-flex items-center justify-center gap-3 rounded-full px-6 py-4 text-sm font-bold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition-all hover:scale-[1.02] active:scale-98"
+                                            >
                                                 Ajouter au panier
                                                 <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
                                             </button>

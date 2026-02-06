@@ -85,7 +85,7 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" onClick={(e) => e.stopPropagation()}>
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose}></div>
 
-            <div className="relative w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] md:h-[500px] animate-in fade-in zoom-in duration-200">
+            <div className="relative w-full max-w-4xl bg-white rounded-lg overflow-hidden flex flex-col md:flex-row max-h-[90vh] md:h-[500px] animate-in fade-in zoom-in duration-200">
 
                 {/* Close Button */}
                 <button
@@ -184,7 +184,7 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                                                 className={`
                                                     min-w-[44px] h-11 px-3 flex items-center justify-center text-sm font-medium rounded-md border transition-all duration-200
                                                     ${isSelected
-                                                        ? 'bg-zinc-900 text-white border-zinc-900 shadow-md transform scale-105'
+                                                        ? 'bg-zinc-900 text-white border-zinc-900 transform scale-105'
                                                         : 'bg-white text-zinc-700 border-zinc-200 hover:border-zinc-400 hover:text-zinc-900'
                                                     }
                                                 `}
@@ -205,12 +205,12 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                             onClick={handleAddToCart}
                             disabled={isOutOfStock || isAdding}
                             className={`
-                                w-full py-4 rounded-md font-bold uppercase tracking-widest text-sm transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5
+                                w-full py-4 rounded-md font-bold uppercase tracking-widest text-sm transition-all duration-200 hover:-translate-y-0.5
                                 ${isOutOfStock
                                     ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
                                     : isAdding
                                         ? 'bg-zinc-900 text-white cursor-wait opacity-80'
-                                        : 'bg-zinc-900 text-white hover:bg-zinc-800 shadow-md hover:shadow-lg'
+                                        : 'bg-zinc-900 text-white hover:bg-zinc-800'
                                 }
                             `}
                         >
