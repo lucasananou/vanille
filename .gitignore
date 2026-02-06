@@ -1,19 +1,17 @@
-# Root gitignore
+# Root
 node_modules
+**/node_modules
 dist
+**/dist
 .env
+**/.env
+**/.env.local
 *.log
 .DS_Store
 coverage
 .turbo
+.next
+**/.next
 
-# Backend
-BACKEND/node_modules
-BACKEND/dist
-BACKEND/.env
-
-# Frontend
-frontend/node_modules
-frontend/dist
-frontend/.next
-frontend/.env.local
+# Specifics
+wc-product-export-*.csv
