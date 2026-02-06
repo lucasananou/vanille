@@ -78,7 +78,7 @@ export default function CheckoutPage() {
                                         />
                                     </div>
 
-                                    <div className="rounded-2xl bg-vanilla-50/5 border border-vanilla-100/10 p-6 shadow-inner">
+                                    <div className="rounded-2xl bg-vanilla-50/5 border border-vanilla-100/10 p-6">
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-10 h-10 rounded-xl bg-gold-500/10 flex items-center justify-center">
                                                 <CreditCardIcon />

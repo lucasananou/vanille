@@ -170,7 +170,7 @@ export default function ShopPage() {
                                                             onChange={() => toggleFilter(selectedGrades, setSelectedGrades, grade)}
                                                             className="peer sr-only"
                                                         />
-                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white shadow-inner group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
+                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
                                                         <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
                                                     </div>
                                                     <span className="text-sm text-jungle-700 font-medium group-hover:text-jungle-950 transition-colors">{grade}</span>
@@ -192,7 +192,7 @@ export default function ShopPage() {
                                                             onChange={() => toggleFilter(selectedSizes, setSelectedSizes, size)}
                                                             className="peer sr-only"
                                                         />
-                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white shadow-inner group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
+                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
                                                         <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
                                                     </div>
                                                     <span className="text-sm text-jungle-700 font-medium group-hover:text-jungle-950 transition-colors">{size}</span>
@@ -214,7 +214,7 @@ export default function ShopPage() {
                                                             onChange={() => toggleFilter(selectedPack, setSelectedPack, pack)}
                                                             className="peer sr-only"
                                                         />
-                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white shadow-inner group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
+                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
                                                         <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
                                                     </div>
                                                     <span className="text-sm text-jungle-700 font-medium group-hover:text-jungle-950 transition-colors">{pack}</span>

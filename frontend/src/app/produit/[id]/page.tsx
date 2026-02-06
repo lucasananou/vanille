@@ -122,7 +122,7 @@ export default function ProductDetailPage() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="rounded-2xl bg-vanilla-50 border border-vanilla-200 p-4 shadow-inner">
+                                        <div className="rounded-2xl bg-vanilla-50 border border-vanilla-200 p-4">
                                             <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 text-center">Disponibilité</p>
                                             <p className="text-sm font-semibold text-gold-600 mt-1">En stock</p>
                                         </div>
