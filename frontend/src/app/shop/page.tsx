@@ -128,7 +128,7 @@ export default function ShopPage() {
                                                 onChange={(e) => setSortBy(e.target.value)}
                                                 className="mt-1 w-full bg-jungle-950/50 border border-vanilla-100/10 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold-500/20 transition-all text-vanilla-50"
                                             >
-                                                <option className="bg-jungle-900" value="featured">Sélection MSV</option>
+                                                <option className="bg-jungle-900" value="featured">Sélection M.S.V-NOSY BE</option>
                                                 <option className="bg-jungle-900" value="name_asc">Nom (A-Z)</option>
                                                 <option className="bg-jungle-900" value="name_desc">Nom (Z-A)</option>
                                             </select>

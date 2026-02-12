@@ -49,13 +49,14 @@ export default function Header() {
                         <VanillaIcon />
                     </div>
                     <div className="leading-tight">
-                        <p className="font-display text-lg">MSV Nosy-Be</p>
+                        <p className="font-display text-lg">M.S.V-NOSY BE</p>
                         <p className="text-xs text-vanilla-100/70">Vanille de Madagascar</p>
                     </div>
                 </Link>
 
                 {/* Nav */}
                 <nav className="hidden md:flex items-center gap-8">
+                    <Link href="/" className="text-sm font-semibold hover:text-gold-500 transition-colors">Accueil</Link>
                     <Link href="/shop" className="text-sm font-semibold hover:text-gold-500 transition-colors">Boutique</Link>
                     <Link href="/about" className="text-sm font-semibold hover:text-gold-500 transition-colors">À propos</Link>
                     <Link href="/b2b" className="text-sm font-semibold hover:text-gold-500 transition-colors">Professionnels</Link>

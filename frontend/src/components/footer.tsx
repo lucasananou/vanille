@@ -15,9 +15,11 @@ export default function Footer() {
             <div className="mx-auto max-w-7xl px-4 py-10">
                 <div className="grid md:grid-cols-4 gap-8">
                     <div>
-                        <p className="font-display text-xl">MSV Nosy-Be</p>
-                        <p className="mt-2 text-sm text-vanilla-100/70">Vanille de Madagascar — expérience premium.</p>
-                        <div className="mt-4 inline-flex items-center gap-2 text-sm text-vanilla-100/80">
+                        <div className="leading-tight mb-4">
+                            <p className="font-display text-xl">M.S.V-NOSY BE</p>
+                            <p className="text-sm text-vanilla-100/60">Vanille de Madagascar</p>
+                        </div>
+                        <div className="inline-flex items-center gap-2 text-sm text-vanilla-100/80">
                             <LeafIcon />
                             <span>100% naturel & sélectionné à la main.</span>
                         </div>
@@ -50,7 +52,7 @@ export default function Footer() {
 
                 <div className="mt-10 pt-6 border-t border-vanilla-100/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <p className="text-xs text-vanilla-100/60">
-                        © {new Date().getFullYear()} MSV Nosy-Be • Design premium. Tous droits réservés.
+                        © {new Date().getFullYear()} M.S.V-NOSY BE • Design premium. Tous droits réservés.
                     </p>
                     <p className="text-xs text-vanilla-100/60">
                         Vanille de Madagascar — Terroir d'Exception

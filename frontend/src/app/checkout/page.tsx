@@ -87,7 +87,7 @@ export default function CheckoutPage() {
                             <VanillaIcon />
                         </div>
                         <div className="leading-tight">
-                            <p className="font-display text-lg text-vanilla-50">MSV Nosy-Be</p>
+                            <p className="font-display text-lg text-vanilla-50">M.S.V-NOSY BE</p>
                             <p className="text-xs text-vanilla-100/70">Checkout</p>
                         </div>
                     </Link>

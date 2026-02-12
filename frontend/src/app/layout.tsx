@@ -21,7 +21,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "MSV Nosy-Be — Vanille de Madagascar",
+  title: "M.S.V-NOSY BE — Vanille de Madagascar",
   description: "Vanille de Nosy-Be (Madagascar) — arôme intense, sélection TK (Noir) / Gourmet, conditionnement premium. Découvrez la boutique.",
 };
 

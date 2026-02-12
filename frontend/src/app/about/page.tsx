@@ -41,7 +41,7 @@ export default function AboutPage() {
                             <div>
                                 <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-vanilla-50">
                                     <LeafIcon />
-                                    <span className="text-sm font-semibold uppercase tracking-widest">Notre Histoire • MSV Nosy-Be</span>
+                                    <span className="text-sm font-semibold uppercase tracking-widest">Notre Histoire • M.S.V-NOSY BE</span>
                                 </div>
 
                                 <h1 className="mt-8 font-display text-4xl sm:text-5xl lg:text-7xl italic leading-tight text-vanilla-50">
@@ -98,32 +98,35 @@ export default function AboutPage() {
                     <div className="mx-auto max-w-4xl px-4">
                         <div className="space-y-12 text-lg leading-relaxed text-jungle-800/80">
                             <div className="space-y-6">
-                                <h2 className="font-display text-4xl text-jungle-950 italic">Notre Histoire</h2>
+                                <h2 className="font-display text-4xl text-jungle-950 italic">L&apos;Origine de la Vanille Bourbon</h2>
                                 <p>
-                                    La S.A.R.L MORIDY SOANJARA VANILLE NOSY-BE (M.S.V – Nosy Be) a été fondée le 30 mai 2023 à Nosy Be, une région historiquement reconnue pour l&apos;excellence de sa vanille. Notre entreprise s&apos;appuie sur un savoir-faire traditionnel transmis de génération en génération, bénéficiant des conditions climatiques idéales de l&apos;&quot;Île aux Parfums&quot;.
+                                    Née sur l’île de Nosy-Be, là où la vanille fut introduite pour la première fois à Madagascar en 1880, Vanille Moridy® incarne l’origine même de la vanille Bourbon. Façonnée par un terroir volcanique, les brises marines et des générations de savoir-faire, chaque gousse exprime un arôme naturellement intense et une profondeur sensorielle remarquable.
                                 </p>
                                 <p>
-                                    Sous la direction de Monsieur ABOU MORIDY, nous maîtrisons l&apos;intégralité de la chaîne de valeur : de la production agricole à la transformation, l&apos;affinage, le stockage et l&apos;exportation internationale.
+                                    Cultivée avec soin, récoltée à pleine maturité et affinée lentement selon des méthodes traditionnelles, Vanille Moridy® révèle un profil aromatique chaud, rond et élégant. C’est une vanille de caractère et d’authenticité, créée pour les chefs, artisans et marques en quête d’excellence, d’émotion et d’origine dans chacune de leurs créations.
+                                </p>
+                                <p className="italic font-display text-2xl text-gold-600 border-l-2 border-gold-500 pl-6">
+                                    Vanille Moridy® est plus qu’une vanille — c’est l’expression du patrimoine de Nosy-Be.
                                 </p>
                             </div>
 
                             <div className="grid sm:grid-cols-2 gap-8 py-8">
                                 <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8 shadow-sm">
-                                    <div className="w-12 h-12 rounded-2xl bg-vanilla-50 border border-vanilla-100 flex items-center justify-center text-gold-600 mb-6">
-                                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-                                    </div>
-                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Notre Mission</h3>
-                                    <p className="text-sm leading-relaxed">
-                                        Fournir une vanille malgache de haute qualité, traçable et conforme aux normes internationales, tout en portant une attention particulière aux marchés exigeants comme les États-Unis.
+                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Excellence Technique</h3>
+                                    <p className="text-sm leading-relaxed mb-4">
+                                        Vanille Moridy® se distingue par une concentration aromatique naturellement élevée et un contrôle qualité strict tout au long de la chaîne d’approvisionnement.
+                                    </p>
+                                    <p className="text-sm leading-relaxed text-jungle-700">
+                                        Notre production repose sur des pratiques agricoles maîtrisées, garantissant stabilité, homogénéité et intégrité aromatique.
                                     </p>
                                 </div>
                                 <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8 shadow-sm">
-                                    <div className="w-12 h-12 rounded-2xl bg-vanilla-50 border border-vanilla-100 flex items-center justify-center text-gold-600 mb-6">
-                                        <LeafIcon />
-                                    </div>
-                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Engagement Durable</h3>
-                                    <p className="text-sm leading-relaxed">
-                                        Nous luttons activement contre le réchauffement climatique et protégeons la biodiversité malgache tout en participant à l&apos;économie locale par la création d&apos;emplois à Nosy-Be.
+                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Qualité & Traçabilité</h3>
+                                    <p className="text-sm leading-relaxed mb-4">
+                                        Répond aux exigences techniques et de traçabilité des partenaires internationaux les plus exigeants au monde.
+                                    </p>
+                                    <p className="text-sm leading-relaxed text-jungle-700">
+                                        Destinée aux applications alimentaires premium, aux arômes et aux extraits de haute performance.
                                     </p>
                                 </div>
                             </div>
