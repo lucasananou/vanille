@@ -76,6 +76,17 @@ export const CATALOG: ProductData[] = [
         packaging: ["Sous-vide"],
         bullets: ["Volumes adaptés aux pros", "Demande de devis rapide (B2B)", "Conditionnement sous‑vide"],
         images: ["/photos produit vanille/Galerie photos qui sommes nous/Triage et calibrage.jpg"]
+    },
+    {
+        id: "poivre-sauvage",
+        title: "Poivre Sauvage de Madagascar",
+        subtitle: "Récolte sauvage, arôme boisé & frais",
+        price_label: "—",
+        size: "En gros",
+        grade: "Premium",
+        packaging: ["Sac pro"],
+        bullets: ["Poivre rare récolté en forêt", "Disponible uniquement en gros pour le moment", "Bientôt disponible au détail"],
+        images: ["/photos produit vanille/Galerie photos qui sommes nous/Vanilles traite╠ües.jpg"]
     }
 ];
 

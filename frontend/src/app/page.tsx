@@ -253,7 +253,7 @@ export default function HomePage() {
             <div className="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
               {[
                 { icon: <ShieldStarIcon />, title: "Sélection qualité", desc: "TK (Noir) / Gourmet selon lots. Tri + contrôle rigoureux." },
-                { icon: <ArchiveIcon />, title: "Conservation premium", desc: "Sous-vide pour stabilité, tube pour l’expérience cadeau." },
+                { icon: <ArchiveIcon />, title: "Conservation premium", desc: "Sous-vide pour la stabilité, tube pour l’expérience cadeau." },
                 { icon: <FlaskIcon />, title: "Riche en arômes", desc: "Un parfum chaud & intense, idéal pour la haute pâtisserie." },
                 { icon: <SilverwareIcon />, title: "Pensée cuisine", desc: "Pâtisserie, glaces, rhum arrangé, extrait maison." }
               ].map((item, idx) => (

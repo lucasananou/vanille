@@ -1,53 +1,86 @@
+'use client';
 
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
-export default function CGV() {
+export default function CGVPage() {
     return (
-        <div className="flex flex-col min-h-screen bg-white text-zinc-900">
+        <div className="flex flex-col min-h-screen bg-vanilla-50 text-jungle-950 font-sans antialiased">
             <Header />
-            <main className="flex-grow mx-auto max-w-4xl w-full px-6 py-12">
-                <h1 className="text-3xl font-serif mb-8 text-center text-zinc-900">Conditions Générales de Vente (CGV)</h1>
 
-                <div className="prose prose-zinc max-w-none">
-                    <p className="text-sm text-zinc-500 italic mb-8">Dernière mise à jour : 20 Octobre 2024</p>
+            <main className="flex-grow py-16 lg:py-24">
+                <div className="mx-auto max-w-4xl px-4">
+                    <h1 className="font-display text-4xl sm:text-5xl italic leading-tight mb-12 text-center text-jungle-900">
+                        Conditions Générales de Vente <br />
+                        <span className="text-jungle-700/60 text-2xl not-italic">General Terms and Conditions of Sale</span>
+                    </h1>
 
-                    <h2>1. Objet</h2>
-                    <p>
-                        Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre <strong>Tsniout Shop</strong> et toute personne effectuant un achat via le site e-commerce <strong>tsniout-shop.fr</strong>.
-                    </p>
+                    <div className="space-y-16 bg-white shadow-xl p-8 sm:p-12 rounded-[2rem] border border-vanilla-200 text-sm leading-relaxed text-jungle-800">
+                        {/* Article 1 */}
+                        <section className="grid sm:grid-cols-2 gap-8 border-b border-vanilla-100 pb-12">
+                            <div>
+                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 1 – Parties (FR)</h2>
+                                <p>La société MORIDY SOANJARA VANILLE NOSY-BE (M.S.V – NOSY BE), SARL de droit malgache.</p>
+                                <ul className="mt-2 space-y-1">
+                                    <li>Siège social : Lot n°109B 0163 à Befitina, Hell-Ville, Nosy-Be, Madagascar</li>
+                                    <li>Tél : +261 32 98 595 50</li>
+                                    <li>Immatriculée : RCS Nosy-Be 2023 B 00054</li>
+                                    <li>STAT : 46101 71 2023 0 10373</li>
+                                    <li>Représentée par : ABOU MORIDY, Directeur Général</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 1 – Parties (EN)</h2>
+                                <p>MORIDY SOANJARA VANILLA NOSY-BE (M.S.V – NOSY BE), a limited liability company under Malagasy law.</p>
+                                <ul className="mt-2 space-y-1 text-jungle-600">
+                                    <li>Registered office: Lot No. 109B 0163, Befitina, Hell-Ville, Nosy-Be, Madagascar</li>
+                                    <li>Phone: +261 32 98 595 50</li>
+                                    <li>Registered under No.: RCS Nosy-Be 2023 B 00054</li>
+                                    <li>STAT No.: 46101 71 2023 0 10373</li>
+                                    <li>Represented by: ABOU MORIDY, Managing Director</li>
+                                </ul>
+                            </div>
+                        </section>
 
-                    <h2>2. Produits et Prix</h2>
-                    <p>
-                        Nos produits sont décrits avec la plus grande précision possible. Les prix sont indiqués en Euros (€) toutes taxes comprises (TTC). Les frais de livraison sont calculés lors du passage de la commande.
-                    </p>
+                        {/* Article 2 */}
+                        <section className="grid sm:grid-cols-2 gap-8 border-b border-vanilla-100 pb-12">
+                            <div>
+                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 2 – Objet (FR)</h2>
+                                <p>Définir les conditions de commercialisation, coordination, assistance logistique et facilitation à l&apos;exportation de vanille naturelle originaire de Nosy Be. Toute commande implique l&apos;acceptation pleine et entière des présentes CGV.</p>
+                            </div>
+                            <div>
+                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 2 – Purpose (EN)</h2>
+                                <p className="text-jungle-600">Define the terms under which M.S.V – Nosy Be markets and facilitates the export of natural vanilla. Any order implies full and unconditional acceptance of these GTC.</p>
+                            </div>
+                        </section>
 
-                    <h2>3. Commande</h2>
-                    <p>
-                        Toute commande vaut acceptation des prix et descriptions des produits disponibles à la vente. La validation de la commande entraîne l'acceptation des présentes CGV.
-                    </p>
+                        {/* Article 4 & 5 Highlights */}
+                        <section className="bg-vanilla-50 p-6 rounded-2xl border border-gold-600/10">
+                            <div className="grid sm:grid-cols-2 gap-8">
+                                <div>
+                                    <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4 text-xs">Paiement & Prix</h2>
+                                    <p className="font-semibold text-jungle-900 mb-2">Acompte de 30% à la commande.</p>
+                                    <p className="mb-4 italic opacity-70 border-l-2 border-gold-500 pl-4">Solde de 70% avant expédition.</p>
+                                    <p className="text-lg font-display text-gold-600">100 € / kg (Réf.)</p>
+                                </div>
+                                <div className="text-jungle-600">
+                                    <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4 text-xs">Payment & Price</h2>
+                                    <p className="font-semibold text-jungle-900 mb-2">30% deposit upon confirmation.</p>
+                                    <p className="mb-4 italic opacity-70 border-l-2 border-gold-500 pl-4">70% balance before shipment.</p>
+                                    <p className="text-lg font-display text-gold-600">€100 / kg (Ref.)</p>
+                                </div>
+                            </div>
+                        </section>
 
-                    <h2>4. Paiement</h2>
-                    <p>
-                        Le paiement est exigible immédiatement à la commande. Vous pouvez effectuer le règlement par carte bancaire. Les paiements sont sécurisés par notre partenaire de paiement.
-                    </p>
-
-                    <h2>5. Livraison</h2>
-                    <p>
-                        La livraison est effectuée à l'adresse indiquée lors de la commande. Les délais de livraison sont donnés à titre indicatif. Pour plus de détails, consultez notre <a href="/legal/politique-d-expedition">Politique d'Expédition</a>.
-                    </p>
-
-                    <h2>6. Rétractation</h2>
-                    <p>
-                        Conformément à la loi, vous disposez d'un délai de 14 jours à compter de la réception de vos produits pour exercer votre droit de rétractation. Voir notre <a href="/legal/politique-de-remboursement">Politique de Remboursement</a>.
-                    </p>
-
-                    <h2>7. Garanties</h2>
-                    <p>
-                        Tous nos produits bénéficient de la garantie légale de conformité et de la garantie des vices cachés.
-                    </p>
+                        <div className="text-center pt-12">
+                            <p className="text-xs uppercase tracking-widest text-jungle-400">Fait à Nosy Be – Madagascar, le 29 décembre 2025</p>
+                            <p className="mt-4 font-display text-xl text-gold-600 italic">ABOU MORIDY</p>
+                            <p className="text-xs opacity-60">Directeur Général / Managing Director</p>
+                        </div>
+                    </div>
                 </div>
             </main>
+
             <Footer />
         </div>
     );

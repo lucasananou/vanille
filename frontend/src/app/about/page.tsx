@@ -98,39 +98,40 @@ export default function AboutPage() {
                     <div className="mx-auto max-w-4xl px-4">
                         <div className="space-y-12 text-lg leading-relaxed text-jungle-800/80">
                             <div className="space-y-6">
-                                <h2 className="font-display text-4xl text-jungle-950 italic">Notre Terroir</h2>
+                                <h2 className="font-display text-4xl text-jungle-950 italic">Notre Histoire</h2>
                                 <p>
-                                    Située au large de la côte Nord-Ouest de Madagascar, l&apos;île de Nosy-Be bénéficie d&apos;un microclimat exceptionnel.
-                                    C&apos;est ici, entre mer et forêt tropicale, que nos orchidées s&apos;épanouissent pour donner naissance à des gousses d&apos;une richesse aromatique incomparable.
+                                    La S.A.R.L MORIDY SOANJARA VANILLE NOSY-BE (M.S.V – Nosy Be) a été fondée le 30 mai 2023 à Nosy Be, une région historiquement reconnue pour l&apos;excellence de sa vanille. Notre entreprise s&apos;appuie sur un savoir-faire traditionnel transmis de génération en génération, bénéficiant des conditions climatiques idéales de l&apos;&quot;Île aux Parfums&quot;.
+                                </p>
+                                <p>
+                                    Sous la direction de Monsieur ABOU MORIDY, nous maîtrisons l&apos;intégralité de la chaîne de valeur : de la production agricole à la transformation, l&apos;affinage, le stockage et l&apos;exportation internationale.
                                 </p>
                             </div>
 
                             <div className="grid sm:grid-cols-2 gap-8 py-8">
-                                <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8">
+                                <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8 shadow-sm">
                                     <div className="w-12 h-12 rounded-2xl bg-vanilla-50 border border-vanilla-100 flex items-center justify-center text-gold-600 mb-6">
                                         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
                                     </div>
-                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Qualité MSV</h3>
+                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Notre Mission</h3>
                                     <p className="text-sm leading-relaxed">
-                                        Nous sélectionnons uniquement les gousses les plus charnues, souples et parfumées, garantissant un taux de vanilline optimal et une fraîcheur exemplaire.
+                                        Fournir une vanille malgache de haute qualité, traçable et conforme aux normes internationales, tout en portant une attention particulière aux marchés exigeants comme les États-Unis.
                                     </p>
                                 </div>
-                                <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8">
+                                <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8 shadow-sm">
                                     <div className="w-12 h-12 rounded-2xl bg-vanilla-50 border border-vanilla-100 flex items-center justify-center text-gold-600 mb-6">
-                                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" /><line x1="16" x2="2" y1="8" y2="22" /><line x1="17.5" x2="15" y1="15" y2="17.5" /></svg>
+                                        <LeafIcon />
                                     </div>
-                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Affinage Manuel</h3>
+                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">Engagement Durable</h3>
                                     <p className="text-sm leading-relaxed">
-                                        Le secret réside dans le temps. Nos gousses sont affinées durant de longs mois dans des malles de bois, permettant aux arômes de gagner en rondeur et en complexité.
+                                        Nous luttons activement contre le réchauffement climatique et protégeons la biodiversité malgache tout en participant à l&apos;économie locale par la création d&apos;emplois à Nosy-Be.
                                     </p>
                                 </div>
                             </div>
 
                             <div className="space-y-6">
-                                <h2 className="font-display text-4xl text-jungle-950 italic">Notre Engagement</h2>
+                                <h2 className="font-display text-4xl text-jungle-950 italic">Culture & Qualité</h2>
                                 <p>
-                                    Nous travaillons main dans la main avec des producteurs locaux, au plus près des plantations.
-                                    Cette proximité nous permet non seulement de garantir une qualité constante, mais aussi de soutenir l&apos;économie locale et de préserver un savoir-faire ancestral indispensable à la survie de cette filière d&apos;exception.
+                                    Notre vanille 100% naturelle et non OGM est cultivée en altitude. Chaque étape est réalisée à la main : de la pollinisation manuelle à la récolte, suivie d&apos;un processus de séchage et d&apos;affinage rigoureusement maîtrisé pour garantir un arôme riche, raffiné et une fragrance stable.
                                 </p>
                             </div>
                         </div>

@@ -28,75 +28,130 @@ export default function B2BPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-jungle-900 text-vanilla-50 font-sans antialiased">
+        <div className="flex flex-col min-h-screen bg-vanilla-50 text-jungle-950 font-sans antialiased">
             <Header />
 
             <main className="flex-grow">
                 <section className="relative py-16 lg:py-24 overflow-hidden">
-                    <div className="absolute inset-0 grain opacity-40" aria-hidden="true"></div>
+                    <div className="absolute inset-0 grain opacity-20" aria-hidden="true"></div>
                     <div className="mx-auto max-w-7xl px-4 relative">
                         <div className="grid lg:grid-cols-2 gap-16 items-start">
                             <div className="max-w-xl">
                                 <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight">
                                     Professionnels <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 to-vanilla-100 italic">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-jungle-800 italic">
                                         & Gastronomie.
                                     </span>
                                 </h1>
-                                <p className="text-vanilla-100/70 mt-6 text-lg">
+                                <p className="text-jungle-700 mt-6 text-lg">
                                     Chef pâtissier, chocolatier ou distributeur ? Accédez à des volumes importants et des tarifs préférentiels pour sublimer vos créations.
                                 </p>
 
                                 <div className="mt-10 space-y-6">
-                                    <div className="rounded-xxl glass p-6 border border-vanilla-100/10 flex items-start gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-vanilla-50/5 border border-vanilla-100/10 flex items-center justify-center shrink-0">
+                                    <div className="rounded-xxl bg-white p-6 border border-vanilla-200 shadow-sm flex items-start gap-4">
+                                        <div className="w-12 h-12 rounded-2xl bg-vanilla-50 border border-vanilla-100 flex items-center justify-center shrink-0">
                                             <BuildingIcon />
                                         </div>
                                         <div>
-                                            <p className="font-display text-xl text-gold-500">Service Dédié</p>
-                                            <p className="text-vanilla-100/70 mt-1">Accompagnement personnalisé, facturation HT et expédition sécurisée monde entier.</p>
+                                            <p className="font-display text-xl text-gold-600">MORIDY SOANJARA VANILLA NOSY-BE</p>
+                                            <p className="text-sm text-jungle-700 mt-2">
+                                                SARL de droit malgache spécialisée dans la production, la transformation, le stockage et l’exportation de vanille naturelle.
+                                            </p>
+                                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-jungle-600 border-t border-vanilla-100 pt-4">
+                                                <div>
+                                                    <p className="font-semibold text-jungle-900">Siège Social</p>
+                                                    <p>Lot n° 109B 0163, Befitina, Nosy-Be</p>
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-jungle-900">Identifiants</p>
+                                                    <p>RCS Nosy-Be : 2023 B 00054</p>
+                                                    <p>N° STAT : 46101 71 2023 0 10373</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h3 className="font-display text-2xl italic text-jungle-900">Notre activité</h3>
+                                        <ul className="grid grid-cols-2 gap-4">
+                                            {[
+                                                { title: "Production", desc: "Maîtrise agricole" },
+                                                { title: "Transformation", desc: "Affinage traditionnel" },
+                                                { title: "Stockage", desc: "Conditions contrôlées" },
+                                                { title: "Exportation", desc: "Normes internationales" }
+                                            ].map((item, i) => (
+                                                <li key={i} className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
+                                                    <p className="font-semibold text-gold-600">{item.title}</p>
+                                                    <p className="text-xs text-jungle-600">{item.desc}</p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h3 className="font-display text-2xl italic text-jungle-900">Nos Produits</h3>
+                                        <div className="grid gap-4">
+                                            <div className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
+                                                <p className="font-semibold text-gold-600">Grade GOURMET</p>
+                                                <p className="text-sm text-jungle-700">Gastronomie fine et pâtisserie haut de gamme.</p>
+                                            </div>
+                                            <div className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
+                                                <p className="font-semibold text-gold-600">Grade TK</p>
+                                                <p className="text-sm text-jungle-700">Industrie agroalimentaire et transformation.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h3 className="font-display text-2xl italic text-jungle-900">Partenaires Cibles</h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {["Importateurs", "Industriels", "Pâtissiers", "Confiseurs", "Négociants"].map((tag, i) => (
+                                                <span key={i} className="px-3 py-1 rounded-full bg-vanilla-100 border border-vanilla-200 text-xs text-jungle-700">
+                                                    {tag}
+                                                </span>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="rounded-3xl glass border border-vanilla-100/15 p-8 relative">
-                                <h2 className="font-display text-3xl italic">Demande de devis</h2>
+                            <div className="lg:sticky lg:top-24 rounded-3xl bg-white shadow-2xl border border-vanilla-200 p-8 relative">
+                                <h2 className="font-display text-3xl italic text-jungle-900">Demande de devis</h2>
                                 <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
                                     <div className="grid sm:grid-cols-2 gap-5">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-vanilla-100/80" htmlFor="company">Entreprise / Restaurant</label>
+                                            <label className="text-sm font-medium text-jungle-700" htmlFor="company">Entreprise / Restaurant</label>
                                             <input
                                                 id="company"
                                                 required
-                                                className="w-full rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-vanilla-100/30 text-vanilla-50"
+                                                className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
                                                 placeholder="Nom de l’établissement"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-vanilla-100/80" htmlFor="b2bemail">Email pro</label>
+                                            <label className="text-sm font-medium text-jungle-700" htmlFor="b2bemail">Email pro</label>
                                             <input
                                                 id="b2bemail"
                                                 type="email"
                                                 required
-                                                className="w-full rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-vanilla-100/30 text-vanilla-50"
+                                                className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
                                                 placeholder="contact@entreprise.fr"
                                             />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-vanilla-100/80" htmlFor="need">Votre besoin (Volumes, Types...)</label>
+                                        <label className="text-sm font-medium text-jungle-700" htmlFor="need">Votre besoin (Volumes, Types...)</label>
                                         <textarea
                                             id="need"
                                             rows={5}
                                             required
-                                            className="w-full rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-vanilla-100/30 text-vanilla-50"
+                                            className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
                                             placeholder="Ex: 5kg Gousses TK, Livraison mensuelle..."
                                         />
                                     </div>
                                     <button
                                         type="submit"
-                                        className="w-full inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-4 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all"
+                                        className="w-full inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-4 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all shadow-lg"
                                     >
                                         Envoyer ma demande <ArrowRightIcon />
                                     </button>
@@ -111,7 +166,7 @@ export default function B2BPage() {
 
             {/* Toast */}
             {status && (
-                <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 rounded-full glass border border-gold-500/20 text-vanilla-50 text-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 rounded-full bg-jungle-900 border border-gold-500/20 text-vanilla-50 text-sm animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-2xl">
                     <div className="flex items-center gap-3">
                         <div className="w-2 h-2 rounded-full bg-gold-500 animate-pulse"></div>
                         {status}

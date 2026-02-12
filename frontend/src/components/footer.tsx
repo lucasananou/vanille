@@ -35,7 +35,7 @@ export default function Footer() {
                         <p className="text-sm font-semibold">Infos</p>
                         <ul className="mt-3 space-y-2 text-sm text-vanilla-100/70">
                             <li><Link className="hover:text-vanilla-50 transition-colors" href="/cart">Panier</Link></li>
-                            <li><Link className="hover:text-vanilla-50 transition-colors" href="/about">Livraison</Link></li>
+                            <li><Link className="hover:text-vanilla-50 transition-colors" href="/legal/conditions-generales-de-vente">CGV</Link></li>
                             <li><Link className="hover:text-vanilla-50 transition-colors" href="/contact">FAQ</Link></li>
                         </ul>
                     </div>
