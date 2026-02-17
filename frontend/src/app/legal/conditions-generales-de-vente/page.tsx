@@ -61,14 +61,26 @@ export default function CGVPage() {
                                     <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4 text-xs">Paiement & Prix</h2>
                                     <p className="font-semibold text-jungle-900 mb-2">Acompte de 30% à la commande.</p>
                                     <p className="mb-4 italic opacity-70 border-l-2 border-gold-500 pl-4">Solde de 70% avant expédition.</p>
-                                    <p className="text-lg font-display text-gold-600">100 € / kg (Réf.)</p>
+                                    <p className="text-lg font-display text-gold-600">267,555 € / kg</p>
                                 </div>
                                 <div className="text-jungle-600">
                                     <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4 text-xs">Payment & Price</h2>
                                     <p className="font-semibold text-jungle-900 mb-2">30% deposit upon confirmation.</p>
                                     <p className="mb-4 italic opacity-70 border-l-2 border-gold-500 pl-4">70% balance before shipment.</p>
-                                    <p className="text-lg font-display text-gold-600">€100 / kg (Ref.)</p>
+                                    <p className="text-lg font-display text-gold-600">€267.555 / kg</p>
                                 </div>
+                            </div>
+                        </section>
+
+                        {/* Article 14 */}
+                        <section className="grid sm:grid-cols-2 gap-8 border-b border-vanilla-100 pb-12">
+                            <div>
+                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 14 – Prix de vente global de référence (FR)</h2>
+                                <p>Le prix de vente global de référence est fixé à 267,555 € / kg, incluant l’ensemble des coûts directs et indirects liés à la production, à la transformation, à la conservation, à la logistique, à l’exportation ainsi qu’aux obligations réglementaires. Ce prix est pleinement et objectivement justifié sur le plan économique.</p>
+                            </div>
+                            <div>
+                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 14 – Global Reference Selling Price (EN)</h2>
+                                <p className="text-jungle-600">The global reference selling price is set at €267.555 / kg, including all direct and indirect costs related to production, processing, storage, logistics, export, and regulatory obligations. This price is fully and objectively justified on economic grounds.</p>
                             </div>
                         </section>
 
