@@ -95,9 +95,13 @@ export default function CheckoutPage() {
                 style={{ backgroundColor: 'rgba(10, 44, 29, 0.7)' }}
             >
                 <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
-                    <Link href="/" className="flex items-center gap-3 rounded-2xl px-2 py-1 focus:ring-2 focus:ring-gold-500/50 outline-none">
-                        <div className="w-10 h-10 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center">
-                            <VanillaIcon />
+                    <Link href="/" className="flex items-center gap-3 rounded-2xl px-1 py-1 focus:ring-2 focus:ring-gold-500/50 outline-none">
+                        <div className="w-14 h-14 rounded-2xl overflow-hidden">
+                            <img
+                                src="/logo_msv.png"
+                                alt="Logo MSV Nosy-Be"
+                                className="w-full h-full object-contain"
+                            />
                         </div>
                         <div className="leading-tight">
                             <p className="font-display text-lg text-vanilla-50">M.S.V-NOSY BE</p>

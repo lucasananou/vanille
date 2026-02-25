@@ -16,7 +16,7 @@ const faqs = [
     },
     {
         question: "Les articles sont-ils transparents ?",
-        answer: "Nous apportons une attention particulière à l'opacité de nos tissus. La plupart de nos robes et jupes sont doublées ou conçues dans des matières denses pour garantir une opacité totale, conformément aux principes de la Tsniout."
+        answer: "Nous apportons une attention particulière à l'opacité de nos tissus. La plupart de nos robes et jupes sont doublées ou conçues dans des matières denses pour garantir une opacité totale, conformément aux principes de la M.S.V-NOSY BE."
     },
     {
         question: "Puis-je modifier ma commande après validation ?",
@@ -30,7 +30,7 @@ export default function FAQPage() {
             <Header />
             <main className="flex-grow mx-auto max-w-3xl w-full px-6 py-16">
                 <h1 className="text-4xl font-serif mb-4 text-center">Foire Aux Questions</h1>
-                <p className="text-zinc-500 text-center mb-12 font-light">Toutes les réponses à vos questions sur Tsniout Shop.</p>
+                <p className="text-zinc-500 text-center mb-12 font-light">Toutes les réponses à vos questions sur M.S.V-NOSY BE Shop.</p>
 
                 <div className="space-y-8">
                     {faqs.map((faq, index) => (

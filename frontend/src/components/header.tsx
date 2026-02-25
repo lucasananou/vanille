@@ -43,10 +43,13 @@ export default function Header() {
             style={{ backgroundColor: '#0a2c1d' }}
         >
             <div className="mx-auto max-w-7xl px-4 flex items-center justify-between gap-3">
-                {/* Brand */}
-                <Link href="/" className="flex items-center gap-3 rounded-2xl px-2 py-1 focus-ring group">
-                    <div className="w-10 h-10 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/15 grid place-items-center transition-all duration-300">
-                        <VanillaIcon />
+                <Link href="/" className="flex items-center gap-3 rounded-2xl px-1 py-1 focus-ring group">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden transition-all duration-300">
+                        <img
+                            src="/logo_msv.png"
+                            alt="Logo MSV Nosy-Be"
+                            className="w-full h-full object-contain"
+                        />
                     </div>
                     <div className="leading-tight">
                         <p className="font-display text-lg">M.S.V-NOSY BE</p>

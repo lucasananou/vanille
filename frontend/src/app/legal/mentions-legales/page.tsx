@@ -12,8 +12,8 @@ export default function MentionsLegales() {
                 <div className="prose prose-zinc max-w-none">
                     <h2>1. Éditeur du site</h2>
                     <p>
-                        Le site <strong>Tsniout Shop</strong> (ci-après dénommé « le Site ») est édité par :<br />
-                        <strong>Tsniout Shop LTD</strong><br />
+                        Le site <strong>M.S.V-NOSY BE Shop</strong> (ci-après dénommé « le Site ») est édité par :<br />
+                        <strong>M.S.V-NOSY BE Shop LTD</strong><br />
                         Adresse : 123 Rue de la Modestie, 75000 Paris, France<br />
                         Email : <a href="mailto:contact@tsniout-shop.fr">contact@tsniout-shop.fr</a><br />
                         Téléphone : +33 1 23 45 67 89<br />

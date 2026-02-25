@@ -46,7 +46,7 @@ export default function OrderConfirmationPage() {
                 <nav className="border-b border-zinc-100">
                     <div className="mx-auto flex h-20 max-w-7xl items-center px-6">
                         <Link href="/" className="text-xl font-medium tracking-tight text-zinc-900 uppercase hover:text-amber-700 transition-colors">
-                            AP Collections
+                            M.S.V-NOSY BE
                         </Link>
                     </div>
                 </nav>
@@ -63,9 +63,18 @@ export default function OrderConfirmationPage() {
     return (
         <div className="min-h-screen bg-white">
             <nav className="border-b border-zinc-100">
-                <div className="mx-auto flex h-20 max-w-7xl items-center px-6">
-                    <Link href="/" className="text-xl font-medium tracking-tight text-zinc-900 uppercase hover:text-amber-700 transition-colors">
-                        AP Collections
+                <div className="mx-auto flex h-20 max-w-7xl items-center px-6 gap-3">
+                    <Link href="/" className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl overflow-hidden">
+                            <img
+                                src="/logo_msv.png"
+                                alt="Logo MSV Nosy-Be"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
+                        <span className="text-xl font-medium tracking-tight text-zinc-900 uppercase">
+                            M.S.V-NOSY BE
+                        </span>
                     </Link>
                 </div>
             </nav>

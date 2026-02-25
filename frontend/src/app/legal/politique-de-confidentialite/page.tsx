@@ -11,7 +11,7 @@ export default function PolitiqueConfidentialite() {
 
                 <div className="prose prose-zinc max-w-none">
                     <p>
-                        Chez <strong>Tsniout Shop</strong>, nous accordons une grande importance à la confidentialité de vos données. Cette politique décrit comment nous collectons, utilisons et protégeons vos informations personnelles.
+                        Chez <strong>M.S.V-NOSY BE Shop</strong>, nous accordons une grande importance à la confidentialité de vos données. Cette politique décrit comment nous collectons, utilisons et protégeons vos informations personnelles.
                     </p>
 
                     <h2>1. Collecte des données</h2>

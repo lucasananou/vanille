@@ -278,7 +278,7 @@ export default function CollectionPage() {
                         <h2 className="text-3xl font-serif text-zinc-900 mb-8">Robe tsniout</h2>
                         <div className="prose prose-zinc prose-sm max-w-none space-y-8">
                             <p className="leading-relaxed">
-                                Bienvenue chez Tsniout Shop, votre destination de confiance pour des <strong className="font-bold text-zinc-900">robes tsniout</strong> qui allient modestie et élégance. Nous croyons fermement que s’habiller avec discrétion peut être synonyme de style et de beauté. C’est pourquoi nous avons soigneusement sélectionné une collection de robes tsniout qui incarnent pudeur, raffinement, et confort.
+                                Bienvenue chez M.S.V-NOSY BE Shop, votre destination de confiance pour des <strong className="font-bold text-zinc-900">robes tsniout</strong> qui allient modestie et élégance. Nous croyons fermement que s’habiller avec discrétion peut être synonyme de style et de beauté. C’est pourquoi nous avons soigneusement sélectionné une collection de robes tsniout qui incarnent pudeur, raffinement, et confort.
                             </p>
 
                             <div>
@@ -291,7 +291,7 @@ export default function CollectionPage() {
                             <div>
                                 <h3 className="text-xl font-bold text-zinc-900 mb-3">Une large gamme de styles pour tous les goûts</h3>
                                 <p className="leading-relaxed">
-                                    Chez Tsniout Shop, nous vous proposons une variété de <strong className="font-bold text-zinc-900">robes tsniout</strong> pour répondre à toutes vos envies. Découvrez nos robes longues fluides parfaites pour les journées chaudes, ou choisissez une robe plissée pour un look plus sophistiqué. Si vous aimez les motifs, nos robes imprimées ajouteront une touche de dynamisme à votre garde-robe, tandis que nos robes unies offrent une élégance intemporelle. Pour les occasions spéciales, explorez nos robes à volants ou robes en dentelle qui apportent une touche de romantisme et de luxe à votre style.
+                                    Chez M.S.V-NOSY BE Shop, nous vous proposons une variété de <strong className="font-bold text-zinc-900">robes tsniout</strong> pour répondre à toutes vos envies. Découvrez nos robes longues fluides parfaites pour les journées chaudes, ou choisissez une robe plissée pour un look plus sophistiqué. Si vous aimez les motifs, nos robes imprimées ajouteront une touche de dynamisme à votre garde-robe, tandis que nos robes unies offrent une élégance intemporelle. Pour les occasions spéciales, explorez nos robes à volants ou robes en dentelle qui apportent une touche de romantisme et de luxe à votre style.
                                 </p>
                             </div>
 
@@ -305,14 +305,14 @@ export default function CollectionPage() {
                             <div>
                                 <h3 className="text-xl font-bold text-zinc-900 mb-3">Comment styliser votre robe tsniout ?</h3>
                                 <p className="leading-relaxed">
-                                    Une <strong className="font-bold text-zinc-900">robe tsniout</strong> de Tsniout Shop peut être stylisée de nombreuses façons. Associez-la à une veste en coton ou à un cardigan léger pour les journées plus fraîches, ou complétez-la avec des accessoires discrets pour un look raffiné. Que vous préfériez un style classique ou moderne, notre collection de robes tsniout vous offre d’innombrables possibilités pour exprimer votre personnalité tout en respectant vos valeurs de modestie.
+                                    Une <strong className="font-bold text-zinc-900">robe tsniout</strong> de M.S.V-NOSY BE Shop peut être stylisée de nombreuses façons. Associez-la à une veste en coton ou à un cardigan léger pour les journées plus fraîches, ou complétez-la avec des accessoires discrets pour un look raffiné. Que vous préfériez un style classique ou moderne, notre collection de robes tsniout vous offre d’innombrables possibilités pour exprimer votre personnalité tout en respectant vos valeurs de modestie.
                                 </p>
                             </div>
 
                             <div className="bg-zinc-50 p-6 rounded-lg border border-zinc-100 mt-8">
-                                <h3 className="text-xl font-bold text-zinc-900 mb-3">Achetez votre robe tsniout chez Tsniout Shop</h3>
+                                <h3 className="text-xl font-bold text-zinc-900 mb-3">Achetez votre robe tsniout chez M.S.V-NOSY BE Shop</h3>
                                 <p className="leading-relaxed m-0">
-                                    En choisissant une <strong className="font-bold text-zinc-900">robe tsniout</strong> chez Tsniout Shop, vous faites le choix de la qualité, du style, et du respect des principes de modestie qui vous sont chers. Explorez notre collection dès maintenant et trouvez la robe parfaite qui vous accompagnera avec grâce et pudeur.
+                                    En choisissant une <strong className="font-bold text-zinc-900">robe tsniout</strong> chez M.S.V-NOSY BE Shop, vous faites le choix de la qualité, du style, et du respect des principes de modestie qui vous sont chers. Explorez notre collection dès maintenant et trouvez la robe parfaite qui vous accompagnera avec grâce et pudeur.
                                 </p>
                             </div>
                         </div>
@@ -325,7 +325,7 @@ export default function CollectionPage() {
                         <h2 className="text-3xl font-serif text-zinc-900 mb-8">Jupe tsniout</h2>
                         <div className="prose prose-zinc prose-sm max-w-none space-y-8">
                             <p className="leading-relaxed">
-                                Bienvenue sur notre page dédiée aux <strong className="font-bold text-zinc-900">jupes tsniout</strong>, où la modestie rencontre l’élégance. Chez Tsniout Shop, nous comprenons l’importance de s’habiller avec discrétion tout en exprimant son style personnel. C’est pourquoi nous avons sélectionné une vaste gamme de jupes tsniout qui allient pudeur, confort, et raffinement.
+                                Bienvenue sur notre page dédiée aux <strong className="font-bold text-zinc-900">jupes tsniout</strong>, où la modestie rencontre l’élégance. Chez M.S.V-NOSY BE Shop, nous comprenons l’importance de s’habiller avec discrétion tout en exprimant son style personnel. C’est pourquoi nous avons sélectionné une vaste gamme de jupes tsniout qui allient pudeur, confort, et raffinement.
                             </p>
 
                             <div>
@@ -359,7 +359,7 @@ export default function CollectionPage() {
                             <div className="bg-zinc-50 p-6 rounded-lg border border-zinc-100 mt-8">
                                 <h3 className="text-xl font-bold text-zinc-900 mb-3">Achetez votre jupe tsniout chez nous !</h3>
                                 <p className="leading-relaxed m-0">
-                                    En choisissant une <strong className="font-bold text-zinc-900">jupe tsniout</strong> chez Tsniout Shop, vous faites le choix de la qualité, du style, et du respect des valeurs qui vous sont chères. Explorez notre collection dès maintenant et trouvez la jupe qui vous accompagnera avec élégance et modestie.
+                                    En choisissant une <strong className="font-bold text-zinc-900">jupe tsniout</strong> chez M.S.V-NOSY BE Shop, vous faites le choix de la qualité, du style, et du respect des valeurs qui vous sont chères. Explorez notre collection dès maintenant et trouvez la jupe qui vous accompagnera avec élégance et modestie.
                                 </p>
                             </div>
                         </div>
@@ -372,7 +372,7 @@ export default function CollectionPage() {
                         <h2 className="text-3xl font-serif text-zinc-900 mb-8">Chemisiers tsniout</h2>
                         <div className="prose prose-zinc prose-sm max-w-none space-y-8">
                             <p className="leading-relaxed">
-                                Bienvenue dans notre collection de <strong className="font-bold text-zinc-900">chemisiers tsniout</strong>, l'élément indispensable pour une garde-robe à la fois modeste et professionnelle. Chez Tsniout Shop, nous croyons que chaque détail compte. Nos chemisiers et blouses sont pensés pour offrir une élégance sans effort tout en respectant scrupuleusement les codes de la pudeur.
+                                Bienvenue dans notre collection de <strong className="font-bold text-zinc-900">chemisiers tsniout</strong>, l'élément indispensable pour une garde-robe à la fois modeste et professionnelle. Chez M.S.V-NOSY BE Shop, nous croyons que chaque détail compte. Nos chemisiers et blouses sont pensés pour offrir une élégance sans effort tout en respectant scrupuleusement les codes de la pudeur.
                             </p>
 
                             <div>
@@ -399,7 +399,7 @@ export default function CollectionPage() {
                             <div className="bg-zinc-50 p-6 rounded-lg border border-zinc-100 mt-8">
                                 <h3 className="text-xl font-bold text-zinc-900 mb-3">Votre destination mode tsniout</h3>
                                 <p className="leading-relaxed m-0">
-                                    En choisissant vos hauts chez Tsniout Shop, vous optez pour des pièces qui durent et qui respectent vos valeurs. Parcourez notre sélection et trouvez le <strong className="font-bold text-zinc-900">chemisier parfait</strong> qui sublimera votre quotidien avec grâce et élégance.
+                                    En choisissant vos hauts chez M.S.V-NOSY BE Shop, vous optez pour des pièces qui durent et qui respectent vos valeurs. Parcourez notre sélection et trouvez le <strong className="font-bold text-zinc-900">chemisier parfait</strong> qui sublimera votre quotidien avec grâce et élégance.
                                 </p>
                             </div>
                         </div>
@@ -412,7 +412,7 @@ export default function CollectionPage() {
                         <h2 className="text-3xl font-serif text-zinc-900 mb-8">Vestes & Blazers tsniout</h2>
                         <div className="prose prose-zinc prose-sm max-w-none space-y-8">
                             <p className="leading-relaxed">
-                                Découvrez notre gamme de <strong className="font-bold text-zinc-900">vestes tsniout</strong>, conçues pour compléter vos tenues avec élégance et pudeur. Chez Tsniout Shop, la veste n'est pas qu'un accessoire, c'est la pièce finale qui structure votre silhouette tout en respectant vos valeurs.
+                                Découvrez notre gamme de <strong className="font-bold text-zinc-900">vestes tsniout</strong>, conçues pour compléter vos tenues avec élégance et pudeur. Chez M.S.V-NOSY BE Shop, la veste n'est pas qu'un accessoire, c'est la pièce finale qui structure votre silhouette tout en respectant vos valeurs.
                             </p>
 
                             <div>
@@ -432,7 +432,7 @@ export default function CollectionPage() {
                             <div>
                                 <h3 className="text-xl font-bold text-zinc-900 mb-3">Qualité et durabilité</h3>
                                 <p className="leading-relaxed">
-                                    Investir dans une <strong className="font-bold text-zinc-900">veste Tsniout Shop</strong>, c'est choisir un vêtement durable, aux finitions soignées. Nous privilégions des coupes intemporelles qui traversent les tendances, vous garantissant une pièce maîtresse que vous garderez des années.
+                                    Investir dans une <strong className="font-bold text-zinc-900">veste M.S.V-NOSY BE Shop</strong>, c'est choisir un vêtement durable, aux finitions soignées. Nous privilégions des coupes intemporelles qui traversent les tendances, vous garantissant une pièce maîtresse que vous garderez des années.
                                 </p>
                             </div>
 
@@ -452,7 +452,7 @@ export default function CollectionPage() {
                         <h2 className="text-3xl font-serif text-zinc-900 mb-8">Pulls & Mailles tsniout</h2>
                         <div className="prose prose-zinc prose-sm max-w-none space-y-8">
                             <p className="leading-relaxed">
-                                Enveloppez-vous de douceur avec notre collection de <strong className="font-bold text-zinc-900">pulls tsniout</strong>. Chez Tsniout Shop, le confort ne se fait jamais au détriment de l'élégance ou de la pudeur. Nos mailles sont pensées pour vous tenir chaud tout en restant sophistiquée.
+                                Enveloppez-vous de douceur avec notre collection de <strong className="font-bold text-zinc-900">pulls tsniout</strong>. Chez M.S.V-NOSY BE Shop, le confort ne se fait jamais au détriment de l'élégance ou de la pudeur. Nos mailles sont pensées pour vous tenir chaud tout en restant sophistiquée.
                             </p>
 
                             <div>
@@ -492,7 +492,7 @@ export default function CollectionPage() {
                         <h2 className="text-3xl font-serif text-zinc-900 mb-8">Bijoux & Accessoires</h2>
                         <div className="prose prose-zinc prose-sm max-w-none space-y-8">
                             <p className="leading-relaxed">
-                                Sublimez votre tenue avec notre sélection de <strong className="font-bold text-zinc-900">bijoux élégants</strong>. Chez Tsniout Shop, nous savons que la modestie réside aussi dans les détails. Nos accessoires sont choisis pour apporter une touche de lumière et de féminité, sans ostentation.
+                                Sublimez votre tenue avec notre sélection de <strong className="font-bold text-zinc-900">bijoux élégants</strong>. Chez M.S.V-NOSY BE Shop, nous savons que la modestie réside aussi dans les détails. Nos accessoires sont choisis pour apporter une touche de lumière et de féminité, sans ostentation.
                             </p>
 
                             <div>

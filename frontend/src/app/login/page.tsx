@@ -41,8 +41,8 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
                     <Link href="/">
                         <Image
-                            src="/logo.png"
-                            alt="Tsniout"
+                            src="/logo_msv.png"
+                            alt="M.S.V-NOSY BE"
                             width={180}
                             height={60}
                             className="object-contain"

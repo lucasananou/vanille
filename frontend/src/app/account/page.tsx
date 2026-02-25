@@ -57,8 +57,17 @@ export default function AccountPage() {
             {/* Simple Nav */}
             <nav className="border-b border-zinc-100">
                 <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-                    <Link href="/" className="text-xl font-medium tracking-tight text-zinc-900 uppercase hover:text-[#a1b8ff] transition-colors">
-                        Tsniout
+                    <Link href="/" className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl overflow-hidden">
+                            <img
+                                src="/logo_msv.png"
+                                alt="Logo MSV Nosy-Be"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
+                        <span className="text-xl font-medium tracking-tight text-zinc-900 uppercase">
+                            M.S.V-NOSY BE
+                        </span>
                     </Link>
                     <button
                         onClick={logout}

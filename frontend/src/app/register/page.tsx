@@ -65,8 +65,8 @@ export default function RegisterPage() {
                 <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
                     <Link href="/">
                         <Image
-                            src="/logo.png"
-                            alt="Tsniout"
+                            src="/logo_msv.png"
+                            alt="M.S.V-NOSY BE"
                             width={180}
                             height={60}
                             className="object-contain"
@@ -81,7 +81,7 @@ export default function RegisterPage() {
                 <div className="w-full max-w-md">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-medium text-zinc-900">Créer un compte</h1>
-                        <p className="mt-2 text-zinc-500">Rejoignez AP Collections dès aujourd'hui</p>
+                        <p className="mt-2 text-zinc-500">Rejoignez M.S.V-NOSY BE dès aujourd'hui</p>
                     </div>
 
                     {error && (

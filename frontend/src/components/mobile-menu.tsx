@@ -41,9 +41,9 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     }, [isOpen, onClose]);
 
     const links = [
-        { href: '/jupe-longue-tsniout', label: 'Jupe Tsniout' },
-        { href: '/robe-tsniout', label: 'Robe Tsniout' },
-        { href: '/veste-tsniout', label: 'Veste Tsniout' },
+        { href: '/jupe-longue-tsniout', label: 'Jupe M.S.V-NOSY BE' },
+        { href: '/robe-tsniout', label: 'Robe M.S.V-NOSY BE' },
+        { href: '/veste-tsniout', label: 'Veste M.S.V-NOSY BE' },
         { href: '/pull-chemisier', label: 'Pull' },
         { href: '/chemisier', label: 'Chemisier' },
         { href: '/collier', label: 'Bijoux' },

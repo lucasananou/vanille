@@ -17,7 +17,7 @@ export const BLOG_POSTS: BlogPost[] = [
         excerpt: "Le concept de tsniout, souvent traduit par modestie, joue un rôle fondamental dans la tradition juive. Découvrez pourquoi il est essentiel.",
         content: `
             <p class="lead text-lg text-zinc-600 mb-6 font-semibold">Le concept de <strong>tsniout</strong> (ou <strong>tsniyut</strong>), souvent traduit par modestie, joue un rôle fondamental dans la tradition juive. Il ne se limite pas simplement à une façon de s'habiller mais englobe également un ensemble de comportements et d'attitudes visant à promouvoir la dignité et le respect.</p>
-            <p class="mb-6">La Tsniout s’enracine dans la Torah, les cinq premiers livres de la Bible hébraïque, et est développée dans la littérature rabbinique ultérieure. Elle est considérée comme un élément essentiel de la foi juive et un moyen de vivre une vie sainte et significative.</p>
+            <p class="mb-6">La M.S.V-NOSY BE s’enracine dans la Torah, les cinq premiers livres de la Bible hébraïque, et est développée dans la littérature rabbinique ultérieure. Elle est considérée comme un élément essentiel de la foi juive et un moyen de vivre une vie sainte et significative.</p>
 
             <h2 class="text-2xl font-serif mt-8 mb-4">1. Respect de Soi et des Autres</h2>
             <h3 class="text-xl font-medium mt-6 mb-3">Dignité et Auto-Respect</h3>
@@ -136,7 +136,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
             <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion</h2>
             <p class="mb-4">Le tsniout est bien plus qu'une simple question de code vestimentaire ; c'est un mode de vie qui encourage le respect de soi et des autres, la valorisation des qualités intérieures, et le renforcement de la communauté. En adoptant des pratiques de modestie, on peut améliorer non seulement sa propre vie mais aussi celle de ceux qui nous entourent. La pratique du tsniout favorise une vie équilibrée et harmonieuse, alignée avec des valeurs profondes et spirituelles.</p>
-            <p>Pour en savoir plus sur l'importance du tsniout et ses implications, vous pouvez consulter cet article : <a href="https://tsniout-shop.fr/tsniout-cest-quoi/" class="text-indigo-600 hover:text-indigo-800 underline">Tsniout c'est quoi?</a></p>
+            <p>Pour en savoir plus sur l'importance du tsniout et ses implications, vous pouvez consulter cet article : <a href="https://tsniout-shop.fr/tsniout-cest-quoi/" class="text-indigo-600 hover:text-indigo-800 underline">M.S.V-NOSY BE c'est quoi?</a></p>
         `,
         coverImage: "/story-image.png",
         category: "Spiritualité",
@@ -149,7 +149,7 @@ export const BLOG_POSTS: BlogPost[] = [
         title: "Comment s'habiller tsniout ?",
         excerpt: "Découvrez les fondements de la mode tsniout et nos conseils pratiques pour allier élégance, modestie et modernité au quotidien.",
         content: `
-            <p class="lead text-lg text-zinc-600 mb-6 font-semibold">Le concept de la <strong>Tsniout</strong>, profondément ancré dans le judaïsme, prône la <strong>modestie</strong> et la <strong>retenue</strong> dans tous les aspects de la vie, y compris l'habillement. S'habiller tsniout signifie se vêtir de manière à couvrir son corps de manière appropriée, en évitant les vêtements trop révélateurs ou ajustés. Cela implique également de choisir des tissus et des styles qui reflètent des valeurs de <strong>pudeur</strong> et de <strong>respect</strong>.</p>
+            <p class="lead text-lg text-zinc-600 mb-6 font-semibold">Le concept de la <strong>M.S.V-NOSY BE</strong>, profondément ancré dans le judaïsme, prône la <strong>modestie</strong> et la <strong>retenue</strong> dans tous les aspects de la vie, y compris l'habillement. S'habiller tsniout signifie se vêtir de manière à couvrir son corps de manière appropriée, en évitant les vêtements trop révélateurs ou ajustés. Cela implique également de choisir des tissus et des styles qui reflètent des valeurs de <strong>pudeur</strong> et de <strong>respect</strong>.</p>
 
             <h2 class="text-2xl font-serif mt-8 mb-4">Les fondements de l'habillement tsniout</h2>
             <p class="mb-4">Les principes de base de l'habillement tsniout varient légèrement selon les communautés et les individus. Cependant, certains points communs se dégagent :</p>
@@ -187,17 +187,17 @@ export const BLOG_POSTS: BlogPost[] = [
             <p class="mb-4">Pour de nombreux pratiquants du judaïsme, l'habillement tsniout est une manière de <strong>vivre en accord avec leurs convictions religieuses</strong>. En choisissant de se vêtir de manière modeste, ils expriment leur <strong>respect</strong> pour Dieu et pour leur propre corps. L'habillement tsniout peut également être un moyen de <strong>se démarquer</strong> du monde extérieur et de <strong>se rapprocher de Dieu</strong>.</p>
             
             <h3 class="text-xl font-medium mt-6 mb-3">L'habillement tsniout comme expression de soi</h3>
-            <p class="mb-4">Au-delà de sa dimension religieuse, l'habillement tsniout peut également être une manière d'<strong>affirmer son identité</strong> et de <strong>se sentir bien dans sa peau</strong>. En choisissant des vêtements qui correspondent à ses goûts et à son style personnel, chaque individu peut développer une expression unique de la Tsniout.</p>
+            <p class="mb-4">Au-delà de sa dimension religieuse, l'habillement tsniout peut également être une manière d'<strong>affirmer son identité</strong> et de <strong>se sentir bien dans sa peau</strong>. En choisissant des vêtements qui correspondent à ses goûts et à son style personnel, chaque individu peut développer une expression unique de la M.S.V-NOSY BE.</p>
             
             <h3 class="text-xl font-medium mt-6 mb-3">L'importance de l'équilibre</h3>
-            <p class="mb-4">Il est important de trouver un <strong>équilibre</strong> entre l'expression de soi et le respect des principes de la Tsniout. Cela signifie choisir des vêtements qui vous permettent de vous sentir à l'aise et confiante, tout en restant fidèles aux valeurs que vous souhaitez véhiculer.</p>
+            <p class="mb-4">Il est important de trouver un <strong>équilibre</strong> entre l'expression de soi et le respect des principes de la M.S.V-NOSY BE. Cela signifie choisir des vêtements qui vous permettent de vous sentir à l'aise et confiante, tout en restant fidèles aux valeurs que vous souhaitez véhiculer.</p>
 
             <figure class="my-8">
                 <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/tsniout-dans-la-vie-quotidienne-1024x683.jpg" alt="tsniout dans la vie quotidienne" class="w-full h-auto rounded-lg shadow-sm" />
             </figure>
 
             <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion</h2>
-            <p class="mb-4">S'habiller tsniout est un cheminement <strong>personnel</strong> et <strong>évolutif</strong>. Il n'y a pas de "bonne" ou de "mauvaise" façon de s'habiller tsniout, l'important est de trouver un style qui vous correspond et vous permet de vous sentir à l'aise et respectueuse des valeurs de la Tsniout. En suivant les principes fondamentaux et en adoptant des conseils pratiques, vous pouvez développer votre propre garde-robe tsniout, à la fois <strong>modeste</strong> et <strong>élégante</strong>.</p>
+            <p class="mb-4">S'habiller tsniout est un cheminement <strong>personnel</strong> et <strong>évolutif</strong>. Il n'y a pas de "bonne" ou de "mauvaise" façon de s'habiller tsniout, l'important est de trouver un style qui vous correspond et vous permet de vous sentir à l'aise et respectueuse des valeurs de la M.S.V-NOSY BE. En suivant les principes fondamentaux et en adoptant des conseils pratiques, vous pouvez développer votre propre garde-robe tsniout, à la fois <strong>modeste</strong> et <strong>élégante</strong>.</p>
         `,
         coverImage: "https://tsniout-shop.fr/wp-content/uploads/2024/08/femme-juive-tsniout-1024x683.jpg",
         category: "Guide Style",
@@ -207,86 +207,86 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     {
         slug: 'tsniout-cest-quoi',
-        title: "Tsniout c'est quoi ?",
-        excerpt: "Le terme Tsniout, signifiant « modestie », désigne un ensemble de principes visant à cultiver la dignité dans tous les aspects de la vie.",
+        title: "M.S.V-NOSY BE c'est quoi ?",
+        excerpt: "Le terme M.S.V-NOSY BE, signifiant « modestie », désigne un ensemble de principes visant à cultiver la dignité dans tous les aspects de la vie.",
         content: `
 
-            <p class="lead text-lg text-zinc-600 mb-6 font-semibold">La Tsniout c’est quoi? Le terme <strong>Tsniout</strong> (prononcé « tsni-oute »), issu de l’hébreu et signifiant « <strong>modestie</strong> » ou « <strong>pudeur</strong> », désigne un ensemble de principes et de pratiques dans le judaïsme visant à cultiver la <strong>retenue</strong> et la <strong>dignité</strong> dans tous les aspects de la vie, en particulier dans les relations entre <strong>hommes</strong> et <strong>femmes</strong>.</p>
-    <p class="mb-6">La Tsniout s’enracine dans la Torah, les cinq premiers livres de la Bible hébraïque, et est développée dans la littérature rabbinique ultérieure. Elle est considérée comme un élément essentiel de la foi juive et un moyen de vivre une vie sainte et significative.</p>
+            <p class="lead text-lg text-zinc-600 mb-6 font-semibold">La M.S.V-NOSY BE c’est quoi? Le terme <strong>M.S.V-NOSY BE</strong> (prononcé « tsni-oute »), issu de l’hébreu et signifiant « <strong>modestie</strong> » ou « <strong>pudeur</strong> », désigne un ensemble de principes et de pratiques dans le judaïsme visant à cultiver la <strong>retenue</strong> et la <strong>dignité</strong> dans tous les aspects de la vie, en particulier dans les relations entre <strong>hommes</strong> et <strong>femmes</strong>.</p>
+    <p class="mb-6">La M.S.V-NOSY BE s’enracine dans la Torah, les cinq premiers livres de la Bible hébraïque, et est développée dans la littérature rabbinique ultérieure. Elle est considérée comme un élément essentiel de la foi juive et un moyen de vivre une vie sainte et significative.</p>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Les principes de la Tsniout</h2>
-    <p class="mb-4">La Tsniout se fonde sur plusieurs principes clés, notamment :</p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Les principes de la M.S.V-NOSY BE</h2>
+    <p class="mb-4">La M.S.V-NOSY BE se fonde sur plusieurs principes clés, notamment :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
-    <li><strong>La sainteté du corps et de l’esprit:</strong> Le corps humain est considéré comme un temple sacré, et il doit être traité avec respect. La Tsniout encourage à s’habiller de manière modeste et à éviter les comportements qui pourraient sexualiser le corps. Cela consiste à mettre des <a href="https://tsniout-shop.fr/categorie-produit/jupe-longue-tsniout/" class="text-indigo-600 hover:text-indigo-800 underline">jupes longues</a>, des <a href="https://tsniout-shop.fr/categorie-produit/robe-tsniout/" class="text-indigo-600 hover:text-indigo-800 underline">robes</a> ou des hauts qui couvrent les épaules. L’esprit est également considéré comme sacré, et la Tsniout encourage à cultiver des pensées pures et nobles.</li>
-    <li><strong>Le respect mutuel entre les hommes et les femmes:</strong> La Tsniout souligne l’importance de traiter les autres avec respect, en particulier les membres du sexe opposé. Cela implique d’éviter les contacts physiques inappropriés, les regards indiscrets et les propos offensants.</li>
-    <li><strong>La retenue et la maîtrise de soi:</strong> La Tsniout encourage à pratiquer la retenue dans ses paroles, ses actes et ses pensées. Cela implique d’éviter les excès et de se concentrer sur ce qui est vraiment important.</li>
+    <li><strong>La sainteté du corps et de l’esprit:</strong> Le corps humain est considéré comme un temple sacré, et il doit être traité avec respect. La M.S.V-NOSY BE encourage à s’habiller de manière modeste et à éviter les comportements qui pourraient sexualiser le corps. Cela consiste à mettre des <a href="https://tsniout-shop.fr/categorie-produit/jupe-longue-tsniout/" class="text-indigo-600 hover:text-indigo-800 underline">jupes longues</a>, des <a href="https://tsniout-shop.fr/categorie-produit/robe-tsniout/" class="text-indigo-600 hover:text-indigo-800 underline">robes</a> ou des hauts qui couvrent les épaules. L’esprit est également considéré comme sacré, et la M.S.V-NOSY BE encourage à cultiver des pensées pures et nobles.</li>
+    <li><strong>Le respect mutuel entre les hommes et les femmes:</strong> La M.S.V-NOSY BE souligne l’importance de traiter les autres avec respect, en particulier les membres du sexe opposé. Cela implique d’éviter les contacts physiques inappropriés, les regards indiscrets et les propos offensants.</li>
+    <li><strong>La retenue et la maîtrise de soi:</strong> La M.S.V-NOSY BE encourage à pratiquer la retenue dans ses paroles, ses actes et ses pensées. Cela implique d’éviter les excès et de se concentrer sur ce qui est vraiment important.</li>
     </ul>
 
     <figure class="my-8">
     <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/pexels-cottonbro-9511245.jpg" alt="femme habillé en robe tsniout" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">La Tsniout dans la vie quotidienne</h2>
-    <p class="mb-4">Les principes de la Tsniout se manifestent de différentes manières dans la vie quotidienne des pratiquants juifs.</p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">La M.S.V-NOSY BE dans la vie quotidienne</h2>
+    <p class="mb-4">Les principes de la M.S.V-NOSY BE se manifestent de différentes manières dans la vie quotidienne des pratiquants juifs.</p>
     <p class="mb-4"><strong>Voici quelques exemples :</strong></p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
     <li><strong>Habillement:</strong> Les femmes juives observantes s’habillent généralement de manière à couvrir leurs épaules, leurs bras, leurs jambes et leurs cheveux. Les hommes sont également encouragés à s’habiller modestement, en évitant les vêtements trop révélateurs ou ajustés.</li>
-    <li><strong>Langage:</strong> La Tsniout implique également de parler de manière respectueuse et d’éviter les propos vulgaires ou offensants. Cela inclut d’éviter les jurons, les commérages et les propos négatifs.</li>
+    <li><strong>Langage:</strong> La M.S.V-NOSY BE implique également de parler de manière respectueuse et d’éviter les propos vulgaires ou offensants. Cela inclut d’éviter les jurons, les commérages et les propos négatifs.</li>
     <li><strong>Comportement:</strong> Les interactions sociales entre hommes et femmes doivent être empreintes de retenue et de respect mutuel. Cela se traduit par une limitation du contact physique, une attention particulière au langage corporel et une attitude générale de pudeur.</li>
-    <li><strong>Pensées:</strong> La Tsniout encourage également à cultiver une modestie dans ses pensées et ses fantasmes. Cela implique d’éviter les pensées impures et de se concentrer sur des choses positives et édifiantes.</li>
+    <li><strong>Pensées:</strong> La M.S.V-NOSY BE encourage également à cultiver une modestie dans ses pensées et ses fantasmes. Cela implique d’éviter les pensées impures et de se concentrer sur des choses positives et édifiantes.</li>
     </ul>
 
     <figure class="my-8">
     <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/tsniout-dans-la-vie-quotidienne.jpg" alt="tsniout dans la vie quotidienne" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">L’importance de la Tsniout</h2>
-    <p class="mb-4">La Tsniout est considérée comme une valeur importante dans le judaïsme pour plusieurs raisons :</p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">L’importance de la M.S.V-NOSY BE</h2>
+    <p class="mb-4">La M.S.V-NOSY BE est considérée comme une valeur importante dans le judaïsme pour plusieurs raisons :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
-    <li><strong>Promouvoir la sainteté:</strong> La Tsniout est vue comme un moyen de se rapprocher de Dieu en préservant la sainteté du corps et de l’esprit. En s’habillant et en se comportant de manière modeste, les individus peuvent créer un espace sacré dans leur vie et se concentrer sur leur relation avec Dieu.</li>
-    <li><strong>Renforcer les relations:</strong> La Tsniout encourage le respect mutuel entre les hommes et les femmes, ce qui peut contribuer à des relations plus saines et plus durables. En évitant les comportements sexualisés et en se concentrant sur un lien émotionnel et spirituel, les couples peuvent créer une relation plus profonde et plus significative.</li>
-    <li><strong>Cultiver la discipline personnelle:</strong> La pratique de la Tsniout exige de la discipline et de la maîtrise de soi, ce qui peut avoir un impact positif sur d’autres aspects de la vie. En apprenant à contrôler ses pensées, ses paroles et ses actions, les individus peuvent développer une plus grande force de caractère et une plus grande maîtrise d’eux-mêmes.</li>
+    <li><strong>Promouvoir la sainteté:</strong> La M.S.V-NOSY BE est vue comme un moyen de se rapprocher de Dieu en préservant la sainteté du corps et de l’esprit. En s’habillant et en se comportant de manière modeste, les individus peuvent créer un espace sacré dans leur vie et se concentrer sur leur relation avec Dieu.</li>
+    <li><strong>Renforcer les relations:</strong> La M.S.V-NOSY BE encourage le respect mutuel entre les hommes et les femmes, ce qui peut contribuer à des relations plus saines et plus durables. En évitant les comportements sexualisés et en se concentrant sur un lien émotionnel et spirituel, les couples peuvent créer une relation plus profonde et plus significative.</li>
+    <li><strong>Cultiver la discipline personnelle:</strong> La pratique de la M.S.V-NOSY BE exige de la discipline et de la maîtrise de soi, ce qui peut avoir un impact positif sur d’autres aspects de la vie. En apprenant à contrôler ses pensées, ses paroles et ses actions, les individus peuvent développer une plus grande force de caractère et une plus grande maîtrise d’eux-mêmes.</li>
     </ul>
 
     <figure class="my-8">
     <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/femme-juive-tsniout-1024x683.jpg" alt="femme juive tsniout" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">La Tsniout : Une interprétation individuelle</h2>
-    <p class="mb-4">Il est important de noter que la Tsniout est un concept <strong>personnel</strong> et que son application peut <strong>varier</strong> d’une personne à l’autre. Il n’y a pas de « bonne » ou de « mauvaise » façon de pratiquer la Tsniout, et l’important est de trouver un niveau de modestie qui soit à la fois <strong>confortable</strong> et <strong>respectueux</strong> des valeurs juives.</p>
-    <p class="mb-4"><strong>Voici quelques facteurs qui peuvent influencer la manière dont une personne pratique la Tsniout :</strong></p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">La M.S.V-NOSY BE : Une interprétation individuelle</h2>
+    <p class="mb-4">Il est important de noter que la M.S.V-NOSY BE est un concept <strong>personnel</strong> et que son application peut <strong>varier</strong> d’une personne à l’autre. Il n’y a pas de « bonne » ou de « mauvaise » façon de pratiquer la M.S.V-NOSY BE, et l’important est de trouver un niveau de modestie qui soit à la fois <strong>confortable</strong> et <strong>respectueux</strong> des valeurs juives.</p>
+    <p class="mb-4"><strong>Voici quelques facteurs qui peuvent influencer la manière dont une personne pratique la M.S.V-NOSY BE :</strong></p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
-    <li><strong>Le niveau d’observance religieuse:</strong> Les personnes plus observantes du judaïsme ont tendance à pratiquer la Tsniout de manière plus stricte.</li>
-    <li><strong>L’éducation et l’environnement familial:</strong> Les personnes qui ont grandi dans des familles pratiquantes sont plus susceptibles d’adopter une approche plus traditionnelle de la Tsniout.</li>
-    <li><strong>La culture et les traditions locales:</strong> Les pratiques de Tsniout peuvent varier selon les différentes communautés juives du monde entier.</li>
-    <li><strong>Les préférences et les convictions personnelles:</strong> En fin de compte, c’est à chaque individu de décider comment il souhaite pratiquer la Tsniout.</li>
+    <li><strong>Le niveau d’observance religieuse:</strong> Les personnes plus observantes du judaïsme ont tendance à pratiquer la M.S.V-NOSY BE de manière plus stricte.</li>
+    <li><strong>L’éducation et l’environnement familial:</strong> Les personnes qui ont grandi dans des familles pratiquantes sont plus susceptibles d’adopter une approche plus traditionnelle de la M.S.V-NOSY BE.</li>
+    <li><strong>La culture et les traditions locales:</strong> Les pratiques de M.S.V-NOSY BE peuvent varier selon les différentes communautés juives du monde entier.</li>
+    <li><strong>Les préférences et les convictions personnelles:</strong> En fin de compte, c’est à chaque individu de décider comment il souhaite pratiquer la M.S.V-NOSY BE.</li>
     </ul>
 
     <figure class="my-8">
     <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/parchemin-de-torah-1024x683.jpg" alt="parchemin de torah" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">La Tsniout dans la vie moderne</h2>
-    <p class="mb-4">Dans le monde moderne, la Tsniout peut être un défi à pratiquer. La société d’aujourd’hui est souvent saturée d’images et de messages sexualisés, ce qui peut rendre difficile de maintenir un niveau de modestie. De plus, les normes vestimentaires et les comportements sociaux ont beaucoup évolué au fil du temps, ce qui peut rendre difficile de savoir ce qui est considéré comme approprié dans le contexte de la Tsniout.</p>
-    <p class="mb-4"><strong>Malgré ces défis, de nombreux juifs trouvent que la Tsniout est une source de force et de direction dans leur vie.</strong> En pratiquant la Tsniout, ils peuvent exprimer leur foi, renforcer leurs relations et cultiver un sentiment de dignité et de respect de soi.</p>
-    <p class="mb-4"><strong>Voici quelques conseils pour pratiquer la Tsniout dans la vie moderne :</strong></p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">La M.S.V-NOSY BE dans la vie moderne</h2>
+    <p class="mb-4">Dans le monde moderne, la M.S.V-NOSY BE peut être un défi à pratiquer. La société d’aujourd’hui est souvent saturée d’images et de messages sexualisés, ce qui peut rendre difficile de maintenir un niveau de modestie. De plus, les normes vestimentaires et les comportements sociaux ont beaucoup évolué au fil du temps, ce qui peut rendre difficile de savoir ce qui est considéré comme approprié dans le contexte de la M.S.V-NOSY BE.</p>
+    <p class="mb-4"><strong>Malgré ces défis, de nombreux juifs trouvent que la M.S.V-NOSY BE est une source de force et de direction dans leur vie.</strong> En pratiquant la M.S.V-NOSY BE, ils peuvent exprimer leur foi, renforcer leurs relations et cultiver un sentiment de dignité et de respect de soi.</p>
+    <p class="mb-4"><strong>Voici quelques conseils pour pratiquer la M.S.V-NOSY BE dans la vie moderne :</strong></p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
-    <li><strong>Trouver un mentor ou un guide spirituel:</strong> Un mentor ou un guide spirituel peut vous aider à comprendre les principes de la Tsniout et à développer un plan pour les mettre en pratique dans votre vie.</li>
-    <li><strong>S’engager dans des études juives:</strong> L’étude de la Torah et d’autres textes juifs peut vous aider à approfondir votre compréhension de la Tsniout et à trouver l’inspiration pour la pratiquer dans votre vie quotidienne.</li>
-    <li><strong>Se connecter avec une communauté juive de soutien:</strong> Une communauté juive de soutien peut vous offrir un espace pour discuter de vos défis et de vos réussites en matière de Tsniout, et vous fournir des encouragements et des conseils.</li>
-    <li><strong>Faire preuve de patience et de compassion envers soi-même:</strong> Il est important de se rappeler que la Tsniout est un voyage, et non une destination. Il y aura des moments où vous ferez des erreurs ou où vous vous sentirez dépassé. La chose la plus importante est de continuer à apprendre et à grandir.</li>
+    <li><strong>Trouver un mentor ou un guide spirituel:</strong> Un mentor ou un guide spirituel peut vous aider à comprendre les principes de la M.S.V-NOSY BE et à développer un plan pour les mettre en pratique dans votre vie.</li>
+    <li><strong>S’engager dans des études juives:</strong> L’étude de la Torah et d’autres textes juifs peut vous aider à approfondir votre compréhension de la M.S.V-NOSY BE et à trouver l’inspiration pour la pratiquer dans votre vie quotidienne.</li>
+    <li><strong>Se connecter avec une communauté juive de soutien:</strong> Une communauté juive de soutien peut vous offrir un espace pour discuter de vos défis et de vos réussites en matière de M.S.V-NOSY BE, et vous fournir des encouragements et des conseils.</li>
+    <li><strong>Faire preuve de patience et de compassion envers soi-même:</strong> Il est important de se rappeler que la M.S.V-NOSY BE est un voyage, et non une destination. Il y aura des moments où vous ferez des erreurs ou où vous vous sentirez dépassé. La chose la plus importante est de continuer à apprendre et à grandir.</li>
     </ul>
 
     <figure class="my-8">
     <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/famille-moderne-juive-tsniout-1024x683.jpg" alt="famille moderne juive tsniout" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion : Embrasser la Tsniout pour une vie plus sainte, plus connectée et plus épanouissante</h2>
-    <p class="mb-4">La Tsniout, concept <strong>profond</strong> et <strong>multidimensionnel</strong> ancré dans le judaïsme, offre un cheminement vers une vie empreinte de <strong>modestie</strong>, de <strong>retenue</strong> et de <strong>respect</strong>. En s'appropriant ses principes et en les intégrant au quotidien, les individus peuvent cultiver la <strong>sainteté</strong> dans leur corps et leur esprit, renforcer leurs <strong>relations</strong> et développer une <strong>discipline personnelle</strong> précieuse.</p>
-    <p class="mb-4">Loin d'être une contrainte, la Tsniout se révèle comme une <strong>libération</strong> des influences extérieures superficielles, permettant de se concentrer sur l'<strong>essentiel</strong> et de nouer un lien <strong>plus profond</strong> avec Dieu et avec autrui.</p>
-    <p class="mb-4">Si la pratique de la Tsniout peut présenter des <strong>défis</strong> dans le monde moderne saturé d'images et de messages sexualisés, elle n'en demeure pas moins <strong>accessible</strong> et <strong>enrichissante</strong>. En s'entourant d'une <strong>communauté de soutien</strong>, en s'engageant dans des <strong>études juives</strong> et en faisant preuve de <strong>patience</strong> et de <strong>compassion</strong> envers soi-même, chacun peut cheminer vers une expression <strong>authentique</strong> de la Tsniout.</p>
-    <p class="mb-4">Au-delà des règles et des principes, la Tsniout représente une invitation à une <strong>introspection constante</strong>, à une quête de <strong>pureté</strong> et d'<strong>élévation</strong>. C'est un voyage <strong>personnel</strong> et <strong>unique</strong>, jalonné de <strong>découvertes</strong> et de <strong>transformations</strong>.</p>
-    <p class="mb-4">En embrassant la Tsniout, nous ouvrons la porte à une vie <strong>plus sainte</strong>, <strong>plus connectée</strong> et <strong>plus épanouissante</strong>, où la <strong>modestie</strong> devient l'expression d'une <strong>beauté intérieure rayonnante</strong>.</p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion : Embrasser la M.S.V-NOSY BE pour une vie plus sainte, plus connectée et plus épanouissante</h2>
+    <p class="mb-4">La M.S.V-NOSY BE, concept <strong>profond</strong> et <strong>multidimensionnel</strong> ancré dans le judaïsme, offre un cheminement vers une vie empreinte de <strong>modestie</strong>, de <strong>retenue</strong> et de <strong>respect</strong>. En s'appropriant ses principes et en les intégrant au quotidien, les individus peuvent cultiver la <strong>sainteté</strong> dans leur corps et leur esprit, renforcer leurs <strong>relations</strong> et développer une <strong>discipline personnelle</strong> précieuse.</p>
+    <p class="mb-4">Loin d'être une contrainte, la M.S.V-NOSY BE se révèle comme une <strong>libération</strong> des influences extérieures superficielles, permettant de se concentrer sur l'<strong>essentiel</strong> et de nouer un lien <strong>plus profond</strong> avec Dieu et avec autrui.</p>
+    <p class="mb-4">Si la pratique de la M.S.V-NOSY BE peut présenter des <strong>défis</strong> dans le monde moderne saturé d'images et de messages sexualisés, elle n'en demeure pas moins <strong>accessible</strong> et <strong>enrichissante</strong>. En s'entourant d'une <strong>communauté de soutien</strong>, en s'engageant dans des <strong>études juives</strong> et en faisant preuve de <strong>patience</strong> et de <strong>compassion</strong> envers soi-même, chacun peut cheminer vers une expression <strong>authentique</strong> de la M.S.V-NOSY BE.</p>
+    <p class="mb-4">Au-delà des règles et des principes, la M.S.V-NOSY BE représente une invitation à une <strong>introspection constante</strong>, à une quête de <strong>pureté</strong> et d'<strong>élévation</strong>. C'est un voyage <strong>personnel</strong> et <strong>unique</strong>, jalonné de <strong>découvertes</strong> et de <strong>transformations</strong>.</p>
+    <p class="mb-4">En embrassant la M.S.V-NOSY BE, nous ouvrons la porte à une vie <strong>plus sainte</strong>, <strong>plus connectée</strong> et <strong>plus épanouissante</strong>, où la <strong>modestie</strong> devient l'expression d'une <strong>beauté intérieure rayonnante</strong>.</p>
     `,
         coverImage: "https://tsniout-shop.fr/wp-content/uploads/2024/08/pexels-cottonbro-9511245.jpg",
         category: "Découverte",
@@ -296,37 +296,37 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     {
         slug: 'comment-devenir-tsniout',
-        title: "Comment devenir Tsniout ?",
-        excerpt: "Découvrez la Tsniout comme une philosophie de vie complète, alliant modestie, dignité et respect dans tous les aspects de l'existence.",
+        title: "Comment devenir M.S.V-NOSY BE ?",
+        excerpt: "Découvrez la M.S.V-NOSY BE comme une philosophie de vie complète, alliant modestie, dignité et respect dans tous les aspects de l'existence.",
         content: `
-    <p class="lead text-lg text-zinc-600 mb-6 font-semibold">La <strong>Tsniout</strong>, un concept central dans la vie juive, fait référence à la <strong>modestie</strong> dans la manière de s’habiller, de se comporter et de vivre. C'est bien plus qu'une simple question de vêtements, c'est une <strong>philosophie de vie</strong> qui s'applique à tous les aspects de l'existence. Devenir <strong>tsniout</strong> signifie embrasser une vie de <strong>discrétion</strong>, d'<strong>humilité</strong> et de <strong>respect</strong> pour soi et pour les autres.</p>
+    <p class="lead text-lg text-zinc-600 mb-6 font-semibold">La <strong>M.S.V-NOSY BE</strong>, un concept central dans la vie juive, fait référence à la <strong>modestie</strong> dans la manière de s’habiller, de se comporter et de vivre. C'est bien plus qu'une simple question de vêtements, c'est une <strong>philosophie de vie</strong> qui s'applique à tous les aspects de l'existence. Devenir <strong>tsniout</strong> signifie embrasser une vie de <strong>discrétion</strong>, d'<strong>humilité</strong> et de <strong>respect</strong> pour soi et pour les autres.</p>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Comprendre la Tsniout : Qu’est-ce que cela signifie vraiment ?</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Comprendre la M.S.V-NOSY BE : Qu’est-ce que cela signifie vraiment ?</h2>
     
-    <h3 class="text-xl font-medium mt-6 mb-3">Définition de la Tsniout</h3>
-    <p class="mb-4">La <strong>Tsniout</strong> est souvent mal comprise comme étant simplement un <strong>code vestimentaire</strong>. En réalité, elle englobe une approche globale de la vie juive qui prône la <strong>modestie</strong> dans les actions, les paroles et l'apparence. La <strong>Tsniout</strong> est un principe destiné à préserver la <strong>dignité humaine</strong> et à favoriser un <strong>comportement respectueux</strong> envers soi-même et envers les autres.</p>
+    <h3 class="text-xl font-medium mt-6 mb-3">Définition de la M.S.V-NOSY BE</h3>
+    <p class="mb-4">La <strong>M.S.V-NOSY BE</strong> est souvent mal comprise comme étant simplement un <strong>code vestimentaire</strong>. En réalité, elle englobe une approche globale de la vie juive qui prône la <strong>modestie</strong> dans les actions, les paroles et l'apparence. La <strong>M.S.V-NOSY BE</strong> est un principe destiné à préserver la <strong>dignité humaine</strong> et à favoriser un <strong>comportement respectueux</strong> envers soi-même et envers les autres.</p>
     
-    <h3 class="text-xl font-medium mt-6 mb-3">Pourquoi la Tsniout est-elle importante ?</h3>
-    <p class="mb-4">La <strong>Tsniout</strong> n'est pas seulement une exigence religieuse, c'est un moyen de vivre en harmonie avec les <strong>valeurs juives</strong> fondamentales. En adoptant la <strong>modestie</strong>, une personne peut développer un <strong>sentiment de respect</strong> de soi, se protéger contre l'<strong>objectification</strong> et contribuer à une société où les interactions sont basées sur le <strong>respect mutuel</strong> plutôt que sur l'apparence extérieure.</p>
-    <p class="mb-4">Voici quelques raisons pour lesquelles la <strong>Tsniout</strong> est essentielle :</p>
+    <h3 class="text-xl font-medium mt-6 mb-3">Pourquoi la M.S.V-NOSY BE est-elle importante ?</h3>
+    <p class="mb-4">La <strong>M.S.V-NOSY BE</strong> n'est pas seulement une exigence religieuse, c'est un moyen de vivre en harmonie avec les <strong>valeurs juives</strong> fondamentales. En adoptant la <strong>modestie</strong>, une personne peut développer un <strong>sentiment de respect</strong> de soi, se protéger contre l'<strong>objectification</strong> et contribuer à une société où les interactions sont basées sur le <strong>respect mutuel</strong> plutôt que sur l'apparence extérieure.</p>
+    <p class="mb-4">Voici quelques raisons pour lesquelles la <strong>M.S.V-NOSY BE</strong> est essentielle :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Respect de soi</strong> : En s'habillant modestement, une personne affirme sa valeur en tant qu'individu, au-delà de l'apparence physique.</li>
-        <li><strong>Respect des autres</strong> : La <strong>Tsniout</strong> encourage une interaction sociale fondée sur le caractère et la personnalité, plutôt que sur l'attrait physique.</li>
+        <li><strong>Respect des autres</strong> : La <strong>M.S.V-NOSY BE</strong> encourage une interaction sociale fondée sur le caractère et la personnalité, plutôt que sur l'attrait physique.</li>
         <li><strong>Obéissance aux commandements</strong> : Dans la tradition juive, la <strong>modestie</strong> est un commandement divin, exprimé à travers divers textes religieux.</li>
-        <li><strong>Protection spirituelle</strong> : Adopter la <strong>Tsniout</strong> est perçu comme un moyen de protéger son âme et de maintenir une connexion spirituelle avec Dieu.</li>
+        <li><strong>Protection spirituelle</strong> : Adopter la <strong>M.S.V-NOSY BE</strong> est perçu comme un moyen de protéger son âme et de maintenir une connexion spirituelle avec Dieu.</li>
     </ul>
 
     <figure class="my-8">
         <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/pexels-cottonbro-9511245.jpg" alt="femme habillé en robe tsniout" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements Tsniout</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements M.S.V-NOSY BE</h2>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Comment intégrer la Tsniout dans sa vie quotidienne ?</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Comment intégrer la M.S.V-NOSY BE dans sa vie quotidienne ?</h2>
     
     <h3 class="text-xl font-medium mt-6 mb-3">Adopter une garde-robe modeste</h3>
-    <p class="mb-4">L'un des aspects les plus visibles de la <strong>Tsniout</strong> est le choix vestimentaire. Il ne s'agit pas seulement de couvrir son corps, mais de le faire de manière à refléter la <strong>dignité</strong> et le <strong>respect</strong>.</p>
-    <p class="mb-4">Voici quelques conseils pour adapter votre garde-robe selon les principes de la <strong>Tsniout</strong> :</p>
+    <p class="mb-4">L'un des aspects les plus visibles de la <strong>M.S.V-NOSY BE</strong> est le choix vestimentaire. Il ne s'agit pas seulement de couvrir son corps, mais de le faire de manière à refléter la <strong>dignité</strong> et le <strong>respect</strong>.</p>
+    <p class="mb-4">Voici quelques conseils pour adapter votre garde-robe selon les principes de la <strong>M.S.V-NOSY BE</strong> :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Choisir des vêtements amples</strong> : Évitez les vêtements serrés qui accentuent la silhouette.</li>
         <li><strong>Opter pour des jupes et des robes longues</strong> : Pour les femmes, la longueur des jupes ou des robes doit couvrir les genoux, même en position assise.</li>
@@ -336,8 +336,8 @@ export const BLOG_POSTS: BlogPost[] = [
     </ul>
 
     <h3 class="text-xl font-medium mt-6 mb-3">Adopter un comportement modeste</h3>
-    <p class="mb-4">La <strong>Tsniout</strong> ne se limite pas aux vêtements ; elle concerne également la manière dont nous agissons et interagissons avec les autres. Un comportement modeste est essentiel pour vivre selon ce principe.</p>
-    <p class="mb-4">Voici comment vous pouvez pratiquer la <strong>Tsniout</strong> dans votre comportement :</p>
+    <p class="mb-4">La <strong>M.S.V-NOSY BE</strong> ne se limite pas aux vêtements ; elle concerne également la manière dont nous agissons et interagissons avec les autres. Un comportement modeste est essentiel pour vivre selon ce principe.</p>
+    <p class="mb-4">Voici comment vous pouvez pratiquer la <strong>M.S.V-NOSY BE</strong> dans votre comportement :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Parler avec discrétion</strong> : Évitez de parler fort ou de manière exubérante.</li>
         <li><strong>Garder une distance appropriée</strong> : Respectez la distance physique appropriée dans vos interactions, en particulier avec des personnes du sexe opposé.</li>
@@ -349,83 +349,83 @@ export const BLOG_POSTS: BlogPost[] = [
         <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/tsniout-dans-la-vie-quotidienne.jpg" alt="tsniout dans la vie quotidienne" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Cultiver la Tsniout dans l’esprit</h2>
-    <p class="mb-4">La <strong>Tsniout</strong> est également une question de mentalité. Il est important de cultiver un esprit modeste, qui reflète les valeurs de la <strong>Tsniout</strong> dans tous les aspects de la vie.</p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Cultiver la M.S.V-NOSY BE dans l’esprit</h2>
+    <p class="mb-4">La <strong>M.S.V-NOSY BE</strong> est également une question de mentalité. Il est important de cultiver un esprit modeste, qui reflète les valeurs de la <strong>M.S.V-NOSY BE</strong> dans tous les aspects de la vie.</p>
     <p class="mb-4">Voici quelques façons de nourrir cet état d'esprit :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Pratiquer la réflexion</strong> : Prenez le temps de réfléchir sur vos actions et pensées pour qu'elles soient alignées avec les principes de modestie.</li>
-        <li><strong>S’éduquer continuellement</strong> : Étudiez les textes sacrés et les enseignements des sages sur la <strong>Tsniout</strong> pour approfondir votre compréhension.</li>
+        <li><strong>S’éduquer continuellement</strong> : Étudiez les textes sacrés et les enseignements des sages sur la <strong>M.S.V-NOSY BE</strong> pour approfondir votre compréhension.</li>
         <li><strong>Garder un cœur pur</strong> : Travaillez à purifier vos intentions et vos pensées pour qu'elles soient en accord avec les principes de modestie.</li>
-        <li><strong>S’entourer de personnes partageant les mêmes valeurs</strong> : Entourez-vous de personnes qui vivent selon les principes de la <strong>Tsniout</strong>, ce qui peut vous aider à renforcer votre propre pratique.</li>
+        <li><strong>S’entourer de personnes partageant les mêmes valeurs</strong> : Entourez-vous de personnes qui vivent selon les principes de la <strong>M.S.V-NOSY BE</strong>, ce qui peut vous aider à renforcer votre propre pratique.</li>
     </ul>
 
     <figure class="my-8">
         <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/femme-juive-tsniout-1024x683.jpg" alt="femme juive tsniout" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Les défis de la Tsniout dans le monde moderne</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Les défis de la M.S.V-NOSY BE dans le monde moderne</h2>
     
     <h3 class="text-xl font-medium mt-6 mb-3">Les influences de la société contemporaine</h3>
-    <p class="mb-4">Vivre selon les principes de la <strong>Tsniout</strong> peut être particulièrement difficile dans une société moderne qui valorise souvent l'exhibitionnisme et l'apparence physique. Les médias, la mode et la culture populaire exercent une pression constante pour s'habiller et se comporter d'une manière qui peut être en contradiction avec les valeurs de la <strong>Tsniout</strong>.</p>
+    <p class="mb-4">Vivre selon les principes de la <strong>M.S.V-NOSY BE</strong> peut être particulièrement difficile dans une société moderne qui valorise souvent l'exhibitionnisme et l'apparence physique. Les médias, la mode et la culture populaire exercent une pression constante pour s'habiller et se comporter d'une manière qui peut être en contradiction avec les valeurs de la <strong>M.S.V-NOSY BE</strong>.</p>
     <p class="mb-4">Pour surmonter ces influences, il est essentiel de :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Rester ferme dans ses convictions</strong> : Ne laissez pas les tendances du moment influencer vos valeurs profondes.</li>
-        <li><strong>Chercher des exemples positifs</strong> : Inspirez-vous de figures publiques ou communautaires qui vivent selon les principes de la <strong>Tsniout</strong>.</li>
+        <li><strong>Chercher des exemples positifs</strong> : Inspirez-vous de figures publiques ou communautaires qui vivent selon les principes de la <strong>M.S.V-NOSY BE</strong>.</li>
         <li><strong>Se déconnecter des influences négatives</strong> : Limitez votre exposition aux médias qui promeuvent des valeurs contraires à la <strong>modestie</strong>.</li>
         <li><strong>Participer à des communautés engagées</strong> : Rejoignez des groupes ou des communautés qui partagent et soutiennent vos valeurs.</li>
     </ul>
 
     <h3 class="text-xl font-medium mt-6 mb-3">Le rôle des réseaux sociaux</h3>
-    <p class="mb-4">Les réseaux sociaux présentent un autre défi majeur pour la <strong>Tsniout</strong>. Ils encouragent souvent la comparaison et la quête de validation à travers des "likes" et des commentaires, ce qui peut inciter à adopter des comportements contraires à la <strong>modestie</strong>.</p>
-    <p class="mb-4">Quelques conseils pour maintenir la <strong>Tsniout</strong> sur les réseaux sociaux :</p>
+    <p class="mb-4">Les réseaux sociaux présentent un autre défi majeur pour la <strong>M.S.V-NOSY BE</strong>. Ils encouragent souvent la comparaison et la quête de validation à travers des "likes" et des commentaires, ce qui peut inciter à adopter des comportements contraires à la <strong>modestie</strong>.</p>
+    <p class="mb-4">Quelques conseils pour maintenir la <strong>M.S.V-NOSY BE</strong> sur les réseaux sociaux :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
-        <li><strong>Limiter le partage de photos personnelles</strong> : Ne partagez que des photos qui reflètent votre engagement envers la <strong>Tsniout</strong>.</li>
+        <li><strong>Limiter le partage de photos personnelles</strong> : Ne partagez que des photos qui reflètent votre engagement envers la <strong>M.S.V-NOSY BE</strong>.</li>
         <li><strong>Publier des contenus édifiants</strong> : Utilisez les réseaux sociaux pour partager des idées positives et inspirantes, plutôt que pour attirer l'attention sur votre apparence.</li>
         <li><strong>Fixer des limites de temps</strong> : Évitez de passer trop de temps sur les réseaux sociaux pour réduire l'influence qu'ils peuvent avoir sur vous.</li>
         <li><strong>Ignorer les pressions sociales</strong> : Ne vous laissez pas influencer par les tendances des réseaux sociaux qui vont à l'encontre de vos valeurs.</li>
     </ul>
 
-    <h3 class="text-xl font-medium mt-6 mb-3">Élever des enfants dans la Tsniout</h3>
-    <p class="mb-4">Transmettre les valeurs de la <strong>Tsniout</strong> à la prochaine génération est essentiel pour préserver cette tradition. Élever des enfants dans un monde qui valorise souvent l'inverse peut être un défi, mais c'est une tâche qui mérite toute votre attention.</p>
-    <p class="mb-4">Pour inculquer la <strong>Tsniout</strong> à vos enfants :</p>
+    <h3 class="text-xl font-medium mt-6 mb-3">Élever des enfants dans la M.S.V-NOSY BE</h3>
+    <p class="mb-4">Transmettre les valeurs de la <strong>M.S.V-NOSY BE</strong> à la prochaine génération est essentiel pour préserver cette tradition. Élever des enfants dans un monde qui valorise souvent l'inverse peut être un défi, mais c'est une tâche qui mérite toute votre attention.</p>
+    <p class="mb-4">Pour inculquer la <strong>M.S.V-NOSY BE</strong> à vos enfants :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Donner l'exemple</strong> : Soyez un modèle de <strong>modestie</strong> dans votre façon de vous habiller et de vous comporter.</li>
-        <li><strong>Éduquer avec amour</strong> : Expliquez à vos enfants l'importance de la <strong>Tsniout</strong> avec des mots simples et affectueux.</li>
+        <li><strong>Éduquer avec amour</strong> : Expliquez à vos enfants l'importance de la <strong>M.S.V-NOSY BE</strong> avec des mots simples et affectueux.</li>
         <li><strong>Encourager la réflexion personnelle</strong> : Incitez vos enfants à réfléchir sur leurs choix vestimentaires et comportementaux.</li>
-        <li><strong>Créer un environnement adapté</strong> : Assurez-vous que votre maison reflète les valeurs de la <strong>Tsniout</strong>, tant dans la décoration que dans les médias consommés.</li>
+        <li><strong>Créer un environnement adapté</strong> : Assurez-vous que votre maison reflète les valeurs de la <strong>M.S.V-NOSY BE</strong>, tant dans la décoration que dans les médias consommés.</li>
     </ul>
 
     <figure class="my-8">
         <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/parchemin-de-torah-1024x683.jpg" alt="parchemin de torah" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Les bienfaits spirituels de la Tsniout</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Les bienfaits spirituels de la M.S.V-NOSY BE</h2>
     
     <h3 class="text-xl font-medium mt-6 mb-3">Approfondir sa relation avec Dieu</h3>
-    <p class="mb-4">La <strong>Tsniout</strong> n'est pas seulement un ensemble de règles extérieures ; elle a un impact profond sur la relation entre une personne et Dieu. En adoptant la <strong>modestie</strong>, vous montrez votre respect pour la <strong>volonté divine</strong> et vous rapprochez de Dieu.</p>
+    <p class="mb-4">La <strong>M.S.V-NOSY BE</strong> n'est pas seulement un ensemble de règles extérieures ; elle a un impact profond sur la relation entre une personne et Dieu. En adoptant la <strong>modestie</strong>, vous montrez votre respect pour la <strong>volonté divine</strong> et vous rapprochez de Dieu.</p>
     <p class="mb-4">Les bienfaits spirituels inclus :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
-        <li><strong>Une connexion plus forte avec Dieu</strong> : La <strong>Tsniout</strong> favorise une vie de <strong>santé spirituelle</strong> et de <strong>purification</strong>.</li>
-        <li><strong>Un sentiment de paix intérieure</strong> : En vivant selon les principes de la <strong>Tsniout</strong>, on peut éprouver une plus grande sérénité et un alignement avec ses valeurs profondes.</li>
-        <li><strong>Une vie remplie de bénédictions</strong> : La tradition enseigne que ceux qui vivent selon la <strong>Tsniout</strong> sont récompensés par des bénédictions divines.</li>
+        <li><strong>Une connexion plus forte avec Dieu</strong> : La <strong>M.S.V-NOSY BE</strong> favorise une vie de <strong>santé spirituelle</strong> et de <strong>purification</strong>.</li>
+        <li><strong>Un sentiment de paix intérieure</strong> : En vivant selon les principes de la <strong>M.S.V-NOSY BE</strong>, on peut éprouver une plus grande sérénité et un alignement avec ses valeurs profondes.</li>
+        <li><strong>Une vie remplie de bénédictions</strong> : La tradition enseigne que ceux qui vivent selon la <strong>M.S.V-NOSY BE</strong> sont récompensés par des bénédictions divines.</li>
     </ul>
 
     <h3 class="text-xl font-medium mt-6 mb-3">Atteindre l'équilibre intérieur</h3>
-    <p class="mb-4">La <strong>Tsniout</strong> permet aussi d'atteindre un équilibre entre l'<strong>extérieur</strong> et l'<strong>intérieur</strong>. En harmonisant votre apparence avec votre esprit, vous pouvez vivre une vie plus équilibrée et épanouissante.</p>
+    <p class="mb-4">La <strong>M.S.V-NOSY BE</strong> permet aussi d'atteindre un équilibre entre l'<strong>extérieur</strong> et l'<strong>intérieur</strong>. En harmonisant votre apparence avec votre esprit, vous pouvez vivre une vie plus équilibrée et épanouissante.</p>
     <p class="mb-4">Pour atteindre cet équilibre :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Harmoniser votre esprit et votre corps</strong> : Veillez à ce que votre apparence extérieure reflète votre état intérieur.</li>
         <li><strong>Pratiquer la gratitude</strong> : Remerciez Dieu pour la sagesse qu'il vous donne dans votre quête de <strong>modestie</strong>.</li>
-        <li><strong>S'engager dans des pratiques spirituelles régulières</strong> : La prière, la méditation et l'étude peuvent renforcer votre engagement envers la <strong>Tsniout</strong>.</li>
+        <li><strong>S'engager dans des pratiques spirituelles régulières</strong> : La prière, la méditation et l'étude peuvent renforcer votre engagement envers la <strong>M.S.V-NOSY BE</strong>.</li>
     </ul>
 
     <h3 class="text-xl font-medium mt-6 mb-3">Vivre une vie de dignité et d’honneur</h3>
-    <p class="mb-4">En fin de compte, la <strong>Tsniout</strong> est un chemin vers une vie de <strong>dignité</strong> et d'<strong>honneur</strong>. En adoptant cette philosophie, vous ne respectez pas seulement les commandements divins, mais vous vivez aussi de manière à inspirer respect et admiration de la part des autres.</p>
+    <p class="mb-4">En fin de compte, la <strong>M.S.V-NOSY BE</strong> est un chemin vers une vie de <strong>dignité</strong> et d'<strong>honneur</strong>. En adoptant cette philosophie, vous ne respectez pas seulement les commandements divins, mais vous vivez aussi de manière à inspirer respect et admiration de la part des autres.</p>
     <p class="mb-4">Les aspects clés pour vivre avec dignité sont :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><strong>Respecter soi-même et les autres</strong> : Votre comportement modeste inspire le respect.</li>
-        <li><strong>Cultiver un esprit noble</strong> : Vivre selon les principes de la <strong>Tsniout</strong> développe un caractère noble.</li>
-        <li><strong>Être un modèle de modestie</strong> : Votre engagement envers la <strong>Tsniout</strong> peut encourager d'autres à suivre votre exemple.</li>
+        <li><strong>Cultiver un esprit noble</strong> : Vivre selon les principes de la <strong>M.S.V-NOSY BE</strong> développe un caractère noble.</li>
+        <li><strong>Être un modèle de modestie</strong> : Votre engagement envers la <strong>M.S.V-NOSY BE</strong> peut encourager d'autres à suivre votre exemple.</li>
     </ul>
 
     <figure class="my-8">
@@ -433,7 +433,7 @@ export const BLOG_POSTS: BlogPost[] = [
     </figure>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion</h2>
-    <p class="mb-4">Devenir <strong>Tsniout</strong> est un voyage spirituel et pratique qui exige de la réflexion, de l'engagement et une volonté de vivre selon les principes de <strong>modestie</strong>. Ce chemin est parsemé de défis, notamment dans le monde moderne, mais les récompenses spirituelles et personnelles sont inestimables. En cultivant la <strong>modestie</strong> dans tous les aspects de votre vie, vous pouvez non seulement approfondir votre connexion avec Dieu, mais aussi vivre une vie pleine de <strong>dignité</strong>, de <strong>respect</strong> et de <strong>noblesse</strong>. Que ce voyage vous guide vers une vie plus épanouie et alignée avec les valeurs les plus profondes du judaïsme.</p>
+    <p class="mb-4">Devenir <strong>M.S.V-NOSY BE</strong> est un voyage spirituel et pratique qui exige de la réflexion, de l'engagement et une volonté de vivre selon les principes de <strong>modestie</strong>. Ce chemin est parsemé de défis, notamment dans le monde moderne, mais les récompenses spirituelles et personnelles sont inestimables. En cultivant la <strong>modestie</strong> dans tous les aspects de votre vie, vous pouvez non seulement approfondir votre connexion avec Dieu, mais aussi vivre une vie pleine de <strong>dignité</strong>, de <strong>respect</strong> et de <strong>noblesse</strong>. Que ce voyage vous guide vers une vie plus épanouie et alignée avec les valeurs les plus profondes du judaïsme.</p>
         `,
         coverImage: "https://tsniout-shop.fr/wp-content/uploads/2024/08/famille-moderne-juive-tsniout-1024x683.jpg",
         category: "Philosophie",
@@ -461,7 +461,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/pexels-cottonbro-9511245.jpg" alt="femme habillé en robe tsniout" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements Tsniout</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements M.S.V-NOSY BE</h2>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">Le code vestimentaire d’une femme tsniout</h2>
     <p class="mb-4">La tsniout est souvent associée à la <strong>mode vestimentaire</strong>, car c’est l’un des aspects les plus visibles. Une femme tsniout porte généralement :</p>
@@ -513,7 +513,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
     <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion</h2>
     <p class="mb-4">Une <strong>femme tsniout</strong> est une femme qui exprime sa féminité à travers la <strong>pudeur, l’élégance et la dignité</strong>. Son style vestimentaire reflète ses valeurs, mais c’est aussi son comportement et son attitude qui définissent sa manière de vivre la tsniout.<br />Aujourd’hui, il est possible d’allier <strong>mode, modernité et respect des traditions</strong> grâce à une large gamme de vêtements adaptés.</p>
-    <p class="mb-4">👉 Découvrez notre <a href="/boutique" class="text-indigo-600 hover:text-indigo-800 underline"><strong>collection de robes, jupes et maillots de bain tsniout</strong></a> sur <em>Tsniout Shop</em> et exprimez votre style en toute élégance et pudeur.</p>
+    <p class="mb-4">👉 Découvrez notre <a href="/boutique" class="text-indigo-600 hover:text-indigo-800 underline"><strong>collection de robes, jupes et maillots de bain tsniout</strong></a> sur <em>M.S.V-NOSY BE Shop</em> et exprimez votre style en toute élégance et pudeur.</p>
 
     <h3 class="text-xl font-medium mt-6 mb-3">FAQ – Femme tsniout</h3>
     <p class="mb-4"><strong>Quelle est la définition de tsniout ?</strong><br />La tsniout désigne la pudeur, dans la tenue vestimentaire comme dans le comportement, en accord avec les valeurs juives.</p>
@@ -621,7 +621,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <img src="https://tsniout-shop.fr/wp-content/uploads/2025/11/femme-juive-avec-la-tete-rase.jpg" alt="femme juive avec la tete rasé" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements Tsniout</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements M.S.V-NOSY BE</h2>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">Les 2 raisons principales du rasage</h2>
     <p class="mb-4">Pourquoi aller jusqu'à raser les cheveux alors que les couvrir suffirait ? Il y a deux motivations principales, l'une légale et l'autre mystique.</p>
@@ -746,19 +746,19 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     {
         slug: 'comment-shabiller-de-maniere-tsniout',
-        title: "Comment s'habiller de manière Tsniout ?",
+        title: "Comment s'habiller de manière M.S.V-NOSY BE ?",
         excerpt: "Le guide complet pour se constituer une garde-robe à la fois casher et stylée.",
         content: `
-    <p class="lead text-lg text-zinc-600 mb-6 font-semibold">S'habiller de manière <strong>Tsniout</strong> (ou Tzniout) ne signifie pas renoncer à la mode ou à sa féminité. Au contraire, ce concept fondamental du judaïsme, qui prône la <strong>pudeur</strong> et la discrétion, met en valeur la dignité intérieure de la femme plutôt que son apparence physique superficielle. Mais concrètement, quelles sont les règles vestimentaires à respecter pour être en accord avec la <em>Halakha</em> ? Voici le guide complet pour se constituer une garde-robe à la fois casher et stylée.</p>
+    <p class="lead text-lg text-zinc-600 mb-6 font-semibold">S'habiller de manière <strong>M.S.V-NOSY BE</strong> (ou Tzniout) ne signifie pas renoncer à la mode ou à sa féminité. Au contraire, ce concept fondamental du judaïsme, qui prône la <strong>pudeur</strong> et la discrétion, met en valeur la dignité intérieure de la femme plutôt que son apparence physique superficielle. Mais concrètement, quelles sont les règles vestimentaires à respecter pour être en accord avec la <em>Halakha</em> ? Voici le guide complet pour se constituer une garde-robe à la fois casher et stylée.</p>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Les 3 Règles d'Or de la tenue Tsniout</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Les 3 Règles d'Or de la tenue M.S.V-NOSY BE</h2>
     <p class="mb-4">Bien que les coutumes varient légèrement selon les communautés (Sépharades, Ashkénazes, Loubavitch, etc.), le consensus halakhique repose sur trois zones principales du corps à couvrir.</p>
 
     <h3 class="text-xl font-medium mt-6 mb-3">1. La longueur de la jupe (Les Genoux)</h3>
     <p class="mb-4">La règle est stricte : la jupe ou la robe doit couvrir les <strong>genoux</strong>, même lorsque vous êtes assise.</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><p><strong>Ce qu'il faut porter :</strong> Des jupes midi ou maxi.</p></li>
-        <li><p><strong>L'astuce :</strong> Attention aux jupes fendues. Si la fente remonte au-dessus du genou, le vêtement n'est pas considéré comme Tsniout.</p></li>
+        <li><p><strong>L'astuce :</strong> Attention aux jupes fendues. Si la fente remonte au-dessus du genou, le vêtement n'est pas considéré comme M.S.V-NOSY BE.</p></li>
     </ul>
 
     <h3 class="text-xl font-medium mt-6 mb-3">2. Les manches (Les Coudes)</h3>
@@ -776,7 +776,7 @@ export const BLOG_POSTS: BlogPost[] = [
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
         <figure>
             <a href="/boutique">
-                <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/Gemini_Generated_Image_gy04uxgy04uxgy04.png" alt="Jupe d'été style bohème Tsniout" class="w-full h-auto rounded-lg shadow-sm hover:opacity-90 transition-opacity" />
+                <img src="https://tsniout-shop.fr/wp-content/uploads/2024/08/Gemini_Generated_Image_gy04uxgy04uxgy04.png" alt="Jupe d'été style bohème M.S.V-NOSY BE" class="w-full h-auto rounded-lg shadow-sm hover:opacity-90 transition-opacity" />
             </a>
         </figure>
         <figure>
@@ -786,10 +786,10 @@ export const BLOG_POSTS: BlogPost[] = [
         </figure>
     </div>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements Tsniout</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Quelques vêtements M.S.V-NOSY BE</h2>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Les indispensables d'une garde-robe Tsniout moderne</h2>
-    <p class="mb-4">Passer à un style Tsniout peut sembler un défi, mais avec les bonnes pièces "basiques", c'est un jeu d'enfant. C'est ici que la <strong>Modest Fashion</strong> prend tout son sens.</p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Les indispensables d'une garde-robe M.S.V-NOSY BE moderne</h2>
+    <p class="mb-4">Passer à un style M.S.V-NOSY BE peut sembler un défi, mais avec les bonnes pièces "basiques", c'est un jeu d'enfant. C'est ici que la <strong>Modest Fashion</strong> prend tout son sens.</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><p><strong>Le "Basic" ou "Shell" :</strong> C'est le meilleur ami de la femme juive pratiquante. Il s'agit d'un t-shirt moulant (souvent en lycra ou coton) à manches longues ou ¾ avec un col haut. Il se porte sous n'importe quelle robe un peu trop décolletée ou sans manches, rendant instantanément "casher" une tenue qui ne l'était pas.</p></li>
         <li><p><strong>La Jupe en Jean Midi :</strong> Un classique indémodable qui va avec tout, des baskets pour la semaine aux bottines pour le travail.</p></li>
@@ -804,7 +804,7 @@ export const BLOG_POSTS: BlogPost[] = [
         </figure>
         <figure>
             <a href="/boutique">
-                <img src="https://tsniout-shop.fr/wp-content/uploads/2025/07/Gemini_Generated_Image_yzggxzyzggxzyzgg.png" alt="Robes à volants Tsniout" class="w-full h-auto rounded-lg shadow-sm hover:opacity-90 transition-opacity" />
+                <img src="https://tsniout-shop.fr/wp-content/uploads/2025/07/Gemini_Generated_Image_yzggxzyzggxzyzgg.png" alt="Robes à volants M.S.V-NOSY BE" class="w-full h-auto rounded-lg shadow-sm hover:opacity-90 transition-opacity" />
             </a>
         </figure>
     </div>
@@ -812,14 +812,14 @@ export const BLOG_POSTS: BlogPost[] = [
     <h2 class="text-2xl font-serif mt-8 mb-4">Peut-on porter un pantalon ?</h2>
     <p class="mb-4">C'est une question qui revient souvent. Selon la grande majorité des décisionnaires orthodoxes, le port du pantalon est <strong>interdit</strong> pour deux raisons :</p>
     <ol class="list-decimal pl-5 space-y-2 mb-6">
-        <li><p>Il moule les formes (manque de Tsniout).</p></li>
+        <li><p>Il moule les formes (manque de M.S.V-NOSY BE).</p></li>
         <li><p>Il est considéré comme un vêtement masculin (interdit de <em>Lo Yilbash</em>). La jupe reste donc l'emblème de la féminité juive. Cependant, pour le sport ou dormir, des vêtements amples spécifiques sont évidemment permis dans l'intimité.</p></li>
     </ol>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
         <figure>
             <a href="/boutique">
-                <img src="https://tsniout-shop.fr/wp-content/uploads/2025/09/Gemini_Generated_Image_6byxo66byxo66byx.png" alt="Robe Longue Plissée Tsniout" class="w-full h-auto rounded-lg shadow-sm hover:opacity-90 transition-opacity" />
+                <img src="https://tsniout-shop.fr/wp-content/uploads/2025/09/Gemini_Generated_Image_6byxo66byxo66byx.png" alt="Robe Longue Plissée M.S.V-NOSY BE" class="w-full h-auto rounded-lg shadow-sm hover:opacity-90 transition-opacity" />
             </a>
         </figure>
         <figure>
@@ -838,7 +838,7 @@ export const BLOG_POSTS: BlogPost[] = [
     </ul>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion</h2>
-    <p class="mb-4">S'habiller de manière <strong>Tsniout</strong>, c'est faire le choix de réserver son intimité et de sanctifier son corps. C'est un code vestimentaire qui inspire le respect. Aujourd'hui, grâce aux nombreux créateurs de mode modeste, il n'a jamais été aussi facile d'être à la fois conforme à la Torah et élégante.</p>
+    <p class="mb-4">S'habiller de manière <strong>M.S.V-NOSY BE</strong>, c'est faire le choix de réserver son intimité et de sanctifier son corps. C'est un code vestimentaire qui inspire le respect. Aujourd'hui, grâce aux nombreux créateurs de mode modeste, il n'a jamais été aussi facile d'être à la fois conforme à la Torah et élégante.</p>
         `,
         coverImage: "https://tsniout-shop.fr/wp-content/uploads/2024/08/Gemini_Generated_Image_gy04uxgy04uxgy04.png",
         category: "Guide Style",
@@ -848,17 +848,17 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     {
         slug: '8-idees-cadeaux-pour-elle-illuminez-son-hanouka-avec-tsniout-shop',
-        title: "8 Idées Cadeaux pour Elle : Illuminez son Hanouka avec Tsniout Shop 🕎",
+        title: "8 Idées Cadeaux pour Elle : Illuminez son Hanouka avec M.S.V-NOSY BE Shop 🕎",
         excerpt: "Hanouka approche ! Découvrez notre sélection de cadeaux uniques et porteurs de sens pour faire briller les femmes de votre vie.",
         content: `
-    <p class="lead text-lg text-zinc-600 mb-6 font-semibold"><strong>Hanouka</strong>, la fête des Lumières, est une période empreinte de magie, de chaleur et de spiritualité. C'est le moment idéal pour montrer à celles qui nous sont chères – épouse, mère, sœur, ou amie – à quel point elles illuminent notre quotidien. Mais trouver le cadeau parfait qui allie <strong>élégance</strong>, <strong>modernité</strong> et respect des valeurs de la <strong>Tsniout</strong> peut parfois être un défi.</p>
-    <p class="mb-6">Chez <strong>Tsniout Shop</strong>, nous avons sélectionné pour vous 8 idées cadeaux pensées pour la femme juive moderne, qui feront de cette fête un moment inoubliable.</p>
+    <p class="lead text-lg text-zinc-600 mb-6 font-semibold"><strong>Hanouka</strong>, la fête des Lumières, est une période empreinte de magie, de chaleur et de spiritualité. C'est le moment idéal pour montrer à celles qui nous sont chères – épouse, mère, sœur, ou amie – à quel point elles illuminent notre quotidien. Mais trouver le cadeau parfait qui allie <strong>élégance</strong>, <strong>modernité</strong> et respect des valeurs de la <strong>M.S.V-NOSY BE</strong> peut parfois être un défi.</p>
+    <p class="mb-6">Chez <strong>M.S.V-NOSY BE Shop</strong>, nous avons sélectionné pour vous 8 idées cadeaux pensées pour la femme juive moderne, qui feront de cette fête un moment inoubliable.</p>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">La signification de Hanouka et l'art d'offrir</h2>
     <p class="mb-4">Hanouka, ou <em>Hag Haourim</em> (la fête des Lumières), célèbre le miracle de la fiole d'huile qui a brûlé pendant huit jours au lieu d'un seul. C'est le triomphe de la lumière sur l'obscurité, du spirituel sur le matériel. Offrir un cadeau à Hanouka n'est pas une simple obligation sociale, c'est une manière de <strong>propager cette lumière</strong> et de renforcer les liens d'affection.</p>
-    <p class="mb-6">Choisir un cadeau qui respecte la <strong>Tsniout</strong> (pudeur), c'est offrir bien plus qu'un objet : c'est offrir un message de respect pour la dignité et la beauté intérieure de la femme.</p>
+    <p class="mb-6">Choisir un cadeau qui respecte la <strong>M.S.V-NOSY BE</strong> (pudeur), c'est offrir bien plus qu'un objet : c'est offrir un message de respect pour la dignité et la beauté intérieure de la femme.</p>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">1. La Robe Tsniout Élégante pour les Fêtes</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">1. La Robe M.S.V-NOSY BE Élégante pour les Fêtes</h2>
     <p class="mb-4">Pour les soirées d'allumage des bougies en famille, rien de tel qu'une tenue qui allie confort et raffinement. Une belle <strong>robe tsniout</strong> en velours ou en satin est le cadeau idéal pour marquer le coup.</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><p><strong>Robe en Velours Côtelé :</strong> Parfaite pour l'hiver, elle apporte chaleur et texture.</p></li>
@@ -890,7 +890,7 @@ export const BLOG_POSTS: BlogPost[] = [
     </figure>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">4. Une Jupe Longue Plissée Intemporelle</h2>
-    <p class="mb-4">La <strong>jupe longue plissée</strong> est la pièce maîtresse de la garde-robe Tsniout moderne. Elle est incroyablement versatile :</p>
+    <p class="mb-4">La <strong>jupe longue plissée</strong> est la pièce maîtresse de la garde-robe M.S.V-NOSY BE moderne. Elle est incroyablement versatile :</p>
     <ul class="list-disc pl-5 space-y-2 mb-6">
         <li><p>Avec des baskets et un pull pour la journée.</p></li>
         <li><p>Avec des talons et un chemisier élégant pour le Chabbat ou les fêtes.</p></li>
@@ -898,7 +898,7 @@ export const BLOG_POSTS: BlogPost[] = [
     <p class="mb-4">C'est le cadeau "valeur sûre" par excellence, alliant confort absolu et respect strict des règles de pudeur (couvrant les genoux en toutes circonstances).</p>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">5. Un Ensemble "Cozy" pour l'Hiver</h2>
-    <p class="mb-4">Hanouka tombe en hiver, et qui dit hiver dit besoin de chaleur ! Offrez un ensemble <strong>"loungewear" Tsniout</strong> : une jupe longue en maille douce assortie à un pull confortable.</p>
+    <p class="mb-4">Hanouka tombe en hiver, et qui dit hiver dit besoin de chaleur ! Offrez un ensemble <strong>"loungewear" M.S.V-NOSY BE</strong> : une jupe longue en maille douce assortie à un pull confortable.</p>
     <p class="mb-4">C'est le cadeau idéal pour les dimanches matins détendus à la maison, pour lire un livre au coin du feu tout en restant élégante pour les invités surprises.</p>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">6. Un Livre sur la Pensée Juive ou la Femme Juive</h2>
@@ -910,20 +910,20 @@ export const BLOG_POSTS: BlogPost[] = [
     </ul>
     <p class="mb-4">C'est une invitation à l'inspiration et à la croissance personnelle.</p>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">7. Une Carte Cadeau Tsniout Shop</h2>
+    <h2 class="text-2xl font-serif mt-8 mb-4">7. Une Carte Cadeau M.S.V-NOSY BE Shop</h2>
     <p class="mb-4">Vous avez peur de vous tromper de taille ou de couleur ? La <strong>Carte Cadeau</strong> est la solution parfaite. Elle offre la <strong>liberté de choisir</strong> ce qui lui plaît vraiment.</p>
     <p class="mb-4">C'est le cadeau qui dit : "Je veux te faire plaisir, mais je respecte tes goûts personnels".</p>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">8. Un Manteau d'Hiver Chic et Couvrant</h2>
-    <p class="mb-4">Un bon manteau est un investissement. Un modèle Tsniout sera suffisamment long pour couvrir les jupes, bien taillé pour structurer la silhouette sans la marquer excessivement, et chaud pour affronter les frimas de décembre.</p>
+    <p class="mb-4">Un bon manteau est un investissement. Un modèle M.S.V-NOSY BE sera suffisamment long pour couvrir les jupes, bien taillé pour structurer la silhouette sans la marquer excessivement, et chaud pour affronter les frimas de décembre.</p>
     <p class="mb-4">Optez pour un manteau en laine mélangée avec une belle ceinture à nouer pour une touche d'élégance parisienne.</p>
 
     <figure class="my-8">
         <img src="https://tsniout-shop.fr/wp-content/uploads/2025/09/Gemini_Generated_Image_lb2iutlb2iutlb2i.png" alt="Cardigan et manteau tsniout" class="w-full h-auto rounded-lg shadow-sm" />
     </figure>
 
-    <h2 class="text-2xl font-serif mt-8 mb-4">Pourquoi choisir un cadeau Tsniout ?</h2>
-    <p class="mb-4">Offrir un vêtement ou un accessoire Tsniout, c'est soutenir une vision de la mode qui valorise l'éthique et la spiritualité. C'est dire à la femme à qui vous l'offrez que vous admirez son engagement et sa volonté de conjuguer sa foi avec sa vie de femme moderne.</p>
+    <h2 class="text-2xl font-serif mt-8 mb-4">Pourquoi choisir un cadeau M.S.V-NOSY BE ?</h2>
+    <p class="mb-4">Offrir un vêtement ou un accessoire M.S.V-NOSY BE, c'est soutenir une vision de la mode qui valorise l'éthique et la spiritualité. C'est dire à la femme à qui vous l'offrez que vous admirez son engagement et sa volonté de conjuguer sa foi avec sa vie de femme moderne.</p>
 
     <h2 class="text-2xl font-serif mt-8 mb-4">Conclusion</h2>
     <p class="mb-4">Que vous choisissiez un bijou étincelant, une robe somptueuse ou un simple livre inspirant, l'essentiel à Hanouka est d'y mettre du cœur. Ces 8 idées cadeaux sont là pour vous guider, mais le plus beau cadeau restera toujours votre amour et votre attention bienveillante.</p>

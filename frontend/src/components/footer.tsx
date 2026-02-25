@@ -14,13 +14,21 @@ export default function Footer() {
         <footer className="border-t border-vanilla-100/10 bg-jungle-900 text-vanilla-50">
             <div className="mx-auto max-w-7xl px-4 py-10">
                 <div className="grid md:grid-cols-4 gap-8">
-                    <div>
-                        <div className="leading-tight mb-4">
-                            <p className="font-display text-xl">M.S.V-NOSY BE</p>
-                            <p className="text-sm text-vanilla-100/60">Vanille de Madagascar</p>
-                        </div>
+                    <div className="flex flex-col gap-4">
+                        <Link href="/" className="flex items-center gap-3 group">
+                            <div className="w-14 h-14 rounded-xl overflow-hidden">
+                                <img
+                                    src="/logo_msv.png"
+                                    alt="Logo MSV Nosy-Be"
+                                    className="w-full h-full object-contain"
+                                />
+                            </div>
+                            <div className="leading-tight">
+                                <p className="font-display text-xl">M.S.V-NOSY BE</p>
+                                <p className="text-sm text-vanilla-100/60">Vanille de Madagascar</p>
+                            </div>
+                        </Link>
                         <div className="inline-flex items-center gap-2 text-sm text-vanilla-100/80">
-                            <LeafIcon />
                             <span>100% naturel & sélectionné à la main.</span>
                         </div>
                     </div>

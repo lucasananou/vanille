@@ -18,12 +18,12 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
     if (!post) {
         return {
-            title: 'Article non trouvé | Tsniout Shop',
+            title: 'Article non trouvé | M.S.V-NOSY BE Shop',
         };
     }
 
     return {
-        title: `${post.title} | Blog Tsniout Shop`,
+        title: `${post.title} | Blog M.S.V-NOSY BE Shop`,
         description: post.excerpt,
         openGraph: {
             title: post.title,
@@ -113,10 +113,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             },
                             publisher: {
                                 '@type': 'Organization',
-                                name: 'Tsniout Shop',
+                                name: 'M.S.V-NOSY BE Shop',
                                 logo: {
                                     '@type': 'ImageObject',
-                                    url: 'https://tsniout-shop.fr/logo.png' // Ensure this exists or use a valid URL
+                                    url: 'https://tsniout-shop.fr/logo_msv.png' // Ensure this exists or use a valid URL
                                 }
                             },
                             description: post.excerpt

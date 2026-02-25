@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
                         </svg>
                     </div>
                     <h1 className="text-3xl font-bold text-zinc-900">Portail Admin</h1>
-                    <p className="mt-2 text-zinc-600">AP Collections</p>
+                    <p className="mt-2 text-zinc-600">M.S.V-NOSY BE</p>
                 </div>
 
                 {/* Login Card */}
