@@ -110,7 +110,7 @@ export default function CartDrawer() {
                                             <div className="flex items-start justify-between gap-3">
                                                 <div className="min-w-0">
                                                     <p className="font-semibold truncate">{item.product.title}</p>
-                                                    <p className="text-sm text-vanilla-100/70">{fmt.format(item.price)} <span className="text-xs">/ unité</span></p>
+                                                    <p className="text-sm text-vanilla-100/70">{fmt.format(item.price / 100)} <span className="text-xs">/ unité</span></p>
                                                 </div>
                                                 <button
                                                     onClick={() => removeItem(item.id)}
@@ -139,7 +139,7 @@ export default function CartDrawer() {
                                                         <PlusIcon />
                                                     </button>
                                                 </div>
-                                                <p className="text-sm font-semibold">{fmt.format(item.price * item.quantity)}</p>
+                                                <p className="text-sm font-semibold">{fmt.format((item.price / 100) * item.quantity)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@ export default function CartDrawer() {
                         <div className="rounded-xxl glass p-4">
                             <div className="flex items-center justify-between">
                                 <p className="text-sm text-vanilla-100/75">Sous-total</p>
-                                <p className="text-lg font-semibold">{fmt.format(total)}</p>
+                                <p className="text-lg font-semibold">{fmt.format(total / 100)}</p>
                             </div>
                             <p className="mt-1 text-xs text-vanilla-100/60">Livraison & taxes calculées au paiement.</p>
 

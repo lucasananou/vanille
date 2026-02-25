@@ -17,7 +17,7 @@ export class PaymentsService {
     async createPaymentIntent(amount: number, currency: string = 'eur') {
         try {
             const paymentIntent = await this.stripe.paymentIntents.create({
-                amount: Math.round(amount * 100), // Stripe expects amounts in cents
+                amount: Math.round(amount), // Amount is already expected in cents from the controller
                 currency,
                 automatic_payment_methods: {
                     enabled: true,

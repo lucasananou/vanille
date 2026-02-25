@@ -1,19 +1,39 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ordersApi } from '@/lib/api/orders';
 import { useAuth } from '@/lib/auth-context';
+import type { Order } from '@/lib/types';
 
 export default function AccountPage() {
     const router = useRouter();
-    const { customer, isAuthenticated, logout, isLoading } = useAuth();
+    const { customer, isAuthenticated, logout, isLoading, token } = useAuth();
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [isLoadingOrders, setIsLoadingOrders] = useState(true);
+
+    const fmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 
     useEffect(() => {
-        // Only redirect after loading is complete
+        const fetchOrders = async () => {
+            if (isAuthenticated && token) {
+                try {
+                    const data = await ordersApi.getOrders(token);
+                    setOrders(data);
+                } catch (err) {
+                    console.error('Failed to fetch orders:', err);
+                } finally {
+                    setIsLoadingOrders(false);
+                }
+            }
+        };
+
         if (!isLoading && !isAuthenticated) {
             console.log('Not authenticated, redirecting to login');
             router.push('/login');
+        } else if (isAuthenticated) {
+            fetchOrders();
         }
     }, [isAuthenticated, isLoading, router]);
 
@@ -80,13 +100,35 @@ export default function AccountPage() {
                         {/* Orders */}
                         <div className="rounded-lg border border-zinc-200 p-6">
                             <h2 className="text-lg font-medium text-zinc-900 mb-4">Commandes récentes</h2>
-                            <p className="text-sm text-zinc-500">Vous n'avez pas encore passé de commande.</p>
-                            <Link
-                                href="/"
-                                className="mt-4 inline-block text-sm text-[#a1b8ff] hover:text-[#8da0ef] font-medium"
-                            >
-                                Commencer mes achats →
-                            </Link>
+                            {isLoadingOrders ? (
+                                <p className="text-sm text-zinc-500">Chargement des commandes...</p>
+                            ) : orders.length > 0 ? (
+                                <div className="space-y-4">
+                                    {orders.map((order) => (
+                                        <div key={order.id} className="flex items-center justify-between p-4 rounded-xl border border-zinc-100 hover:border-zinc-200 transition-all">
+                                            <div>
+                                                <p className="font-semibold text-zinc-900">{order.orderNumber}</p>
+                                                <p className="text-xs text-zinc-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="font-semibold text-zinc-900">{fmt.format(order.total / 100)}</p>
+                                                <p className="text-xs text-zinc-500">{order.status}</p>
+                                            </div>
+                                            <Link href={`/order-confirmation/${order.id}`} className="text-sm text-[#a1b8ff] hover:underline">Voir</Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <>
+                                    <p className="text-sm text-zinc-500">Vous n'avez pas encore passé de commande.</p>
+                                    <Link
+                                        href="/"
+                                        className="mt-4 inline-block text-sm text-[#a1b8ff] hover:text-[#8da0ef] font-medium"
+                                    >
+                                        Commencer mes achats →
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
 

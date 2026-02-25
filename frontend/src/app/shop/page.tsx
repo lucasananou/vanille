@@ -288,9 +288,9 @@ export default function ShopPage() {
 
                                                     <div className="flex items-center justify-between pt-4 border-t border-vanilla-100">
                                                         <p className="font-display text-xl text-jungle-950">
-                                                            {p.price_label === '—' ? 'Sur demande' : (p.price_label === 'Devis' ? 'Prix Pro' : `${p.price_label}€`)}
+                                                            {p.price_label === '—' ? 'Sur demande' : (p.price_label === 'Devis' ? 'Prix Pro' : `${p.price_label} €`)}
                                                         </p>
-                                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">Voir gousse</span>
+                                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">Détails</span>
                                                     </div>
                                                 </div>
                                             </Link>

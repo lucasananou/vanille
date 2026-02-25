@@ -150,7 +150,7 @@ export default function ProductDetailPage() {
                                             <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 ml-1">Prix de la sélection</p>
                                             <div className="flex items-end gap-3 mt-1">
                                                 <p className="text-4xl font-semibold text-jungle-950">
-                                                    {product.price_label === '—' ? 'Sur demande' : (product.price_label === 'Devis' ? 'Prix Pro' : `${product.price_label}€`)}
+                                                    {product.price_label === '—' ? 'Sur demande' : (product.price_label === 'Devis' ? 'Prix Pro' : `${product.price_label} €`)}
                                                 </p>
                                             </div>
                                         </div>
