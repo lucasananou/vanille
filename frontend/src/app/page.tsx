@@ -180,7 +180,7 @@ export default function HomePage() {
                 <div className="rounded-[28px] border border-vanilla-100/15 overflow-hidden bg-gradient-to-b from-vanilla-50/10 to-jungle-900/10">
                   <div className="aspect-[4/3] relative">
                     <img
-                      src="/photos produit vanille/Galerie photos qui sommes nous/Triage et calibrage.jpg"
+                      src="/photos-produit-vanille/galerie-photos-qui-sommes-nous/Triage et calibrage.jpg"
                       alt="Triage et calibrage de la vanille MSV Nosy-Be"
                       className="absolute inset-0 w-full h-full object-cover"
                     />

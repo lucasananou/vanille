@@ -66,7 +66,7 @@ export default function AboutPage() {
                                 <div className="rounded-[3rem] border border-vanilla-100/10 bg-vanilla-50/5 overflow-hidden p-3 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] relative">
                                     <div className="w-full h-full rounded-[2.5rem] bg-jungle-950/40 relative overflow-hidden">
                                         <img
-                                            src="/photos produit vanille/Galerie photos qui sommes nous/PDG sur le terrain.jpg"
+                                            src="/photos-produit-vanille/galerie-photos-qui-sommes-nous/pdg-sur-le-terrain.jpg"
                                             alt="L'art de l'affinage"
                                             className="absolute inset-0 w-full h-full object-cover opacity-60"
                                         />
