@@ -321,7 +321,7 @@ export default function ProductDetailPage() {
                                                     </div>
                                                     <div className="bg-white p-6">
                                                         <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">Conditionnement</p>
-                                                        <p className="mt-2 text-lg font-semibold text-jungle-900 uppercase">{selectedFormat}</p>
+                                                        <p className="mt-2 text-lg font-semibold text-jungle-900 uppercase">{selectedVariant?.packaging || product.packaging[0]}</p>
                                                     </div>
                                                 </div>
                                             </div>
