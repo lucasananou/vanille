@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, IsObject } from 'class-validator';
+import { IsString, IsEmail, IsObject, IsOptional, IsArray, IsInt, Min } from 'class-validator';
 
 export class CreateOrderDto {
-    @ApiProperty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsString()
-    cartId: string;
+    cartId?: string;
 
     @ApiProperty({ example: 'customer@example.com' })
     @IsEmail()
@@ -14,7 +15,30 @@ export class CreateOrderDto {
     @IsObject()
     shippingAddress: any;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
+    @IsOptional()
     @IsObject()
-    billingAddress: any;
+    billingAddress?: any;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsArray()
+    items?: any[];
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsInt()
+    @Min(0)
+    shippingCost?: number;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    shippingRateId?: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsInt()
+    @Min(0)
+    tax?: number;
 }

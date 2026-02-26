@@ -27,7 +27,7 @@ export class OrdersController {
     @ApiOperation({ summary: 'Create order from cart' })
     @ApiResponse({ status: 201, description: 'Order created' })
     createOrder(@Body() createOrderDto: CreateOrderDto) {
-        return this.ordersService.createOrderFromCart(createOrderDto);
+        return this.ordersService.createOrder(createOrderDto);
     }
 
     @Post(':id/payment-intent')

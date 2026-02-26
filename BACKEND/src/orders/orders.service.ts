@@ -35,24 +35,48 @@ export class OrdersService {
         return this.stripe;
     }
 
-    async createOrderFromCart(createOrderDto: CreateOrderDto) {
-        const { cartId, email, shippingAddress, billingAddress } = createOrderDto;
+    async createOrder(createOrderDto: CreateOrderDto) {
+        const { cartId, email, shippingAddress, billingAddress, items: directItems, shippingCost, shippingRateId, tax: directTax } = createOrderDto;
 
-        // Get cart with items
-        const cart = await this.cartService.getCart(cartId);
+        let orderItems: any[] = [];
+        let subtotal = 0;
+        let customerId: string | undefined;
 
-        if (!cart.items || cart.items.length === 0) {
-            throw new BadRequestException('Cart is empty');
+        if (cartId) {
+            // Get cart with items
+            const cart = await this.cartService.getCart(cartId);
+
+            if (!cart.items || cart.items.length === 0) {
+                throw new BadRequestException('Cart is empty');
+            }
+
+            subtotal = cart.subtotal;
+            customerId = cart.customerId || undefined;
+            orderItems = cart.items.map((item) => ({
+                productId: item.productId,
+                variantId: item.variantId,
+                quantity: item.quantity,
+                price: item.price,
+                title: item.product.title,
+                image: item.product.images[0],
+            }));
+
+            // Clear cart
+            await this.cartService.clearCart(cartId);
+        } else if (directItems && directItems.length > 0) {
+            orderItems = directItems;
+            subtotal = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        } else {
+            throw new BadRequestException('Either cartId or items must be provided');
         }
 
         // Calculate totals
-        const subtotal = cart.subtotal;
-        const tax = Math.round(subtotal * 0.1); // 10% tax example
-        const shipping = 1000; // $10 flat shipping
+        const tax = directTax !== undefined ? directTax : Math.round(subtotal * 0.1); // Fallback to 10% tax if not provided
+        const shipping = shippingCost !== undefined ? shippingCost : 1000; // Fallback to 1000 if not provided
         const total = subtotal + tax + shipping;
 
         // Generate unique order number
-        const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+        const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
 
         // Create order
         const order = await this.prisma.order.create({
@@ -66,14 +90,16 @@ export class OrdersService {
                 status: OrderStatus.PENDING,
                 shippingAddress,
                 billingAddress: billingAddress || shippingAddress,
-                customerId: cart.customerId,
+                customerId,
+                shippingRateId,
                 items: {
-                    create: cart.items.map((item) => ({
+                    create: orderItems.map((item) => ({
                         productId: item.productId,
                         variantId: item.variantId,
                         quantity: item.quantity,
                         price: item.price,
-                        title: item.product.title,
+                        title: item.title,
+                        image: item.image,
                     })),
                 },
             },
@@ -85,9 +111,6 @@ export class OrdersService {
                 },
             },
         });
-
-        // Clear cart
-        await this.cartService.clearCart(cartId);
 
         return order;
     }

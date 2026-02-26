@@ -7,6 +7,7 @@ import Footer from '@/components/footer';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { paymentsApi } from '@/lib/api/payments';
+import { shippingApi, ShippingRate } from '@/lib/api/shipping';
 import StripeForm from '@/components/checkout/stripe-form';
 
 // Initialize Stripe outside of component
@@ -57,20 +58,25 @@ export default function CheckoutPage() {
         address: '',
         zip: '',
         city: '',
+        country: 'FR',
     });
+
+    const [availableRates, setAvailableRates] = useState<ShippingRate[]>([]);
+    const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null);
+    const [isLoadingRates, setIsLoadingRates] = useState(false);
 
     const fmt = useMemo(() => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }), []);
     const subtotal = total / 100;
-    const shipping = 0; // Temporairement gratuit
+    const shipping = selectedRate ? selectedRate.price / 100 : 0;
     const totalWithShipping = subtotal + shipping;
 
     useEffect(() => {
         const getSecret = async () => {
-            if (total > 0 && !clientSecret && !isLoadingSecret) {
+            if (totalWithShipping > 0 && !isLoadingSecret) {
                 setIsLoadingSecret(true);
                 try {
                     // Call backend with total in cents
-                    const res = await paymentsApi.createPaymentIntent(total);
+                    const res = await paymentsApi.createPaymentIntent(Math.round(totalWithShipping * 100));
                     setClientSecret(res.clientSecret);
                 } catch (err) {
                     console.error('Failed to get client secret:', err);
@@ -80,7 +86,34 @@ export default function CheckoutPage() {
             }
         };
         getSecret();
-    }, [total, clientSecret, isLoadingSecret]);
+    }, [totalWithShipping]);
+
+    useEffect(() => {
+        const fetchRates = async () => {
+            if (formData.country && total > 0) {
+                setIsLoadingRates(true);
+                try {
+                    const res = await shippingApi.calculateAvailableRates(formData.country, total);
+                    setAvailableRates(res.availableRates);
+                    if (res.availableRates.length > 0 && !selectedRate) {
+                        setSelectedRate(res.availableRates[0]);
+                    }
+                } catch (err) {
+                    console.error('Failed to fetch shipping rates:', err);
+                    // Fallback rates if API fails
+                    const fallbacks: ShippingRate[] = [
+                        { id: 'poste', name: 'La Poste - Colissimo', price: 690, estimatedDays: '3-5 jours', zoneName: 'Standard' },
+                        { id: 'dhl', name: 'DHL Express', price: 1490, estimatedDays: '1-2 jours', zoneName: 'Express' }
+                    ];
+                    setAvailableRates(fallbacks);
+                    setSelectedRate(fallbacks[0]);
+                } finally {
+                    setIsLoadingRates(false);
+                }
+            }
+        };
+        fetchRates();
+    }, [formData.country, total]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
@@ -230,16 +263,62 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
 
+                            {/* Shipping Section */}
+                            <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm">
+                                <div className="flex items-center justify-between gap-3 mb-6">
+                                    <h2 className="font-display text-2xl text-jungle-950">2. Mode de livraison</h2>
+                                    {isLoadingRates && <div className="w-4 h-4 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div>}
+                                </div>
+
+                                <div className="space-y-3">
+                                    {availableRates.length > 0 ? (
+                                        availableRates.map((rate) => (
+                                            <label
+                                                key={rate.id}
+                                                className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all cursor-pointer ${selectedRate?.id === rate.id
+                                                    ? 'border-gold-500 bg-gold-50/30 ring-1 ring-gold-500'
+                                                    : 'border-cacao-900/5 bg-white hover:border-cacao-900/15'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedRate?.id === rate.id ? 'border-gold-500' : 'border-cacao-200'}`}>
+                                                        {selectedRate?.id === rate.id && <div className="w-2.5 h-2.5 rounded-full bg-gold-500" />}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-semibold text-cacao-900">{rate.name}</p>
+                                                        <p className="text-xs text-cacao-600">{rate.estimatedDays}</p>
+                                                    </div>
+                                                </div>
+                                                <p className="font-bold text-cacao-900">{rate.price === 0 ? 'Gratuit' : fmt.format(rate.price / 100)}</p>
+                                                <input
+                                                    type="radio"
+                                                    name="shippingRate"
+                                                    className="sr-only"
+                                                    checked={selectedRate?.id === rate.id}
+                                                    onChange={() => setSelectedRate(rate)}
+                                                />
+                                            </label>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-cacao-600 italic">Aucun mode de livraison disponible pour cette destination.</p>
+                                    )}
+                                </div>
+                            </div>
+
                             {/* Stripe Section */}
                             <div className="mt-6">
+                                <div className="flex items-center justify-between gap-3 mb-6 px-6">
+                                    <h2 className="font-display text-2xl text-jungle-950">3. Paiement</h2>
+                                </div>
                                 {clientSecret ? (
                                     <Elements stripe={stripePromise} options={{ clientSecret, locale: 'fr', appearance: { theme: 'stripe' } }}>
                                         <StripeForm
                                             formData={formData}
-                                            total={total}
+                                            total={Math.round(totalWithShipping * 100)}
                                             subtotal={total}
                                             shipping={shipping}
                                             tax={0}
+                                            shippingRateId={selectedRate?.id}
                                         />
                                     </Elements>
                                 ) : (
@@ -288,7 +367,9 @@ export default function CheckoutPage() {
                                                 </div>
                                                 <div className="flex justify-between text-sm">
                                                     <span className="text-cacao-700">Livraison</span>
-                                                    <span className="text-gold-600 font-bold">Gratuite</span>
+                                                    <span className={shipping === 0 ? "text-gold-600 font-bold" : "font-semibold"}>
+                                                        {shipping === 0 ? 'Gratuite' : fmt.format(shipping)}
+                                                    </span>
                                                 </div>
                                                 <div className="flex justify-between text-lg font-display pt-3 border-t border-cacao-900/10">
                                                     <span className="text-jungle-950">Total</span>

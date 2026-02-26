@@ -41,6 +41,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         { name: 'Import CSV', href: '/admin/products/import', icon: 'M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
         { name: 'Commandes', href: '/admin/orders', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
         { name: 'Clients', href: '/admin/customers', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
+        { name: 'PayPal Dash', href: 'https://www.paypal.com/mep/dashboard', icon: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z', external: true },
     ];
 
     return (
@@ -61,6 +62,31 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                 <nav className="flex-1 p-4 space-y-1">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
+                        const isExternal = (item as any).external;
+
+                        const content = (
+                            <>
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                                </svg>
+                                {item.name}
+                            </>
+                        );
+
+                        if (isExternal) {
+                            return (
+                                <a
+                                    key={item.name}
+                                    href={item.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
+                                >
+                                    {content}
+                                </a>
+                            );
+                        }
+
                         return (
                             <Link
                                 key={item.name}
@@ -70,10 +96,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                                     : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'
                                     }`}
                             >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                                </svg>
-                                {item.name}
+                                {content}
                             </Link>
                         );
                     })}

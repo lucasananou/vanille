@@ -20,6 +20,7 @@ interface StripeFormProps {
     subtotal: number;
     shipping: number;
     tax: number;
+    shippingRateId?: string;
 }
 
 const LockIcon = () => (
@@ -29,7 +30,7 @@ const LockIcon = () => (
     </svg>
 );
 
-export default function StripeForm({ formData, total, subtotal, shipping, tax }: StripeFormProps) {
+export default function StripeForm({ formData, total, subtotal, shipping, tax, shippingRateId }: StripeFormProps) {
     const stripe = useStripe();
     const elements = useElements();
     const router = useRouter();
@@ -64,9 +65,9 @@ export default function StripeForm({ formData, total, subtotal, shipping, tax }:
                     quantity: item.quantity,
                     price: item.price,
                 })),
-                shippingCost: shipping * 100, // Convert to cents if needed, but here it's already cents? 
-                // Wait, in CheckoutPage total is in cents. Let's be careful.
+                shippingCost: Math.round(shipping * 100),
                 tax: 0,
+                shippingRateId: shippingRateId,
             };
 
             const order = await ordersApi.createOrder(orderData);
