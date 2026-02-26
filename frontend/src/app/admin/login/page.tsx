@@ -92,11 +92,6 @@ export default function AdminLoginPage() {
                         </button>
                     </form>
 
-                    <div className="mt-6 pt-6 border-t border-zinc-200 text-center">
-                        <p className="text-sm text-zinc-500">
-                            Identifiants de démonstration : <strong>admin@ecommerce.local</strong> / <strong>admin123</strong>
-                        </p>
-                    </div>
                 </div>
 
                 <div className="mt-6 text-center">

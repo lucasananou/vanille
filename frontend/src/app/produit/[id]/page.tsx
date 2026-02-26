@@ -34,32 +34,50 @@ export default function ProductDetailPage() {
     const product = findProduct(id) || CATALOG[0];
 
     const [qty, setQty] = useState(1);
-    const [selectedFormat, setSelectedFormat] = useState(product.packaging[0] || 'Tube');
+    const [selectedVariant, setSelectedVariant] = useState(product.variants ? product.variants[0] : null);
     const [activeTab, setActiveTab] = useState('desc');
     const { addItem, openCart } = useCart();
 
     if (!product) return <div>Produit non trouvé</div>;
 
-    // Map to Product type for the cart
-    const cartProduct: Product = {
-        id: product.id,
-        title: product.title,
-        price: product.id === 'pack-pro' ? 0 : 2500,
-        sku: product.id.toUpperCase(),
-        slug: product.id,
-        stock: 100,
-        images: product.images,
-        tags: ['vanille'],
-        published: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        subtitle: product.subtitle,
-        grade: product.grade,
-        size: product.size,
-    };
+    const currentPrice = selectedVariant ? selectedVariant.price : (product.id === 'pack-pro' || product.id === 'poivre-sauvage' ? 0 : 2500);
 
     const handleAddToCart = () => {
-        addItem(cartProduct, qty);
+        const cartProduct: Product = {
+            id: product.id,
+            title: product.title,
+            price: currentPrice,
+            sku: product.id.toUpperCase(),
+            slug: product.id,
+            stock: 100,
+            images: product.images,
+            tags: ['vanille'],
+            published: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            subtitle: product.subtitle,
+            grade: product.grade,
+            size: product.size,
+        };
+
+        // If there's a selected variant, we can pass it to addItem
+        // Since useCart addItem expects ProductVariant from types.ts, we map it
+        const variantToStore = selectedVariant ? {
+            id: `${product.id}-${selectedVariant.packaging}-${selectedVariant.quantity}`,
+            productId: product.id,
+            sku: `${product.id}-${selectedVariant.packaging}-${selectedVariant.quantity}`.toUpperCase(),
+            title: `${selectedVariant.packaging} — ${selectedVariant.quantity}`,
+            price: selectedVariant.price,
+            stock: 100,
+            options: {
+                "Conditionnement": selectedVariant.packaging,
+                "Quantité": selectedVariant.quantity
+            },
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        } : undefined;
+
+        addItem(cartProduct, qty, variantToStore as any);
         openCart();
     };
 
@@ -150,7 +168,7 @@ export default function ProductDetailPage() {
                                             <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 ml-1">Prix de la sélection</p>
                                             <div className="flex items-end gap-3 mt-1">
                                                 <p className="text-4xl font-semibold text-jungle-950">
-                                                    {product.price_label === '—' ? 'Sur demande' : (product.price_label === 'Devis' ? 'Prix Pro' : `${product.price_label} €`)}
+                                                    {product.id === 'pack-pro' || product.id === 'poivre-sauvage' ? 'Sur demande' : (selectedVariant ? `${selectedVariant.price / 100} €` : `${product.price_label}`)}
                                                 </p>
                                             </div>
                                         </div>
@@ -161,24 +179,31 @@ export default function ProductDetailPage() {
                                     </div>
 
                                     {/* Variant Selection */}
-                                    <div className="mt-8">
-                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-400 ml-1">Conditionnement</p>
-                                        <div className="mt-3 grid grid-cols-2 gap-3">
-                                            {product.packaging.map((pack) => (
-                                                <button
-                                                    key={pack}
-                                                    onClick={() => setSelectedFormat(pack)}
-                                                    className={`inline-flex items-center justify-between gap-2 rounded-2xl px-5 py-4 text-sm font-bold border transition-all ${selectedFormat === pack
-                                                        ? 'bg-jungle-900 text-vanilla-50 border-jungle-900'
-                                                        : 'bg-vanilla-50 border-vanilla-200 text-jungle-700 hover:bg-white hover:border-gold-500/30'
-                                                        }`}
-                                                >
-                                                    <span className="truncate">{pack}</span>
-                                                    {selectedFormat === pack && <svg className="w-4 h-4 text-gold-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>}
-                                                </button>
-                                            ))}
+                                    {product.variants && (
+                                        <div className="mt-8">
+                                            <p className="text-sm font-bold uppercase tracking-widest text-jungle-400 ml-1">Options de sélection</p>
+                                            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                {product.variants.map((variant, index) => (
+                                                    <button
+                                                        key={index}
+                                                        onClick={() => setSelectedVariant(variant)}
+                                                        className={`inline-flex flex-col items-start justify-center gap-1 rounded-2xl px-5 py-4 text-sm font-bold border transition-all ${selectedVariant === variant
+                                                            ? 'bg-jungle-900 text-vanilla-50 border-jungle-900'
+                                                            : 'bg-vanilla-50 border-vanilla-200 text-jungle-700 hover:bg-white hover:border-gold-500/30'
+                                                            }`}
+                                                    >
+                                                        <div className="flex items-center justify-between w-full">
+                                                            <span className="truncate">{variant.packaging}</span>
+                                                            {selectedVariant === variant && <svg className="w-4 h-4 text-gold-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>}
+                                                        </div>
+                                                        <div className={`text-[11px] font-medium ${selectedVariant === variant ? 'text-vanilla-100/60' : 'text-jungle-700/50'}`}>
+                                                            {variant.quantity} — {variant.price / 100}€
+                                                        </div>
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
 
                                     {/* Quantity + Add */}
                                     <div className="mt-8 grid grid-cols-12 gap-4 items-center">
