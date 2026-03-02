@@ -499,6 +499,96 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ACTUALITÉS */}
+        <section id="actualites" className="bg-vanilla-50 text-cacao-900 overflow-hidden">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:py-24">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-gold-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-gold-700 border border-gold-500/20 mb-4">
+                  <SparklesIcon />
+                  Actualités
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl">Dernières nouvelles de la plantation</h2>
+              </div>
+              <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
+                Toute l'actualité
+                <ArrowRightIcon />
+              </Link>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  date: "12 Mars 2024",
+                  title: "La récolte 2024 s'annonce exceptionnelle",
+                  excerpt: "Grâce à des conditions météo idéales à Nosy-Be, nos gousses développent des arômes d'une intensité rare...",
+                  image: "/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
+                },
+                {
+                  date: "05 Mars 2024",
+                  title: "MSV Nosy-Be s'invite dans les cuisines étoilées",
+                  excerpt: "Plusieurs chefs pâtissiers ont choisi notre vanille pour leurs créations de Pâques. Découvrez leurs retours...",
+                  image: "/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
+                },
+                {
+                  date: "28 Février 2024",
+                  title: "Nouveau : Le Poivre Sauvage de Madagascar",
+                  excerpt: "Nous élargissons notre gamme avec une épice rare et puissante, récoltée durablement dans les forêts malgaches...",
+                  image: "/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
+                }
+              ].map((news, i) => (
+                <article key={i} className="group cursor-pointer">
+                  <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 border border-vanilla-200">
+                    <img src={news.image} alt={news.title} className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-jungle-900 uppercase">
+                      {news.date}
+                    </div>
+                  </div>
+                  <h3 className="font-display text-xl mb-3 group-hover:text-gold-600 transition-colors">{news.title}</h3>
+                  <p className="text-sm text-cacao-600 line-clamp-2 mb-4">{news.excerpt}</p>
+                  <span className="text-xs font-bold uppercase tracking-tighter text-gold-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                    Lire la suite <ArrowRightIcon />
+                  </span>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PARTENAIRES */}
+        <section id="partenaires" className="bg-jungle-950 text-vanilla-50 py-16 overflow-hidden border-y border-vanilla-100/5">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="font-display text-3xl sm:text-4xl mb-6">Partenariats & Professionnels</h2>
+                <p className="text-white/60 mb-8 max-w-lg">
+                  Vous êtes chef pâtissier, artisan chocolatier ou distributeur de produits d'exception ?
+                  MSV Nosy-Be accompagne les professionnels exigeants avec des conditions sur-mesure et une qualité constante.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition focus-ring">
+                    Devenir partenaire
+                  </Link>
+                  <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition focus-ring text-white">
+                    Demander un devis
+                  </Link>
+                </div>
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-0 bg-gold-500/5 blur-3xl rounded-full"></div>
+                <div className="relative grid grid-cols-2 gap-4">
+                  {[1, 2, 3, 4].map(idx => (
+                    <div key={idx} className="aspect-video rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 flex items-center justify-center p-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 group">
+                      <span className="text-xs font-bold tracking-[0.2em] uppercase text-vanilla-100/30 group-hover:text-gold-500 transition-colors">Futur Partenaire</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* FINAL CTA */}
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 bg-jungle-900" aria-hidden="true"></div>
