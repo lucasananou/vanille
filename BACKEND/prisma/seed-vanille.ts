@@ -102,6 +102,18 @@ async function main() {
             images: ["/photos produit vanille/Galerie photos qui sommes nous/Triage et calibrage.jpg"],
             description: "Volumes adaptés aux pros. Demande de devis rapide (B2B).",
             tags: ["b2b", "pro", "restauration"],
+        },
+        {
+            id: "poivre-sauvage",
+            title: "Poivre Sauvage de Madagascar",
+            slug: "poivre-sauvage-madagascar",
+            subtitle: "L’Expression Pure du Terroir Malgache",
+            price: 1000,
+            sku: "POIVRE-SAUVAGE",
+            stock: 50,
+            images: ["/photos-produit-vanille/poivre-sauvage-madagascar.jpg"],
+            description: "Issu des terres préservées de Madagascar, notre poivre sauvage est récolté à la main selon un savoir-faire traditionnel transmis de génération en génération. Véritable trésor naturel, il offre des arômes puissants, raffinés et profondément authentiques.",
+            tags: ["poivre", "sauvage", "madagascar"],
         }
     ];
 

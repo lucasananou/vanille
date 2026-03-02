@@ -265,21 +265,34 @@ export default function ProductDetailPage() {
                                     <div className="mt-12">
                                         {activeTab === 'desc' && (
                                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                                                <h2 className="font-display text-3xl text-jungle-950 italic">Une palette aromatique riche et complexe.</h2>
-                                                <p className="mt-6 text-lg text-jungle-800/80 leading-relaxed max-w-2xl">
-                                                    Nos gousses de vanille de Nosy-Be sont réputées pour leur finesse et leur intensité.
-                                                    Chaque lot est affiné durant de longs mois pour développer des notes boisées et cacaotées uniques au monde.
-                                                </p>
-                                                <div className="mt-10 grid sm:grid-cols-2 gap-6">
-                                                    <div className="rounded-3xl bg-vanilla-100/50 border border-vanilla-200 p-6">
-                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-gold-600">Notes de tête</p>
-                                                        <p className="mt-2 text-lg font-display italic text-jungle-900">Vanille pure, Florale</p>
+                                                {product.description ? (
+                                                    <div className="space-y-6">
+                                                        <h2 className="font-display text-3xl text-jungle-950 italic">
+                                                            {product.subtitle}
+                                                        </h2>
+                                                        <div className="text-lg text-jungle-800/80 leading-relaxed max-w-3xl whitespace-pre-line">
+                                                            {product.description}
+                                                        </div>
                                                     </div>
-                                                    <div className="rounded-3xl bg-vanilla-100/50 border border-vanilla-200 p-6">
-                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-gold-600">Notes de cœur</p>
-                                                        <p className="mt-2 text-lg font-display italic text-jungle-900">Bois de santal, Cacao</p>
-                                                    </div>
-                                                </div>
+                                                ) : (
+                                                    <>
+                                                        <h2 className="font-display text-3xl text-jungle-950 italic">Une palette aromatique riche et complexe.</h2>
+                                                        <p className="mt-6 text-lg text-jungle-800/80 leading-relaxed max-w-2xl">
+                                                            Nos gousses de vanille de Nosy-Be sont réputées pour leur finesse et leur intensité.
+                                                            Chaque lot est affiné durant de longs mois pour développer des notes boisées et cacaotées uniques au monde.
+                                                        </p>
+                                                        <div className="mt-10 grid sm:grid-cols-2 gap-6">
+                                                            <div className="rounded-3xl bg-vanilla-100/50 border border-vanilla-200 p-6">
+                                                                <p className="text-[10px] font-bold uppercase tracking-widest text-gold-600">Notes de tête</p>
+                                                                <p className="mt-2 text-lg font-display italic text-jungle-900">Vanille pure, Florale</p>
+                                                            </div>
+                                                            <div className="rounded-3xl bg-vanilla-100/50 border border-vanilla-200 p-6">
+                                                                <p className="text-[10px] font-bold uppercase tracking-widest text-gold-600">Notes de cœur</p>
+                                                                <p className="mt-2 text-lg font-display italic text-jungle-900">Bois de santal, Cacao</p>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
                                         )}
 

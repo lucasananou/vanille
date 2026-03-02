@@ -8,6 +8,7 @@ export interface ProductData {
     id: string;
     title: string;
     subtitle: string;
+    description?: string;
     price_label: string;
     size: string;
     grade: string;
@@ -92,7 +93,13 @@ export const CATALOG: ProductData[] = [
         variants: [
             { packaging: "Sous-vide", quantity: "Assortiment", price: 2900 }
         ],
-        bullets: ["Assortiment de gousses (tailles variées)", "Pour trouver votre profil aromatique", "Conditionnement sous‑vide (conservation)"],
+        bullets: [
+            "17–18 cm : 2 gousses",
+            "16 cm : 2 gousses",
+            "14–15 cm : 10 gousses",
+            "10–13 cm : 10 gousses",
+            "+ Une surprise incluse !"
+        ],
         images: ["/photos-produit-vanille/galerie-photos-qui-sommes-nous/vanilles-traitees.jpg"]
     },
     {
@@ -109,13 +116,18 @@ export const CATALOG: ProductData[] = [
     {
         id: "poivre-sauvage",
         title: "Poivre Sauvage de Madagascar",
-        subtitle: "Récolte sauvage, arôme boisé & frais",
-        price_label: "Sur Devis",
-        size: "En gros",
-        grade: "Premium",
-        packaging: ["Sac pro"],
-        bullets: ["Poivre rare récolté en forêt", "Disponible uniquement en gros pour le moment", "Bientôt disponible au détail"],
-        images: ["/photos-produit-vanille/galerie-photos-qui-sommes-nous/vanilles-traitees.jpg"]
+        subtitle: "L’Expression Pure du Terroir Malgache",
+        description: "Issu des terres préservées de Madagascar, notre poivre sauvage est récolté à la main selon un savoir-faire traditionnel transmis de génération en génération. Véritable trésor naturel, il offre des arômes puissants, raffinés et profondément authentiques.\n\nMadagascar, île d’exception reconnue pour sa biodiversité unique au monde, abrite une flore d’une richesse remarquable. C’est au cœur de cet environnement encore sauvage et préservé que notre poivre puise son caractère incomparable. Cette diversité naturelle exceptionnelle confère aux grains une intensité aromatique rare, reflet fidèle de son terroir d’origine.\n\nChaque grain révèle ainsi la richesse du terroir malgache : des notes boisées intenses, une chaleur subtilement épicée et une longueur en bouche remarquable. Produit rare et recherché, il séduit les passionnés de gastronomie ainsi que les chefs en quête d’excellence et d’authenticité.",
+        price_label: "À partir de 10€",
+        size: "100g / 1kg",
+        grade: "Excellence Sauvage",
+        packaging: ["Sachet Kraft"],
+        variants: [
+            { packaging: "Sachet", quantity: "100g", price: 1000 },
+            { packaging: "Sachet", quantity: "1kg", price: 10000 }
+        ],
+        bullets: ["Récolte artisanale à la main", "Notes boisées & chaleur subtile", "Origine : Madagascar (Nosy-Be)"],
+        images: ["/photos-produit-vanille/poivre-sauvage-madagascar.jpg"]
     }
 ];
 
