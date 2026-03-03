@@ -2,16 +2,19 @@
 
 // Ensure API_URL has protocol, default to http for localhost
 const getApiUrl = () => {
-    // Production Railway URL
     const railwayUrl = 'https://vanille-nosybe-api.up.railway.app';
     const envUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    // If we are on the production domain, force railway URL if env is not set
-    if (typeof window !== 'undefined' && (window.location.hostname.includes('vanille-nosybe.fr') || window.location.hostname.includes('vercel.app'))) {
-        return envUrl || railwayUrl;
+    // Check if we are in environment that should use production API
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        if (hostname.includes('vanille-nosybe.fr') || hostname.includes('vercel.app')) {
+            return envUrl || railwayUrl;
+        }
     }
 
-    return envUrl || railwayUrl || 'http://localhost:3001';
+    // Default for local development
+    return envUrl || 'http://localhost:3001';
 };
 
 const API_URL = getApiUrl();
