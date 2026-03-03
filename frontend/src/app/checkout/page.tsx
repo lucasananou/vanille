@@ -60,6 +60,7 @@ export default function CheckoutPage() {
         city: '',
         country: 'FR',
     });
+    const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal'>('stripe');
 
     const [availableRates, setAvailableRates] = useState<ShippingRate[]>([]);
     const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null);
@@ -102,8 +103,8 @@ export default function CheckoutPage() {
                     console.error('Failed to fetch shipping rates:', err);
                     // Fallback rates if API fails
                     const fallbacks: ShippingRate[] = [
-                        { id: 'poste', name: 'La Poste - Colissimo', price: 690, estimatedDays: '3-5 jours', zoneName: 'Standard' },
-                        { id: 'dhl', name: 'DHL Express', price: 1490, estimatedDays: '1-2 jours', zoneName: 'Express' }
+                        { id: 'lettre', name: 'Lettre Suivie', price: 350, estimatedDays: '3-5 jours', zoneName: 'Standard' },
+                        { id: 'colissimo', name: 'Colissimo Domicile', price: 695, estimatedDays: '2-3 jours', zoneName: 'Standard' }
                     ];
                     setAvailableRates(fallbacks);
                     setSelectedRate(fallbacks[0]);
@@ -305,26 +306,63 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
 
-                            {/* Stripe Section */}
-                            <div className="mt-6">
-                                <div className="flex items-center justify-between gap-3 mb-6 px-6">
-                                    <h2 className="font-display text-2xl text-jungle-950">3. Paiement</h2>
+                            {/* Payment Method Selector */}
+                            <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm mt-6">
+                                <h2 className="font-display text-2xl text-jungle-950 mb-6">3. Mode de paiement</h2>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <button
+                                        onClick={() => setPaymentMethod('stripe')}
+                                        className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all ${paymentMethod === 'stripe' ? 'border-gold-500 bg-gold-50/30' : 'border-cacao-900/5 hover:border-cacao-900/15'}`}
+                                    >
+                                        <div className="flex gap-2 mb-2">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-4 w-auto" />
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" className="h-3 w-auto opacity-50" />
+                                        </div>
+                                        <p className="text-sm font-semibold">Carte bancaire</p>
+                                    </button>
+                                    <button
+                                        onClick={() => setPaymentMethod('paypal')}
+                                        className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all ${paymentMethod === 'paypal' ? 'border-gold-500 bg-gold-50/30' : 'border-cacao-900/5 hover:border-cacao-900/15'}`}
+                                    >
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-4 w-auto mb-2" />
+                                        <p className="text-sm font-semibold">PayPal</p>
+                                    </button>
                                 </div>
-                                {clientSecret ? (
-                                    <Elements stripe={stripePromise} options={{ clientSecret, locale: 'fr', appearance: { theme: 'stripe' } }}>
-                                        <StripeForm
-                                            formData={formData}
-                                            total={Math.round(totalWithShipping * 100)}
-                                            subtotal={total}
-                                            shipping={shipping}
-                                            tax={0}
-                                            shippingRateId={selectedRate?.id}
-                                        />
-                                    </Elements>
+                            </div>
+
+                            {/* Payment Integration */}
+                            <div className="mt-6">
+                                {paymentMethod === 'stripe' ? (
+                                    clientSecret ? (
+                                        <Elements stripe={stripePromise} options={{ clientSecret, locale: 'fr', appearance: { theme: 'stripe' } }}>
+                                            <StripeForm
+                                                formData={formData}
+                                                total={Math.round(totalWithShipping * 100)}
+                                                subtotal={total}
+                                                shipping={shipping}
+                                                tax={0}
+                                                shippingRateId={selectedRate?.id}
+                                            />
+                                        </Elements>
+                                    ) : (
+                                        <div className="rounded-[28px] bg-white/80 p-12 text-center border border-cacao-900/10">
+                                            <div className="w-10 h-10 border-4 border-gold-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                            <p className="text-sm text-cacao-700">Initialisation du paiement sécurisé...</p>
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className="rounded-[28px] bg-white/80 p-12 text-center border border-cacao-900/10">
-                                        <div className="w-10 h-10 border-4 border-gold-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                                        <p className="text-sm text-cacao-700">Initialisation du paiement sécurisé...</p>
+                                    <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-10 shadow-sm text-center">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-8 mx-auto mb-6" />
+                                        <h3 className="text-xl font-display text-jungle-950 mb-4">Payer avec PayPal</h3>
+                                        <p className="text-sm text-cacao-700 mb-8 max-w-sm mx-auto">
+                                            Vous allez être redirigé vers l'interface de PayPal pour finaliser votre commande en toute sécurité.
+                                        </p>
+                                        <button
+                                            className="w-full inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 text-base font-bold text-white bg-[#0070ba] hover:bg-[#005ea6] transition-all shadow-md"
+                                            onClick={() => alert("Redirection vers PayPal...")}
+                                        >
+                                            Continuer vers PayPal
+                                        </button>
                                     </div>
                                 )}
                             </div>

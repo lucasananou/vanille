@@ -4,6 +4,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { CATALOG } from '@/lib/products-data';
+import { BLOG_POSTS } from '@/lib/data/blog-posts';
 
 const SparklesIcon = () => (
   <svg className="w-4 h-4 text-gold-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -500,60 +501,43 @@ export default function HomePage() {
         </section>
 
         {/* ACTUALITÉS */}
-        <section id="actualites" className="bg-vanilla-50 text-cacao-900 overflow-hidden">
-          <div className="mx-auto max-w-7xl px-4 py-16 lg:py-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-gold-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-gold-700 border border-gold-500/20 mb-4">
-                  <SparklesIcon />
-                  Actualités
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl">Dernières nouvelles de la plantation</h2>
-              </div>
-              <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
-                Toute l'actualité
-                <ArrowRightIcon />
-              </Link>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  date: "12 Mars 2024",
-                  title: "La récolte 2024 s'annonce exceptionnelle",
-                  excerpt: "Grâce à des conditions météo idéales à Nosy-Be, nos gousses développent des arômes d'une intensité rare...",
-                  image: "/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
-                },
-                {
-                  date: "05 Mars 2024",
-                  title: "MSV Nosy-Be s'invite dans les cuisines étoilées",
-                  excerpt: "Plusieurs chefs pâtissiers ont choisi notre vanille pour leurs créations de Pâques. Découvrez leurs retours...",
-                  image: "/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
-                },
-                {
-                  date: "28 Février 2024",
-                  title: "Nouveau : Le Poivre Sauvage de Madagascar",
-                  excerpt: "Nous élargissons notre gamme avec une épice rare et puissante, récoltée durablement dans les forêts malgaches...",
-                  image: "/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
-                }
-              ].map((news, i) => (
-                <article key={i} className="group cursor-pointer">
-                  <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 border border-vanilla-200">
-                    <img src={news.image} alt={news.title} className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-jungle-900 uppercase">
-                      {news.date}
-                    </div>
+        {BLOG_POSTS.length > 0 && (
+          <section id="actualites" className="bg-vanilla-50 text-cacao-900 overflow-hidden">
+            <div className="mx-auto max-w-7xl px-4 py-16 lg:py-24">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-gold-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-gold-700 border border-gold-500/20 mb-4">
+                    <SparklesIcon />
+                    Actualités
                   </div>
-                  <h3 className="font-display text-xl mb-3 group-hover:text-gold-600 transition-colors">{news.title}</h3>
-                  <p className="text-sm text-cacao-600 line-clamp-2 mb-4">{news.excerpt}</p>
-                  <span className="text-xs font-bold uppercase tracking-tighter text-gold-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                    Lire la suite <ArrowRightIcon />
-                  </span>
-                </article>
-              ))}
+                  <h2 className="font-display text-3xl sm:text-4xl">Dernières nouvelles de la plantation</h2>
+                </div>
+                <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
+                  Toute l'actualité
+                  <ArrowRightIcon />
+                </Link>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-8">
+                {BLOG_POSTS.slice(0, 3).map((news, i) => (
+                  <Link key={i} href={`/blog/${news.slug}`} className="group cursor-pointer block">
+                    <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 border border-vanilla-200">
+                      <img src={news.coverImage} alt={news.title} className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-jungle-900 uppercase">
+                        {news.date}
+                      </div>
+                    </div>
+                    <h3 className="font-display text-xl mb-3 group-hover:text-gold-600 transition-colors">{news.title}</h3>
+                    <p className="text-sm text-cacao-600 line-clamp-2 mb-4">{news.excerpt}</p>
+                    <span className="text-xs font-bold uppercase tracking-tighter text-gold-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Lire la suite <ArrowRightIcon />
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* PARTENAIRES */}
         <section id="partenaires" className="bg-jungle-950 text-vanilla-50 py-16 overflow-hidden border-y border-vanilla-100/5">

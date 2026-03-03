@@ -6,6 +6,10 @@ const prisma = new PrismaClient();
 async function main() {
     console.log('Seeding shipping zones and rates...');
 
+    // Clear existing rates
+    await prisma.shippingRate.deleteMany();
+    await prisma.shippingZone.deleteMany();
+
     // Create Europe/France Zone
     const franceZone = await prisma.shippingZone.upsert({
         where: { id: 'france-zone' },
@@ -21,19 +25,24 @@ async function main() {
     // Create Rates for France
     const rates = [
         {
-            name: 'La Poste - Colissimo (Standard)',
-            price: 690, // 6.90€
+            name: 'Lettre Suivie (Recommandé pour gousses)',
+            price: 350, // 3.50€
             estimatedDays: '3-5 jours ouvrés',
         },
         {
-            name: 'DHL Express (Rapide)',
-            price: 1490, // 14.90€
-            estimatedDays: '1-2 jours ouvrés',
+            name: 'Colissimo Domicile',
+            price: 695, // 6.95€
+            estimatedDays: '2-3 jours ouvrés',
         },
         {
-            name: 'Livraison Gratuite (Dès 100€)',
+            name: 'Colissimo Point Retrait',
+            price: 490, // 4.90€
+            estimatedDays: '3-4 jours ouvrés',
+        },
+        {
+            name: 'Livraison Gratuite (Dès 75€)',
             price: 0,
-            minOrderValue: 10000,
+            minOrderValue: 7500, // 75.00€
             estimatedDays: '3-5 jours ouvrés',
         }
     ];

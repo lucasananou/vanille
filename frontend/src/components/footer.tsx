@@ -36,6 +36,7 @@ export default function Footer() {
                         <p className="text-sm font-semibold">Liens</p>
                         <ul className="mt-3 space-y-2 text-sm text-vanilla-100/70">
                             <li><Link className="hover:text-vanilla-50 transition-colors" href="/">Boutique</Link></li>
+                            <li><Link className="hover:text-vanilla-50 transition-colors" href="/blog">Blog</Link></li>
                             <li><Link className="hover:text-vanilla-50 transition-colors" href="/about">À propos</Link></li>
                             <li><Link className="hover:text-vanilla-50 transition-colors" href="/contact">Contact</Link></li>
                             <li><Link className="hover:text-vanilla-50 transition-colors" href="/b2b">B2B / Devis</Link></li>
@@ -61,7 +62,7 @@ export default function Footer() {
                 <div className="mt-10 pt-6 border-t border-vanilla-100/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div className="space-y-3">
                         <p className="text-xs text-vanilla-100/60">
-                            © {new Date().getFullYear()} M.S.V-NOSY BE • Design premium. Tous droits réservés.
+                            © {new Date().getFullYear()} M.S.V-NOSY BE • Design premium. Tous droits réservés. — Une création de <a href="https://orylis.fr" target="_blank" rel="noopener noreferrer" className="hover:text-gold-500 transition-colors">Orylis.fr</a>
                         </p>
                         <p className="text-xs text-vanilla-100/60">
                             Vanille de Madagascar — Terroir d'Exception

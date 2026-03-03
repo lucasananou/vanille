@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <main className="pt-8 pb-16">
                 {/* Article Header */}
                 <header className="max-w-3xl mx-auto px-6 text-center mb-12">
-                    <div className="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-widest text-[#a1b8ff] mb-6">
+                    <div className="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-widest text-gold-600 mb-6">
                         <span>{post.category}</span>
                         <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
                         <span>{post.readTime} de lecture</span>
@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </div>
 
                 {/* Content */}
-                <article className="max-w-2xl mx-auto px-6 prose prose-zinc prose-lg hover:prose-a:text-[#a1b8ff] prose-a:transition-colors">
+                <article className="max-w-2xl mx-auto px-6 prose prose-zinc prose-lg hover:prose-a:text-gold-600 prose-a:transition-colors">
                     <div dangerouslySetInnerHTML={{ __html: post.content }} />
                 </article>
 
@@ -139,7 +139,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                             />
                                         </div>
-                                        <h3 className="text-lg font-medium text-zinc-900 group-hover:text-[#a1b8ff] transition-colors mb-2">
+                                        <h3 className="text-lg font-medium text-zinc-900 group-hover:text-gold-600 transition-colors mb-2">
                                             {related.title}
                                         </h3>
                                         <p className="text-sm text-zinc-500 line-clamp-2">

@@ -97,7 +97,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Rechercher une robe, une jupe..."
+                            placeholder="Rechercher une vanille, poivre..."
                             className="w-full text-2xl md:text-4xl font-serif text-zinc-900 placeholder:text-zinc-300 bg-transparent border-transparent focus:border-transparent focus:ring-0 p-0 outline-none shadow-none ring-0 appearance-none"
                         />
                         {isLoading && (
@@ -126,7 +126,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             <div>
                                 <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">Populaire</h3>
                                 <div className="flex flex-wrap gap-3">
-                                    {['Robe longue', 'Jupe plissée', 'Veste noire', 'Nouveautés'].map(term => (
+                                    {['Vanille 18cm', 'Gousses Gourmet', 'Poivre Sauvage', 'Pack Découverte'].map(term => (
                                         <button
                                             key={term}
                                             onClick={() => setQuery(term)}
@@ -139,13 +139,13 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             </div>
 
                             <div>
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">Catégories</h3>
+                                <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">Suggestions</h3>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                     {[
-                                        { name: 'Robes', slug: 'robe-tsniout', href: '/robe-tsniout' },
-                                        { name: 'Jupes', slug: 'jupe-longue-tsniout', href: '/jupe-longue-tsniout' },
-                                        { name: 'Hauts', slug: 'chemisier', href: '/chemisier' },
-                                        { name: 'Accessoires', slug: 'collier', href: '/collier' },
+                                        { name: 'Vanille Prestige', slug: 'vanille-prestige', href: '/shop' },
+                                        { name: 'Vanille Gourmet', slug: 'vanille-gourmet', href: '/shop' },
+                                        { name: 'Poivre Sauvage', slug: 'poivre-sauvage', href: '/produit/poivre-sauvage' },
+                                        { name: 'Le Blog', slug: 'blog', href: '/blog' },
                                     ].map((cat) => (
                                         <CategoryTile key={cat.slug} category={cat} onClose={onClose} />
                                     ))}

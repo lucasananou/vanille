@@ -31,24 +31,24 @@ export default function NotFound() {
                         </Link>
 
                         <Link
-                            href="/new"
+                            href="/shop"
                             className="w-full sm:w-auto px-8 py-3 bg-white border border-zinc-200 text-zinc-900 font-medium text-sm transition-all hover:border-zinc-900"
                         >
-                            Voir les nouveautés
+                            Boutique
                         </Link>
                     </div>
 
                     <div className="mt-16 pt-16 border-t border-zinc-100 w-full">
                         <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-900 mb-8">
-                            Nos catégories populaires
+                            Explorer notre sélection
                         </h2>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {[
-                                { name: 'Robes', href: '/robe-tsniout' },
-                                { name: 'Jupes', href: '/jupe-longue-tsniout' },
-                                { name: 'Hauts', href: '/chemisier' },
-                                { name: 'Accessoires', href: '/collier' },
+                                { name: 'Vanille Prestige', href: '/shop' },
+                                { name: 'Vanille Gourmet', href: '/shop' },
+                                { name: 'Poivre Sauvage', href: '/produit/poivre-sauvage' },
+                                { name: 'Le Blog', href: '/blog' },
                             ].map((cat) => (
                                 <Link
                                     key={cat.href}

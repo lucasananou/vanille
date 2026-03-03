@@ -1,8 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tsniout-shop.fr';
-
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vanille-nosybe.fr';
     return {
         rules: {
             userAgent: '*',

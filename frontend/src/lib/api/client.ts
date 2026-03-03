@@ -3,11 +3,11 @@
 // Ensure API_URL has protocol, default to http for localhost
 const getApiUrl = () => {
     // Production Railway URL
-    const railwayUrl = 'https://tsniout-production.up.railway.app';
+    const railwayUrl = 'https://vanille-nosybe-api.up.railway.app';
     const envUrl = process.env.NEXT_PUBLIC_API_URL;
 
     // If we are on the production domain, force railway URL if env is not set
-    if (typeof window !== 'undefined' && (window.location.hostname.includes('tsniout-shop.fr') || window.location.hostname.includes('vercel.app'))) {
+    if (typeof window !== 'undefined' && (window.location.hostname.includes('vanille-nosybe.fr') || window.location.hostname.includes('vercel.app'))) {
         return envUrl || railwayUrl;
     }
 

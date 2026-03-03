@@ -11,7 +11,7 @@ export default function PolitiqueConfidentialite() {
 
                 <div className="prose prose-zinc max-w-none">
                     <p>
-                        Chez <strong>M.S.V-NOSY BE Shop</strong>, nous accordons une grande importance à la confidentialité de vos données. Cette politique décrit comment nous collectons, utilisons et protégeons vos informations personnelles.
+                        Chez <strong>M.S.V-NOSY BE</strong>, nous accordons une grande importance à la confidentialité de vos données. Cette politique décrit comment nous collectons, utilisons et protégeons vos informations personnelles.
                     </p>
 
                     <h2>1. Collecte des données</h2>
@@ -44,7 +44,7 @@ export default function PolitiqueConfidentialite() {
 
                     <h2>4. Vos droits</h2>
                     <p>
-                        Vous disposez d'un droit d'accès, de modification et de suppression de vos données. Pour l'exercer, contactez-nous à <a href="mailto:contact@tsniout-shop.fr">contact@tsniout-shop.fr</a>.
+                        Vous disposez d'un droit d'accès, de modification et de suppression de vos données. Pour l'exercer, contactez-nous à <a href="mailto:contact@vanille-nosybe.fr">contact@vanille-nosybe.fr</a>.
                     </p>
                 </div>
             </main>

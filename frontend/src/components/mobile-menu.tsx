@@ -41,13 +41,13 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     }, [isOpen, onClose]);
 
     const links = [
-        { href: '/jupe-longue-tsniout', label: 'Jupe M.S.V-NOSY BE' },
-        { href: '/robe-tsniout', label: 'Robe M.S.V-NOSY BE' },
-        { href: '/veste-tsniout', label: 'Veste M.S.V-NOSY BE' },
-        { href: '/pull-chemisier', label: 'Pull' },
-        { href: '/chemisier', label: 'Chemisier' },
-        { href: '/collier', label: 'Bijoux' },
+        { href: '/', label: 'Accueil' },
+        { href: '/shop', label: 'Boutique' },
+        { href: '/produit/tk-noir-17-18', label: 'Vanille Prestige (18cm)' },
+        { href: '/produit/tk-noir-14-15', label: 'Vanille Gourmet' },
+        { href: '/produit/poivre-sauvage', label: 'Poivre Sauvage' },
         { href: '/blog', label: 'Blog' },
+        { href: '/about', label: 'Notre Histoire' },
     ];
 
     return (

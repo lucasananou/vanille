@@ -6,22 +6,22 @@ import Image from 'next/image';
 export default function CategoryGrid() {
     const categories = [
         {
-            title: "Les Robes",
-            href: "/robe-tsniout",
-            image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=2583&auto=format&fit=crop",
-            description: "Élégance & pudeur au quotidien"
+            title: "Vanille Gourmet",
+            href: "/shop",
+            image: "/photos-produit-vanille/photos-vanille-de-14-a-15-cm/img_8394.jpg",
+            description: "Gousses souples et parfumées"
         },
         {
-            title: "Les Jupes",
-            href: "/jupe-longue-tsniout",
-            image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80&w=2664&auto=format&fit=crop",
-            description: "Coupes fluides et intemporelles"
+            title: "Vanille Prestige",
+            href: "/shop",
+            image: "/photos-produit-vanille/photos-vanille-18-et-17-cm/img_8403.jpg",
+            description: "Le format premium de 18cm"
         },
         {
-            title: "Nouveautés",
-            href: "/new",
-            image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2670&auto=format&fit=crop",
-            description: "Les dernières pièces de l'atelier"
+            title: "Poivre Sauvage",
+            href: "/produit/poivre-sauvage",
+            image: "/photos-produit-vanille/poivre-sauvage-madagascar.jpg",
+            description: "L'or noir de Madagascar"
         }
     ];
 

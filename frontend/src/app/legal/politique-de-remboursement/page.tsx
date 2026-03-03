@@ -15,12 +15,12 @@ export default function PolitiqueRemboursement() {
                         Nous avons une politique de retour de <strong>14 jours</strong>. Vous avez 14 jours après la réception de votre article pour demander un retour.
                     </p>
                     <p>
-                        Pour être éligible à un retour, votre article doit être dans le même état que celui dans lequel vous l'avez reçu, non porté et non utilisé, avec les étiquettes, et dans son emballage d'origine.
+                        Pour être éligible à un retour, votre article doit être dans le même état que celui dans lequel vous l'avez reçu, scellé et non utilisé, dans son emballage d'origine intact.
                     </p>
 
                     <h2>2. Comment effectuer un retour ?</h2>
                     <p>
-                        Pour lancer un retour, vous pouvez nous contacter à <a href="mailto:contact@tsniout-shop.fr">contact@tsniout-shop.fr</a>. Si votre retour est accepté, nous vous enverrons les instructions sur comment et où envoyer votre colis. Les articles renvoyés sans demande préalable ne seront pas acceptés.
+                        Pour lancer un retour, vous pouvez nous contacter à <a href="mailto:contact@vanille-nosybe.fr">contact@vanille-nosybe.fr</a>. Si votre retour est accepté, nous vous enverrons les instructions sur comment et où envoyer votre colis. Les articles renvoyés sans demande préalable ne seront pas acceptés.
                     </p>
 
                     <h2>3. Remboursements</h2>

@@ -61,6 +61,7 @@ export default function Header() {
                 <nav className="hidden md:flex items-center gap-8">
                     <Link href="/" className="text-sm font-semibold hover:text-gold-500 transition-colors">Accueil</Link>
                     <Link href="/shop" className="text-sm font-semibold hover:text-gold-500 transition-colors">Boutique</Link>
+                    <Link href="/blog" className="text-sm font-semibold hover:text-gold-500 transition-colors">Blog</Link>
                     <Link href="/about" className="text-sm font-semibold hover:text-gold-500 transition-colors">À propos</Link>
                     <Link href="/b2b" className="text-sm font-semibold hover:text-gold-500 transition-colors">Professionnels</Link>
                     <Link href="/contact" className="text-sm font-semibold hover:text-gold-500 transition-colors">Contact</Link>

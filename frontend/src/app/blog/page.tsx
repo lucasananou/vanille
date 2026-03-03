@@ -10,17 +10,17 @@ export default function BlogPage() {
             <Header />
             <main className="flex-grow mx-auto max-w-7xl w-full px-6 py-12">
                 <div className="text-center mb-16">
-                    <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-[#a1b8ff]">Blog</span>
-                    <h1 className="text-4xl font-serif text-zinc-900">Inspirations & Conseils</h1>
+                    <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-gold-600">Terroir d'Excellence</span>
+                    <h1 className="text-4xl font-serif text-zinc-900">Le Mag de la Vanille</h1>
                     <p className="mt-4 text-zinc-500 max-w-2xl mx-auto">
-                        Découvrez nos articles sur la mode tsniout, nos conseils de style et les coulisses de notre atelier.
+                        Découvrez les secrets de la vanille de Madagascar, nos conseils pour sublimer vos recettes et l'histoire de notre plantation à Nosy-Be.
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8">
                     {BLOG_POSTS.map((post) => (
                         <article key={post.slug} className="group flex flex-col">
-                            <Link href={`/${post.slug}`} className="relative h-64 w-full overflow-hidden rounded-lg bg-zinc-100 mb-6">
+                            <Link href={`/blog/${post.slug}`} className="relative h-64 w-full overflow-hidden rounded-lg bg-zinc-100 mb-6">
                                 <Image
                                     src={post.coverImage}
                                     alt={post.title}
@@ -35,15 +35,15 @@ export default function BlogPage() {
                                     <span>•</span>
                                     <span>{post.readTime} de lecture</span>
                                 </div>
-                                <h2 className="text-xl font-medium text-zinc-900 mb-3 group-hover:text-[#a1b8ff] transition-colors">
-                                    <Link href={`/${post.slug}`}>
+                                <h2 className="text-xl font-medium text-zinc-900 mb-3 group-hover:text-gold-600 transition-colors">
+                                    <Link href={`/blog/${post.slug}`}>
                                         {post.title}
                                     </Link>
                                 </h2>
                                 <p className="text-zinc-600 font-light mb-4 line-clamp-3">
                                     {post.excerpt}
                                 </p>
-                                <Link href={`/${post.slug}`} className="mt-auto inline-flex items-center text-sm font-medium text-[#a1b8ff] hover:text-[#8da0ef]">
+                                <Link href={`/blog/${post.slug}`} className="mt-auto inline-flex items-center text-sm font-medium text-gold-600 hover:text-gold-700">
                                     Lire l'article →
                                 </Link>
                             </div>

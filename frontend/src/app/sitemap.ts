@@ -3,7 +3,7 @@ import { productsApi } from '@/lib/api/products';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tsniout-shop.fr';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vanille-nosybe.fr';
 
     // Static pages
     const staticPages = [
@@ -42,11 +42,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Given the context, we can hardcode the main ones or try to fetch.
     // Let's stick to the known main navigation collections for now + dynamic if we had a collection API exposed in lib.
     const collections = [
-        'robe-tsniout',
-        'jupe-longue-tsniout',
-        'chemisiers-tsniout',
-        'vestes-tsniout',
-        'pulls-tsniout',
+        'vanille-tk-noir',
+        'poivre-sauvage',
+        'pack-decouverte',
+        'accessoires-cuisine',
         'bijoux-accessoires'
     ];
 

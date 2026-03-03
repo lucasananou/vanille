@@ -12,13 +12,13 @@ export default function MentionsLegales() {
                 <div className="prose prose-zinc max-w-none">
                     <h2>1. Éditeur du site</h2>
                     <p>
-                        Le site <strong>M.S.V-NOSY BE Shop</strong> (ci-après dénommé « le Site ») est édité par :<br />
-                        <strong>M.S.V-NOSY BE Shop LTD</strong><br />
-                        Adresse : 123 Rue de la Modestie, 75000 Paris, France<br />
-                        Email : <a href="mailto:contact@tsniout-shop.fr">contact@tsniout-shop.fr</a><br />
-                        Téléphone : +33 1 23 45 67 89<br />
-                        Numéro SIRET : 123 456 789 00012<br />
-                        Directeur de la publication : Sarah Cohen
+                        Le site <strong>M.S.V-NOSY BE</strong> (ci-après dénommé « le Site ») est édité par :<br />
+                        <strong>MORIDY SOANJARA VANILLE NOSY-BE (M.S.V – NOSY BE)</strong><br />
+                        Siège social : Lot n°109B 0163 à Befitina, Hell-Ville, Nosy-Be, Madagascar<br />
+                        Email : <a href="mailto:contact@vanille-nosybe.fr">contact@vanille-nosybe.fr</a><br />
+                        Tél : +261 32 98 595 50<br />
+                        RCS Nosy-Be 2023 B 00054<br />
+                        Directeur de la publication : ABOU MORIDY
                     </p>
 
                     <h2>2. Hébergement</h2>
