@@ -95,19 +95,28 @@ export default function CheckoutPage() {
                 setIsLoadingRates(true);
                 try {
                     const res = await shippingApi.calculateAvailableRates(formData.country, total);
-                    setAvailableRates(res.availableRates);
-                    if (res.availableRates.length > 0 && !selectedRate) {
-                        setSelectedRate(res.availableRates[0]);
+
+                    if (res.availableRates && res.availableRates.length > 0) {
+                        setAvailableRates(res.availableRates);
+                        if (!selectedRate) setSelectedRate(res.availableRates[0]);
+                    } else {
+                        throw new Error('No rates returned');
                     }
                 } catch (err) {
-                    console.error('Failed to fetch shipping rates:', err);
-                    // Fallback rates if API fails
+                    console.error('Shipping rates fetch failed or empty, using fallbacks:', err);
                     const fallbacks: ShippingRate[] = [
-                        { id: 'lettre', name: 'Lettre Suivie', price: 350, estimatedDays: '3-5 jours', zoneName: 'Standard' },
-                        { id: 'colissimo', name: 'Colissimo Domicile', price: 695, estimatedDays: '2-3 jours', zoneName: 'Standard' }
+                        { id: 'lettre', name: 'Lettre Suivie (Recommandé)', price: 350, estimatedDays: '3-5 jours', zoneName: 'Standard' },
+                        { id: 'colissimo', name: 'Colissimo Domicile', price: 695, estimatedDays: '2-3 jours', zoneName: 'Standard' },
+                        { id: 'gratuit', name: 'Livraison Gratuite', price: 0, estimatedDays: '3-5 jours', zoneName: 'Standard' }
                     ];
-                    setAvailableRates(fallbacks);
-                    setSelectedRate(fallbacks[0]);
+
+                    // Logic for free shipping fallback on frontend
+                    const applicableFallbacks = total >= 7500
+                        ? [fallbacks[2]]
+                        : [fallbacks[0], fallbacks[1]];
+
+                    setAvailableRates(applicableFallbacks);
+                    setSelectedRate(applicableFallbacks[0]);
                 } finally {
                     setIsLoadingRates(false);
                 }
