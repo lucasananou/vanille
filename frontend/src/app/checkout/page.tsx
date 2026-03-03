@@ -61,6 +61,8 @@ export default function CheckoutPage() {
         country: 'FR',
     });
     const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal'>('stripe');
+    const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
 
     const [availableRates, setAvailableRates] = useState<ShippingRate[]>([]);
     const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null);
@@ -125,8 +127,39 @@ export default function CheckoutPage() {
         fetchRates();
     }, [formData.country, total]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({ ...prev, [id]: value }));
+
+        // Address search for France
+        if (id === 'address' && value.length > 5 && formData.country === 'FR') {
+            searchAddress(value);
+        } else if (id === 'address') {
+            setAddressSuggestions([]);
+        }
+    };
+
+    const searchAddress = async (query: string) => {
+        try {
+            const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=5`);
+            const data = await res.json();
+            setAddressSuggestions(data.features || []);
+            setShowSuggestions(true);
+        } catch (err) {
+            console.error('Address search failed', err);
+        }
+    };
+
+    const selectAddress = (feature: any) => {
+        const { name, postcode, city } = feature.properties;
+        setFormData(prev => ({
+            ...prev,
+            address: name,
+            zip: postcode,
+            city: city
+        }));
+        setAddressSuggestions([]);
+        setShowSuggestions(false);
     };
 
     return (
@@ -217,6 +250,7 @@ export default function CheckoutPage() {
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="email" type="email" placeholder="vous@exemple.com" required
                                             value={formData.email} onChange={handleInputChange}
+                                            autoComplete="email"
                                         />
                                     </div>
                                     <div>
@@ -225,6 +259,7 @@ export default function CheckoutPage() {
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="phone" type="tel" placeholder="+33…"
                                             value={formData.phone} onChange={handleInputChange}
+                                            autoComplete="tel"
                                         />
                                     </div>
                                 </div>
@@ -236,6 +271,7 @@ export default function CheckoutPage() {
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="firstName" type="text" placeholder="Jan" required
                                             value={formData.firstName} onChange={handleInputChange}
+                                            autoComplete="given-name"
                                         />
                                     </div>
                                     <div>
@@ -244,15 +280,34 @@ export default function CheckoutPage() {
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="lastName" type="text" placeholder="Dupont" required
                                             value={formData.lastName} onChange={handleInputChange}
+                                            autoComplete="family-name"
                                         />
                                     </div>
-                                    <div className="sm:col-span-2">
+                                    <div className="sm:col-span-2 relative">
                                         <label className="text-xs font-semibold text-cacao-700" htmlFor="address">Adresse</label>
                                         <input
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="address" type="text" placeholder="123 rue de la Vanille" required
                                             value={formData.address} onChange={handleInputChange}
+                                            autoComplete="address-line1"
+                                            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                            onFocus={() => addressSuggestions.length > 0 && setShowSuggestions(true)}
                                         />
+                                        {showSuggestions && addressSuggestions.length > 0 && (
+                                            <div className="absolute z-50 w-full mt-1 bg-white border border-cacao-900/10 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2">
+                                                {addressSuggestions.map((suggestion, i) => (
+                                                    <button
+                                                        key={i}
+                                                        type="button"
+                                                        onClick={() => selectAddress(suggestion)}
+                                                        className="w-full text-left px-4 py-3 text-sm hover:bg-vanilla-50 transition-colors border-b border-cacao-900/5 last:border-0"
+                                                    >
+                                                        <p className="font-semibold text-jungle-950">{suggestion.properties.label}</p>
+                                                        <p className="text-xs text-cacao-600">{suggestion.properties.context}</p>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                     <div>
                                         <label className="text-xs font-semibold text-cacao-700" htmlFor="zip">Code postal</label>
@@ -260,6 +315,7 @@ export default function CheckoutPage() {
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="zip" type="text" placeholder="75000" required
                                             value={formData.zip} onChange={handleInputChange}
+                                            autoComplete="postal-code"
                                         />
                                     </div>
                                     <div>
@@ -268,7 +324,24 @@ export default function CheckoutPage() {
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="city" type="text" placeholder="Paris" required
                                             value={formData.city} onChange={handleInputChange}
+                                            autoComplete="address-level2"
                                         />
+                                    </div>
+                                    <div className="sm:col-span-2">
+                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="country">Pays</label>
+                                        <select
+                                            className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all appearance-none"
+                                            id="country" required
+                                            value={formData.country} onChange={handleInputChange}
+                                            autoComplete="country-name"
+                                        >
+                                            <option value="FR">France</option>
+                                            <option value="BE">Belgique</option>
+                                            <option value="CH">Suisse</option>
+                                            <option value="LU">Luxembourg</option>
+                                            <option value="RE">Réunion (974)</option>
+                                            <option value="MG">Madagascar</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
