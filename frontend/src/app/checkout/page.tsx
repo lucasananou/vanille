@@ -283,31 +283,33 @@ export default function CheckoutPage() {
                                             autoComplete="family-name"
                                         />
                                     </div>
-                                    <div className="sm:col-span-2 relative">
+                                    <div className="sm:col-span-2 relative z-30">
                                         <label className="text-xs font-semibold text-cacao-700" htmlFor="address">Adresse</label>
-                                        <input
-                                            className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
-                                            id="address" type="text" placeholder="123 rue de la Vanille" required
-                                            value={formData.address} onChange={handleInputChange}
-                                            autoComplete="address-line1"
-                                            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                                            onFocus={() => addressSuggestions.length > 0 && setShowSuggestions(true)}
-                                        />
-                                        {showSuggestions && addressSuggestions.length > 0 && (
-                                            <div className="absolute z-50 w-full mt-1 bg-white border border-cacao-900/10 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2">
-                                                {addressSuggestions.map((suggestion, i) => (
-                                                    <button
-                                                        key={i}
-                                                        type="button"
-                                                        onClick={() => selectAddress(suggestion)}
-                                                        className="w-full text-left px-4 py-3 text-sm hover:bg-vanilla-50 transition-colors border-b border-cacao-900/5 last:border-0"
-                                                    >
-                                                        <p className="font-semibold text-jungle-950">{suggestion.properties.label}</p>
-                                                        <p className="text-xs text-cacao-600">{suggestion.properties.context}</p>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
+                                        <div className="relative">
+                                            <input
+                                                className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
+                                                id="address" type="text" placeholder="123 rue de la Vanille" required
+                                                value={formData.address} onChange={handleInputChange}
+                                                autoComplete="address-line1"
+                                                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                                onFocus={() => addressSuggestions.length > 0 && setShowSuggestions(true)}
+                                            />
+                                            {showSuggestions && addressSuggestions.length > 0 && (
+                                                <div className="absolute z-[100] w-full mt-1 bg-white border border-cacao-900/10 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 ring-1 ring-black/5">
+                                                    {addressSuggestions.map((suggestion, i) => (
+                                                        <button
+                                                            key={i}
+                                                            type="button"
+                                                            onClick={() => selectAddress(suggestion)}
+                                                            className="w-full text-left px-4 py-3 text-sm hover:bg-gold-50 transition-colors border-b border-cacao-900/5 last:border-0"
+                                                        >
+                                                            <p className="font-semibold text-jungle-950">{suggestion.properties.label}</p>
+                                                            <p className="text-xs text-cacao-600">{suggestion.properties.context}</p>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <div>
                                         <label className="text-xs font-semibold text-cacao-700" htmlFor="zip">Code postal</label>
