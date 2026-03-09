@@ -11,7 +11,12 @@ async function bootstrap() {
   // Enable CORS
   const corsOrigins = configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
   // Support multiple origins separated by comma
-  const allowedOrigins = corsOrigins.split(',').map(origin => origin.trim());
+  const configuredOrigins = corsOrigins
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+  const allowedOrigins = new Set(configuredOrigins);
+  const wildcardOrigins = configuredOrigins.filter(origin => origin.startsWith('*.'));
 
   // Add production domains if not present
   const productionDomains = [
@@ -23,21 +28,49 @@ async function bootstrap() {
     'https://vanille-nosybe.vercel.app'
   ];
 
-  productionDomains.forEach(domain => {
-    if (!allowedOrigins.includes(domain)) {
-      allowedOrigins.push(domain);
+  productionDomains.forEach(domain => allowedOrigins.add(domain));
+
+  const matchesWildcard = (origin: string) => {
+    try {
+      const { hostname } = new URL(origin);
+      return wildcardOrigins.some(pattern => hostname.endsWith(pattern.slice(2)));
+    } catch {
+      return false;
     }
-  });
+  };
+
+  const isAllowedOrigin = (origin: string) => {
+    if (allowedOrigins.has('*') || allowedOrigins.has(origin)) {
+      return true;
+    }
+
+    if (matchesWildcard(origin)) {
+      return true;
+    }
+
+    try {
+      const { hostname } = new URL(origin);
+      // Allow Vercel preview/prod domains by default
+      if (hostname.endsWith('.vercel.app')) {
+        return true;
+      }
+    } catch {
+      return false;
+    }
+
+    return false;
+  };
 
   app.enableCors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        // Return "not allowed" without throwing noisy server errors
+        callback(null, false);
       }
     },
     credentials: true,
