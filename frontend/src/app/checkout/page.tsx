@@ -1,7 +1,7 @@
 'use client';
 
 import { useCart } from '@/lib/cart-context';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/footer';
 import { loadStripe } from '@stripe/stripe-js';
@@ -9,9 +9,12 @@ import { Elements } from '@stripe/react-stripe-js';
 import { paymentsApi } from '@/lib/api/payments';
 import { shippingApi, ShippingRate } from '@/lib/api/shipping';
 import StripeForm from '@/components/checkout/stripe-form';
+import PayPalButton from '@/components/checkout/paypal-button';
+import { useRouter } from 'next/navigation';
 
 // Initialize Stripe outside of component
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
+const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
 // --- Icons ---
 const VanillaIcon = () => (
@@ -47,7 +50,9 @@ const ShieldIcon = () => (
 );
 
 export default function CheckoutPage() {
-    const { items, total } = useCart();
+    const SHIPPING_LAUNCH_DISCOUNT_RATE = 0.5;
+    const router = useRouter();
+    const { items, total, clearCart } = useCart();
     const [clientSecret, setClientSecret] = useState<string | null>(null);
     const [isLoadingSecret, setIsLoadingSecret] = useState(false);
     const [formData, setFormData] = useState({
@@ -61,6 +66,9 @@ export default function CheckoutPage() {
         country: 'FR',
     });
     const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal'>('stripe');
+    const [paymentError, setPaymentError] = useState<string | null>(null);
+    const [paypalError, setPaypalError] = useState<string | null>(null);
+    const [isFinalizingPayPal, setIsFinalizingPayPal] = useState(false);
     const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -70,26 +78,92 @@ export default function CheckoutPage() {
 
     const fmt = useMemo(() => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }), []);
     const subtotal = total / 100;
-    const shipping = selectedRate ? selectedRate.price / 100 : 0;
+    const originalShipping = selectedRate ? selectedRate.price / 100 : 0;
+    const shippingDiscount = originalShipping * SHIPPING_LAUNCH_DISCOUNT_RATE;
+    const shipping = Math.max(0, originalShipping - shippingDiscount);
     const totalWithShipping = subtotal + shipping;
+    const isCheckoutDataValid = Boolean(
+        formData.email &&
+        formData.firstName &&
+        formData.lastName &&
+        formData.address &&
+        formData.zip &&
+        formData.city &&
+        items.length > 0
+    );
 
     useEffect(() => {
         const getSecret = async () => {
+            if (paymentMethod !== 'stripe') return;
+            if (!stripePromise) {
+                setPaymentError("Paiement Stripe indisponible: clé publique manquante (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).");
+                return;
+            }
             if (totalWithShipping > 0 && !isLoadingSecret) {
                 setIsLoadingSecret(true);
+                setPaymentError(null);
                 try {
                     // Call backend with total in cents
                     const res = await paymentsApi.createPaymentIntent(Math.round(totalWithShipping * 100));
                     setClientSecret(res.clientSecret);
                 } catch (err) {
                     console.error('Failed to get client secret:', err);
+                    setPaymentError("Impossible d'initialiser le paiement Stripe.");
                 } finally {
                     setIsLoadingSecret(false);
                 }
             }
         };
         getSecret();
-    }, [totalWithShipping]);
+    }, [totalWithShipping, paymentMethod]);
+
+    useEffect(() => {
+        if (paymentMethod !== 'stripe') {
+            setClientSecret(null);
+            setPaymentError(null);
+        }
+    }, [paymentMethod]);
+
+    const buildOrderPayload = useCallback(() => ({
+        email: formData.email,
+        shippingAddress: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            address1: formData.address,
+            city: formData.city,
+            postalCode: formData.zip,
+            country: formData.country || 'FR',
+            phone: formData.phone,
+        },
+        items: items.map((item) => ({
+            productId: item.productId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            price: item.price,
+        })),
+        shippingCost: Math.round(shipping * 100),
+        tax: 0,
+        shippingRateId: selectedRate?.id,
+    }), [formData, items, shipping, selectedRate]);
+
+    const handlePayPalApproved = useCallback(async (paypalOrderId: string) => {
+        setIsFinalizingPayPal(true);
+        setPaypalError(null);
+        try {
+            const result = await paymentsApi.finalizePayPalOrder(paypalOrderId, buildOrderPayload());
+            clearCart();
+            router.push(`/order-confirmation/${result.orderId}`);
+        } catch (error: any) {
+            console.error('PayPal finalization failed:', error);
+            setPaypalError(error?.message || 'Le paiement PayPal a échoué.');
+        } finally {
+            setIsFinalizingPayPal(false);
+        }
+    }, [buildOrderPayload, router, clearCart]);
+
+    const handlePayPalError = useCallback((message: string) => {
+        setPaypalError(message);
+    }, []);
 
     useEffect(() => {
         const fetchRates = async () => {
@@ -208,6 +282,9 @@ export default function CheckoutPage() {
                                     <SealIcon />
                                     <span className="text-sm font-semibold">Finalisation</span>
                                     <span className="text-sm text-vanilla-100/70">• 2 minutes chrono</span>
+                                </div>
+                                <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-gold-500/20 border border-gold-500/50 px-4 py-2 text-gold-100">
+                                    <span className="text-sm font-semibold">Offre lancement: -50% sur la livraison</span>
                                 </div>
                                 <h1 className="mt-4 font-display text-3xl sm:text-4xl text-vanilla-50 leading-[1.06]">
                                     Checkout
@@ -374,7 +451,16 @@ export default function CheckoutPage() {
                                                         <p className="text-xs text-cacao-600">{rate.estimatedDays}</p>
                                                     </div>
                                                 </div>
-                                                <p className="font-bold text-cacao-900">{rate.price === 0 ? 'Gratuit' : fmt.format(rate.price / 100)}</p>
+                                                <div className="text-right">
+                                                    {rate.price === 0 ? (
+                                                        <p className="font-bold text-cacao-900">Gratuit</p>
+                                                    ) : (
+                                                        <>
+                                                            <p className="text-xs text-cacao-500 line-through">{fmt.format(rate.price / 100)}</p>
+                                                            <p className="font-bold text-cacao-900">{fmt.format((rate.price / 100) * (1 - SHIPPING_LAUNCH_DISCOUNT_RATE))}</p>
+                                                        </>
+                                                    )}
+                                                </div>
                                                 <input
                                                     type="radio"
                                                     name="shippingRate"
@@ -417,8 +503,16 @@ export default function CheckoutPage() {
                             {/* Payment Integration */}
                             <div className="mt-6">
                                 {paymentMethod === 'stripe' ? (
-                                    clientSecret ? (
-                                        <Elements stripe={stripePromise} options={{ clientSecret, locale: 'fr', appearance: { theme: 'stripe' } }}>
+                                    paymentError ? (
+                                        <div className="rounded-[28px] bg-red-50 border border-red-200 p-6 text-center">
+                                            <p className="text-sm text-red-700">{paymentError}</p>
+                                        </div>
+                                    ) : (clientSecret && stripePromise) ? (
+                                        <Elements
+                                            key={clientSecret}
+                                            stripe={stripePromise}
+                                            options={{ clientSecret, locale: 'fr', appearance: { theme: 'stripe' } }}
+                                        >
                                             <StripeForm
                                                 formData={formData}
                                                 total={Math.round(totalWithShipping * 100)}
@@ -438,15 +532,22 @@ export default function CheckoutPage() {
                                     <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-10 shadow-sm text-center">
                                         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-8 mx-auto mb-6" />
                                         <h3 className="text-xl font-display text-jungle-950 mb-4">Payer avec PayPal</h3>
-                                        <p className="text-sm text-cacao-700 mb-8 max-w-sm mx-auto">
-                                            Vous allez être redirigé vers l'interface de PayPal pour finaliser votre commande en toute sécurité.
+                                        <p className="text-sm text-cacao-700 mb-6 max-w-sm mx-auto">
+                                            Vous allez être redirigé vers PayPal pour autoriser le paiement, puis revenir automatiquement.
                                         </p>
-                                        <button
-                                            className="w-full inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 text-base font-bold text-white bg-[#0070ba] hover:bg-[#005ea6] transition-all shadow-md"
-                                            onClick={() => alert("Redirection vers PayPal...")}
-                                        >
-                                            Continuer vers PayPal
-                                        </button>
+                                        <PayPalButton
+                                            amountInCents={Math.round(totalWithShipping * 100)}
+                                            currency="EUR"
+                                            disabled={!isCheckoutDataValid || isFinalizingPayPal}
+                                            onApproved={handlePayPalApproved}
+                                            onError={handlePayPalError}
+                                        />
+                                        {isFinalizingPayPal && (
+                                            <p className="text-sm text-cacao-700 mt-4">Validation du paiement en cours...</p>
+                                        )}
+                                        {paypalError && (
+                                            <p className="text-sm text-red-600 mt-4">{paypalError}</p>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -493,6 +594,12 @@ export default function CheckoutPage() {
                                                         {shipping === 0 ? 'Gratuite' : fmt.format(shipping)}
                                                     </span>
                                                 </div>
+                                                {originalShipping > 0 && (
+                                                    <div className="flex justify-between text-xs -mt-1">
+                                                        <span className="text-cacao-500">Remise lancement livraison</span>
+                                                        <span className="font-semibold text-gold-700">- {fmt.format(shippingDiscount)}</span>
+                                                    </div>
+                                                )}
                                                 <div className="flex justify-between text-lg font-display pt-3 border-t border-cacao-900/10">
                                                     <span className="text-jungle-950">Total</span>
                                                     <span className="text-jungle-950">{fmt.format(totalWithShipping)}</span>

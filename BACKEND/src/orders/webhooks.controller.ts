@@ -60,8 +60,12 @@ export class WebhooksController {
         switch (event.type) {
             case 'payment_intent.succeeded':
                 const paymentIntent = event.data.object as Stripe.PaymentIntent;
-                // TODO: Implement payment success handling
                 console.log('✅ Payment succeeded:', paymentIntent.id);
+                if (paymentIntent.metadata?.orderId) {
+                    await this.ordersService.markOrderAsPaid(paymentIntent.metadata.orderId);
+                } else {
+                    console.warn('payment_intent.succeeded without orderId metadata:', paymentIntent.id);
+                }
                 break;
 
             case 'payment_intent.payment_failed':

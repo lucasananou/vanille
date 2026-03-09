@@ -3,6 +3,7 @@
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useState } from 'react';
+import { communicationsApi } from '@/lib/api/communications';
 
 const ArrowRightIcon = () => (
     <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -20,11 +21,27 @@ const BuildingIcon = () => (
 
 export default function B2BPage() {
     const [status, setStatus] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        company: '',
+        email: '',
+        need: '',
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setStatus('Demande de devis envoyée. Notre équipe commerciale vous recontactera.');
-        setTimeout(() => setStatus(null), 3000);
+        setIsSubmitting(true);
+
+        try {
+            await communicationsApi.sendB2BLead(formData);
+            setStatus('Demande de devis envoyée. Notre équipe commerciale vous recontactera.');
+            setFormData({ company: '', email: '', need: '' });
+        } catch (error: any) {
+            setStatus(error?.message || 'Impossible d’envoyer votre demande pour le moment.');
+        } finally {
+            setIsSubmitting(false);
+            setTimeout(() => setStatus(null), 3000);
+        }
     };
 
     return (
@@ -126,6 +143,8 @@ export default function B2BPage() {
                                                 required
                                                 className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
                                                 placeholder="Nom de l’établissement"
+                                                value={formData.company}
+                                                onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -136,6 +155,8 @@ export default function B2BPage() {
                                                 required
                                                 className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
                                                 placeholder="contact@entreprise.fr"
+                                                value={formData.email}
+                                                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                                             />
                                         </div>
                                     </div>
@@ -147,13 +168,16 @@ export default function B2BPage() {
                                             required
                                             className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
                                             placeholder="Ex: 5kg Gousses TK, Livraison mensuelle..."
+                                            value={formData.need}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, need: e.target.value }))}
                                         />
                                     </div>
                                     <button
                                         type="submit"
+                                        disabled={isSubmitting}
                                         className="w-full inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-4 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all shadow-lg"
                                     >
-                                        Envoyer ma demande <ArrowRightIcon />
+                                        {isSubmitting ? 'Envoi en cours...' : 'Envoyer ma demande'} <ArrowRightIcon />
                                     </button>
                                 </form>
                             </div>

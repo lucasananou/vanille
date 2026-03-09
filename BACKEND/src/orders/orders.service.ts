@@ -6,6 +6,7 @@ import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderStatus } from '@prisma/client';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class OrdersService {
@@ -17,6 +18,7 @@ export class OrdersService {
         private productsService: ProductsService,
         private cartService: CartService,
         private configService: ConfigService,
+        private mailService: MailService,
     ) {
         this.stripeSecretKey = this.configService.get<string>('STRIPE_SECRET_KEY') || null;
     }
@@ -112,6 +114,11 @@ export class OrdersService {
             },
         });
 
+        // Transactional email (non-blocking)
+        this.mailService
+            .sendOrderConfirmation(order.email, order.orderNumber, order)
+            .catch((error) => console.error('Failed to send order confirmation:', error));
+
         return order;
     }
 
@@ -200,5 +207,30 @@ export class OrdersService {
         return {
             clientSecret: paymentIntent.client_secret,
         };
+    }
+
+    async markOrderAsPaid(orderId: string) {
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+        });
+
+        if (!order) {
+            throw new NotFoundException('Order not found');
+        }
+
+        if (order.status === OrderStatus.PAID) {
+            return order;
+        }
+
+        const updatedOrder = await this.prisma.order.update({
+            where: { id: orderId },
+            data: { status: OrderStatus.PAID },
+        });
+
+        this.mailService
+            .sendPaymentConfirmation(updatedOrder.email, updatedOrder.orderNumber)
+            .catch((error) => console.error('Failed to send payment confirmation:', error));
+
+        return updatedOrder;
     }
 }

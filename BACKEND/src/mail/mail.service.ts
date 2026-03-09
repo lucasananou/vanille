@@ -1,37 +1,91 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class MailService {
-  private transporter: nodemailer.Transporter;
+  private transporter?: nodemailer.Transporter;
+  private readonly resendApiKey: string | null;
 
   constructor(private configService: ConfigService) {
-    const provider = this.configService.get<string>('EMAIL_PROVIDER', 'nodemailer');
+    const smtpHost = this.configService.get<string>('SMTP_HOST');
+    const smtpPort = this.configService.get<number>('SMTP_PORT');
+    const smtpUser = this.configService.get<string>('SMTP_USER');
+    const smtpPass = this.configService.get<string>('SMTP_PASS');
+    this.resendApiKey =
+      this.configService.get<string>('RESEND_API_KEY') ||
+      this.configService.get<string>('EMAIL_PROVIDER_KEY') ||
+      null;
 
-    if (provider === 'nodemailer') {
+    if (smtpHost && smtpPort && smtpUser && smtpPass) {
       this.transporter = nodemailer.createTransport({
-        host: this.configService.get<string>('SMTP_HOST'),
-        port: this.configService.get<number>('SMTP_PORT'),
+        host: smtpHost,
+        port: smtpPort,
+        secure: smtpPort === 465,
         auth: {
-          user: this.configService.get<string>('SMTP_USER'),
-          pass: this.configService.get<string>('SMTP_PASS'),
+          user: smtpUser,
+          pass: smtpPass,
         },
       });
     }
   }
 
-  async sendEmail(options: { to: string; subject: string; html: string }) {
+  private getFromEmail() {
+    return this.configService.get<string>('SMTP_FROM_EMAIL') || this.configService.get<string>('EMAIL_FROM') || 'no-reply@orylis.fr';
+  }
+
+  private getFromName() {
+    return this.configService.get<string>('SMTP_FROM_NAME') || 'MSV Nosy Be';
+  }
+
+  private getFromHeader() {
+    return `${this.getFromName()} <${this.getFromEmail()}>`;
+  }
+
+  private getClientEmail() {
+    return this.configService.get<string>('CLIENT_EMAIL') || this.getFromEmail();
+  }
+
+  async sendEmail(options: { to: string | string[]; subject: string; html: string; replyTo?: string }) {
     const mailOptions = {
-      from: this.configService.get<string>('EMAIL_FROM'),
+      from: this.getFromHeader(),
       to: options.to,
       subject: options.subject,
       html: options.html,
+      ...(options.replyTo ? { replyTo: options.replyTo } : {}),
     };
 
     try {
-      await this.transporter.sendMail(mailOptions);
-      console.log(`✅ Email sent to ${options.to}`);
+      if (this.resendApiKey) {
+        const recipients = Array.isArray(options.to) ? options.to : [options.to];
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${this.resendApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: this.getFromHeader(),
+            to: recipients,
+            subject: options.subject,
+            html: options.html,
+            ...(options.replyTo ? { reply_to: options.replyTo } : {}),
+          }),
+        });
+
+        if (!response.ok) {
+          const bodyText = await response.text();
+          throw new Error(`Resend API error (${response.status}): ${bodyText}`);
+        }
+      } else if (this.transporter) {
+        await this.transporter.sendMail(mailOptions);
+      } else {
+        throw new ServiceUnavailableException(
+          'Email service is not configured. Set RESEND_API_KEY or SMTP_* variables.',
+        );
+      }
+
+      console.log(`✅ Email sent to ${Array.isArray(options.to) ? options.to.join(', ') : options.to}`);
     } catch (error) {
       console.error('Failed to send email:', error);
       throw error;
@@ -40,14 +94,13 @@ export class MailService {
 
   async sendOrderConfirmation(email: string, orderNumber: string, orderDetails: any) {
     const mailOptions = {
-      from: this.configService.get<string>('EMAIL_FROM'),
       to: email,
       subject: `Order Confirmation - ${orderNumber}`,
       html: this.getOrderConfirmationTemplate(orderNumber, orderDetails),
     };
 
     try {
-      await this.transporter.sendMail(mailOptions);
+      await this.sendEmail(mailOptions);
       console.log(`✅ Order confirmation email sent to ${email}`);
     } catch (error) {
       console.error('Failed to send order confirmation email:', error);
@@ -56,14 +109,13 @@ export class MailService {
 
   async sendPaymentConfirmation(email: string, orderNumber: string) {
     const mailOptions = {
-      from: this.configService.get<string>('EMAIL_FROM'),
       to: email,
       subject: `Payment Confirmed - ${orderNumber}`,
       html: this.getPaymentConfirmationTemplate(orderNumber),
     };
 
     try {
-      await this.transporter.sendMail(mailOptions);
+      await this.sendEmail(mailOptions);
       console.log(`✅ Payment confirmation email sent to ${email}`);
     } catch (error) {
       console.error('Failed to send payment confirmation email:', error);
@@ -76,18 +128,97 @@ export class MailService {
       : 'Last chance! Your cart is waiting';
 
     const mailOptions = {
-      from: this.configService.get<string>('EMAIL_FROM'),
       to: email,
       subject,
       html: this.getAbandonedCartTemplate(cartItems, daysAgo),
     };
 
     try {
-      await this.transporter.sendMail(mailOptions);
+      await this.sendEmail(mailOptions);
       console.log(`✅ Abandoned cart reminder sent to ${email} (Day +${daysAgo})`);
     } catch (error) {
       console.error('Failed to send abandoned cart email:', error);
     }
+  }
+
+  async sendContactMessage(payload: {
+    name: string;
+    email: string;
+    message: string;
+  }) {
+    await this.sendEmail({
+      to: this.getClientEmail(),
+      subject: `Nouveau message contact - ${payload.name}`,
+      replyTo: payload.email,
+      html: `
+        <h2>Nouveau message depuis le formulaire de contact</h2>
+        <p><strong>Nom:</strong> ${payload.name}</p>
+        <p><strong>Email:</strong> ${payload.email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${payload.message.replace(/\n/g, '<br />')}</p>
+      `,
+    });
+
+    await this.sendEmail({
+      to: payload.email,
+      subject: 'Nous avons bien reçu votre message',
+      html: `
+        <p>Bonjour ${payload.name},</p>
+        <p>Merci pour votre message. Notre équipe vous répondra rapidement.</p>
+        <p>Cordialement,<br/>${this.getFromName()}</p>
+      `,
+    });
+  }
+
+  async sendB2BLead(payload: {
+    company: string;
+    email: string;
+    need: string;
+  }) {
+    await this.sendEmail({
+      to: this.getClientEmail(),
+      subject: `Nouveau lead B2B - ${payload.company}`,
+      replyTo: payload.email,
+      html: `
+        <h2>Nouvelle demande B2B</h2>
+        <p><strong>Entreprise:</strong> ${payload.company}</p>
+        <p><strong>Email:</strong> ${payload.email}</p>
+        <p><strong>Besoin:</strong></p>
+        <p>${payload.need.replace(/\n/g, '<br />')}</p>
+      `,
+    });
+
+    await this.sendEmail({
+      to: payload.email,
+      subject: 'Votre demande B2B a bien été reçue',
+      html: `
+        <p>Bonjour,</p>
+        <p>Merci pour votre demande de devis. Notre équipe commerciale revient vers vous sous 24h ouvrées.</p>
+        <p>Cordialement,<br/>${this.getFromName()}</p>
+      `,
+    });
+  }
+
+  async sendNewsletterSubscription(email: string) {
+    await this.sendEmail({
+      to: this.getClientEmail(),
+      subject: 'Nouvelle inscription newsletter',
+      replyTo: email,
+      html: `
+        <h2>Nouvelle inscription marketing</h2>
+        <p><strong>Email:</strong> ${email}</p>
+      `,
+    });
+
+    await this.sendEmail({
+      to: email,
+      subject: 'Bienvenue dans la newsletter MSV Nosy Be',
+      html: `
+        <p>Bonjour,</p>
+        <p>Merci pour votre inscription. Vous recevrez nos offres et actualités en avant-première.</p>
+        <p>À bientôt,<br/>${this.getFromName()}</p>
+      `,
+    });
   }
 
   private getOrderConfirmationTemplate(orderNumber: string, orderDetails: any): string {

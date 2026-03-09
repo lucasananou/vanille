@@ -3,6 +3,7 @@
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useState } from 'react';
+import { communicationsApi } from '@/lib/api/communications';
 
 const EmailIcon = () => (
     <svg className="w-5 h-5 text-deepgreen-800" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -26,11 +27,27 @@ const SendIcon = () => (
 
 export default function ContactPage() {
     const [status, setStatus] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: '',
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setStatus('Message envoyé (démo).');
-        setTimeout(() => setStatus(null), 2200);
+        setIsSubmitting(true);
+
+        try {
+            await communicationsApi.sendContactMessage(formData);
+            setStatus('Message envoyé. Nous vous répondrons rapidement.');
+            setFormData({ name: '', email: '', message: '' });
+        } catch (error: any) {
+            setStatus(error?.message || 'Impossible d’envoyer votre message pour le moment.');
+        } finally {
+            setIsSubmitting(false);
+            setTimeout(() => setStatus(null), 2600);
+        }
     };
 
     return (
@@ -76,6 +93,8 @@ export default function ContactPage() {
                                                 required
                                                 className="mt-2 w-full rounded-xl border border-vanilla-100/20 bg-vanilla-50/5 px-3 py-2 text-sm text-vanilla-50 focus:outline-none focus:ring-2 focus:ring-gold-500"
                                                 placeholder="Votre nom"
+                                                value={formData.name}
+                                                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                                             />
                                         </div>
                                         <div>
@@ -86,6 +105,8 @@ export default function ContactPage() {
                                                 required
                                                 className="mt-2 w-full rounded-xl border border-vanilla-100/20 bg-vanilla-50/5 px-3 py-2 text-sm text-vanilla-50 focus:outline-none focus:ring-2 focus:ring-gold-500"
                                                 placeholder="vous@exemple.com"
+                                                value={formData.email}
+                                                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                                             />
                                         </div>
                                     </div>
@@ -97,13 +118,16 @@ export default function ContactPage() {
                                             required
                                             className="mt-2 w-full rounded-xl border border-vanilla-100/20 bg-vanilla-50/5 px-3 py-2 text-sm text-vanilla-50 focus:outline-none focus:ring-2 focus:ring-gold-500"
                                             placeholder="Écrivez votre message…"
+                                            value={formData.message}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                                         />
                                     </div>
                                     <button
                                         type="submit"
+                                        disabled={isSubmitting}
                                         className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-semibold text-jungle-900 hover:opacity-90 transition-all font-bold"
                                     >
-                                        Envoyer <SendIcon />
+                                        {isSubmitting ? 'Envoi...' : 'Envoyer'} <SendIcon />
                                     </button>
                                 </form>
                             </div>

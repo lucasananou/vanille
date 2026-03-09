@@ -17,7 +17,10 @@ async function bootstrap() {
   const productionDomains = [
     'https://tsniout-shop.fr',
     'https://www.tsniout-shop.fr',
-    'https://tsniout.vercel.app'
+    'https://tsniout.vercel.app',
+    'https://vanille-nosybe.fr',
+    'https://www.vanille-nosybe.fr',
+    'https://vanille-nosybe.vercel.app'
   ];
 
   productionDomains.forEach(domain => {
