@@ -66,8 +66,27 @@ export class OrdersService {
             // Clear cart
             await this.cartService.clearCart(cartId);
         } else if (directItems && directItems.length > 0) {
+            const normalizedDirectItems = directItems.map((item: any) => ({
+                ...item,
+                variantId: item.variantId || undefined,
+                quantity: Number(item.quantity),
+                price: Number(item.price),
+            }));
+
+            for (const item of normalizedDirectItems) {
+                if (!item.productId) {
+                    throw new BadRequestException('Each checkout item must include productId.');
+                }
+                if (!Number.isFinite(item.quantity) || item.quantity <= 0) {
+                    throw new BadRequestException(`Invalid quantity for product ${item.productId}.`);
+                }
+                if (!Number.isFinite(item.price) || item.price < 0) {
+                    throw new BadRequestException(`Invalid price for product ${item.productId}.`);
+                }
+            }
+
             // Enrich direct items with title/image if missing to satisfy OrderItem schema
-            const productIds = Array.from(new Set(directItems.map((item: any) => item.productId).filter(Boolean)));
+            const productIds = Array.from(new Set(normalizedDirectItems.map((item: any) => item.productId).filter(Boolean)));
             const products = productIds.length
                 ? await this.prisma.product.findMany({
                     where: { id: { in: productIds } },
@@ -84,7 +103,7 @@ export class OrdersService {
             }
 
             const variantIds = Array.from(
-                new Set(directItems.map((item: any) => item.variantId).filter(Boolean)),
+                new Set(normalizedDirectItems.map((item: any) => item.variantId).filter(Boolean)),
             ) as string[];
             if (variantIds.length > 0) {
                 const variants = await this.prisma.productVariant.findMany({
@@ -100,7 +119,7 @@ export class OrdersService {
                     );
                 }
 
-                for (const item of directItems as any[]) {
+                for (const item of normalizedDirectItems as any[]) {
                     if (!item.variantId) continue;
                     const variant = variantById.get(item.variantId);
                     if (variant && variant.productId !== item.productId) {
@@ -111,7 +130,7 @@ export class OrdersService {
                 }
             }
 
-            orderItems = directItems.map((item: any) => {
+            orderItems = normalizedDirectItems.map((item: any) => {
                 const product = productById.get(item.productId);
                 return {
                     ...item,
@@ -187,6 +206,13 @@ export class OrdersService {
                 if (error.code === 'P2002') {
                     throw new BadRequestException('Duplicate order number generated. Please retry.');
                 }
+                if (error.code === 'P2023') {
+                    throw new BadRequestException('Invalid identifier format in checkout payload.');
+                }
+                throw new BadRequestException(`Checkout data rejected (${error.code}).`);
+            }
+            if (error instanceof Prisma.PrismaClientValidationError) {
+                throw new BadRequestException('Invalid checkout payload format.');
             }
             throw error;
         }
