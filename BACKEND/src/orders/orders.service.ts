@@ -98,6 +98,16 @@ export class OrdersService {
         // Generate unique order number
         const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
 
+        // Only keep shippingRateId when it exists in DB to avoid FK errors from frontend fallback IDs
+        let validShippingRateId: string | undefined;
+        if (shippingRateId) {
+            const existingRate = await this.prisma.shippingRate.findUnique({
+                where: { id: shippingRateId },
+                select: { id: true },
+            });
+            validShippingRateId = existingRate?.id;
+        }
+
         // Create order
         const order = await this.prisma.order.create({
             data: {
@@ -111,7 +121,7 @@ export class OrdersService {
                 shippingAddress,
                 billingAddress: billingAddress || shippingAddress,
                 customerId,
-                shippingRateId,
+                shippingRateId: validShippingRateId,
                 items: {
                     create: orderItems.map((item) => ({
                         productId: item.productId,
