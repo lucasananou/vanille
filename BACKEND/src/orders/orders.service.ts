@@ -37,6 +37,18 @@ export class OrdersService {
         return this.stripe;
     }
 
+    private buildProductLookup(products: Array<{ id: string; slug: string; sku: string; title: string; images: string[] }>) {
+        const byAnyKey = new Map<string, (typeof products)[number]>();
+
+        for (const product of products) {
+            byAnyKey.set(product.id, product);
+            byAnyKey.set(product.slug, product);
+            byAnyKey.set(product.sku, product);
+        }
+
+        return byAnyKey;
+    }
+
     async createOrder(createOrderDto: CreateOrderDto) {
         const { cartId, email, shippingAddress, billingAddress, items: directItems, shippingCost, shippingRateId, tax: directTax } = createOrderDto;
 
@@ -86,24 +98,38 @@ export class OrdersService {
             }
 
             // Enrich direct items with title/image if missing to satisfy OrderItem schema
-            const productIds = Array.from(new Set(normalizedDirectItems.map((item: any) => item.productId).filter(Boolean)));
-            const products = productIds.length
+            const productRefs = Array.from(new Set(normalizedDirectItems.map((item: any) => item.productId).filter(Boolean)));
+            const products = productRefs.length
                 ? await this.prisma.product.findMany({
-                    where: { id: { in: productIds } },
-                    select: { id: true, title: true, images: true },
+                    where: {
+                        OR: [
+                            { id: { in: productRefs } },
+                            { slug: { in: productRefs } },
+                            { sku: { in: productRefs } },
+                        ],
+                    },
+                    select: { id: true, slug: true, sku: true, title: true, images: true },
                 })
                 : [];
 
-            const productById = new Map(products.map((p) => [p.id, p]));
-            const missingProductIds = productIds.filter((id) => !productById.has(id));
+            const productByRef = this.buildProductLookup(products);
+            const missingProductIds = productRefs.filter((ref) => !productByRef.has(ref));
             if (missingProductIds.length > 0) {
                 throw new BadRequestException(
                     `Invalid products in checkout: ${missingProductIds.join(', ')}`,
                 );
             }
 
+            const normalizedItemsWithCanonicalProductId = normalizedDirectItems.map((item: any) => {
+                const product = productByRef.get(item.productId);
+                return {
+                    ...item,
+                    productId: product!.id,
+                };
+            });
+
             const variantIds = Array.from(
-                new Set(normalizedDirectItems.map((item: any) => item.variantId).filter(Boolean)),
+                new Set(normalizedItemsWithCanonicalProductId.map((item: any) => item.variantId).filter(Boolean)),
             ) as string[];
             if (variantIds.length > 0) {
                 const variants = await this.prisma.productVariant.findMany({
@@ -119,7 +145,7 @@ export class OrdersService {
                     );
                 }
 
-                for (const item of normalizedDirectItems as any[]) {
+                for (const item of normalizedItemsWithCanonicalProductId as any[]) {
                     if (!item.variantId) continue;
                     const variant = variantById.get(item.variantId);
                     if (variant && variant.productId !== item.productId) {
@@ -130,8 +156,8 @@ export class OrdersService {
                 }
             }
 
-            orderItems = normalizedDirectItems.map((item: any) => {
-                const product = productById.get(item.productId);
+            orderItems = normalizedItemsWithCanonicalProductId.map((item: any) => {
+                const product = productByRef.get(item.productId);
                 return {
                     ...item,
                     title: item.title || product?.title || 'Produit',
