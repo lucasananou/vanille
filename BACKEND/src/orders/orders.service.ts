@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus, Prisma } from '@prisma/client';
 import { MailService } from '../mail/mail.service';
 
 @Injectable()
@@ -76,6 +76,40 @@ export class OrdersService {
                 : [];
 
             const productById = new Map(products.map((p) => [p.id, p]));
+            const missingProductIds = productIds.filter((id) => !productById.has(id));
+            if (missingProductIds.length > 0) {
+                throw new BadRequestException(
+                    `Invalid products in checkout: ${missingProductIds.join(', ')}`,
+                );
+            }
+
+            const variantIds = Array.from(
+                new Set(directItems.map((item: any) => item.variantId).filter(Boolean)),
+            ) as string[];
+            if (variantIds.length > 0) {
+                const variants = await this.prisma.productVariant.findMany({
+                    where: { id: { in: variantIds } },
+                    select: { id: true, productId: true },
+                });
+                const variantById = new Map(variants.map((v) => [v.id, v]));
+
+                const missingVariantIds = variantIds.filter((id) => !variantById.has(id));
+                if (missingVariantIds.length > 0) {
+                    throw new BadRequestException(
+                        `Invalid variants in checkout: ${missingVariantIds.join(', ')}`,
+                    );
+                }
+
+                for (const item of directItems as any[]) {
+                    if (!item.variantId) continue;
+                    const variant = variantById.get(item.variantId);
+                    if (variant && variant.productId !== item.productId) {
+                        throw new BadRequestException(
+                            `Variant ${item.variantId} does not belong to product ${item.productId}`,
+                        );
+                    }
+                }
+            }
 
             orderItems = directItems.map((item: any) => {
                 const product = productById.get(item.productId);
@@ -109,38 +143,53 @@ export class OrdersService {
         }
 
         // Create order
-        const order = await this.prisma.order.create({
-            data: {
-                orderNumber,
-                email,
-                subtotal,
-                tax,
-                shipping,
-                total,
-                status: OrderStatus.PENDING,
-                shippingAddress,
-                billingAddress: billingAddress || shippingAddress,
-                customerId,
-                shippingRateId: validShippingRateId,
-                items: {
-                    create: orderItems.map((item) => ({
-                        productId: item.productId,
-                        variantId: item.variantId,
-                        quantity: item.quantity,
-                        price: item.price,
-                        title: item.title,
-                        image: item.image,
-                    })),
-                },
-            },
-            include: {
-                items: {
-                    include: {
-                        product: true,
+        let order: any;
+        try {
+            order = await this.prisma.order.create({
+                data: {
+                    orderNumber,
+                    email,
+                    subtotal,
+                    tax,
+                    shipping,
+                    total,
+                    status: OrderStatus.PENDING,
+                    shippingAddress,
+                    billingAddress: billingAddress || shippingAddress,
+                    customerId,
+                    shippingRateId: validShippingRateId,
+                    items: {
+                        create: orderItems.map((item) => ({
+                            productId: item.productId,
+                            variantId: item.variantId,
+                            quantity: item.quantity,
+                            price: item.price,
+                            title: item.title,
+                            image: item.image,
+                        })),
                     },
                 },
-            },
-        });
+                include: {
+                    items: {
+                        include: {
+                            product: true,
+                        },
+                    },
+                },
+            });
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2003') {
+                    throw new BadRequestException(
+                        'Invalid checkout references (product, variant or shipping rate).',
+                    );
+                }
+                if (error.code === 'P2002') {
+                    throw new BadRequestException('Duplicate order number generated. Please retry.');
+                }
+            }
+            throw error;
+        }
 
         // Transactional email (non-blocking)
         this.mailService

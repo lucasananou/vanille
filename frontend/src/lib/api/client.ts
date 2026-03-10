@@ -3,13 +3,28 @@
 // Ensure API_URL has protocol, default to http for localhost
 const getApiUrl = () => {
     const railwayUrl = 'https://vanille-nosybe-api.up.railway.app';
-    const envUrl = process.env.NEXT_PUBLIC_API_URL;
+    const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+
+    const isLocalApiUrl = (url: string) => {
+        try {
+            const parsed = new URL(url);
+            return parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
+        } catch {
+            return false;
+        }
+    };
 
     // Check if we are in environment that should use production API
     if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
-        if (hostname.includes('vanille-nosybe.fr') || hostname.includes('vercel.app')) {
-            return envUrl || railwayUrl;
+        const isLocalFrontendHost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+        if (!isLocalFrontendHost) {
+            // In production browser contexts, never use localhost API URL.
+            if (envUrl && !isLocalApiUrl(envUrl)) {
+                return envUrl.replace(/^http:\/\//i, 'https://');
+            }
+            return railwayUrl;
         }
     }
 
