@@ -7,6 +7,7 @@ import { useAdminAuth } from '@/lib/admin-auth-context';
 import { adminProductsApi } from '@/lib/api/admin-products';
 import { adminCollectionsApi } from '@/lib/api/admin-collections';
 import type { Collection, ProductOption, ProductVariant } from '@/lib/types';
+import ImageManager from '@/components/admin/image-manager';
 
 export default function NewProductPage() {
     const router = useRouter();
@@ -24,7 +25,7 @@ export default function NewProductPage() {
         price: '',
         compareAtPrice: '',
         stock: '0',
-        images: '',
+        images: [] as string[],
         tags: '',
         collectionId: '',
         published: false,
@@ -136,7 +137,7 @@ export default function NewProductPage() {
                 price: Math.round(parseFloat(formData.price) * 100),
                 compareAtPrice: formData.compareAtPrice ? Math.round(parseFloat(formData.compareAtPrice) * 100) : undefined,
                 stock: parseInt(formData.stock),
-                images: formData.images.split('\n').filter(Boolean),
+                images: formData.images,
                 tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
                 collectionId: formData.collectionId || undefined,
                 published: formData.published,
@@ -532,19 +533,10 @@ export default function NewProductPage() {
                         <div className="bg-white rounded-xl border border-zinc-200 p-6">
                             <h2 className="text-lg font-semibold text-zinc-900 mb-4">Images</h2>
 
-                            <div>
-                                <label className="block text-sm font-medium text-zinc-700 mb-2">
-                                    URLs d'images (une par ligne)
-                                </label>
-                                <textarea
-                                    name="images"
-                                    rows={5}
-                                    value={formData.images}
-                                    onChange={handleChange}
-                                    className="w-full border border-zinc-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    placeholder="https://images.unsplash.com/photo-1234/image.jpg"
-                                />
-                            </div>
+                            <ImageManager
+                                images={formData.images}
+                                onChange={(newImages) => setFormData({ ...formData, images: newImages })}
+                            />
                         </div>
 
                         {/* Tags */}

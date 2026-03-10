@@ -2,7 +2,7 @@
 
 // Ensure API_URL has protocol, default to http for localhost
 const getApiUrl = () => {
-    const railwayUrl = 'https://vanille-nosybe-api.up.railway.app';
+    const railwayUrl = 'https://vanille-production.up.railway.app';
     const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
 
     const isLocalApiUrl = (url: string) => {

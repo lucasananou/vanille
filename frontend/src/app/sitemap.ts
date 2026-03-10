@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next';
-import { productsApi } from '@/lib/api/products';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vanille-nosybe.fr';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vanille-production.up.railway.app';
 
     // Static pages
     const staticPages = [
@@ -24,8 +24,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Dynamic Products
     let products: any[] = [];
     try {
-        const response = await productsApi.getProducts({ limit: 1000 });
-        products = response.data || [];
+        const response = await fetch(`${apiUrl}/store/products?take=1000`, {
+            next: { revalidate: 3600 },
+        });
+        if (response.ok) {
+            const data = await response.json();
+            products = data.data || [];
+        }
     } catch (error) {
         console.error('Sitemap: Failed to fetch products', error);
     }

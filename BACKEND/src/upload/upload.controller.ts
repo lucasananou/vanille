@@ -5,6 +5,7 @@ import { UploadService } from './upload.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { memoryStorage } from 'multer';
 
 @ApiTags('Admin - Upload')
 @ApiBearerAuth()
@@ -28,7 +29,7 @@ export class UploadController {
             },
         },
     })
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
     async uploadImage(@UploadedFile() file: Express.Multer.File) {
         if (!file) {
             throw new BadRequestException('No file uploaded');
@@ -53,7 +54,7 @@ export class UploadController {
             },
         },
     })
-    @UseInterceptors(FilesInterceptor('files', 10))
+    @UseInterceptors(FilesInterceptor('files', 10, { storage: memoryStorage() }))
     async uploadImages(@UploadedFiles() files: Express.Multer.File[]) {
         if (!files || files.length === 0) {
             throw new BadRequestException('No files uploaded');

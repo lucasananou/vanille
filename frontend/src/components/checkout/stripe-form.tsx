@@ -3,8 +3,11 @@
 import { useState, useEffect } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { ordersApi } from '@/lib/api/orders';
+import { productsApi } from '@/lib/api/products';
+import { normalizeProductRef } from '@/lib/product-refs';
 import { useCart } from '@/lib/cart-context';
 import { useRouter } from 'next/navigation';
+import type { Product } from '@/lib/types';
 
 interface StripeFormProps {
     formData: {
@@ -38,6 +41,32 @@ export default function StripeForm({ formData, total, subtotal, shipping, tax, s
     const [isProcessing, setIsProcessing] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+    const resolveCanonicalCheckoutItems = async () => {
+        const resolvedProducts = new Map<string, Product>();
+
+        const resolveProduct = async (ref: string) => {
+            if (!resolvedProducts.has(ref)) {
+                const product = await productsApi.getProductBySlug(ref);
+                resolvedProducts.set(ref, product);
+            }
+            return resolvedProducts.get(ref)!;
+        };
+
+        return Promise.all(
+            items.map(async (item) => {
+                const productRef = normalizeProductRef(item.product?.slug || item.productId);
+                const product = await resolveProduct(productRef);
+
+                return {
+                    productId: product.id,
+                    variantId: undefined,
+                    quantity: item.quantity,
+                    price: item.price,
+                };
+            }),
+        );
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -59,12 +88,7 @@ export default function StripeForm({ formData, total, subtotal, shipping, tax, s
                     country: 'FR', // Defaulting to France for now
                     phone: formData.phone,
                 },
-                items: items.map(item => ({
-                    productId: item.productId,
-                    variantId: item.variantId,
-                    quantity: item.quantity,
-                    price: item.price,
-                })),
+                items: await resolveCanonicalCheckoutItems(),
                 shippingCost: Math.round(shipping * 100),
                 tax: 0,
                 shippingRateId: shippingRateId,

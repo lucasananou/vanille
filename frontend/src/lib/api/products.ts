@@ -6,6 +6,8 @@ import type { Product, PaginatedResponse } from '../types';
 export interface GetProductsParams {
     page?: number;
     limit?: number;
+    skip?: number;
+    take?: number;
     collection?: string;
     minPrice?: number;
     maxPrice?: number;
@@ -20,13 +22,24 @@ export const productsApi = {
     getProducts: async (params: GetProductsParams = {}) => {
         const searchParams = new URLSearchParams();
 
-        if (params.page) searchParams.set('page', params.page.toString());
-        if (params.limit) searchParams.set('limit', params.limit.toString());
+        const take = params.take ?? params.limit;
+        const skip = params.skip ?? (params.page && take ? (params.page - 1) * take : undefined);
+
+        if (skip !== undefined) searchParams.set('skip', skip.toString());
+        if (take !== undefined) searchParams.set('take', take.toString());
         if (params.collection) searchParams.set('collection', params.collection);
         if (params.minPrice) searchParams.set('minPrice', params.minPrice.toString());
         if (params.maxPrice) searchParams.set('maxPrice', params.maxPrice.toString());
         if (params.search) searchParams.set('search', params.search);
-        if (params.sort) searchParams.set('sort', params.sort);
+        if (params.sort) {
+            const sortMap: Record<NonNullable<GetProductsParams['sort']>, string> = {
+                'price-asc': 'price_asc',
+                'price-desc': 'price_desc',
+                newest: 'newest',
+                featured: 'newest',
+            };
+            searchParams.set('sort', sortMap[params.sort]);
+        }
 
         const query = searchParams.toString();
         const endpoint = `/store/products${query ? `?${query}` : ''}`;

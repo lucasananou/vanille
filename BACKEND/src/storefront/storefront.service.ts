@@ -13,6 +13,7 @@ export class StorefrontService {
         minPrice?: number;
         maxPrice?: number;
         sortBy?: 'price_asc' | 'price_desc' | 'newest' | 'title';
+        search?: string;
     }) {
         console.log('[DEBUG] getProducts called with:', params);
         try {
@@ -24,6 +25,7 @@ export class StorefrontService {
                 minPrice,
                 maxPrice,
                 sortBy = 'newest',
+                search,
             } = params;
 
             const where: any = {
@@ -62,6 +64,16 @@ export class StorefrontService {
                 }
             }
 
+            if (search) {
+                where.OR = [
+                    { title: { contains: search, mode: 'insensitive' } },
+                    { description: { contains: search, mode: 'insensitive' } },
+                    { slug: { contains: search, mode: 'insensitive' } },
+                    { sku: { contains: search, mode: 'insensitive' } },
+                    { tags: { has: search.toLowerCase() } },
+                ];
+            }
+
             // Sort options
             const orderBy: any = {};
             switch (sortBy) {
@@ -91,25 +103,42 @@ export class StorefrontService {
                     select: {
                         id: true,
                         title: true,
+                        description: true,
+                        sku: true,
                         slug: true,
                         price: true,
                         compareAtPrice: true,
+                        stock: true,
                         images: true,
                         tags: true,
+                        published: true,
                         seoTitle: true,
                         seoMetaDescription: true,
+                        details: true,
+                        createdAt: true,
+                        updatedAt: true,
                         options: {
                             select: {
                                 id: true,
+                                productId: true,
                                 name: true,
                                 values: true,
+                                position: true,
                             },
                         },
                         variants: {
                             select: {
                                 id: true,
+                                productId: true,
+                                sku: true,
+                                title: true,
                                 price: true,
                                 compareAtPrice: true,
+                                stock: true,
+                                image: true,
+                                options: true,
+                                createdAt: true,
+                                updatedAt: true,
                             },
                         },
                         collection: {

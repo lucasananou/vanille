@@ -7,10 +7,13 @@ import Footer from '@/components/footer';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { paymentsApi } from '@/lib/api/payments';
+import { productsApi } from '@/lib/api/products';
+import { normalizeProductRef } from '@/lib/product-refs';
 import { shippingApi, ShippingRate } from '@/lib/api/shipping';
 import StripeForm from '@/components/checkout/stripe-form';
 import PayPalButton from '@/components/checkout/paypal-button';
 import { useRouter } from 'next/navigation';
+import type { Product } from '@/lib/types';
 
 // Initialize Stripe outside of component
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
@@ -124,33 +127,55 @@ export default function CheckoutPage() {
         }
     }, [paymentMethod]);
 
-    const buildOrderPayload = useCallback(() => ({
-        email: formData.email,
-        shippingAddress: {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            address1: formData.address,
-            city: formData.city,
-            postalCode: formData.zip,
-            country: formData.country || 'FR',
-            phone: formData.phone,
-        },
-        items: items.map((item) => ({
-            productId: item.productId,
-            variantId: item.variantId,
-            quantity: item.quantity,
-            price: item.price,
-        })),
-        shippingCost: Math.round(shipping * 100),
-        tax: 0,
-        shippingRateId: selectedRate?.id,
-    }), [formData, items, shipping, selectedRate]);
+    const buildOrderPayload = useCallback(async () => {
+        const resolvedProducts = new Map<string, Product>();
+
+        const resolveProduct = async (ref: string) => {
+            if (!resolvedProducts.has(ref)) {
+                const product = await productsApi.getProductBySlug(ref);
+                resolvedProducts.set(ref, product);
+            }
+            return resolvedProducts.get(ref)!;
+        };
+
+        const normalizedItems = await Promise.all(
+            items.map(async (item) => {
+                const productRef = normalizeProductRef(item.product?.slug || item.productId);
+                const product = await resolveProduct(productRef);
+
+                return {
+                    productId: product.id,
+                    variantId: undefined,
+                    quantity: item.quantity,
+                    price: item.price,
+                };
+            }),
+        );
+
+        return {
+            email: formData.email,
+            shippingAddress: {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                address1: formData.address,
+                city: formData.city,
+                postalCode: formData.zip,
+                country: formData.country || 'FR',
+                phone: formData.phone,
+            },
+            items: normalizedItems,
+            shippingCost: Math.round(shipping * 100),
+            tax: 0,
+            shippingRateId: selectedRate?.id,
+        };
+    }, [formData, items, shipping, selectedRate]);
 
     const handlePayPalApproved = useCallback(async (paypalOrderId: string) => {
         setIsFinalizingPayPal(true);
         setPaypalError(null);
         try {
-            const result = await paymentsApi.finalizePayPalOrder(paypalOrderId, buildOrderPayload());
+            const orderPayload = await buildOrderPayload();
+            const result = await paymentsApi.finalizePayPalOrder(paypalOrderId, orderPayload);
             clearCart();
             router.push(`/order-confirmation/${result.orderId}`);
         } catch (error: any) {

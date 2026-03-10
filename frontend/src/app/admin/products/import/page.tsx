@@ -52,7 +52,7 @@ export default function ProductImportPage() {
             formData.append('file', selectedFile);
 
             const token = localStorage.getItem('admin_token') || '';
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
             const response = await fetch(`${apiUrl}/admin/products/import/parse`, {
                 method: 'POST',
@@ -91,7 +91,7 @@ export default function ProductImportPage() {
 
         try {
             const token = localStorage.getItem('admin_token') || '';
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
             // Re-parser le fichier localement pour tout envoyer
             setProgress(30);

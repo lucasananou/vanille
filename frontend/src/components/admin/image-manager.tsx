@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { adminUploadApi } from '@/lib/api/admin-upload';
 import { useAdminAuth } from '@/lib/admin-auth-context';
+import { getImageUrl } from '@/lib/utils';
 
 interface ImageManagerProps {
     images: string[];
@@ -13,16 +14,6 @@ export default function ImageManager({ images, onChange }: ImageManagerProps) {
     const { token } = useAdminAuth();
     const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const getImageUrl = (url: string) => {
-        if (!url) return '';
-        if (url.startsWith('http')) return url;
-        // Handle local paths
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-        // Ensure url starts with / if not present
-        const path = url.startsWith('/') ? url : `/${url}`;
-        return `${baseUrl}${path}`;
-    };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length || !token) return;

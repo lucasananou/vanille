@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { Product, ProductVariant } from './types';
+import { normalizeProductRef } from './product-refs';
 
 export interface CartItem {
     id: string;
@@ -40,7 +41,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const savedCart = localStorage.getItem('cart');
         if (savedCart) {
             try {
-                setItems(JSON.parse(savedCart));
+                const parsedItems = JSON.parse(savedCart);
+                const normalizedItems = Array.isArray(parsedItems)
+                    ? parsedItems.map((item) => ({
+                        ...item,
+                        product: item.product
+                            ? {
+                                ...item.product,
+                                slug: normalizeProductRef(item.product.slug || item.product.id),
+                            }
+                            : item.product,
+                    }))
+                    : [];
+                setItems(normalizedItems);
             } catch (error) {
                 console.error('Failed to load cart from localStorage:', error);
             }
@@ -54,10 +67,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const addItem = (product: Product, quantity = 1, variant?: ProductVariant) => {
         setItems((currentItems) => {
+            const incomingProductRef = normalizeProductRef(product.slug || product.id);
             // Check if item already exists
             const existingIndex = currentItems.findIndex(
                 (item) =>
-                    item.productId === product.id &&
+                    normalizeProductRef(item.product?.slug || item.productId) === incomingProductRef &&
                     item.variantId === variant?.id
             );
 

@@ -23,6 +23,7 @@ export class StorefrontController {
     @ApiQuery({ name: 'minPrice', required: false, type: Number })
     @ApiQuery({ name: 'maxPrice', required: false, type: Number })
     @ApiQuery({ name: 'sort', required: false, enum: ['price_asc', 'price_desc', 'newest', 'title'] })
+    @ApiQuery({ name: 'search', required: false, type: String })
     getProducts(
         @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
         @Query('take', new DefaultValuePipe(24), ParseIntPipe) take: number,
@@ -31,6 +32,7 @@ export class StorefrontController {
         @Query('minPrice', new DefaultValuePipe(undefined)) minPrice?: number,
         @Query('maxPrice', new DefaultValuePipe(undefined)) maxPrice?: number,
         @Query('sort') sortBy?: 'price_asc' | 'price_desc' | 'newest' | 'title',
+        @Query('search') search?: string,
     ) {
         const tags = tagsString ? tagsString.split(',') : undefined;
         return this.storefrontService.getProducts({
@@ -41,6 +43,7 @@ export class StorefrontController {
             minPrice: minPrice ? Number(minPrice) : undefined,
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
             sortBy,
+            search,
         });
     }
 

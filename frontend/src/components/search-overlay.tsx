@@ -77,7 +77,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
         e.preventDefault();
         if (query.length > 0) {
             onClose();
-            router.push(`/store/products?search=${encodeURIComponent(query)}`);
+            router.push(`/shop?search=${encodeURIComponent(query)}`);
         }
     };
 
@@ -206,7 +206,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             <p className="text-zinc-400 text-lg font-light mb-4">Aucun résultat trouvé pour &quot;{query}&quot;</p>
                             <p className="text-zinc-500 text-sm">Essayez avec un autre mot-clé ou parcourez nos catégories.</p>
                             <Link
-                                href="/produit"
+                                href="/shop"
                                 onClick={onClose}
                                 className="inline-block mt-8 text-xs font-bold uppercase tracking-widest border-b border-zinc-900 pb-1 hover:text-zinc-600 hover:border-zinc-600 transition-all"
                             >

@@ -4,6 +4,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
+import { getImageUrl } from '@/lib/utils';
 
 export default function CartPage() {
     const { items, removeItem, updateQuantity, clearCart, total } = useCart();
@@ -102,7 +103,7 @@ export default function CartPage() {
                                                 <div className="flex items-center gap-6 flex-1 min-w-0">
                                                     <div className="w-24 h-24 rounded-[24px] bg-vanilla-50 border border-cacao-900/10 overflow-hidden flex-shrink-0 relative group-hover:scale-105 transition-transform duration-500">
                                                         <img
-                                                            src={item.product.images[0]}
+                                                            src={getImageUrl(item.product.images[0])}
                                                             alt={item.product.title}
                                                             className="w-full h-full object-cover"
                                                         />

@@ -46,11 +46,16 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     const login = async (email: string, password: string) => {
         try {
             const response = await adminAuthApi.login({ email, password });
+            const token = response.accessToken || response.access_token;
 
-            setToken(response.access_token);
+            if (!token) {
+                throw new Error('Réponse de connexion invalide: token manquant.');
+            }
+
+            setToken(token);
             setAdmin(response.admin);
 
-            localStorage.setItem('admin_token', response.access_token);
+            localStorage.setItem('admin_token', token);
             localStorage.setItem('admin_user', JSON.stringify(response.admin));
         } catch (error) {
             console.error('Admin login failed:', error);

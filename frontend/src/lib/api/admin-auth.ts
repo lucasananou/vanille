@@ -8,7 +8,9 @@ export interface AdminLoginDto {
 }
 
 export interface AdminAuthResponse {
-    access_token: string;
+    accessToken?: string;
+    access_token?: string;
+    refreshToken?: string;
     admin: {
         id: string;
         email: string;

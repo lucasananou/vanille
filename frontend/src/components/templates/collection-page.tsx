@@ -64,7 +64,7 @@ export default function CollectionPage() {
             setIsLoading(true);
             try {
                 // Fetch collection details
-                const collResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/store/collections/${slug}`);
+                const collResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/store/collections/${slug}`);
                 if (!collResponse.ok) throw new Error('Collection non trouvée');
                 const collData = await collResponse.json();
                 setCollection(collData);
