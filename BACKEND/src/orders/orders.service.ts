@@ -66,7 +66,25 @@ export class OrdersService {
             // Clear cart
             await this.cartService.clearCart(cartId);
         } else if (directItems && directItems.length > 0) {
-            orderItems = directItems;
+            // Enrich direct items with title/image if missing to satisfy OrderItem schema
+            const productIds = Array.from(new Set(directItems.map((item: any) => item.productId).filter(Boolean)));
+            const products = productIds.length
+                ? await this.prisma.product.findMany({
+                    where: { id: { in: productIds } },
+                    select: { id: true, title: true, images: true },
+                })
+                : [];
+
+            const productById = new Map(products.map((p) => [p.id, p]));
+
+            orderItems = directItems.map((item: any) => {
+                const product = productById.get(item.productId);
+                return {
+                    ...item,
+                    title: item.title || product?.title || 'Produit',
+                    image: item.image || product?.images?.[0] || null,
+                };
+            });
             subtotal = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
         } else {
             throw new BadRequestException('Either cartId or items must be provided');
