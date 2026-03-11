@@ -1,16 +1,35 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import ProductCard from '@/components/product-card';
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { productsApi } from '@/lib/api/products';
 import type { Product } from '@/lib/types';
+import { getImageUrl } from '@/lib/utils';
 
 const SearchIcon = () => (
     <svg className="w-5 h-5 text-vanilla-100/70" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+    </svg>
+);
+
+const TuneIcon = () => (
+    <svg className="w-5 h-5 text-vanilla-50" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M11 4H4m16 0h-5m-6 8H4m16 0h-9m-5 8H4m16 0h-7" />
+        <circle cx="15" cy="4" r="2" /><circle cx="11" cy="12" r="2" /><circle cx="13" cy="20" r="2" />
+    </svg>
+);
+
+const CloseIcon = () => (
+    <svg className="w-6 h-6 text-vanilla-50" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+);
+
+const VanillaIcon = () => (
+    <svg className="w-6 h-6 text-gold-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
     </svg>
 );
 
@@ -20,18 +39,71 @@ const ArrowRightIcon = () => (
     </svg>
 );
 
+type ShopProduct = Product & {
+    uiGrade: string;
+    uiSize: string;
+    uiSubtitle: string;
+    uiPackaging: string[];
+    uiPriceLabel: string;
+};
+
+function extractSize(product: Product) {
+    const fromDetails = (product.details as any)?.size;
+    if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
+    const match = product.title.match(/(\d+\s*[–-]\s*\d+\s*cm|\d+\s*cm|Assorti|Volume)/i);
+    return match?.[1] || product.options?.map((option) => option.values.join(' / ')).join(' • ') || 'Sélection';
+}
+
+function extractGrade(product: Product) {
+    const fromDetails = (product.details as any)?.grade;
+    if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
+    const match = product.title.match(/(TK\s*\(Noir\)|Gourmet|Noir|Assorti|Poivre Sauvage)/i);
+    return match?.[1] || product.collection?.name || product.tags?.[0] || 'Sélection';
+}
+
+function extractPackaging(product: Product) {
+    if (product.options?.length) {
+        return product.options.flatMap((option) => option.values).filter(Boolean);
+    }
+    return ['Sous-vide'];
+}
+
+function extractSubtitle(product: Product) {
+    const description = product.description || '';
+    const firstLine = description.split(/\n+/).map((line) => line.trim()).find(Boolean);
+    return firstLine || 'Vanille premium sélectionnée à Nosy-Be.';
+}
+
+function getPriceLabel(product: Product) {
+    if (product.variants?.length) {
+        const prices = product.variants
+            .map((variant) => variant.price ?? product.price)
+            .filter((price): price is number => typeof price === 'number');
+        if (prices.length > 0) {
+            const min = Math.min(...prices);
+            const max = Math.max(...prices);
+            if (min !== max) return `À partir de ${(min / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`;
+            return (min / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+        }
+    }
+    return (product.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+}
+
 export default function ShopPage() {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<ShopProduct[]>([]);
+    const [search, setSearch] = useState('');
+    const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
+    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+    const [selectedPack, setSelectedPack] = useState<string[]>([]);
+    const [sortBy, setSortBy] = useState<'featured' | 'name_asc' | 'name_desc'>('featured');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [search, setSearch] = useState('');
-    const [sortBy, setSortBy] = useState<'featured' | 'newest' | 'price-asc' | 'price-desc'>('featured');
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
         const params = new URLSearchParams(window.location.search);
-        const initialSearch = params.get('search') || '';
-        setSearch(initialSearch);
+        setSearch(params.get('search') || '');
     }, []);
 
     useEffect(() => {
@@ -39,12 +111,16 @@ export default function ShopPage() {
             setIsLoading(true);
             setError(null);
             try {
-                const response = await productsApi.getProducts({
-                    search: search || undefined,
-                    sort: sortBy,
-                    take: 100,
-                });
-                setProducts(response.data || []);
+                const response = await productsApi.getProducts({ take: 100 });
+                const normalized = (response.data || []).map((product) => ({
+                    ...product,
+                    uiGrade: extractGrade(product),
+                    uiSize: extractSize(product),
+                    uiSubtitle: extractSubtitle(product),
+                    uiPackaging: extractPackaging(product),
+                    uiPriceLabel: getPriceLabel(product),
+                }));
+                setProducts(normalized);
             } catch (err) {
                 console.error('Failed to fetch shop products:', err);
                 setError(err instanceof Error ? err.message : 'Impossible de charger la boutique.');
@@ -54,9 +130,40 @@ export default function ShopPage() {
         };
 
         fetchProducts();
-    }, [search, sortBy]);
+    }, []);
 
-    const productCountLabel = useMemo(() => `${products.length} produit${products.length > 1 ? 's' : ''}`, [products.length]);
+    const allGrades = useMemo(() => Array.from(new Set(products.map((p) => p.uiGrade))), [products]);
+    const allSizes = useMemo(() => Array.from(new Set(products.map((p) => p.uiSize))), [products]);
+    const allPacks = useMemo(() => Array.from(new Set(products.flatMap((p) => p.uiPackaging))), [products]);
+
+    const filteredProducts = useMemo(() => {
+        let result = products.filter((p) => {
+            const haystack = `${p.title} ${p.uiSubtitle} ${p.description || ''}`.toLowerCase();
+            const matchesSearch = haystack.includes(search.toLowerCase());
+            const matchesGrade = selectedGrades.length === 0 || selectedGrades.includes(p.uiGrade);
+            const matchesSize = selectedSizes.length === 0 || selectedSizes.includes(p.uiSize);
+            const matchesPack = selectedPack.length === 0 || p.uiPackaging.some((pack) => selectedPack.includes(pack));
+            return matchesSearch && matchesGrade && matchesSize && matchesPack;
+        });
+
+        if (sortBy === 'name_asc') result = [...result].sort((a, b) => a.title.localeCompare(b.title));
+        if (sortBy === 'name_desc') result = [...result].sort((a, b) => b.title.localeCompare(a.title));
+
+        return result;
+    }, [products, search, selectedGrades, selectedSizes, selectedPack, sortBy]);
+
+    const toggleFilter = (list: string[], setList: (v: string[]) => void, value: string) => {
+        if (list.includes(value)) setList(list.filter((v) => v !== value));
+        else setList([...list, value]);
+    };
+
+    const resetFilters = () => {
+        setSelectedGrades([]);
+        setSelectedSizes([]);
+        setSelectedPack([]);
+        setSearch('');
+        setSortBy('featured');
+    };
 
     return (
         <div className="flex flex-col min-h-screen bg-jungle-900 text-vanilla-50 font-sans antialiased">
@@ -71,6 +178,7 @@ export default function ShopPage() {
                         <div className="grid lg:grid-cols-12 gap-10 items-end">
                             <div className="lg:col-span-7">
                                 <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-vanilla-50">
+                                    <VanillaIcon />
                                     <span className="text-sm font-semibold uppercase tracking-widest">Nosy-Be • Madagascar</span>
                                 </div>
 
@@ -78,7 +186,7 @@ export default function ShopPage() {
                                     La <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">Boutique</span>
                                 </h1>
                                 <p className="mt-4 text-lg text-vanilla-100/80 max-w-xl">
-                                    Catalogue synchronisé avec l'administration. Nouveaux produits, prix, stock et variantes remontent ici sans recopie manuelle.
+                                    Sélectionnez vos gousses de vanille selon leur grade, leur taille et votre usage souhaité.
                                 </p>
                             </div>
 
@@ -88,7 +196,7 @@ export default function ShopPage() {
                                         <SearchIcon />
                                         <input
                                             type="text"
-                                            placeholder="Rechercher un produit..."
+                                            placeholder="Rechercher une gousse..."
                                             className="w-full bg-transparent outline-none text-sm placeholder:text-vanilla-100/40 text-vanilla-50"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
@@ -104,14 +212,13 @@ export default function ShopPage() {
                                                 className="mt-1 w-full bg-jungle-950/50 border border-vanilla-100/10 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold-500/20 transition-all text-vanilla-50"
                                             >
                                                 <option className="bg-jungle-900" value="featured">Sélection M.S.V-NOSY BE</option>
-                                                <option className="bg-jungle-900" value="newest">Nouveautés</option>
-                                                <option className="bg-jungle-900" value="price-asc">Prix croissant</option>
-                                                <option className="bg-jungle-900" value="price-desc">Prix décroissant</option>
+                                                <option className="bg-jungle-900" value="name_asc">Nom (A-Z)</option>
+                                                <option className="bg-jungle-900" value="name_desc">Nom (Z-A)</option>
                                             </select>
                                         </div>
-                                        <div className="sm:w-32 text-center sm:text-left">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-vanilla-100/40 ml-1">Catalogue</label>
-                                            <p className="mt-1 text-2xl font-display italic text-vanilla-50">{products.length}</p>
+                                        <div className="sm:w-24 text-center sm:text-left">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-vanilla-100/40 ml-1">Résultats</label>
+                                            <p className="mt-1 text-2xl font-display italic text-vanilla-50">{filteredProducts.length}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -122,49 +229,246 @@ export default function ShopPage() {
 
                 <section className="bg-vanilla-50 text-jungle-900 transition-colors duration-500 min-h-screen">
                     <div className="mx-auto max-w-7xl px-4 py-12 lg:py-20">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
-                            <div>
-                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-500">Source de vérité</p>
+                        <div className="grid lg:grid-cols-12 gap-12">
+                            <aside className="hidden lg:block lg:col-span-3 space-y-8">
+                                <div className="sticky top-28 space-y-8">
+                                    <div className="flex items-center justify-between pb-4 border-b border-vanilla-200">
+                                        <h2 className="font-display text-xl italic">Filtres</h2>
+                                        <button onClick={resetFilters} className="text-xs font-bold uppercase tracking-widest text-gold-600 hover:text-gold-700 transition-colors">Réinitialiser</button>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">Grade</p>
+                                        <div className="flex flex-col gap-3">
+                                            {allGrades.map((grade) => (
+                                                <label key={grade} className="group flex items-center gap-3 cursor-pointer">
+                                                    <div className="relative flex items-center justify-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedGrades.includes(grade)}
+                                                            onChange={() => toggleFilter(selectedGrades, setSelectedGrades, grade)}
+                                                            className="peer sr-only"
+                                                        />
+                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
+                                                        <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
+                                                    </div>
+                                                    <span className="text-sm text-jungle-700 font-medium group-hover:text-jungle-950 transition-colors">{grade}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">Longueur</p>
+                                        <div className="flex flex-col gap-3">
+                                            {allSizes.map((size) => (
+                                                <label key={size} className="group flex items-center gap-3 cursor-pointer">
+                                                    <div className="relative flex items-center justify-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedSizes.includes(size)}
+                                                            onChange={() => toggleFilter(selectedSizes, setSelectedSizes, size)}
+                                                            className="peer sr-only"
+                                                        />
+                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
+                                                        <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
+                                                    </div>
+                                                    <span className="text-sm text-jungle-700 font-medium group-hover:text-jungle-950 transition-colors">{size}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">Conditionnement</p>
+                                        <div className="flex flex-col gap-3">
+                                            {allPacks.map((pack) => (
+                                                <label key={pack} className="group flex items-center gap-3 cursor-pointer">
+                                                    <div className="relative flex items-center justify-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedPack.includes(pack)}
+                                                            onChange={() => toggleFilter(selectedPack, setSelectedPack, pack)}
+                                                            className="peer sr-only"
+                                                        />
+                                                        <div className="w-5 h-5 rounded-lg border border-vanilla-300 bg-white group-hover:border-gold-500/50 transition-all peer-checked:bg-gold-500 peer-checked:border-gold-500"></div>
+                                                        <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
+                                                    </div>
+                                                    <span className="text-sm text-jungle-700 font-medium group-hover:text-jungle-950 transition-colors">{pack}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="p-6 rounded-3xl bg-jungle-900 text-vanilla-50 border border-vanilla-100/10 relative overflow-hidden group">
+                                        <div className="absolute inset-0 grain opacity-20 transition-opacity group-hover:opacity-30"></div>
+                                        <p className="relative font-display text-xl italic text-vanilla-50">Besoin Pro ?</p>
+                                        <p className="relative mt-2 text-xs text-vanilla-100/70">Volumes, fréquences, tarifs dégressifs.</p>
+                                        <Link href="/b2b" className="relative mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gold-500 hover:text-vanilla-50 transition-colors">
+                                            Demande de devis
+                                            <ArrowRightIcon />
+                                        </Link>
+                                    </div>
+                                </div>
+                            </aside>
+
+                            <div className="lg:col-span-9">
+                                <div className="lg:hidden mb-6">
+                                    <button
+                                        onClick={() => setIsFilterOpen(true)}
+                                        className="w-full inline-flex items-center justify-center gap-3 rounded-2xl bg-white border border-vanilla-200 px-6 py-4 font-semibold"
+                                    >
+                                        <TuneIcon />
+                                        Filtres & Options
+                                    </button>
+                                </div>
+
+                                {isLoading ? (
+                                    <div className="py-20 text-center">
+                                        <div className="inline-flex w-16 h-16 rounded-full bg-vanilla-100 items-center justify-center mb-6 animate-pulse">
+                                            <SearchIcon />
+                                        </div>
+                                        <p className="text-jungle-700/60">Chargement de la boutique…</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="py-20 text-center">
+                                        <h3 className="font-display text-2xl">Erreur de chargement</h3>
+                                        <p className="text-jungle-700/60 mt-2">{error}</p>
+                                    </div>
+                                ) : filteredProducts.length === 0 ? (
+                                    <div className="py-20 text-center">
+                                        <div className="inline-flex w-16 h-16 rounded-full bg-vanilla-100 items-center justify-center mb-6">
+                                            <SearchIcon />
+                                        </div>
+                                        <h3 className="font-display text-2xl">Aucun résultat</h3>
+                                        <p className="text-jungle-700/60 mt-2">Essayez de retirer certains filtres ou changez votre recherche.</p>
+                                        <button onClick={resetFilters} className="mt-6 text-sm font-bold uppercase tracking-widest text-gold-600 hover:underline">Réinitialiser tout</button>
+                                    </div>
+                                ) : (
+                                    <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                                        {filteredProducts.map((p) => (
+                                            <Link
+                                                key={p.id}
+                                                href={`/produit/${p.slug}`}
+                                                className="group rounded-[2rem] bg-white border border-vanilla-200 p-2 hover:border-gold-500/30 transition-all duration-500 overflow-hidden"
+                                            >
+                                                <div className="relative aspect-square rounded-[1.6rem] bg-vanilla-50 flex items-center justify-center overflow-hidden border border-vanilla-100">
+                                                    <div className="absolute inset-0 bg-gradient-to-tr from-vanilla-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                                    <img
+                                                        src={getImageUrl(p.images[0])}
+                                                        alt={p.title}
+                                                        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                    />
+                                                    <div className="absolute top-4 left-4">
+                                                        <span className="bg-white/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-jungle-800 border border-vanilla-100">
+                                                            {p.uiGrade}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="p-5">
+                                                    <div className="flex items-center justify-between gap-4 mb-2">
+                                                        <h3 className="font-display text-xl text-jungle-950 group-hover:text-gold-600 transition-colors uppercase tracking-tight">{p.title}</h3>
+                                                        <span className="text-gold-500"><ArrowRightIcon /></span>
+                                                    </div>
+                                                    <p className="text-sm text-jungle-700/70 line-clamp-1 mb-4">{p.uiSubtitle}</p>
+
+                                                    <div className="flex items-center justify-between pt-4 border-t border-vanilla-100">
+                                                        <p className="font-display text-xl text-jungle-950">{p.uiPriceLabel}</p>
+                                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">Détails</span>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
-                            <p className="text-sm text-cacao-600 font-medium">{productCountLabel}</p>
                         </div>
-
-                        {isLoading && (
-                            <div className="flex justify-center py-24">
-                                <div className="h-10 w-10 animate-spin rounded-full border-4 border-gold-600 border-t-transparent"></div>
-                            </div>
-                        )}
-
-                        {!isLoading && error && (
-                            <div className="rounded-[32px] bg-white border border-red-100 p-10 text-center text-red-600">
-                                <p className="font-semibold">Impossible de charger la boutique.</p>
-                                <p className="mt-2 text-sm">{error}</p>
-                            </div>
-                        )}
-
-                        {!isLoading && !error && products.length === 0 && (
-                            <div className="rounded-[32px] bg-white border border-cacao-900/5 p-10 text-center">
-                                <p className="font-display text-2xl italic text-jungle-950">Aucun produit trouvé</p>
-                                <p className="mt-3 text-cacao-600">Affinez votre recherche ou réessayez avec un autre mot-clé.</p>
-                                <Link href="/shop" className="mt-8 inline-flex items-center gap-2 rounded-full bg-jungle-900 px-6 py-3 text-sm font-bold text-vanilla-50">
-                                    Réinitialiser
-                                    <ArrowRightIcon />
-                                </Link>
-                            </div>
-                        )}
-
-                        {!isLoading && !error && products.length > 0 && (
-                            <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                {products.map((product) => (
-                                    <ProductCard key={product.id} product={product} />
-                                ))}
-                            </div>
-                        )}
                     </div>
                 </section>
             </main>
 
             <Footer />
+
+            {isFilterOpen && (
+                <div className="fixed inset-0 z-[60] overflow-hidden">
+                    <div className="absolute inset-0 bg-jungle-950/60 backdrop-blur-sm" onClick={() => setIsFilterOpen(false)}></div>
+                    <aside className="absolute bottom-0 left-0 right-0 bg-vanilla-50 rounded-t-[2.5rem] max-h-[90vh] flex flex-col border-t border-vanilla-200 animate-in slide-in-from-bottom duration-500">
+                        <div className="p-6 flex items-center justify-between border-b border-vanilla-200">
+                            <h2 className="font-display text-2xl italic text-jungle-900">Filtres</h2>
+                            <button onClick={() => setIsFilterOpen(false)} className="w-10 h-10 rounded-full bg-vanilla-100 flex items-center justify-center transition-transform hover:rotate-90">
+                                <CloseIcon />
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-auto p-8 space-y-10">
+                            <div className="space-y-5">
+                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">Grade</p>
+                                <div className="flex flex-wrap gap-3">
+                                    {allGrades.map((grade) => (
+                                        <button
+                                            key={grade}
+                                            onClick={() => toggleFilter(selectedGrades, setSelectedGrades, grade)}
+                                            className={`px-5 py-3 rounded-2xl border text-sm font-semibold transition-all ${selectedGrades.includes(grade)
+                                                ? 'bg-jungle-900 border-jungle-900 text-vanilla-50'
+                                                : 'bg-white border-vanilla-200 text-jungle-700 hover:bg-vanilla-100'
+                                                }`}
+                                        >
+                                            {grade}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="space-y-5">
+                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">Longueur</p>
+                                <div className="flex flex-wrap gap-3">
+                                    {allSizes.map((size) => (
+                                        <button
+                                            key={size}
+                                            onClick={() => toggleFilter(selectedSizes, setSelectedSizes, size)}
+                                            className={`px-5 py-3 rounded-2xl border text-sm font-semibold transition-all ${selectedSizes.includes(size)
+                                                ? 'bg-jungle-900 border-jungle-900 text-vanilla-50'
+                                                : 'bg-white border-vanilla-200 text-jungle-700 hover:bg-vanilla-100'
+                                                }`}
+                                        >
+                                            {size}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="space-y-5">
+                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">Conditionnement</p>
+                                <div className="flex flex-wrap gap-3">
+                                    {allPacks.map((pack) => (
+                                        <button
+                                            key={pack}
+                                            onClick={() => toggleFilter(selectedPack, setSelectedPack, pack)}
+                                            className={`px-5 py-3 rounded-2xl border text-sm font-semibold transition-all ${selectedPack.includes(pack)
+                                                ? 'bg-jungle-900 border-jungle-900 text-vanilla-50'
+                                                : 'bg-white border-vanilla-200 text-jungle-700 hover:bg-vanilla-100'
+                                                }`}
+                                        >
+                                            {pack}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="p-8 pb-10 border-t border-vanilla-200 flex gap-4">
+                            <button onClick={resetFilters} className="flex-1 py-4 text-sm font-bold uppercase tracking-widest text-jungle-700 hover:text-gold-600 transition-colors">Réinitialiser</button>
+                            <button
+                                onClick={() => setIsFilterOpen(false)}
+                                className="flex-[2] bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 py-4 rounded-full font-bold"
+                            >
+                                Voir {filteredProducts.length} produits
+                            </button>
+                        </div>
+                    </aside>
+                </div>
+            )}
         </div>
     );
 }
