@@ -35,6 +35,59 @@ function findMatchingVariant(product: Product, selectedOptions: Record<string, s
     }) || null;
 }
 
+function getInitialSelectedOptions(product: Product) {
+    const firstVariantOptions = product.variants?.[0]?.options as Record<string, string> | undefined;
+    if (firstVariantOptions && Object.keys(firstVariantOptions).length > 0) {
+        return firstVariantOptions;
+    }
+
+    return (product.options || []).reduce<Record<string, string>>((acc, option) => {
+        if (option.values.length > 0) acc[option.name] = option.values[0];
+        return acc;
+    }, {});
+}
+
+function resolveSelectedOptions(product: Product, previous: Record<string, string>, optionName: string, value: string) {
+    if (!product.variants?.length) {
+        return { ...previous, [optionName]: value };
+    }
+
+    const attempted = { ...previous, [optionName]: value };
+    const exact = findMatchingVariant(product, attempted);
+    if (exact) {
+        return exact.options as Record<string, string>;
+    }
+
+    const partialMatch = product.variants.find((variant) => {
+        const variantOptions = (variant.options || {}) as Record<string, string>;
+        if (variantOptions[optionName] !== value) return false;
+
+        return Object.entries(previous).every(([key, currentValue]) => {
+            if (key === optionName) return true;
+            return variantOptions[key] === currentValue;
+        });
+    });
+
+    if (partialMatch) {
+        return partialMatch.options as Record<string, string>;
+    }
+
+    const fallback = product.variants.find((variant) => {
+        const variantOptions = (variant.options || {}) as Record<string, string>;
+        return variantOptions[optionName] === value;
+    });
+
+    return (fallback?.options as Record<string, string> | undefined) || attempted;
+}
+
+function getOptionValuePrice(product: Product, selectedOptions: Record<string, string>, optionName: string, value: string) {
+    if (!product.variants?.length) return null;
+
+    const resolvedOptions = resolveSelectedOptions(product, selectedOptions, optionName, value);
+    const variant = findMatchingVariant(product, resolvedOptions);
+    return variant?.price ?? null;
+}
+
 function extractGrade(product: Product) {
     const fromDetails = (product.details as any)?.grade;
     if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
@@ -81,14 +134,28 @@ export default function ProductDetailPage() {
             setLoading(true);
             setError(null);
             try {
-                const response = await productsApi.getProductBySlug(slug);
+                let response: Product;
+                try {
+                    response = await productsApi.getProductBySlug(slug);
+                } catch (initialError) {
+                    const listing = await productsApi.getProducts({ take: 100 });
+                    const matched = (listing.data || []).find((candidate) =>
+                        candidate.slug === slug ||
+                        candidate.id === id ||
+                        candidate.sku === id ||
+                        candidate.slug === id
+                    );
+
+                    if (!matched?.slug) {
+                        throw initialError;
+                    }
+
+                    response = await productsApi.getProductBySlug(matched.slug);
+                }
+
                 setProduct(response);
                 setSelectedImageIndex(0);
-                const initialOptions = (response.options || []).reduce<Record<string, string>>((acc, option) => {
-                    if (option.values.length > 0) acc[option.name] = option.values[0];
-                    return acc;
-                }, {});
-                setSelectedOptions(initialOptions);
+                setSelectedOptions(getInitialSelectedOptions(response));
             } catch (err) {
                 console.error('Failed to fetch product:', err);
                 setError(err instanceof Error ? err.message : 'Produit non trouvé');
@@ -99,7 +166,7 @@ export default function ProductDetailPage() {
         };
 
         fetchProduct();
-    }, [slug]);
+    }, [slug, id]);
 
     const selectedVariant = useMemo(() => product ? findMatchingVariant(product, selectedOptions) : null, [product, selectedOptions]);
 
@@ -244,10 +311,11 @@ export default function ProductDetailPage() {
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                             {option.values.map((value) => {
                                                                 const selected = selectedOptions[option.name] === value;
+                                                                const optionPrice = getOptionValuePrice(product, selectedOptions, option.name, value);
                                                                 return (
                                                                     <button
                                                                         key={value}
-                                                                        onClick={() => setSelectedOptions((prev) => ({ ...prev, [option.name]: value }))}
+                                                                        onClick={() => setSelectedOptions((prev) => resolveSelectedOptions(product, prev, option.name, value))}
                                                                         className={`inline-flex flex-col items-start justify-center gap-1 rounded-2xl px-5 py-4 text-sm font-bold border transition-all ${selected
                                                                             ? 'bg-jungle-900 text-vanilla-50 border-jungle-900'
                                                                             : 'bg-vanilla-50 border-vanilla-200 text-jungle-700 hover:bg-white hover:border-gold-500/30'
@@ -257,9 +325,9 @@ export default function ProductDetailPage() {
                                                                             <span className="truncate">{value}</span>
                                                                             {selected && <svg className="w-4 h-4 text-gold-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>}
                                                                         </div>
-                                                                        {selectedVariant && selected && (
+                                                                        {optionPrice !== null && (
                                                                             <div className={`text-[11px] font-medium ${selected ? 'text-vanilla-100/60' : 'text-jungle-700/50'}`}>
-                                                                                {(selectedVariant.price ?? currentPrice) / 100}€
+                                                                                {(optionPrice / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
                                                                             </div>
                                                                         )}
                                                                     </button>

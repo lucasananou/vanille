@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import Link from 'next/link';
 import { CATALOG } from '@/lib/products-data';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
+import { normalizeProductRef } from '@/lib/product-refs';
 
 const SparklesIcon = () => (
   <svg className="w-4 h-4 text-gold-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -318,10 +319,10 @@ export default function HomePage() {
                     </ul>
 
                     <div className="mt-6 flex gap-3">
-                      <Link href={`/produit/${p.id}`} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring text-white">
+                      <Link href={`/produit/${normalizeProductRef(p.id)}`} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring text-white">
                         Voir
                       </Link>
-                      <Link href={`/produit/${p.id}`} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 focus-ring">
+                      <Link href={`/produit/${normalizeProductRef(p.id)}`} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 focus-ring">
                         Acheter
                       </Link>
                     </div>
@@ -463,7 +464,7 @@ export default function HomePage() {
               {CATALOG.slice(0, 3).map((p) => (
                 <Link
                   key={p.id}
-                  href={`/produit/${p.id}`}
+                  href={`/produit/${normalizeProductRef(p.id)}`}
                   className="group rounded-[2rem] bg-white border border-vanilla-200 p-2 hover:border-gold-500/30 transition-all duration-500 overflow-hidden"
                 >
                   <div className="relative aspect-square rounded-[1.6rem] bg-vanilla-50 flex items-center justify-center overflow-hidden border border-vanilla-100">
