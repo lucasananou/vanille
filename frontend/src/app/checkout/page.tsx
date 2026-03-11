@@ -96,29 +96,50 @@ export default function CheckoutPage() {
     );
 
     useEffect(() => {
+        let cancelled = false;
+
         const getSecret = async () => {
             if (paymentMethod !== 'stripe') return;
             if (!stripePromise) {
                 setPaymentError("Paiement Stripe indisponible: clé publique manquante (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).");
                 return;
             }
-            if (totalWithShipping > 0 && !isLoadingSecret) {
-                setIsLoadingSecret(true);
-                setPaymentError(null);
-                try {
-                    // Call backend with total in cents
-                    const res = await paymentsApi.createPaymentIntent(Math.round(totalWithShipping * 100));
+            if (totalWithShipping <= 0) return;
+
+            let cancelled = false;
+            setIsLoadingSecret(true);
+            setPaymentError(null);
+            setClientSecret(null);
+
+            try {
+                // Recreate the PaymentIntent every time the payable total changes.
+                const res = await paymentsApi.createPaymentIntent(
+                    Math.round(totalWithShipping * 100),
+                    'eur',
+                    Math.round(subtotal * 100),
+                    selectedRate?.id,
+                    0,
+                );
+                if (!cancelled) {
                     setClientSecret(res.clientSecret);
-                } catch (err) {
+                }
+            } catch (err) {
+                if (!cancelled) {
                     console.error('Failed to get client secret:', err);
                     setPaymentError("Impossible d'initialiser le paiement Stripe.");
-                } finally {
+                }
+            } finally {
+                if (!cancelled) {
                     setIsLoadingSecret(false);
                 }
             }
         };
         getSecret();
-    }, [totalWithShipping, paymentMethod]);
+        return () => {
+            // Ignore stale secrets when shipping selection changes mid-request.
+            cancelled = true;
+        };
+    }, [totalWithShipping, subtotal, selectedRate?.id, paymentMethod]);
 
     useEffect(() => {
         if (paymentMethod !== 'stripe') {
@@ -562,6 +583,9 @@ export default function CheckoutPage() {
                                         </p>
                                         <PayPalButton
                                             amountInCents={Math.round(totalWithShipping * 100)}
+                                            subtotalAmountInCents={Math.round(subtotal * 100)}
+                                            shippingRateId={selectedRate?.id}
+                                            taxInCents={0}
                                             currency="EUR"
                                             disabled={!isCheckoutDataValid || isFinalizingPayPal}
                                             onApproved={handlePayPalApproved}

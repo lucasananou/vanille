@@ -12,6 +12,7 @@ import { MailService } from '../mail/mail.service';
 export class OrdersService {
     private stripe: Stripe | null = null;
     private stripeSecretKey: string | null = null;
+    private readonly shippingLaunchDiscountRate = 0.5;
 
     constructor(
         private prisma: PrismaService,
@@ -47,6 +48,27 @@ export class OrdersService {
         }
 
         return byAnyKey;
+    }
+
+    private async resolveShippingCost(shippingRateId?: string, shippingCost?: number) {
+        if (shippingRateId) {
+            const rate = await this.prisma.shippingRate.findUnique({
+                where: { id: shippingRateId },
+                select: { id: true, price: true },
+            });
+
+            if (rate) {
+                return {
+                    shippingCost: Math.max(0, Math.round(rate.price * (1 - this.shippingLaunchDiscountRate))),
+                    shippingRateId: rate.id,
+                };
+            }
+        }
+
+        return {
+            shippingCost: shippingCost !== undefined ? shippingCost : 1000,
+            shippingRateId: undefined,
+        };
     }
 
     async createOrder(createOrderDto: CreateOrderDto) {
@@ -171,22 +193,14 @@ export class OrdersService {
 
         // Calculate totals
         const tax = directTax !== undefined ? directTax : Math.round(subtotal * 0.1); // Fallback to 10% tax if not provided
-        const shipping = shippingCost !== undefined ? shippingCost : 1000; // Fallback to 1000 if not provided
+        const resolvedShipping = await this.resolveShippingCost(shippingRateId, shippingCost);
+        const shipping = resolvedShipping.shippingCost;
         const total = subtotal + tax + shipping;
 
         // Generate unique order number
         const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
 
         // Only keep shippingRateId when it exists in DB to avoid FK errors from frontend fallback IDs
-        let validShippingRateId: string | undefined;
-        if (shippingRateId) {
-            const existingRate = await this.prisma.shippingRate.findUnique({
-                where: { id: shippingRateId },
-                select: { id: true },
-            });
-            validShippingRateId = existingRate?.id;
-        }
-
         // Create order
         let order: any;
         try {
@@ -202,7 +216,7 @@ export class OrdersService {
                     shippingAddress,
                     billingAddress: billingAddress || shippingAddress,
                     customerId,
-                    shippingRateId: validShippingRateId,
+                    shippingRateId: resolvedShipping.shippingRateId,
                     items: {
                         create: orderItems.map((item) => ({
                             productId: item.productId,

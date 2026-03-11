@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { OrdersService } from '../orders/orders.service';
 import { CreateOrderDto } from '../orders/dto/create-order.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class PaymentsService {
@@ -11,10 +12,12 @@ export class PaymentsService {
     private paypalClientId: string | null = null;
     private paypalClientSecret: string | null = null;
     private paypalEnvironment: string = 'sandbox';
+    private readonly shippingLaunchDiscountRate = 0.5;
 
     constructor(
         private readonly configService: ConfigService,
         private readonly ordersService: OrdersService,
+        private readonly prisma: PrismaService,
     ) {
         this.stripeSecretKey = this.configService.get<string>('STRIPE_SECRET_KEY') || null;
         this.paypalClientId = this.configService.get<string>('PAYPAL_CLIENT_ID') || null;
@@ -39,10 +42,35 @@ export class PaymentsService {
         return this.stripe;
     }
 
-    async createPaymentIntent(amount: number, currency: string = 'eur') {
+    private async resolveShippingCost(shippingRateId?: string) {
+        if (!shippingRateId) return 0;
+
+        const rate = await this.prisma.shippingRate.findUnique({
+            where: { id: shippingRateId },
+            select: { price: true },
+        });
+
+        if (!rate) {
+            throw new BadRequestException('Invalid shipping rate selected.');
+        }
+
+        return Math.max(0, Math.round(rate.price * (1 - this.shippingLaunchDiscountRate)));
+    }
+
+    async createPaymentIntent(
+        amount: number,
+        currency: string = 'eur',
+        subtotalAmount?: number,
+        shippingRateId?: string,
+        tax: number = 0,
+    ) {
         try {
+            const finalAmount = subtotalAmount !== undefined
+                ? subtotalAmount + tax + await this.resolveShippingCost(shippingRateId)
+                : Math.round(amount);
+
             const paymentIntent = await this.getStripe().paymentIntents.create({
-                amount: Math.round(amount), // Amount is already expected in cents from the controller
+                amount: finalAmount,
                 currency,
                 automatic_payment_methods: {
                     enabled: true,
@@ -93,13 +121,23 @@ export class PaymentsService {
         return data.access_token as string;
     }
 
-    async createPayPalOrder(amountInCents: number, currency: string = 'EUR') {
-        if (!amountInCents || amountInCents <= 0) {
+    async createPayPalOrder(
+        amountInCents: number,
+        currency: string = 'EUR',
+        subtotalAmount?: number,
+        shippingRateId?: string,
+        tax: number = 0,
+    ) {
+        const finalAmount = subtotalAmount !== undefined
+            ? subtotalAmount + tax + await this.resolveShippingCost(shippingRateId)
+            : amountInCents;
+
+        if (!finalAmount || finalAmount <= 0) {
             throw new BadRequestException('Amount must be greater than 0');
         }
 
         const accessToken = await this.getPayPalAccessToken();
-        const value = (amountInCents / 100).toFixed(2);
+        const value = (finalAmount / 100).toFixed(2);
 
         const response = await fetch(`${this.getPayPalBaseUrl()}/v2/checkout/orders`, {
             method: 'POST',

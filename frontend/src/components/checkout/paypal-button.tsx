@@ -11,6 +11,9 @@ declare global {
 
 interface PayPalButtonProps {
     amountInCents: number;
+    subtotalAmountInCents?: number;
+    shippingRateId?: string;
+    taxInCents?: number;
     currency?: string;
     disabled?: boolean;
     onApproved: (paypalOrderId: string) => Promise<void>;
@@ -38,6 +41,9 @@ function loadPayPalScript(clientId: string, currency: string) {
 
 export default function PayPalButton({
     amountInCents,
+    subtotalAmountInCents,
+    shippingRateId,
+    taxInCents = 0,
     currency = 'EUR',
     disabled = false,
     onApproved,
@@ -71,7 +77,13 @@ export default function PayPalButton({
                         height: 48,
                     },
                     createOrder: async () => {
-                        const order = await paymentsApi.createPayPalOrder(amountInCents, currency);
+                        const order = await paymentsApi.createPayPalOrder(
+                            amountInCents,
+                            currency,
+                            subtotalAmountInCents,
+                            shippingRateId,
+                            taxInCents,
+                        );
                         return order.id;
                     },
                     onApprove: async (data: { orderID: string }) => {
@@ -107,7 +119,7 @@ export default function PayPalButton({
                 buttonsInstance.close();
             }
         };
-    }, [amountInCents, currency, onApproved, onError]);
+    }, [amountInCents, subtotalAmountInCents, shippingRateId, taxInCents, currency, onApproved, onError]);
 
     return (
         <div>
