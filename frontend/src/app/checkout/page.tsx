@@ -20,12 +20,6 @@ const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '
 const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
 // --- Icons ---
-const VanillaIcon = () => (
-    <svg className="w-5 h-5 text-gold-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-    </svg>
-);
-
 const ArrowRightIcon = () => (
     <svg className="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M5 12h14M12 5l7 7-7 7" />
@@ -52,12 +46,41 @@ const ShieldIcon = () => (
     </svg>
 );
 
+const SHIPPING_FALLBACKS: Record<string, ShippingRate[]> = {
+    FR: [
+        { id: 'fr-free', name: 'Livraison Gratuite', price: 0, estimatedDays: '3-5 jours', zoneName: 'France & Europe' },
+        { id: 'fr-letter', name: 'Lettre Suivie (Recommandé)', price: 350, estimatedDays: '3-5 jours', zoneName: 'France & Europe' },
+        { id: 'fr-colissimo-home', name: 'Colissimo Domicile', price: 695, estimatedDays: '2-3 jours', zoneName: 'France & Europe' },
+    ],
+    BE: [
+        { id: 'eu-colissimo-home', name: 'Colissimo Europe', price: 695, estimatedDays: '3-5 jours', zoneName: 'France & Europe' },
+    ],
+    CH: [
+        { id: 'eu-colissimo-home', name: 'Colissimo Europe', price: 695, estimatedDays: '3-5 jours', zoneName: 'France & Europe' },
+    ],
+    LU: [
+        { id: 'eu-colissimo-home', name: 'Colissimo Europe', price: 695, estimatedDays: '3-5 jours', zoneName: 'France & Europe' },
+    ],
+    US: [
+        { id: 'us-colissimo-intl', name: 'Colissimo International USA', price: 2890, estimatedDays: '5-8 jours ouvrés', zoneName: 'États-Unis' },
+    ],
+};
+
+type AddressSuggestion = {
+    properties: {
+        label: string;
+        context: string;
+        name: string;
+        postcode: string;
+        city: string;
+    };
+};
+
 export default function CheckoutPage() {
     const SHIPPING_LAUNCH_DISCOUNT_RATE = 0.5;
     const router = useRouter();
     const { items, total, clearCart } = useCart();
     const [clientSecret, setClientSecret] = useState<string | null>(null);
-    const [isLoadingSecret, setIsLoadingSecret] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         phone: '',
@@ -72,7 +95,7 @@ export default function CheckoutPage() {
     const [paymentError, setPaymentError] = useState<string | null>(null);
     const [paypalError, setPaypalError] = useState<string | null>(null);
     const [isFinalizingPayPal, setIsFinalizingPayPal] = useState(false);
-    const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
+    const [addressSuggestions, setAddressSuggestions] = useState<AddressSuggestion[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
     const [availableRates, setAvailableRates] = useState<ShippingRate[]>([]);
@@ -106,8 +129,6 @@ export default function CheckoutPage() {
             }
             if (totalWithShipping <= 0) return;
 
-            let cancelled = false;
-            setIsLoadingSecret(true);
             setPaymentError(null);
             setClientSecret(null);
 
@@ -130,7 +151,6 @@ export default function CheckoutPage() {
                 }
             } finally {
                 if (!cancelled) {
-                    setIsLoadingSecret(false);
                 }
             }
         };
@@ -199,9 +219,9 @@ export default function CheckoutPage() {
             const result = await paymentsApi.finalizePayPalOrder(paypalOrderId, orderPayload);
             clearCart();
             router.push(`/order-confirmation/${result.orderId}`);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('PayPal finalization failed:', error);
-            setPaypalError(error?.message || 'Le paiement PayPal a échoué.');
+            setPaypalError(error instanceof Error ? error.message : 'Le paiement PayPal a échoué.');
         } finally {
             setIsFinalizingPayPal(false);
         }
@@ -220,25 +240,22 @@ export default function CheckoutPage() {
 
                     if (res.availableRates && res.availableRates.length > 0) {
                         setAvailableRates(res.availableRates);
-                        if (!selectedRate) setSelectedRate(res.availableRates[0]);
+                        setSelectedRate((current) => {
+                            if (!current) return res.availableRates[0];
+                            return res.availableRates.find((rate) => rate.id === current.id) ?? res.availableRates[0];
+                        });
                     } else {
                         throw new Error('No rates returned');
                     }
                 } catch (err) {
                     console.error('Shipping rates fetch failed or empty, using fallbacks:', err);
-                    const fallbacks: ShippingRate[] = [
-                        { id: 'lettre', name: 'Lettre Suivie (Recommandé)', price: 350, estimatedDays: '3-5 jours', zoneName: 'Standard' },
-                        { id: 'colissimo', name: 'Colissimo Domicile', price: 695, estimatedDays: '2-3 jours', zoneName: 'Standard' },
-                        { id: 'gratuit', name: 'Livraison Gratuite', price: 0, estimatedDays: '3-5 jours', zoneName: 'Standard' }
-                    ];
-
-                    // Logic for free shipping fallback on frontend
-                    const applicableFallbacks = total >= 7500
-                        ? [fallbacks[2]]
-                        : [fallbacks[0], fallbacks[1]];
+                    const countryFallbacks = SHIPPING_FALLBACKS[formData.country] ?? [];
+                    const applicableFallbacks = formData.country === 'FR'
+                        ? (total >= 7500 ? [countryFallbacks[0]] : countryFallbacks.slice(1))
+                        : countryFallbacks;
 
                     setAvailableRates(applicableFallbacks);
-                    setSelectedRate(applicableFallbacks[0]);
+                    setSelectedRate(applicableFallbacks[0] ?? null);
                 } finally {
                     setIsLoadingRates(false);
                 }
@@ -262,7 +279,7 @@ export default function CheckoutPage() {
     const searchAddress = async (query: string) => {
         try {
             const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=5`);
-            const data = await res.json();
+            const data = await res.json() as { features?: AddressSuggestion[] };
             setAddressSuggestions(data.features || []);
             setShowSuggestions(true);
         } catch (err) {
@@ -270,7 +287,7 @@ export default function CheckoutPage() {
         }
     };
 
-    const selectAddress = (feature: any) => {
+    const selectAddress = (feature: AddressSuggestion) => {
         const { name, postcode, city } = feature.properties;
         setFormData(prev => ({
             ...prev,
@@ -464,6 +481,7 @@ export default function CheckoutPage() {
                                             <option value="BE">Belgique</option>
                                             <option value="CH">Suisse</option>
                                             <option value="LU">Luxembourg</option>
+                                            <option value="US">États-Unis</option>
                                             <option value="RE">Réunion (974)</option>
                                             <option value="MG">Madagascar</option>
                                         </select>

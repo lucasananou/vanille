@@ -6,6 +6,8 @@ import { AuthProvider } from "@/lib/auth-context";
 import CartDrawer from "@/components/cart-drawer";
 import { GoogleAnalytics } from '@next/third-parties/google';
 
+const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID || 'G-R6KF4N6CCF';
+
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -39,9 +41,7 @@ export default function RootLayout({
             <CartDrawer />
           </CartProvider>
         </AuthProvider>
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-        )}
+        <GoogleAnalytics gaId={googleAnalyticsId} />
       </body>
     </html>
   );

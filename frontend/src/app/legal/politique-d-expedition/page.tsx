@@ -7,7 +7,7 @@ export default function PolitiqueExpedition() {
         <div className="flex flex-col min-h-screen bg-white text-zinc-900">
             <Header />
             <main className="flex-grow mx-auto max-w-4xl w-full px-6 py-12">
-                <h1 className="text-3xl font-serif mb-8 text-center text-zinc-900">Politique d'Expédition</h1>
+                <h1 className="text-3xl font-serif mb-8 text-center text-zinc-900">Politique d&apos;Expédition</h1>
 
                 <div className="prose prose-zinc max-w-none">
                     <h2>1. Zones de livraison</h2>
@@ -15,13 +15,14 @@ export default function PolitiqueExpedition() {
                         Nous expédions actuellement vers la France Métropolitaine, la Belgique, la Suisse, le Canada, les États-Unis et Israël.
                     </p>
 
-                    <h2>2. Frais d'expédition</h2>
+                    <h2>2. Frais d&apos;expédition</h2>
                     <p>
-                        Les frais d'expédition sont calculés lors du passage à la caisse en fonction du poids, des dimensions et de la destination des articles commandés.
+                        Les frais d&apos;expédition sont calculés au passage à la caisse selon la destination de livraison et le mode d&apos;expédition disponible pour votre commande.
                     </p>
                     <ul className="list-disc pl-5">
-                        <li><strong>France Métropolitaine :</strong> Livraison standard à 5,90€. Gratuite dès 100€ d'achat.</li>
-                        <li><strong>International :</strong> Livraison à partir de 12,00€.</li>
+                        <li><strong>France Métropolitaine :</strong> plusieurs modes de livraison sont proposés au checkout selon la commande, avec livraison offerte disponible à partir d&apos;un certain montant lorsque l&apos;offre s&apos;applique.</li>
+                        <li><strong>États-Unis :</strong> Colissimo International à partir de 28,90€ avant promotions ponctuelles affichées au checkout.</li>
+                        <li><strong>Autres destinations internationales :</strong> tarif communiqué au checkout lorsqu&apos;un mode est disponible.</li>
                     </ul>
 
                     <h2>3. Délais de traitement</h2>

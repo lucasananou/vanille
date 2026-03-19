@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { ordersApi } from '@/lib/api/orders';
 import { productsApi } from '@/lib/api/products';
 import { normalizeProductRef } from '@/lib/product-refs';
 import { useCart } from '@/lib/cart-context';
-import { useRouter } from 'next/navigation';
 import type { Product } from '@/lib/types';
 
 interface StripeFormProps {
@@ -18,6 +17,7 @@ interface StripeFormProps {
         address: string;
         zip: string;
         city: string;
+        country: string;
     };
     total: number;
     subtotal: number;
@@ -33,10 +33,11 @@ const LockIcon = () => (
     </svg>
 );
 
-export default function StripeForm({ formData, total, subtotal, shipping, tax, shippingRateId }: StripeFormProps) {
+export default function StripeForm({ formData, total, subtotal: _subtotal, shipping, tax: _tax, shippingRateId }: StripeFormProps) {
+    void _subtotal;
+    void _tax;
     const stripe = useStripe();
     const elements = useElements();
-    const router = useRouter();
     const { items, clearCart } = useCart();
     const [isProcessing, setIsProcessing] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -85,7 +86,7 @@ export default function StripeForm({ formData, total, subtotal, shipping, tax, s
                     address1: formData.address,
                     city: formData.city,
                     postalCode: formData.zip,
-                    country: 'FR', // Defaulting to France for now
+                    country: formData.country,
                     phone: formData.phone,
                 },
                 items: await resolveCanonicalCheckoutItems(),
@@ -118,9 +119,9 @@ export default function StripeForm({ formData, total, subtotal, shipping, tax, s
                 // Redirect happens automatically via return_url
                 clearCart();
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Order creation failed:', err);
-            setErrorMessage(err.message || 'Impossible de créer la commande. Veuillez réessayer.');
+            setErrorMessage(err instanceof Error ? err.message : 'Impossible de créer la commande. Veuillez réessayer.');
             setIsProcessing(false);
         }
     };

@@ -34,6 +34,7 @@ export interface CreateOrderDto {
         price: number;
     }>;
     shippingCost: number;
+    shippingRateId?: string;
     tax: number;
 }
 

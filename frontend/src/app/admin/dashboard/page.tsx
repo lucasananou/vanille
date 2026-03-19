@@ -84,6 +84,32 @@ export default function AdminDashboardPage() {
         },
     ];
 
+    const ga = overview.googleAnalytics;
+    const formatDuration = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.round(seconds % 60);
+        return `${mins} min ${secs.toString().padStart(2, '0')} s`;
+    };
+
+    const analyticsStats = ga ? [
+        {
+            name: 'Utilisateurs actifs',
+            value: ga.activeUsers.toLocaleString('fr-FR'),
+        },
+        {
+            name: 'Sessions',
+            value: ga.sessions.toLocaleString('fr-FR'),
+        },
+        {
+            name: 'Pages vues',
+            value: ga.pageViews.toLocaleString('fr-FR'),
+        },
+        {
+            name: 'Durée moy. session',
+            value: formatDuration(ga.averageSessionDuration || 0),
+        },
+    ] : [];
+
     return (
         <div className="p-8">
             {/* Header */}
@@ -162,28 +188,84 @@ export default function AdminDashboardPage() {
 
                 <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-6 text-white">
                     <h2 className="text-lg font-semibold mb-2">Performance de la boutique</h2>
-                    <p className="text-indigo-100 mb-6">Votre boutique se porte bien ce mois-ci !</p>
+                    <p className="text-indigo-100 mb-6">Un mix entre vos ventes internes et vos signaux de trafic.</p>
                     <div className="space-y-3">
                         <div className="flex justify-between items-center">
                             <span className="text-indigo-100">Taux de conversion</span>
-                            <span className="font-semibold">2,4%</span>
+                            <span className="font-semibold">{(overview.conversionRate || 0).toLocaleString('fr-FR')}%</span>
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="text-indigo-100">Valeur moy. de commande</span>
-                            <span className="font-semibold">127,50 €</span>
+                            <span className="font-semibold">{((overview.averageOrderValue || 0) / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-indigo-100">Satisfaction client</span>
-                            <span className="font-semibold">4,8/5,0</span>
+                            <span className="text-indigo-100">Taux de rebond GA4</span>
+                            <span className="font-semibold">{ga?.configured ? `${(ga.bounceRate || 0).toLocaleString('fr-FR', { maximumFractionDigits: 1 })}%` : 'En attente'}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Placeholder for charts and tables */}
-            <div className="bg-white rounded-xl border border-zinc-200 p-6">
-                <h2 className="text-lg font-semibold text-zinc-900 mb-4">Activité Récente</h2>
-                <p className="text-zinc-500 text-center py-12">Les graphiques et les commandes récentes seront affichés ici</p>
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div className="xl:col-span-2 bg-white rounded-xl border border-zinc-200 p-6">
+                    <div className="flex items-start justify-between gap-4 mb-6">
+                        <div>
+                            <h2 className="text-lg font-semibold text-zinc-900">Google Analytics</h2>
+                            <p className="text-sm text-zinc-500">
+                                {ga?.periodLabel || '30 derniers jours'}
+                                {ga?.propertyId ? ` • Propriété ${ga.propertyId}` : ''}
+                            </p>
+                        </div>
+                        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${ga?.configured ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                            {ga?.configured ? 'Connecté' : 'À configurer'}
+                        </span>
+                    </div>
+
+                    {ga?.configured ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {analyticsStats.map((stat) => (
+                                <div key={stat.name} className="rounded-xl border border-zinc-200 bg-zinc-50 p-5">
+                                    <p className="text-sm font-medium text-zinc-500">{stat.name}</p>
+                                    <p className="mt-2 text-2xl font-bold text-zinc-900">{stat.value}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="rounded-xl border border-dashed border-amber-300 bg-amber-50 p-5 text-amber-900">
+                            <p className="font-medium">Google Analytics est bien injecté côté site, mais la lecture serveur n&apos;est pas encore configurée.</p>
+                            <p className="mt-2 text-sm">
+                                Ajoutez `GOOGLE_ANALYTICS_PROPERTY_ID`, `GOOGLE_ANALYTICS_CLIENT_EMAIL` et `GOOGLE_ANALYTICS_PRIVATE_KEY` côté backend pour afficher les stats ici.
+                            </p>
+                            {ga?.error && (
+                                <p className="mt-2 text-sm text-amber-800">{ga.error}</p>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                <div className="bg-white rounded-xl border border-zinc-200 p-6">
+                    <h2 className="text-lg font-semibold text-zinc-900 mb-4">Activité Récente</h2>
+                    <div className="space-y-3">
+                        {overview.orders?.pending !== undefined && (
+                            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3">
+                                <span className="text-sm text-zinc-600">Commandes en attente</span>
+                                <span className="font-semibold text-zinc-900">{overview.orders.pending}</span>
+                            </div>
+                        )}
+                        {overview.orders?.paid !== undefined && (
+                            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3">
+                                <span className="text-sm text-zinc-600">Commandes payées</span>
+                                <span className="font-semibold text-zinc-900">{overview.orders.paid}</span>
+                            </div>
+                        )}
+                        {overview.orders?.shipped !== undefined && (
+                            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3">
+                                <span className="text-sm text-zinc-600">Commandes expédiées</span>
+                                <span className="font-semibold text-zinc-900">{overview.orders.shipped}</span>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

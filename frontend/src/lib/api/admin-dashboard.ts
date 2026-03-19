@@ -10,6 +10,25 @@ export interface DashboardOverview {
     revenueChange: number;
     ordersChange: number;
     customersChange: number;
+    averageOrderValue?: number;
+    conversionRate?: number;
+    googleAnalytics?: {
+        configured: boolean;
+        propertyId?: string;
+        activeUsers: number;
+        sessions: number;
+        pageViews: number;
+        averageSessionDuration: number;
+        bounceRate: number;
+        periodLabel: string;
+        error?: string;
+    };
+    orders?: {
+        total: number;
+        pending: number;
+        paid: number;
+        shipped: number;
+    };
 }
 
 export interface RevenueData {

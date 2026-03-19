@@ -24,6 +24,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:prod": "prisma migrate deploy",
     "prisma:seed": "ts-node prisma/seed.ts",
+    "prisma:seed:shipping": "ts-node prisma/seed-shipping.ts",
     "prisma:studio": "prisma studio",
     "import:woocommerce": "ts-node prisma/import-woocommerce.ts"
   },
@@ -35,6 +36,7 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^6.1.1",
     "@nestjs/serve-static": "^5.0.4",
     "@nestjs/swagger": "^11.2.5",
     "bcrypt": "^6.0.0",
@@ -62,6 +64,7 @@
     "@nestjs/testing": "^11.0.1",
     "@prisma/client": "^5.22.0",
     "@types/bcrypt": "^6.0.0",
+    "@types/cron": "^2.0.1",
     "@types/estree": "^1.0.8",
     "@types/express": "^5.0.0",
     "@types/express-serve-static-core": "^5.1.1",

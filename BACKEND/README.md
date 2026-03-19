@@ -78,6 +78,18 @@ See `.env.example` for all required variables:
 - `REDIS_HOST`, `REDIS_PORT` - Redis configuration for jobs
 - `EMAIL_PROVIDER` - Email service (nodemailer/resend/brevo)
 - `STORAGE_*` - S3-compatible storage config
+- `GOOGLE_ANALYTICS_PROPERTY_ID` - Numeric GA4 property ID for dashboard reporting
+- `GOOGLE_ANALYTICS_CLIENT_EMAIL` - Service account email allowed to read the GA4 property
+- `GOOGLE_ANALYTICS_PRIVATE_KEY` - Service account private key (keep the `\n` line breaks escaped in env)
+
+### Google Analytics
+
+To display GA4 data in the admin dashboard:
+
+1. Add `NEXT_PUBLIC_GA_ID=G-R6KF4N6CCF` to the frontend environment if you want to override the built-in fallback.
+2. Create a Google service account with access to the Google Analytics Data API.
+3. Grant that service account access to your GA4 property.
+4. Set the three backend variables above.
 
 ## API Endpoints
 
