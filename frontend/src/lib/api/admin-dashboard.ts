@@ -31,6 +31,55 @@ export interface DashboardOverview {
     };
 }
 
+export interface GoogleAnalyticsSummary {
+    configured: boolean;
+    propertyId?: string;
+    activeUsers: number;
+    sessions: number;
+    pageViews: number;
+    averageSessionDuration: number;
+    bounceRate: number;
+    periodLabel: string;
+    error?: string;
+}
+
+export interface GoogleAnalyticsDashboard {
+    configured: boolean;
+    propertyId?: string;
+    periodLabel: string;
+    summary: GoogleAnalyticsSummary;
+    timeseries: Array<{
+        date: string;
+        activeUsers: number;
+        sessions: number;
+        pageViews: number;
+    }>;
+    channels: Array<{
+        label: string;
+        value: number;
+        secondaryValue?: number;
+    }>;
+    topPages: Array<{
+        label: string;
+        value: number;
+        secondaryValue?: number;
+    }>;
+    countries: Array<{
+        label: string;
+        value: number;
+    }>;
+    devices: Array<{
+        label: string;
+        value: number;
+    }>;
+    events: Array<{
+        eventName: string;
+        eventCount: number;
+        users: number;
+    }>;
+    error?: string;
+}
+
 export interface RevenueData {
     date: string;
     revenue: number;
@@ -49,6 +98,10 @@ export const adminDashboardApi = {
      */
     getOverview: async (token: string) => {
         return api.get<DashboardOverview>('/admin/dashboard/overview', token);
+    },
+
+    getAnalytics: async (token: string) => {
+        return api.get<GoogleAnalyticsDashboard>('/admin/dashboard/analytics', token);
     },
 
     /**

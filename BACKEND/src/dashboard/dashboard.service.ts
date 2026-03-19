@@ -15,6 +15,48 @@ type GoogleAnalyticsSummary = {
     error?: string;
 };
 
+type GoogleAnalyticsRow = {
+    dimensionValues?: Array<{ value?: string }>;
+    metricValues?: Array<{ value?: string }>;
+};
+
+type GoogleAnalyticsReportResponse = {
+    rows?: GoogleAnalyticsRow[];
+};
+
+type GoogleAnalyticsSeriesPoint = {
+    date: string;
+    activeUsers: number;
+    sessions: number;
+    pageViews: number;
+};
+
+type GoogleAnalyticsBreakdownRow = {
+    label: string;
+    value: number;
+    secondaryValue?: number;
+};
+
+type GoogleAnalyticsEventRow = {
+    eventName: string;
+    eventCount: number;
+    users: number;
+};
+
+type GoogleAnalyticsDashboard = {
+    configured: boolean;
+    propertyId?: string;
+    periodLabel: string;
+    summary: GoogleAnalyticsSummary;
+    timeseries: GoogleAnalyticsSeriesPoint[];
+    channels: GoogleAnalyticsBreakdownRow[];
+    topPages: GoogleAnalyticsBreakdownRow[];
+    countries: GoogleAnalyticsBreakdownRow[];
+    devices: GoogleAnalyticsBreakdownRow[];
+    events: GoogleAnalyticsEventRow[];
+    error?: string;
+};
+
 @Injectable()
 export class DashboardService {
     constructor(
@@ -148,59 +190,27 @@ export class DashboardService {
     }
 
     private async getGoogleAnalyticsSummary(): Promise<GoogleAnalyticsSummary> {
-        const propertyId = this.configService.get<string>('GOOGLE_ANALYTICS_PROPERTY_ID');
-        const clientEmail = this.configService.get<string>('GOOGLE_ANALYTICS_CLIENT_EMAIL');
-        const privateKey = this.configService.get<string>('GOOGLE_ANALYTICS_PRIVATE_KEY');
-
-        if (!propertyId || !clientEmail || !privateKey) {
-            return {
-                configured: false,
-                activeUsers: 0,
-                sessions: 0,
-                pageViews: 0,
-                averageSessionDuration: 0,
-                bounceRate: 0,
-                periodLabel: '30 derniers jours',
-                error: 'Configuration Google Analytics incomplète côté serveur.',
-            };
+        const config = this.getGoogleAnalyticsConfig();
+        if (!config) {
+            return this.getGoogleAnalyticsUnavailableSummary();
         }
 
-        const accessToken = await this.getGoogleAccessToken(clientEmail, privateKey);
-        const response = await fetch(
-            `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify({
-                    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-                    metrics: [
-                        { name: 'activeUsers' },
-                        { name: 'sessions' },
-                        { name: 'screenPageViews' },
-                        { name: 'averageSessionDuration' },
-                        { name: 'bounceRate' },
-                    ],
-                }),
-            },
-        );
-
-        if (!response.ok) {
-            const details = await response.text();
-            throw new Error(`GA Data API ${response.status}: ${details}`);
-        }
-
-        const data = await response.json() as {
-            rows?: Array<{ metricValues?: Array<{ value?: string }> }>;
-        };
+        const data = await this.runGoogleAnalyticsReport(config, {
+            dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+            metrics: [
+                { name: 'activeUsers' },
+                { name: 'sessions' },
+                { name: 'screenPageViews' },
+                { name: 'averageSessionDuration' },
+                { name: 'bounceRate' },
+            ],
+        });
 
         const metrics = data.rows?.[0]?.metricValues ?? [];
 
         return {
             configured: true,
-            propertyId,
+            propertyId: config.propertyId,
             activeUsers: this.parseMetricValue(metrics[0]?.value),
             sessions: this.parseMetricValue(metrics[1]?.value),
             pageViews: this.parseMetricValue(metrics[2]?.value),
@@ -208,6 +218,141 @@ export class DashboardService {
             bounceRate: this.parseMetricValue(metrics[4]?.value),
             periodLabel: '30 derniers jours',
         };
+    }
+
+    async getGoogleAnalyticsDashboard(): Promise<GoogleAnalyticsDashboard> {
+        const config = this.getGoogleAnalyticsConfig();
+        if (!config) {
+            return {
+                configured: false,
+                propertyId: this.configService.get<string>('GOOGLE_ANALYTICS_PROPERTY_ID') || undefined,
+                periodLabel: '30 derniers jours',
+                summary: this.getGoogleAnalyticsUnavailableSummary(),
+                timeseries: [],
+                channels: [],
+                topPages: [],
+                countries: [],
+                devices: [],
+                events: [],
+                error: 'Configuration Google Analytics incomplète côté serveur.',
+            };
+        }
+
+        try {
+            const [summary, timeseriesReport, channelsReport, topPagesReport, countriesReport, devicesReport, eventsReport] = await Promise.all([
+                this.getGoogleAnalyticsSummary(),
+                this.runGoogleAnalyticsReport(config, {
+                    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+                    dimensions: [{ name: 'date' }],
+                    metrics: [
+                        { name: 'activeUsers' },
+                        { name: 'sessions' },
+                        { name: 'screenPageViews' },
+                    ],
+                    orderBys: [{ dimension: { dimensionName: 'date' } }],
+                    limit: 31,
+                }),
+                this.runGoogleAnalyticsReport(config, {
+                    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+                    dimensions: [{ name: 'sessionDefaultChannelGroup' }],
+                    metrics: [
+                        { name: 'sessions' },
+                        { name: 'activeUsers' },
+                    ],
+                    orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+                    limit: 8,
+                }),
+                this.runGoogleAnalyticsReport(config, {
+                    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+                    dimensions: [{ name: 'pagePath' }],
+                    metrics: [
+                        { name: 'screenPageViews' },
+                        { name: 'activeUsers' },
+                    ],
+                    orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
+                    limit: 10,
+                }),
+                this.runGoogleAnalyticsReport(config, {
+                    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+                    dimensions: [{ name: 'country' }],
+                    metrics: [{ name: 'activeUsers' }],
+                    orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
+                    limit: 8,
+                }),
+                this.runGoogleAnalyticsReport(config, {
+                    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+                    dimensions: [{ name: 'deviceCategory' }],
+                    metrics: [{ name: 'activeUsers' }],
+                    orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
+                    limit: 8,
+                }),
+                this.runGoogleAnalyticsReport(config, {
+                    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+                    dimensions: [{ name: 'eventName' }],
+                    metrics: [
+                        { name: 'eventCount' },
+                        { name: 'activeUsers' },
+                    ],
+                    orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
+                    limit: 10,
+                }),
+            ]);
+
+            return {
+                configured: true,
+                propertyId: config.propertyId,
+                periodLabel: '30 derniers jours',
+                summary,
+                timeseries: (timeseriesReport.rows ?? []).map((row) => ({
+                    date: this.formatGoogleAnalyticsDate(row.dimensionValues?.[0]?.value),
+                    activeUsers: this.parseMetricValue(row.metricValues?.[0]?.value),
+                    sessions: this.parseMetricValue(row.metricValues?.[1]?.value),
+                    pageViews: this.parseMetricValue(row.metricValues?.[2]?.value),
+                })),
+                channels: (channelsReport.rows ?? []).map((row) => ({
+                    label: row.dimensionValues?.[0]?.value || 'Non défini',
+                    value: this.parseMetricValue(row.metricValues?.[0]?.value),
+                    secondaryValue: this.parseMetricValue(row.metricValues?.[1]?.value),
+                })),
+                topPages: (topPagesReport.rows ?? []).map((row) => ({
+                    label: row.dimensionValues?.[0]?.value || '/',
+                    value: this.parseMetricValue(row.metricValues?.[0]?.value),
+                    secondaryValue: this.parseMetricValue(row.metricValues?.[1]?.value),
+                })),
+                countries: (countriesReport.rows ?? []).map((row) => ({
+                    label: row.dimensionValues?.[0]?.value || 'Non défini',
+                    value: this.parseMetricValue(row.metricValues?.[0]?.value),
+                })),
+                devices: (devicesReport.rows ?? []).map((row) => ({
+                    label: row.dimensionValues?.[0]?.value || 'Non défini',
+                    value: this.parseMetricValue(row.metricValues?.[0]?.value),
+                })),
+                events: (eventsReport.rows ?? []).map((row) => ({
+                    eventName: row.dimensionValues?.[0]?.value || 'unknown',
+                    eventCount: this.parseMetricValue(row.metricValues?.[0]?.value),
+                    users: this.parseMetricValue(row.metricValues?.[1]?.value),
+                })),
+            };
+        } catch (error) {
+            console.error('Google Analytics dashboard error:', error);
+            return {
+                configured: false,
+                propertyId: config.propertyId,
+                periodLabel: '30 derniers jours',
+                summary: {
+                    ...this.getGoogleAnalyticsUnavailableSummary(),
+                    propertyId: config.propertyId,
+                    error: error instanceof Error ? error.message : 'Impossible de charger les statistiques Google Analytics.',
+                },
+                timeseries: [],
+                channels: [],
+                topPages: [],
+                countries: [],
+                devices: [],
+                events: [],
+                error: error instanceof Error ? error.message : 'Impossible de charger les statistiques Google Analytics.',
+            };
+        }
     }
 
     private async getGoogleAccessToken(clientEmail: string, privateKey: string) {
@@ -272,6 +417,61 @@ export class DashboardService {
         if (!value) return 0;
         const parsed = Number(value);
         return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    private getGoogleAnalyticsConfig() {
+        const propertyId = this.configService.get<string>('GOOGLE_ANALYTICS_PROPERTY_ID');
+        const clientEmail = this.configService.get<string>('GOOGLE_ANALYTICS_CLIENT_EMAIL');
+        const privateKey = this.configService.get<string>('GOOGLE_ANALYTICS_PRIVATE_KEY');
+
+        if (!propertyId || !clientEmail || !privateKey) {
+            return null;
+        }
+
+        return { propertyId, clientEmail, privateKey };
+    }
+
+    private getGoogleAnalyticsUnavailableSummary(): GoogleAnalyticsSummary {
+        return {
+            configured: false,
+            activeUsers: 0,
+            sessions: 0,
+            pageViews: 0,
+            averageSessionDuration: 0,
+            bounceRate: 0,
+            periodLabel: '30 derniers jours',
+            error: 'Configuration Google Analytics incomplète côté serveur.',
+        };
+    }
+
+    private async runGoogleAnalyticsReport(
+        config: { propertyId: string; clientEmail: string; privateKey: string },
+        body: Record<string, unknown>,
+    ): Promise<GoogleAnalyticsReportResponse> {
+        const accessToken = await this.getGoogleAccessToken(config.clientEmail, config.privateKey);
+        const response = await fetch(
+            `https://analyticsdata.googleapis.com/v1beta/properties/${config.propertyId}:runReport`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(body),
+            },
+        );
+
+        if (!response.ok) {
+            const details = await response.text();
+            throw new Error(`GA Data API ${response.status}: ${details}`);
+        }
+
+        return response.json() as Promise<GoogleAnalyticsReportResponse>;
+    }
+
+    private formatGoogleAnalyticsDate(rawDate?: string) {
+        if (!rawDate || rawDate.length !== 8) return rawDate || '';
+        return `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`;
     }
 
     // Revenue metrics

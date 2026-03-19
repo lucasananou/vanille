@@ -19,6 +19,12 @@ export class DashboardController {
         return this.dashboardService.getDashboardOverview();
     }
 
+    @Get('analytics')
+    @ApiOperation({ summary: 'Get Google Analytics dashboard data' })
+    async getAnalytics() {
+        return this.dashboardService.getGoogleAnalyticsDashboard();
+    }
+
     @Get('revenue')
     @ApiOperation({ summary: 'Get total revenue' })
     async getRevenue() {
