@@ -262,6 +262,10 @@ export class OrdersService {
             .sendOrderConfirmation(order.email, order.orderNumber, order)
             .catch((error) => console.error('Failed to send order confirmation:', error));
 
+        this.mailService
+            .sendAdminOrderNotification(order.orderNumber, order)
+            .catch((error) => console.error('Failed to send admin order notification:', error));
+
         return order;
     }
 
@@ -368,11 +372,30 @@ export class OrdersService {
         const updatedOrder = await this.prisma.order.update({
             where: { id: orderId },
             data: { status: OrderStatus.PAID },
+            include: {
+                items: {
+                    include: {
+                        product: true,
+                    },
+                },
+                customer: {
+                    select: {
+                        id: true,
+                        email: true,
+                        firstName: true,
+                        lastName: true,
+                    },
+                },
+            },
         });
 
         this.mailService
             .sendPaymentConfirmation(updatedOrder.email, updatedOrder.orderNumber)
             .catch((error) => console.error('Failed to send payment confirmation:', error));
+
+        this.mailService
+            .sendAdminPaymentNotification(updatedOrder.orderNumber, updatedOrder)
+            .catch((error) => console.error('Failed to send admin payment notification:', error));
 
         return updatedOrder;
     }

@@ -95,7 +95,7 @@ export class MailService {
   async sendOrderConfirmation(email: string, orderNumber: string, orderDetails: any) {
     const mailOptions = {
       to: email,
-      subject: `Order Confirmation - ${orderNumber}`,
+      subject: `Confirmation de commande - ${orderNumber}`,
       html: this.getOrderConfirmationTemplate(orderNumber, orderDetails),
     };
 
@@ -107,10 +107,27 @@ export class MailService {
     }
   }
 
+  async sendAdminOrderNotification(orderNumber: string, orderDetails: any) {
+    const recipient = this.getClientEmail();
+    const mailOptions = {
+      to: recipient,
+      subject: `Nouvelle commande reçue - ${orderNumber}`,
+      html: this.getAdminOrderNotificationTemplate(orderNumber, orderDetails),
+      replyTo: orderDetails?.email || undefined,
+    };
+
+    try {
+      await this.sendEmail(mailOptions);
+      console.log(`✅ Admin order notification sent to ${recipient}`);
+    } catch (error) {
+      console.error('Failed to send admin order notification email:', error);
+    }
+  }
+
   async sendPaymentConfirmation(email: string, orderNumber: string) {
     const mailOptions = {
       to: email,
-      subject: `Payment Confirmed - ${orderNumber}`,
+      subject: `Paiement confirmé - ${orderNumber}`,
       html: this.getPaymentConfirmationTemplate(orderNumber),
     };
 
@@ -122,10 +139,27 @@ export class MailService {
     }
   }
 
+  async sendAdminPaymentNotification(orderNumber: string, orderDetails: any) {
+    const recipient = this.getClientEmail();
+    const mailOptions = {
+      to: recipient,
+      subject: `Paiement confirmé - ${orderNumber}`,
+      html: this.getAdminPaymentNotificationTemplate(orderNumber, orderDetails),
+      replyTo: orderDetails?.email || undefined,
+    };
+
+    try {
+      await this.sendEmail(mailOptions);
+      console.log(`✅ Admin payment notification sent to ${recipient}`);
+    } catch (error) {
+      console.error('Failed to send admin payment notification email:', error);
+    }
+  }
+
   async sendAbandonedCartReminder(email: string, cartId: string, cartItems: any[], daysAgo: number) {
     const subject = daysAgo === 1
-      ? 'You left items in your cart!'
-      : 'Last chance! Your cart is waiting';
+      ? 'Vous avez oublié des articles dans votre panier !'
+      : 'Dernière chance ! Votre panier vous attend';
 
     const mailOptions = {
       to: email,
@@ -237,15 +271,15 @@ export class MailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Order Confirmation</h1>
+            <h1>Confirmation de commande</h1>
           </div>
           <div class="content">
-            <p>Thank you for your order!</p>
-            <p><strong>Order Number:</strong> ${orderNumber}</p>
-            <p>We'll send you another email when your order ships.</p>
+            <p>Merci pour votre commande !</p>
+            <p><strong>Numéro de commande :</strong> ${orderNumber}</p>
+            <p>Nous vous enverrons un e-mail dès l'expédition de votre commande.</p>
           </div>
           <div class="footer">
-            <p>© 2026 E-Commerce Store. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} M.S.V Nosy Be. Tous droits réservés.</p>
           </div>
         </div>
       </body>
@@ -268,12 +302,130 @@ export class MailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>✅ Payment Confirmed</h1>
+            <h1>✅ Paiement confirmé</h1>
           </div>
           <div class="content">
-            <p>Great news! Your payment has been confirmed.</p>
-            <p><strong>Order Number:</strong> ${orderNumber}</p>
-            <p>We're preparing your order for shipment.</p>
+            <p>Excellente nouvelle ! Votre paiement a bien été reçu.</p>
+            <p><strong>Numéro de commande :</strong> ${orderNumber}</p>
+            <p>Nous préparons actuellement votre commande pour l'expédition.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+
+  private getAdminOrderNotificationTemplate(orderNumber: string, orderDetails: any): string {
+    const shippingAddress = orderDetails?.shippingAddress || {};
+    const customerName = [shippingAddress.firstName, shippingAddress.lastName].filter(Boolean).join(' ') || 'Client';
+    const orderDate = orderDetails?.createdAt
+      ? new Date(orderDetails.createdAt).toLocaleString('fr-FR')
+      : new Date().toLocaleString('fr-FR');
+    const items = Array.isArray(orderDetails?.items) ? orderDetails.items : [];
+    const itemsRows = items.map((item: any) => {
+      const title = item?.title || item?.product?.title || 'Produit';
+      const quantity = item?.quantity || 0;
+      const unitPrice = typeof item?.price === 'number'
+        ? (item.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })
+        : '-';
+
+      return `<tr>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">${title}</td>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: center;">${quantity}</td>
+        <td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${unitPrice}</td>
+      </tr>`;
+    }).join('');
+
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #18181b; }
+          .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+          .header { background: #14532d; color: white; padding: 20px; text-align: center; }
+          .content { padding: 20px; background: #f9fafb; }
+          .card { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-top: 16px; }
+          table { width: 100%; border-collapse: collapse; }
+          .muted { color: #52525b; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Nouvelle commande reçue</h1>
+          </div>
+          <div class="content">
+            <p>Une nouvelle commande vient d'être enregistrée sur la boutique.</p>
+            <div class="card">
+              <p><strong>Commande :</strong> ${orderNumber}</p>
+              <p><strong>Date :</strong> ${orderDate}</p>
+              <p><strong>Client :</strong> ${customerName}</p>
+              <p><strong>Email :</strong> ${orderDetails?.email || '-'}</p>
+              <p><strong>Téléphone :</strong> ${shippingAddress.phone || '-'}</p>
+              <p><strong>Total :</strong> ${typeof orderDetails?.total === 'number' ? (orderDetails.total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) : '-'}</p>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Adresse de livraison</h2>
+              <p>${customerName}</p>
+              <p>${shippingAddress.address1 || '-'}</p>
+              ${shippingAddress.address2 ? `<p>${shippingAddress.address2}</p>` : ''}
+              <p>${shippingAddress.postalCode || '-'} ${shippingAddress.city || ''}</p>
+              ${shippingAddress.province ? `<p>${shippingAddress.province}</p>` : ''}
+              <p>${shippingAddress.country || '-'}</p>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Articles commandés</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: left; padding-bottom: 8px;">Produit</th>
+                    <th style="text-align: center; padding-bottom: 8px;">Qté</th>
+                    <th style="text-align: right; padding-bottom: 8px;">PU</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${itemsRows || '<tr><td colspan="3" class="muted">Aucun article trouvé.</td></tr>'}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+
+  private getAdminPaymentNotificationTemplate(orderNumber: string, orderDetails: any): string {
+    const shippingAddress = orderDetails?.shippingAddress || {};
+    const customerName = [shippingAddress.firstName, shippingAddress.lastName].filter(Boolean).join(' ') || 'Client';
+
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #18181b; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: #1d4ed8; color: white; padding: 20px; text-align: center; }
+          .content { padding: 20px; background: #f9fafb; }
+          .card { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-top: 16px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Paiement confirmé</h1>
+          </div>
+          <div class="content">
+            <p>Le paiement d'une commande vient d'être confirmé.</p>
+            <div class="card">
+              <p><strong>Commande :</strong> ${orderNumber}</p>
+              <p><strong>Client :</strong> ${customerName}</p>
+              <p><strong>Email :</strong> ${orderDetails?.email || '-'}</p>
+              <p><strong>Total :</strong> ${typeof orderDetails?.total === 'number' ? (orderDetails.total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) : '-'}</p>
+              <p><strong>Adresse :</strong> ${shippingAddress.address1 || '-'}, ${shippingAddress.postalCode || '-'} ${shippingAddress.city || ''}, ${shippingAddress.country || '-'}</p>
+            </div>
           </div>
         </div>
       </body>
@@ -282,7 +434,7 @@ export class MailService {
   }
 
   private getAbandonedCartTemplate(cartItems: any[], daysAgo: number): string {
-    const itemsList = cartItems.map(item => `<li>${item.product?.title || 'Product'} (x${item.quantity})</li>`).join('');
+    const itemsList = cartItems.map(item => `<li>${item.product?.title || 'Produit'} (x${item.quantity})</li>`).join('');
 
     return `
       <!DOCTYPE html>
@@ -300,13 +452,13 @@ export class MailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🛒 Your Cart Awaits!</h1>
+            <h1>🛒 Votre panier vous attend !</h1>
           </div>
           <div class="content">
-            <p>${daysAgo === 1 ? "You left some items in your cart:" : "Last chance! Don't miss out on these items:"}</p>
+            <p>${daysAgo === 1 ? "Vous avez laissé quelques articles dans votre panier :" : "Dernière chance ! Ne passez pas à côté de ces articles :"}</p>
             <ul>${itemsList}</ul>
             <div class="cta">
-              <a href="${this.configService.get('APP_URL')}/cart" class="button">Complete Your Purchase</a>
+              <a href="${this.configService.get('APP_URL')}/cart" class="button">Terminer mes achats</a>
             </div>
           </div>
         </div>
