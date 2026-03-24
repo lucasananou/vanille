@@ -1,6 +1,48 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
+import PDFDocument = require('pdfkit');
+
+type EmailAttachment = {
+  filename: string;
+  content: Buffer;
+  contentType?: string;
+};
+
+type OrderMailItem = {
+  id?: string;
+  title?: string;
+  price?: number;
+  quantity?: number;
+  product?: {
+    title?: string;
+  };
+};
+
+type OrderMailAddress = {
+  firstName?: string | null;
+  lastName?: string | null;
+  company?: string | null;
+  address1?: string | null;
+  address2?: string | null;
+  city?: string | null;
+  postalCode?: string | null;
+  province?: string | null;
+  country?: string | null;
+  phone?: string | null;
+};
+
+type OrderMailDetails = {
+  email?: string;
+  subtotal?: number;
+  tax?: number;
+  shipping?: number;
+  total?: number;
+  createdAt?: string | Date;
+  shippingAddress?: any;
+  billingAddress?: any;
+  items?: OrderMailItem[];
+};
 
 @Injectable()
 export class MailService {
@@ -46,12 +88,21 @@ export class MailService {
     return this.configService.get<string>('CLIENT_EMAIL') || this.getFromEmail();
   }
 
-  async sendEmail(options: { to: string | string[]; subject: string; html: string; replyTo?: string }) {
+  async sendEmail(options: { to: string | string[]; subject: string; html: string; replyTo?: string; attachments?: EmailAttachment[] }) {
     const mailOptions = {
       from: this.getFromHeader(),
       to: options.to,
       subject: options.subject,
       html: options.html,
+      ...(options.attachments?.length
+        ? {
+          attachments: options.attachments.map((attachment) => ({
+            filename: attachment.filename,
+            content: attachment.content,
+            contentType: attachment.contentType,
+          })),
+        }
+        : {}),
       ...(options.replyTo ? { replyTo: options.replyTo } : {}),
     };
 
@@ -69,6 +120,15 @@ export class MailService {
             to: recipients,
             subject: options.subject,
             html: options.html,
+            ...(options.attachments?.length
+              ? {
+                attachments: options.attachments.map((attachment) => ({
+                  filename: attachment.filename,
+                  content: attachment.content.toString('base64'),
+                  ...(attachment.contentType ? { content_type: attachment.contentType } : {}),
+                })),
+              }
+              : {}),
             ...(options.replyTo ? { reply_to: options.replyTo } : {}),
           }),
         });
@@ -124,11 +184,19 @@ export class MailService {
     }
   }
 
-  async sendPaymentConfirmation(email: string, orderNumber: string) {
+  async sendPaymentConfirmation(email: string, orderNumber: string, orderDetails: OrderMailDetails) {
+    const invoicePdf = await this.generateInvoicePdf(orderNumber, orderDetails);
     const mailOptions = {
       to: email,
       subject: `Paiement confirmé - ${orderNumber}`,
-      html: this.getPaymentConfirmationTemplate(orderNumber),
+      html: this.getPaymentConfirmationTemplate(orderNumber, orderDetails),
+      attachments: [
+        {
+          filename: `facture-${orderNumber}.pdf`,
+          content: invoicePdf,
+          contentType: 'application/pdf',
+        },
+      ],
     };
 
     try {
@@ -141,10 +209,18 @@ export class MailService {
 
   async sendAdminPaymentNotification(orderNumber: string, orderDetails: any) {
     const recipient = this.getClientEmail();
+    const invoicePdf = await this.generateInvoicePdf(orderNumber, orderDetails);
     const mailOptions = {
       to: recipient,
       subject: `Paiement confirmé - ${orderNumber}`,
       html: this.getAdminPaymentNotificationTemplate(orderNumber, orderDetails),
+      attachments: [
+        {
+          filename: `facture-${orderNumber}.pdf`,
+          content: invoicePdf,
+          contentType: 'application/pdf',
+        },
+      ],
       replyTo: orderDetails?.email || undefined,
     };
 
@@ -255,17 +331,193 @@ export class MailService {
     });
   }
 
-  private getOrderConfirmationTemplate(orderNumber: string, orderDetails: any): string {
+  private formatPrice(amountInCents?: number | null) {
+    const safeAmount = typeof amountInCents === 'number' ? amountInCents : 0;
+    return (safeAmount / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+  }
+
+  private getOrderDate(orderDetails: OrderMailDetails) {
+    const date = orderDetails?.createdAt ? new Date(orderDetails.createdAt) : new Date();
+    return date.toLocaleString('fr-FR');
+  }
+
+  private getOrderItems(orderDetails: OrderMailDetails) {
+    return Array.isArray(orderDetails?.items) ? orderDetails.items : [];
+  }
+
+  private getCustomerName(address?: OrderMailAddress | null, fallback = 'Client') {
+    const name = [address?.firstName, address?.lastName].filter(Boolean).join(' ').trim();
+    return name || fallback;
+  }
+
+  private getAddressLines(address?: OrderMailAddress | null) {
+    if (!address) {
+      return ['-'];
+    }
+
+    const cityLine = [address.postalCode, address.city].filter(Boolean).join(' ');
+    return [
+      address.company || null,
+      this.getCustomerName(address, ''),
+      address.address1 || null,
+      address.address2 || null,
+      cityLine || null,
+      address.province || null,
+      address.country || null,
+      address.phone ? `Tél : ${address.phone}` : null,
+    ].filter(Boolean) as string[];
+  }
+
+  private getOrderItemsTableRows(orderDetails: OrderMailDetails) {
+    return this.getOrderItems(orderDetails).map((item) => {
+      const title = item?.title || item?.product?.title || 'Produit';
+      const quantity = item?.quantity || 0;
+      const unitPrice = this.formatPrice(item?.price);
+      const lineTotal = this.formatPrice((item?.price || 0) * quantity);
+
+      return `
+        <tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">${title}</td>
+          <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb; text-align: center;">${quantity}</td>
+          <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${unitPrice}</td>
+          <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${lineTotal}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  private getOrderTotalsHtml(orderDetails: OrderMailDetails) {
+    return `
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 8px 0; color: #52525b;">Sous-total</td>
+          <td style="padding: 8px 0; text-align: right;">${this.formatPrice(orderDetails?.subtotal)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #52525b;">Livraison</td>
+          <td style="padding: 8px 0; text-align: right;">${this.formatPrice(orderDetails?.shipping)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #52525b;">Taxes</td>
+          <td style="padding: 8px 0; text-align: right;">${this.formatPrice(orderDetails?.tax)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 0 0; font-weight: 700;">Total</td>
+          <td style="padding: 12px 0 0; text-align: right; font-weight: 700;">${this.formatPrice(orderDetails?.total)}</td>
+        </tr>
+      </table>
+    `;
+  }
+
+  private async generateInvoicePdf(orderNumber: string, orderDetails: OrderMailDetails) {
+    const shippingAddress = orderDetails?.shippingAddress || null;
+    const billingAddress = orderDetails?.billingAddress || shippingAddress;
+    const items = this.getOrderItems(orderDetails);
+
+    return new Promise<Buffer>((resolve, reject) => {
+      const doc = new PDFDocument({ size: 'A4', margin: 48 });
+      const chunks: Buffer[] = [];
+
+      doc.on('data', (chunk) => chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)));
+      doc.on('end', () => resolve(Buffer.concat(chunks)));
+      doc.on('error', reject);
+
+      doc.fontSize(22).text(this.getFromName(), { align: 'left' });
+      doc.moveDown(0.2);
+      doc.fontSize(10).fillColor('#52525b').text(this.getFromEmail());
+      doc.fillColor('#18181b');
+
+      doc.moveDown(1.5);
+      doc.fontSize(20).text('Facture');
+      doc.moveDown(0.4);
+      doc.fontSize(11).text(`Commande : ${orderNumber}`);
+      doc.text(`Date : ${this.getOrderDate(orderDetails)}`);
+      doc.text(`Client : ${this.getCustomerName(shippingAddress, orderDetails?.email || 'Client')}`);
+      doc.text(`Email : ${orderDetails?.email || '-'}`);
+
+      const billingTop = doc.y + 18;
+      doc.moveDown(1.2);
+      doc.fontSize(12).text('Adresse de facturation', 48, billingTop);
+      doc.fontSize(10);
+      this.getAddressLines(billingAddress).forEach((line, index) => {
+        doc.text(line, 48, billingTop + 18 + index * 14);
+      });
+
+      doc.fontSize(12).text('Adresse de livraison', 320, billingTop);
+      doc.fontSize(10);
+      this.getAddressLines(shippingAddress).forEach((line, index) => {
+        doc.text(line, 320, billingTop + 18 + index * 14);
+      });
+
+      let tableY = Math.max(doc.y, billingTop + 120);
+      doc.moveTo(48, tableY).lineTo(547, tableY).stroke('#d4d4d8');
+      tableY += 12;
+
+      doc.fontSize(10).font('Helvetica-Bold');
+      doc.text('Produit', 48, tableY);
+      doc.text('Qté', 300, tableY, { width: 40, align: 'center' });
+      doc.text('PU', 380, tableY, { width: 70, align: 'right' });
+      doc.text('Total', 465, tableY, { width: 82, align: 'right' });
+      doc.font('Helvetica');
+
+      tableY += 18;
+      items.forEach((item) => {
+        const title = item?.title || item?.product?.title || 'Produit';
+        const quantity = item?.quantity || 0;
+        const unitPrice = this.formatPrice(item?.price);
+        const lineTotal = this.formatPrice((item?.price || 0) * quantity);
+
+        doc.text(title, 48, tableY, { width: 220 });
+        doc.text(String(quantity), 300, tableY, { width: 40, align: 'center' });
+        doc.text(unitPrice, 380, tableY, { width: 70, align: 'right' });
+        doc.text(lineTotal, 465, tableY, { width: 82, align: 'right' });
+        tableY += 18;
+      });
+
+      tableY += 8;
+      doc.moveTo(48, tableY).lineTo(547, tableY).stroke('#d4d4d8');
+      tableY += 16;
+
+      const totalsX = 360;
+      doc.font('Helvetica');
+      doc.text('Sous-total', totalsX, tableY, { width: 100 });
+      doc.text(this.formatPrice(orderDetails?.subtotal), 460, tableY, { width: 87, align: 'right' });
+      tableY += 16;
+      doc.text('Livraison', totalsX, tableY, { width: 100 });
+      doc.text(this.formatPrice(orderDetails?.shipping), 460, tableY, { width: 87, align: 'right' });
+      tableY += 16;
+      doc.text('Taxes', totalsX, tableY, { width: 100 });
+      doc.text(this.formatPrice(orderDetails?.tax), 460, tableY, { width: 87, align: 'right' });
+      tableY += 22;
+      doc.font('Helvetica-Bold');
+      doc.text('Total', totalsX, tableY, { width: 100 });
+      doc.text(this.formatPrice(orderDetails?.total), 460, tableY, { width: 87, align: 'right' });
+
+      doc.moveDown(4);
+      doc.font('Helvetica').fontSize(9).fillColor('#52525b');
+      doc.text('Merci pour votre achat. Cette facture a été générée automatiquement.', 48, 760, {
+        width: 499,
+        align: 'center',
+      });
+
+      doc.end();
+    });
+  }
+
+  private getOrderConfirmationTemplate(orderNumber: string, orderDetails: OrderMailDetails): string {
+    const shippingAddress = orderDetails?.shippingAddress || null;
     return `
       <!DOCTYPE html>
       <html>
       <head>
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #4CAF50; color: white; padding: 20px; text-align: center; }
-          .content { padding: 20px; background: #f9f9f9; }
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #18181b; }
+          .container { max-width: 680px; margin: 0 auto; padding: 20px; }
+          .header { background: #14532d; color: white; padding: 24px; text-align: center; }
+          .content { padding: 24px; background: #f9fafb; }
+          .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; margin-top: 18px; }
           .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+          table { width: 100%; border-collapse: collapse; }
         </style>
       </head>
       <body>
@@ -274,9 +526,38 @@ export class MailService {
             <h1>Confirmation de commande</h1>
           </div>
           <div class="content">
-            <p>Merci pour votre commande !</p>
-            <p><strong>Numéro de commande :</strong> ${orderNumber}</p>
-            <p>Nous vous enverrons un e-mail dès l'expédition de votre commande.</p>
+            <p>Bonjour ${this.getCustomerName(shippingAddress)},</p>
+            <p>Merci pour votre commande. Nous avons bien enregistré votre achat et préparons la suite.</p>
+            <div class="card">
+              <p><strong>Numéro de commande :</strong> ${orderNumber}</p>
+              <p><strong>Date :</strong> ${this.getOrderDate(orderDetails)}</p>
+              <p><strong>Email :</strong> ${orderDetails?.email || '-'}</p>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Articles commandés</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: left; padding-bottom: 8px;">Produit</th>
+                    <th style="text-align: center; padding-bottom: 8px;">Qté</th>
+                    <th style="text-align: right; padding-bottom: 8px;">PU</th>
+                    <th style="text-align: right; padding-bottom: 8px;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${this.getOrderItemsTableRows(orderDetails)}
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Récapitulatif</h2>
+              ${this.getOrderTotalsHtml(orderDetails)}
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Adresse de livraison</h2>
+              ${this.getAddressLines(shippingAddress).map((line) => `<p style="margin: 4px 0;">${line}</p>`).join('')}
+            </div>
+            <p>Nous vous enverrons un e-mail dès que le paiement sera confirmé et qu’une facture sera émise.</p>
           </div>
           <div class="footer">
             <p>© ${new Date().getFullYear()} M.S.V Nosy Be. Tous droits réservés.</p>
@@ -287,16 +568,19 @@ export class MailService {
     `;
   }
 
-  private getPaymentConfirmationTemplate(orderNumber: string): string {
+  private getPaymentConfirmationTemplate(orderNumber: string, orderDetails: OrderMailDetails): string {
+    const shippingAddress = orderDetails?.shippingAddress || null;
     return `
       <!DOCTYPE html>
       <html>
       <head>
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2196F3; color: white; padding: 20px; text-align: center; }
-          .content { padding: 20px; background: #f9f9f9; }
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #18181b; }
+          .container { max-width: 680px; margin: 0 auto; padding: 20px; }
+          .header { background: #1d4ed8; color: white; padding: 24px; text-align: center; }
+          .content { padding: 24px; background: #f9fafb; }
+          .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; margin-top: 18px; }
+          table { width: 100%; border-collapse: collapse; }
         </style>
       </head>
       <body>
@@ -305,9 +589,34 @@ export class MailService {
             <h1>✅ Paiement confirmé</h1>
           </div>
           <div class="content">
-            <p>Excellente nouvelle ! Votre paiement a bien été reçu.</p>
-            <p><strong>Numéro de commande :</strong> ${orderNumber}</p>
-            <p>Nous préparons actuellement votre commande pour l'expédition.</p>
+            <p>Bonjour ${this.getCustomerName(shippingAddress)},</p>
+            <p>Excellente nouvelle : votre paiement a bien été reçu. Vous trouverez votre facture en pièce jointe.</p>
+            <div class="card">
+              <p><strong>Numéro de commande :</strong> ${orderNumber}</p>
+              <p><strong>Date :</strong> ${this.getOrderDate(orderDetails)}</p>
+              <p><strong>Email :</strong> ${orderDetails?.email || '-'}</p>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Articles commandés</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: left; padding-bottom: 8px;">Produit</th>
+                    <th style="text-align: center; padding-bottom: 8px;">Qté</th>
+                    <th style="text-align: right; padding-bottom: 8px;">PU</th>
+                    <th style="text-align: right; padding-bottom: 8px;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${this.getOrderItemsTableRows(orderDetails)}
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Récapitulatif</h2>
+              ${this.getOrderTotalsHtml(orderDetails)}
+            </div>
+            <p>Nous préparons désormais votre commande pour l’expédition.</p>
           </div>
         </div>
       </body>
@@ -315,26 +624,9 @@ export class MailService {
     `;
   }
 
-  private getAdminOrderNotificationTemplate(orderNumber: string, orderDetails: any): string {
+  private getAdminOrderNotificationTemplate(orderNumber: string, orderDetails: OrderMailDetails): string {
     const shippingAddress = orderDetails?.shippingAddress || {};
-    const customerName = [shippingAddress.firstName, shippingAddress.lastName].filter(Boolean).join(' ') || 'Client';
-    const orderDate = orderDetails?.createdAt
-      ? new Date(orderDetails.createdAt).toLocaleString('fr-FR')
-      : new Date().toLocaleString('fr-FR');
-    const items = Array.isArray(orderDetails?.items) ? orderDetails.items : [];
-    const itemsRows = items.map((item: any) => {
-      const title = item?.title || item?.product?.title || 'Produit';
-      const quantity = item?.quantity || 0;
-      const unitPrice = typeof item?.price === 'number'
-        ? (item.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })
-        : '-';
-
-      return `<tr>
-        <td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">${title}</td>
-        <td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: center;">${quantity}</td>
-        <td style="padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${unitPrice}</td>
-      </tr>`;
-    }).join('');
+    const customerName = this.getCustomerName(shippingAddress);
 
     return `
       <!DOCTYPE html>
@@ -359,20 +651,15 @@ export class MailService {
             <p>Une nouvelle commande vient d'être enregistrée sur la boutique.</p>
             <div class="card">
               <p><strong>Commande :</strong> ${orderNumber}</p>
-              <p><strong>Date :</strong> ${orderDate}</p>
+              <p><strong>Date :</strong> ${this.getOrderDate(orderDetails)}</p>
               <p><strong>Client :</strong> ${customerName}</p>
               <p><strong>Email :</strong> ${orderDetails?.email || '-'}</p>
               <p><strong>Téléphone :</strong> ${shippingAddress.phone || '-'}</p>
-              <p><strong>Total :</strong> ${typeof orderDetails?.total === 'number' ? (orderDetails.total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) : '-'}</p>
+              <p><strong>Total :</strong> ${this.formatPrice(orderDetails?.total)}</p>
             </div>
             <div class="card">
               <h2 style="margin-top: 0;">Adresse de livraison</h2>
-              <p>${customerName}</p>
-              <p>${shippingAddress.address1 || '-'}</p>
-              ${shippingAddress.address2 ? `<p>${shippingAddress.address2}</p>` : ''}
-              <p>${shippingAddress.postalCode || '-'} ${shippingAddress.city || ''}</p>
-              ${shippingAddress.province ? `<p>${shippingAddress.province}</p>` : ''}
-              <p>${shippingAddress.country || '-'}</p>
+              ${this.getAddressLines(shippingAddress).map((line) => `<p style="margin: 4px 0;">${line}</p>`).join('')}
             </div>
             <div class="card">
               <h2 style="margin-top: 0;">Articles commandés</h2>
@@ -382,12 +669,17 @@ export class MailService {
                     <th style="text-align: left; padding-bottom: 8px;">Produit</th>
                     <th style="text-align: center; padding-bottom: 8px;">Qté</th>
                     <th style="text-align: right; padding-bottom: 8px;">PU</th>
+                    <th style="text-align: right; padding-bottom: 8px;">Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${itemsRows || '<tr><td colspan="3" class="muted">Aucun article trouvé.</td></tr>'}
+                  ${this.getOrderItemsTableRows(orderDetails) || '<tr><td colspan="4" class="muted">Aucun article trouvé.</td></tr>'}
                 </tbody>
               </table>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Totaux</h2>
+              ${this.getOrderTotalsHtml(orderDetails)}
             </div>
           </div>
         </div>
@@ -396,9 +688,9 @@ export class MailService {
     `;
   }
 
-  private getAdminPaymentNotificationTemplate(orderNumber: string, orderDetails: any): string {
+  private getAdminPaymentNotificationTemplate(orderNumber: string, orderDetails: OrderMailDetails): string {
     const shippingAddress = orderDetails?.shippingAddress || {};
-    const customerName = [shippingAddress.firstName, shippingAddress.lastName].filter(Boolean).join(' ') || 'Client';
+    const customerName = this.getCustomerName(shippingAddress);
 
     return `
       <!DOCTYPE html>
@@ -418,13 +710,37 @@ export class MailService {
             <h1>Paiement confirmé</h1>
           </div>
           <div class="content">
-            <p>Le paiement d'une commande vient d'être confirmé.</p>
+            <p>Le paiement d'une commande vient d'être confirmé. La facture PDF est jointe à cet e-mail.</p>
             <div class="card">
               <p><strong>Commande :</strong> ${orderNumber}</p>
+              <p><strong>Date :</strong> ${this.getOrderDate(orderDetails)}</p>
               <p><strong>Client :</strong> ${customerName}</p>
               <p><strong>Email :</strong> ${orderDetails?.email || '-'}</p>
-              <p><strong>Total :</strong> ${typeof orderDetails?.total === 'number' ? (orderDetails.total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) : '-'}</p>
-              <p><strong>Adresse :</strong> ${shippingAddress.address1 || '-'}, ${shippingAddress.postalCode || '-'} ${shippingAddress.city || ''}, ${shippingAddress.country || '-'}</p>
+              <p><strong>Total :</strong> ${this.formatPrice(orderDetails?.total)}</p>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Adresse de livraison</h2>
+              ${this.getAddressLines(shippingAddress).map((line) => `<p style="margin: 4px 0;">${line}</p>`).join('')}
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Articles commandés</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: left; padding-bottom: 8px;">Produit</th>
+                    <th style="text-align: center; padding-bottom: 8px;">Qté</th>
+                    <th style="text-align: right; padding-bottom: 8px;">PU</th>
+                    <th style="text-align: right; padding-bottom: 8px;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${this.getOrderItemsTableRows(orderDetails) || '<tr><td colspan="4">Aucun article trouvé.</td></tr>'}
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Totaux</h2>
+              ${this.getOrderTotalsHtml(orderDetails)}
             </div>
           </div>
         </div>

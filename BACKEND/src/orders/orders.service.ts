@@ -390,7 +390,7 @@ export class OrdersService {
         });
 
         this.mailService
-            .sendPaymentConfirmation(updatedOrder.email, updatedOrder.orderNumber)
+            .sendPaymentConfirmation(updatedOrder.email, updatedOrder.orderNumber, updatedOrder)
             .catch((error) => console.error('Failed to send payment confirmation:', error));
 
         this.mailService
