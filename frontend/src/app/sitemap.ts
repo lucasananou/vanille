@@ -1,13 +1,20 @@
 import { MetadataRoute } from 'next';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
+import { getApiUrl, getSiteUrl } from '@/lib/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vanille-nosybe.fr';
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vanille-production.up.railway.app';
+    const baseUrl = getSiteUrl();
+    const apiUrl = getApiUrl();
 
     // Static pages
     const staticPages = [
         '',
+        '/shop',
+        '/about',
+        '/contact',
+        '/faq',
+        '/b2b',
+        '/vanille-bourbon-madagascar',
         '/blog',
         '/legal/mentions-legales',
         '/legal/conditions-generales-de-vente',

@@ -5,6 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
+import { getSiteUrl } from '@/lib/site';
 
 interface BlogPostPageProps {
     params: Promise<{
@@ -15,6 +16,7 @@ interface BlogPostPageProps {
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
     const { slug } = await params;
     const post = BLOG_POSTS.find((p) => p.slug === slug);
+    const siteUrl = getSiteUrl();
 
     if (!post) {
         return {
@@ -28,7 +30,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         openGraph: {
             title: post.title,
             description: post.excerpt,
-            url: `https://tsniout-shop.fr/blog/${slug}`,
+            url: `${siteUrl}/blog/${slug}`,
             images: [
                 {
                     url: post.coverImage,
@@ -40,6 +42,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
             type: 'article',
             publishedTime: post.date,
             authors: [post.author],
+        },
+        alternates: {
+            canonical: `/blog/${slug}`,
         },
     };
 }
@@ -112,11 +117,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                 name: post.author
                             },
                             publisher: {
-                                '@type': 'Organization',
-                                name: 'M.S.V-NOSY BE Shop',
+                                    '@type': 'Organization',
+                                name: 'M.S.V-NOSY BE',
                                 logo: {
                                     '@type': 'ImageObject',
-                                    url: 'https://tsniout-shop.fr/logo_msv.png' // Ensure this exists or use a valid URL
+                                    url: `${getSiteUrl()}/logo_msv.png`
                                 }
                             },
                             description: post.excerpt

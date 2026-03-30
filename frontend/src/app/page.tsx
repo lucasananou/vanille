@@ -214,6 +214,9 @@ export default function HomePage() {
                       src="/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
                       alt="Triage et calibrage de la vanille MSV Nosy-Be"
                       className="absolute inset-0 w-full h-full object-cover"
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-jungle-900/40 via-transparent to-transparent"></div>
 

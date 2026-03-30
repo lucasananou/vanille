@@ -7,9 +7,11 @@ import { AuthProvider } from "@/lib/auth-context";
 import CartDrawer from "@/components/cart-drawer";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { normalizeGaMeasurementId } from "@/lib/analytics-config";
+import { getSiteUrl } from "@/lib/site";
 
 const googleAnalyticsId = normalizeGaMeasurementId(process.env.NEXT_PUBLIC_GA_ID || 'G-R6KF4N6CCF');
 const googleTagManagerId = process.env.NEXT_PUBLIC_GTM_ID?.trim() || '';
+const siteUrl = getSiteUrl();
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,8 +28,44 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "M.S.V-NOSY BE — Vanille de Madagascar",
-  description: "Vanille de Nosy-Be (Madagascar) — arôme intense, sélection TK (Noir) / Gourmet, conditionnement premium. Découvrez la boutique.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "M.S.V-NOSY BE | Vanille de Madagascar premium",
+    template: "%s | M.S.V-NOSY BE",
+  },
+  description: "Vanille de Madagascar premium sélectionnée à Nosy-Be. Gousses de vanille Bourbon, packs découverte, livraison France, Europe et USA.",
+  keywords: [
+    "vanille Madagascar",
+    "vanille bourbon",
+    "gousses de vanille premium",
+    "vanille Nosy-Be",
+    "vanille de Madagascar premium",
+  ],
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    url: siteUrl,
+    siteName: 'M.S.V-NOSY BE',
+    title: 'M.S.V-NOSY BE | Vanille de Madagascar premium',
+    description: 'Gousses de vanille Bourbon de Madagascar, sélection premium, packs découverte et expédition France, Europe et USA.',
+    images: [
+      {
+        url: '/logo_msv.png',
+        width: 1200,
+        height: 1200,
+        alt: 'Logo M.S.V-NOSY BE',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'M.S.V-NOSY BE | Vanille de Madagascar premium',
+    description: 'Vanille Bourbon de Madagascar sélectionnée à Nosy-Be pour pâtisserie, cadeaux gourmands et usages professionnels.',
+    images: ['/logo_msv.png'],
+  },
 };
 
 export default function RootLayout({
@@ -66,6 +104,32 @@ export default function RootLayout({
           </Script>
         ) : null}
         {googleAnalyticsId ? <GoogleAnalytics gaId={googleAnalyticsId} /> : null}
+        <Script id="global-structured-data" type="application/ld+json" strategy="afterInteractive">
+          {JSON.stringify([
+            {
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'M.S.V-NOSY BE',
+              url: siteUrl,
+              logo: `${siteUrl}/logo_msv.png`,
+              sameAs: [
+                'https://www.instagram.com/m.s.vnosybe',
+                'https://www.facebook.com/abou.moridy',
+              ],
+            },
+            {
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'M.S.V-NOSY BE',
+              url: siteUrl,
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: `${siteUrl}/shop?search={search_term_string}`,
+                'query-input': 'required name=search_term_string',
+              },
+            },
+          ])}
+        </Script>
       </body>
     </html>
   );
