@@ -24,9 +24,9 @@ export class RefundsService {
             throw new ForbiddenException('This order does not belong to you');
         }
 
-        // Check if order can be refunded (must be PAID or SHIPPED)
-        if (order.status !== 'PAID' && order.status !== 'SHIPPED') {
-            throw new BadRequestException('Only paid or shipped orders can be refunded');
+        // Check if order can be refunded (must be paid, shipped, or delivered)
+        if (order.status !== 'PAID' && order.status !== 'SHIPPED' && order.status !== 'DELIVERED') {
+            throw new BadRequestException('Only paid, shipped, or delivered orders can be refunded');
         }
 
         // Calculate total already refunded

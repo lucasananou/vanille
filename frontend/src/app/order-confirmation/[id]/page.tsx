@@ -122,6 +122,7 @@ export default function OrderConfirmationPage() {
                                     order.status === 'PAID' ? 'Payée' :
                                         order.status === 'PROCESSING' ? 'En préparation' :
                                             order.status === 'SHIPPED' ? 'Expédiée' :
+                                                order.status === 'DELIVERED' ? 'Livrée' :
                                                 order.status === 'CANCELLED' ? 'Annulée' :
                                                     order.status === 'REFUNDED' ? 'Remboursée' : order.status}
                             </span>

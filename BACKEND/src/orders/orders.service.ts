@@ -383,6 +383,12 @@ export class OrdersService {
                 .catch((error) => console.error('Failed to send SHIPPED status update:', error));
         }
 
+        if (status === OrderStatus.DELIVERED) {
+            this.mailService
+                .sendOrderStatusUpdate(updatedOrder.email, updatedOrder.orderNumber, updatedOrder, 'DELIVERED')
+                .catch((error) => console.error('Failed to send DELIVERED status update:', error));
+        }
+
         return updatedOrder;
     }
 

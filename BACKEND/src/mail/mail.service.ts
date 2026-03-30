@@ -44,7 +44,7 @@ type OrderMailDetails = {
   items?: OrderMailItem[];
 };
 
-type NotifiableOrderStatus = 'PAID' | 'PROCESSING' | 'SHIPPED';
+type NotifiableOrderStatus = 'PAID' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED';
 
 @Injectable()
 export class MailService {
@@ -451,6 +451,14 @@ export class MailService {
           intro: 'Votre commande a été expédiée.',
           outro: 'Votre colis est désormais en route.',
           color: '#7c3aed',
+        };
+      case 'DELIVERED':
+        return {
+          subject: 'Votre commande a été livrée',
+          title: 'Commande livrée',
+          intro: 'Votre commande a bien été livrée.',
+          outro: 'Nous espérons que cette sélection vous plaira et sublimera vos prochaines créations.',
+          color: '#0f766e',
         };
     }
   }

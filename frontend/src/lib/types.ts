@@ -126,7 +126,7 @@ export interface Order {
     customerId?: string;
     customer?: Customer;
     email: string;
-    status: 'PENDING' | 'PAID' | 'PROCESSING' | 'SHIPPED' | 'CANCELLED' | 'REFUNDED';
+    status: 'PENDING' | 'PAID' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'REFUNDED';
     total: number;
     subtotal: number;
     shippingCost: number;

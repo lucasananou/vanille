@@ -37,6 +37,7 @@ export default function AdminOrdersPage() {
             PAID: 'bg-blue-100 text-blue-800',
             PROCESSING: 'bg-indigo-100 text-indigo-800',
             SHIPPED: 'bg-purple-100 text-purple-800',
+            DELIVERED: 'bg-emerald-100 text-emerald-800',
             CANCELLED: 'bg-red-100 text-red-800',
             REFUNDED: 'bg-zinc-200 text-zinc-800',
         };
@@ -67,6 +68,7 @@ export default function AdminOrdersPage() {
                         <option value="PAID">Payée</option>
                         <option value="PROCESSING">En préparation</option>
                         <option value="SHIPPED">Expédiée</option>
+                        <option value="DELIVERED">Livrée</option>
                         <option value="CANCELLED">Annulée</option>
                         <option value="REFUNDED">Remboursée</option>
                     </select>
@@ -137,6 +139,7 @@ export default function AdminOrdersPage() {
                                                 order.status === 'PAID' ? 'Payée' :
                                                     order.status === 'PROCESSING' ? 'En préparation' :
                                                         order.status === 'SHIPPED' ? 'Expédiée' :
+                                                            order.status === 'DELIVERED' ? 'Livrée' :
                                                             order.status === 'CANCELLED' ? 'Annulée' :
                                                                 order.status === 'REFUNDED' ? 'Remboursée' : (order.status as string)}
                                         </span>
@@ -157,7 +160,7 @@ export default function AdminOrdersPage() {
             </div>
 
             {/* Stats */}
-            <div className="mt-6 grid grid-cols-4 gap-4">
+            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
                 <div className="bg-white rounded-lg border border-zinc-200 p-4">
                     <p className="text-sm text-zinc-500">Commandes totales</p>
                     <p className="text-2xl font-bold text-zinc-900">{orders.length}</p>
@@ -178,6 +181,12 @@ export default function AdminOrdersPage() {
                     <p className="text-sm text-zinc-500">Expédiées</p>
                     <p className="text-2xl font-bold text-purple-600">
                         {orders.filter((o) => o.status === 'SHIPPED').length}
+                    </p>
+                </div>
+                <div className="bg-white rounded-lg border border-zinc-200 p-4">
+                    <p className="text-sm text-zinc-500">Livrées</p>
+                    <p className="text-2xl font-bold text-emerald-600">
+                        {orders.filter((o) => o.status === 'DELIVERED').length}
                     </p>
                 </div>
             </div>

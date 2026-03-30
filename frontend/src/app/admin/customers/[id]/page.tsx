@@ -51,6 +51,7 @@ const getStatusLabel = (status: string) => {
         PAID: 'Payée',
         PROCESSING: 'En préparation',
         SHIPPED: 'Expédiée',
+        DELIVERED: 'Livrée',
         CANCELLED: 'Annulée',
         REFUNDED: 'Remboursée',
     };
@@ -64,6 +65,7 @@ const getStatusColor = (status: string) => {
         PAID: 'bg-blue-100 text-blue-800',
         PROCESSING: 'bg-indigo-100 text-indigo-800',
         SHIPPED: 'bg-purple-100 text-purple-800',
+        DELIVERED: 'bg-emerald-100 text-emerald-800',
         CANCELLED: 'bg-red-100 text-red-800',
         REFUNDED: 'bg-zinc-200 text-zinc-800',
     };
