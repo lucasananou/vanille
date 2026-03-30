@@ -116,6 +116,8 @@ const VanillaIcon = () => (
 );
 
 export default function HomePage() {
+  const featuredProduct = CATALOG[1];
+
   return (
     <div className="bg-jungle-900 text-vanilla-50 font-sans antialiased">
       <Header />
@@ -148,6 +150,33 @@ export default function HomePage() {
                   Gousses sélectionnées (TK Noir / Gourmet selon lots), conditionnement premium,
                   pensées pour la pâtisserie, l’extrait maison et les cadeaux gourmands.
                 </p>
+
+                <div className="mt-6 rounded-[24px] border border-gold-500/25 bg-white/5 backdrop-blur p-5 max-w-xl">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gold-500 font-semibold">Best-seller</p>
+                      <p className="mt-2 text-xl font-display text-vanilla-50">{featuredProduct.title}</p>
+                      <p className="mt-1 text-sm text-vanilla-100/70">{featuredProduct.subtitle}</p>
+                    </div>
+                    <div className="sm:text-right">
+                      <p className="text-xs text-vanilla-100/60">Prix</p>
+                      <p className="mt-1 text-2xl font-bold text-gold-500">{featuredProduct.price_label}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                    <Link href={`/produit/${featuredProduct.id}`} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                      Ajouter au panier
+                      <ArrowRightIcon />
+                    </Link>
+                    <div className="inline-flex items-center gap-3 rounded-full border border-vanilla-100/10 bg-white/5 px-4 py-3 text-xs text-vanilla-100/75">
+                      <span>Paiement sécurisé</span>
+                      <span className="opacity-30">•</span>
+                      <span>Livraison France / Europe / USA</span>
+                      <span className="opacity-30">•</span>
+                      <span>Origine Nosy-Be</span>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="mt-7 flex flex-col sm:flex-row gap-3">
                   <Link href="/shop" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">

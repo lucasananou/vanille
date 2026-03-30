@@ -10,6 +10,7 @@ import type { Product, ProductVariant } from '@/lib/types';
 import { productsApi } from '@/lib/api/products';
 import { normalizeProductRef } from '@/lib/product-refs';
 import { getImageUrl } from '@/lib/utils';
+import { trackViewItem } from '@/lib/analytics';
 
 const CheckIcon = () => (
     <svg className="w-4 h-4 text-gold-500 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -169,6 +170,19 @@ export default function ProductDetailPage() {
     }, [slug, id]);
 
     const selectedVariant = useMemo(() => product ? findMatchingVariant(product, selectedOptions) : null, [product, selectedOptions]);
+
+    useEffect(() => {
+        if (!product) return;
+
+        const trackingKey = `view_item:${product.id}:${selectedVariant?.id || 'default'}`;
+        if (typeof window !== 'undefined') {
+            const lastKey = sessionStorage.getItem('last_view_item_key');
+            if (lastKey === trackingKey) return;
+            sessionStorage.setItem('last_view_item_key', trackingKey);
+        }
+
+        trackViewItem(product, selectedVariant || undefined);
+    }, [product, selectedVariant]);
 
     if (loading) {
         return (

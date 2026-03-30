@@ -14,6 +14,7 @@ import StripeForm from '@/components/checkout/stripe-form';
 import PayPalButton from '@/components/checkout/paypal-button';
 import { useRouter } from 'next/navigation';
 import type { Product } from '@/lib/types';
+import { trackBeginCheckout } from '@/lib/analytics';
 
 // Initialize Stripe outside of component
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
@@ -117,6 +118,19 @@ export default function CheckoutPage() {
         formData.city &&
         items.length > 0
     );
+
+    useEffect(() => {
+        if (items.length === 0) return;
+        if (typeof window !== 'undefined' && sessionStorage.getItem('begin_checkout_tracked') === 'true') {
+            return;
+        }
+
+        trackBeginCheckout({ items, total: Math.round(totalWithShipping * 100) });
+
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('begin_checkout_tracked', 'true');
+        }
+    }, [items, totalWithShipping]);
 
     useEffect(() => {
         let cancelled = false;
@@ -362,6 +376,20 @@ export default function CheckoutPage() {
                                 <div className="mt-3 flex items-center justify-between text-sm">
                                     <span className="text-vanilla-100/70">Total à payer</span>
                                     <span className="font-semibold text-2xl text-vanilla-50">{fmt.format(totalWithShipping)}</span>
+                                </div>
+                                <div className="mt-4 grid sm:grid-cols-3 gap-3 text-xs">
+                                    <div className="rounded-2xl bg-white/5 border border-vanilla-100/15 px-3 py-3">
+                                        <p className="font-semibold text-vanilla-50">Paiement sécurisé</p>
+                                        <p className="mt-1 text-vanilla-100/70">Stripe et PayPal, 3DS et données protégées.</p>
+                                    </div>
+                                    <div className="rounded-2xl bg-white/5 border border-vanilla-100/15 px-3 py-3">
+                                        <p className="font-semibold text-vanilla-50">Livraison visible</p>
+                                        <p className="mt-1 text-vanilla-100/70">France, Europe et USA avec coûts affichés avant paiement.</p>
+                                    </div>
+                                    <div className="rounded-2xl bg-white/5 border border-vanilla-100/15 px-3 py-3">
+                                        <p className="font-semibold text-vanilla-50">Origine garantie</p>
+                                        <p className="mt-1 text-vanilla-100/70">Vanille sélectionnée à Nosy-Be, Madagascar.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

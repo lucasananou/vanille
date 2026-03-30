@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ordersApi } from '@/lib/api/orders';
 import type { Order } from '@/lib/types';
+import { trackPurchase } from '@/lib/analytics';
 
 export default function OrderConfirmationPage() {
     const params = useParams();
@@ -31,6 +32,16 @@ export default function OrderConfirmationPage() {
             fetchOrder();
         }
     }, [orderId]);
+
+    useEffect(() => {
+        if (!order) return;
+        if (typeof window !== 'undefined') {
+            const key = `purchase_tracked_${order.id}`;
+            if (sessionStorage.getItem(key) === 'true') return;
+            sessionStorage.setItem(key, 'true');
+        }
+        trackPurchase(order);
+    }, [order]);
 
     if (isLoading) {
         return (

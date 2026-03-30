@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { Product, ProductVariant } from './types';
 import { normalizeProductRef } from './product-refs';
+import { trackAddToCart } from './analytics';
 
 export interface CartItem {
     id: string;
@@ -66,6 +67,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }, [items]);
 
     const addItem = (product: Product, quantity = 1, variant?: ProductVariant) => {
+        trackAddToCart(product, quantity, variant);
         setItems((currentItems) => {
             const incomingProductRef = normalizeProductRef(product.slug || product.id);
             // Check if item already exists
