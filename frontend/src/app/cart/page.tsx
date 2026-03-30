@@ -114,6 +114,11 @@ export default function CartPage() {
                                                         <p className="mt-1 text-sm font-bold tracking-tight text-gold-600">
                                                             {fmt.format(item.price / 100)} <span className="text-[10px] uppercase font-bold text-cacao-400">/ unité</span>
                                                         </p>
+                                                        {item.variant?.title ? (
+                                                            <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-jungle-500">
+                                                                Variante choisie : {item.variant.title}
+                                                            </p>
+                                                        ) : null}
 
                                                         <div className="mt-3 flex flex-wrap gap-2">
                                                             <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 bg-vanilla-100 border border-cacao-900/5 text-[10px] font-bold uppercase tracking-widest text-jungle-800 shadow-none">
@@ -225,6 +230,18 @@ export default function CartPage() {
 
                                         <div className="mt-6 flex items-center justify-center gap-4 text-vanilla-100/30 text-2xl">
                                             <svg className="w-8 h-8" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
+                                        </div>
+
+                                        <div className="mt-6 grid gap-3">
+                                            {[
+                                                'Paiement 100% sécurisé et confirmation immédiate',
+                                                'Livraison calculée avant validation de la commande',
+                                                'Vanille premium expédiée depuis un stock contrôlé'
+                                            ].map((message) => (
+                                                <div key={message} className="rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 px-4 py-3 text-xs font-semibold text-vanilla-100/80">
+                                                    {message}
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>

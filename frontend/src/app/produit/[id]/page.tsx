@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 import type { Product, ProductVariant } from '@/lib/types';
 import { productsApi } from '@/lib/api/products';
+import { reviewsApi, type ReviewsResponse } from '@/lib/api/reviews';
 import { normalizeProductRef } from '@/lib/product-refs';
 import { getImageUrl } from '@/lib/utils';
 import { trackViewItem } from '@/lib/analytics';
@@ -128,6 +129,7 @@ export default function ProductDetailPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [reviewsData, setReviewsData] = useState<ReviewsResponse | null>(null);
     const { addItem, openCart } = useCart();
 
     useEffect(() => {
@@ -184,6 +186,35 @@ export default function ProductDetailPage() {
         trackViewItem(product, selectedVariant || undefined);
     }, [product, selectedVariant]);
 
+    useEffect(() => {
+        if (!product?.slug) {
+            setReviewsData(null);
+            return;
+        }
+
+        let cancelled = false;
+
+        const fetchReviews = async () => {
+            try {
+                const response = await reviewsApi.getProductReviews(product.slug);
+                if (!cancelled) {
+                    setReviewsData(response);
+                }
+            } catch (fetchError) {
+                console.error('Failed to fetch product reviews:', fetchError);
+                if (!cancelled) {
+                    setReviewsData(null);
+                }
+            }
+        };
+
+        fetchReviews();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [product?.slug]);
+
     if (loading) {
         return (
             <div className="flex flex-col min-h-screen bg-vanilla-50 font-sans antialiased text-jungle-900">
@@ -217,6 +248,16 @@ export default function ProductDetailPage() {
     const productSize = extractSize(product);
     const packagingLabel = getUiPackaging(product, selectedVariant);
     const descriptionParagraphs = getDescriptionParagraphs(product);
+    const reviewStats = reviewsData?.stats;
+    const topReviews = reviewsData?.reviews?.slice(0, 3) || [];
+    const hasReviews = (reviewStats?.totalReviews || 0) > 0;
+    const productBullets = (product.bullets && product.bullets.length > 0
+        ? product.bullets
+        : [
+            `${productGrade} soigneusement sélectionnée à Nosy-Be.`,
+            `${productSize} pour une infusion intense et gourmande.`,
+            `Conditionnement ${packagingLabel.toLowerCase()} pour préserver les arômes.`
+        ]).slice(0, 3);
 
     const handleAddToCart = () => {
         if (stock <= 0) return;
@@ -297,6 +338,19 @@ export default function ProductDetailPage() {
                                         Nosy-Be • Madagascar
                                     </div>
 
+                                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                                        <div className="inline-flex items-center gap-2 rounded-full border border-gold-200 bg-gold-50 px-4 py-2 text-xs font-semibold text-jungle-900">
+                                            <svg className="w-3.5 h-3.5 text-gold-600" viewBox="0 0 24 24" fill="currentColor"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+                                            {hasReviews
+                                                ? `${reviewStats?.averageRating.toFixed(1)}/5 • ${reviewStats?.totalReviews} avis`
+                                                : 'Sélection premium appréciée en cuisine et pâtisserie'}
+                                        </div>
+                                        <div className="inline-flex items-center gap-2 rounded-full border border-vanilla-200 bg-vanilla-50 px-4 py-2 text-xs font-semibold text-jungle-800">
+                                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold-500"></span>
+                                            Expédition France, Europe et USA
+                                        </div>
+                                    </div>
+
                                     <h1 className="mt-6 font-display text-4xl leading-[1.06] text-jungle-950 italic">{product.title}</h1>
                                     <p className="mt-3 text-lg text-jungle-700/70 leading-relaxed font-medium">{descriptionParagraphs[0] || product.collection?.name || 'Vanille premium de Madagascar'}</p>
 
@@ -313,6 +367,18 @@ export default function ProductDetailPage() {
                                             <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 text-center">Disponibilité</p>
                                             <p className="text-sm font-semibold text-gold-600 mt-1">{stock > 0 ? 'En stock' : 'Épuisé'}</p>
                                         </div>
+                                    </div>
+
+                                    <div className="mt-6 rounded-[2rem] border border-vanilla-200 bg-vanilla-50 p-6">
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">Pourquoi cette sélection plaît autant</p>
+                                        <ul className="mt-4 space-y-3">
+                                            {productBullets.map((bullet) => (
+                                                <li key={bullet} className="flex gap-3 text-sm leading-relaxed text-jungle-800">
+                                                    <CheckIcon />
+                                                    <span>{bullet}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
 
                                     {getVariantOptions(product).length > 0 && (
@@ -374,6 +440,18 @@ export default function ProductDetailPage() {
                                                 <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
                                             </button>
                                         </div>
+                                    </div>
+
+                                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                                        {[
+                                            'Paiement sécurisé Stripe',
+                                            'Expédition suivie sous 24 à 72h',
+                                            'Origine contrôlée Nosy-Be'
+                                        ].map((item) => (
+                                            <div key={item} className="rounded-2xl border border-vanilla-200 bg-white px-4 py-4 text-center text-xs font-semibold text-jungle-800">
+                                                {item}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -463,6 +541,50 @@ export default function ProductDetailPage() {
                                             </div>
                                         )}
                                     </div>
+                                </div>
+
+                                <div className="mt-8 rounded-[2.5rem] bg-white border border-vanilla-200 p-8 lg:p-12">
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                                        <div>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">Preuve sociale</p>
+                                            <h2 className="mt-3 font-display text-3xl text-jungle-950 italic">Ce que disent les clients</h2>
+                                        </div>
+                                        <div className="rounded-2xl border border-gold-200 bg-gold-50 px-5 py-4 text-sm font-semibold text-jungle-900">
+                                            {hasReviews
+                                                ? `${reviewStats?.averageRating.toFixed(1)}/5 de moyenne sur ${reviewStats?.totalReviews} avis`
+                                                : 'Les premiers retours clients apparaîtront ici'}
+                                        </div>
+                                    </div>
+
+                                    {hasReviews ? (
+                                        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+                                            {topReviews.map((review) => (
+                                                <article key={review.id} className="rounded-[2rem] border border-vanilla-200 bg-vanilla-50 p-6">
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <p className="text-sm font-bold text-jungle-900">
+                                                            {review.customer?.firstName || 'Client'} {review.customer?.lastName?.slice(0, 1) ? `${review.customer.lastName.slice(0, 1)}.` : ''}
+                                                        </p>
+                                                        <div className="flex items-center gap-1 text-gold-600">
+                                                            {Array.from({ length: 5 }).map((_, index) => (
+                                                                <svg key={index} className={`h-4 w-4 ${index < review.rating ? 'opacity-100' : 'opacity-20'}`} viewBox="0 0 24 24" fill="currentColor"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    {review.title ? (
+                                                        <p className="mt-4 text-base font-semibold text-jungle-950">{review.title}</p>
+                                                    ) : null}
+                                                    <p className="mt-3 text-sm leading-relaxed text-jungle-800/80">{review.comment}</p>
+                                                    <p className="mt-4 text-[11px] font-semibold uppercase tracking-widest text-jungle-500">
+                                                        {review.verifiedPurchase ? 'Achat vérifié' : 'Avis client'}
+                                                    </p>
+                                                </article>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="mt-8 rounded-[2rem] border border-dashed border-vanilla-300 bg-vanilla-50 px-6 py-8 text-sm leading-relaxed text-jungle-800/75">
+                                            Cette fiche est prête à accueillir les avis clients pour renforcer la confiance et soutenir la conversion des campagnes Google Ads.
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
