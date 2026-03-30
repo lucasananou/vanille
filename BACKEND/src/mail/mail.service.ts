@@ -44,6 +44,8 @@ type OrderMailDetails = {
   items?: OrderMailItem[];
 };
 
+type NotifiableOrderStatus = 'PAID' | 'PROCESSING' | 'SHIPPED';
+
 @Injectable()
 export class MailService {
   private transporter?: nodemailer.Transporter;
@@ -232,6 +234,21 @@ export class MailService {
     }
   }
 
+  async sendOrderStatusUpdate(email: string, orderNumber: string, orderDetails: OrderMailDetails, status: NotifiableOrderStatus) {
+    const mailOptions = {
+      to: email,
+      subject: this.getOrderStatusSubject(orderNumber, status),
+      html: this.getOrderStatusUpdateTemplate(orderNumber, orderDetails, status),
+    };
+
+    try {
+      await this.sendEmail(mailOptions);
+      console.log(`✅ Order status update email sent to ${email} (${status})`);
+    } catch (error) {
+      console.error('Failed to send order status update email:', error);
+    }
+  }
+
   async sendAbandonedCartReminder(email: string, cartId: string, cartItems: any[], daysAgo: number) {
     const subject = daysAgo === 1
       ? 'Vous avez oublié des articles dans votre panier !'
@@ -407,6 +424,39 @@ export class MailService {
         </tr>
       </table>
     `;
+  }
+
+  private getStatusPresentation(status: NotifiableOrderStatus) {
+    switch (status) {
+      case 'PAID':
+        return {
+          subject: 'Votre commande a été validée',
+          title: 'Commande validée',
+          intro: 'Bonne nouvelle : votre commande a bien été validée.',
+          outro: 'Nous allons maintenant lancer la préparation de votre commande.',
+          color: '#14532d',
+        };
+      case 'PROCESSING':
+        return {
+          subject: 'Votre commande est en préparation',
+          title: 'Commande en préparation',
+          intro: 'Votre commande est actuellement en cours de préparation par notre équipe.',
+          outro: 'Nous vous préviendrons dès que votre colis sera expédié.',
+          color: '#4338ca',
+        };
+      case 'SHIPPED':
+        return {
+          subject: 'Votre commande a été expédiée',
+          title: 'Commande expédiée',
+          intro: 'Votre commande a été expédiée.',
+          outro: 'Votre colis est désormais en route.',
+          color: '#7c3aed',
+        };
+    }
+  }
+
+  private getOrderStatusSubject(orderNumber: string, status: NotifiableOrderStatus) {
+    return `${this.getStatusPresentation(status).subject} - ${orderNumber}`;
   }
 
   private async generateInvoicePdf(orderNumber: string, orderDetails: OrderMailDetails) {
@@ -617,6 +667,64 @@ export class MailService {
               ${this.getOrderTotalsHtml(orderDetails)}
             </div>
             <p>Nous préparons désormais votre commande pour l’expédition.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+
+  private getOrderStatusUpdateTemplate(orderNumber: string, orderDetails: OrderMailDetails, status: NotifiableOrderStatus): string {
+    const shippingAddress = orderDetails?.shippingAddress || null;
+    const presentation = this.getStatusPresentation(status);
+
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #18181b; }
+          .container { max-width: 680px; margin: 0 auto; padding: 20px; }
+          .header { background: ${presentation.color}; color: white; padding: 24px; text-align: center; }
+          .content { padding: 24px; background: #f9fafb; }
+          .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; margin-top: 18px; }
+          table { width: 100%; border-collapse: collapse; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>${presentation.title}</h1>
+          </div>
+          <div class="content">
+            <p>Bonjour ${this.getCustomerName(shippingAddress)},</p>
+            <p>${presentation.intro}</p>
+            <div class="card">
+              <p><strong>Numéro de commande :</strong> ${orderNumber}</p>
+              <p><strong>Date :</strong> ${this.getOrderDate(orderDetails)}</p>
+              <p><strong>Email :</strong> ${orderDetails?.email || '-'}</p>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Articles commandés</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: left; padding-bottom: 8px;">Produit</th>
+                    <th style="text-align: center; padding-bottom: 8px;">Qté</th>
+                    <th style="text-align: right; padding-bottom: 8px;">PU</th>
+                    <th style="text-align: right; padding-bottom: 8px;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${this.getOrderItemsTableRows(orderDetails)}
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h2 style="margin-top: 0;">Récapitulatif</h2>
+              ${this.getOrderTotalsHtml(orderDetails)}
+            </div>
+            <p>${presentation.outro}</p>
           </div>
         </div>
       </body>

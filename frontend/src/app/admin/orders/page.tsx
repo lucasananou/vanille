@@ -37,8 +37,8 @@ export default function AdminOrdersPage() {
             PAID: 'bg-blue-100 text-blue-800',
             PROCESSING: 'bg-indigo-100 text-indigo-800',
             SHIPPED: 'bg-purple-100 text-purple-800',
-            DELIVERED: 'bg-green-100 text-green-800',
             CANCELLED: 'bg-red-100 text-red-800',
+            REFUNDED: 'bg-zinc-200 text-zinc-800',
         };
         return colors[status] || 'bg-zinc-100 text-zinc-800';
     };
@@ -67,8 +67,8 @@ export default function AdminOrdersPage() {
                         <option value="PAID">Payée</option>
                         <option value="PROCESSING">En préparation</option>
                         <option value="SHIPPED">Expédiée</option>
-                        <option value="DELIVERED">Livrée</option>
                         <option value="CANCELLED">Annulée</option>
+                        <option value="REFUNDED">Remboursée</option>
                     </select>
                 </div>
             </div>
@@ -135,10 +135,10 @@ export default function AdminOrdersPage() {
                                         >
                                             {order.status === 'PENDING' ? 'En attente' :
                                                 order.status === 'PAID' ? 'Payée' :
-                                                    order.status === 'PROCESSING' ? 'En cours' :
+                                                    order.status === 'PROCESSING' ? 'En préparation' :
                                                         order.status === 'SHIPPED' ? 'Expédiée' :
-                                                            order.status === 'DELIVERED' ? 'Livrée' :
-                                                                order.status === 'CANCELLED' ? 'Annulée' : (order.status as string)}
+                                                            order.status === 'CANCELLED' ? 'Annulée' :
+                                                                order.status === 'REFUNDED' ? 'Remboursée' : (order.status as string)}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
@@ -169,15 +169,15 @@ export default function AdminOrdersPage() {
                     </p>
                 </div>
                 <div className="bg-white rounded-lg border border-zinc-200 p-4">
-                    <p className="text-sm text-zinc-500">En cours</p>
+                    <p className="text-sm text-zinc-500">En préparation</p>
                     <p className="text-2xl font-bold text-indigo-600">
-                        {orders.filter((o) => o.status === 'PROCESSING' || o.status === 'SHIPPED').length}
+                        {orders.filter((o) => o.status === 'PROCESSING').length}
                     </p>
                 </div>
                 <div className="bg-white rounded-lg border border-zinc-200 p-4">
-                    <p className="text-sm text-zinc-500">Livrées</p>
-                    <p className="text-2xl font-bold text-green-600">
-                        {orders.filter((o) => o.status === 'DELIVERED').length}
+                    <p className="text-sm text-zinc-500">Expédiées</p>
+                    <p className="text-2xl font-bold text-purple-600">
+                        {orders.filter((o) => o.status === 'SHIPPED').length}
                     </p>
                 </div>
             </div>

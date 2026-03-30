@@ -53,7 +53,7 @@ export default function OrderConfirmationPage() {
                 <div className="mx-auto max-w-7xl px-6 py-24 text-center">
                     <p className="text-red-600">{error || 'Commande non trouvée'}</p>
                     <Link href="/" className="mt-4 inline-block text-amber-700 hover:text-amber-800">
-                        Retour à l'accueil
+                        Retour à l&apos;accueil
                     </Link>
                 </div>
             </div>
@@ -109,10 +109,10 @@ export default function OrderConfirmationPage() {
                             <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
                                 {order.status === 'PENDING' ? 'En attente' :
                                     order.status === 'PAID' ? 'Payée' :
-                                        order.status === 'PROCESSING' ? 'En cours' :
+                                        order.status === 'PROCESSING' ? 'En préparation' :
                                             order.status === 'SHIPPED' ? 'Expédiée' :
-                                                order.status === 'DELIVERED' ? 'Livrée' :
-                                                    order.status === 'CANCELLED' ? 'Annulée' : order.status}
+                                                order.status === 'CANCELLED' ? 'Annulée' :
+                                                    order.status === 'REFUNDED' ? 'Remboursée' : order.status}
                             </span>
                         </div>
                         <div>

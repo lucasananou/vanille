@@ -4,6 +4,7 @@ import { IsEnum } from 'class-validator';
 enum OrderStatus {
     PENDING = 'PENDING',
     PAID = 'PAID',
+    PROCESSING = 'PROCESSING',
     SHIPPED = 'SHIPPED',
     CANCELLED = 'CANCELLED',
     REFUNDED = 'REFUNDED',

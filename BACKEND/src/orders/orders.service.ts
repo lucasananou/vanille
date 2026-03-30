@@ -333,13 +333,57 @@ export class OrdersService {
     }
 
     async updateOrderStatus(id: string, status: string) {
-        return this.prisma.order.update({
+        const currentOrder = await this.prisma.order.findUnique({
+            where: { id },
+        });
+
+        if (!currentOrder) {
+            throw new NotFoundException('Order not found');
+        }
+
+        if (currentOrder.status === status) {
+            return this.findOne(id);
+        }
+
+        const updatedOrder = await this.prisma.order.update({
             where: { id },
             data: { status: status as OrderStatus },
             include: {
-                items: true,
+                items: {
+                    include: {
+                        product: true,
+                    },
+                },
+                customer: {
+                    select: {
+                        id: true,
+                        email: true,
+                        firstName: true,
+                        lastName: true,
+                    },
+                },
             },
         });
+
+        if (status === OrderStatus.PAID) {
+            this.mailService
+                .sendOrderStatusUpdate(updatedOrder.email, updatedOrder.orderNumber, updatedOrder, 'PAID')
+                .catch((error) => console.error('Failed to send PAID status update:', error));
+        }
+
+        if (status === OrderStatus.PROCESSING) {
+            this.mailService
+                .sendOrderStatusUpdate(updatedOrder.email, updatedOrder.orderNumber, updatedOrder, 'PROCESSING')
+                .catch((error) => console.error('Failed to send PROCESSING status update:', error));
+        }
+
+        if (status === OrderStatus.SHIPPED) {
+            this.mailService
+                .sendOrderStatusUpdate(updatedOrder.email, updatedOrder.orderNumber, updatedOrder, 'SHIPPED')
+                .catch((error) => console.error('Failed to send SHIPPED status update:', error));
+        }
+
+        return updatedOrder;
     }
 
     async createPaymentIntent(orderId: string) {

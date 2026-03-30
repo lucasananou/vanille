@@ -12,8 +12,8 @@ const ORDER_STATUS_OPTIONS = [
     { value: 'PAID', label: 'Payée' },
     { value: 'PROCESSING', label: 'En préparation' },
     { value: 'SHIPPED', label: 'Expédiée' },
-    { value: 'DELIVERED', label: 'Livrée' },
     { value: 'CANCELLED', label: 'Annulée' },
+    { value: 'REFUNDED', label: 'Remboursée' },
 ] as const;
 
 const getStatusColor = (status: string) => {
@@ -22,8 +22,8 @@ const getStatusColor = (status: string) => {
         PAID: 'bg-blue-100 text-blue-800',
         PROCESSING: 'bg-indigo-100 text-indigo-800',
         SHIPPED: 'bg-purple-100 text-purple-800',
-        DELIVERED: 'bg-green-100 text-green-800',
         CANCELLED: 'bg-red-100 text-red-800',
+        REFUNDED: 'bg-zinc-200 text-zinc-800',
     };
     return colors[status] || 'bg-zinc-100 text-zinc-800';
 };
