@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useEffect, useMemo, useState } from 'react';
@@ -87,6 +88,11 @@ function getPriceLabel(product: Product) {
         }
     }
     return (product.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+}
+
+function getSeoCategory(product: ShopProduct) {
+    if (/poivre/i.test(product.title)) return 'Poivre sauvage de Madagascar';
+    return 'Vanille Bourbon Madagascar premium';
 }
 
 export default function ShopPage() {
@@ -183,10 +189,10 @@ export default function ShopPage() {
                                 </div>
 
                                 <h1 className="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl italic leading-tight text-vanilla-50">
-                                    La <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">Boutique</span>
+                                    Boutique <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">vanille Madagascar</span>
                                 </h1>
-                                <p className="mt-4 text-lg text-vanilla-100/80 max-w-xl">
-                                    Sélectionnez vos gousses de vanille selon leur grade, leur taille et votre usage souhaité.
+                                <p className="mt-4 text-lg text-vanilla-100/80 max-w-2xl">
+                                    Retrouvez nos gousses de vanille Bourbon premium, packs découverte et formats cadeaux, avec une lecture simple du prix, du grade et du conditionnement.
                                 </p>
                             </div>
 
@@ -354,10 +360,12 @@ export default function ShopPage() {
                                             >
                                                 <div className="relative aspect-square rounded-[1.6rem] bg-vanilla-50 flex items-center justify-center overflow-hidden border border-vanilla-100">
                                                     <div className="absolute inset-0 bg-gradient-to-tr from-vanilla-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                    <img
+                                                    <Image
                                                         src={getImageUrl(p.images[0])}
-                                                        alt={p.title}
-                                                        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                        alt={`${getSeoCategory(p)} - ${p.title}`}
+                                                        className="absolute inset-0 h-full w-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                        fill
+                                                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                                                     />
                                                     <div className="absolute top-4 left-4">
                                                         <span className="bg-white/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-jungle-800 border border-vanilla-100">
@@ -372,6 +380,14 @@ export default function ShopPage() {
                                                         <span className="text-gold-500"><ArrowRightIcon /></span>
                                                     </div>
                                                     <p className="text-sm text-jungle-700/70 line-clamp-1 mb-4">{p.uiSubtitle}</p>
+                                                    <div className="mb-4 flex flex-wrap gap-2">
+                                                        <span className="rounded-full bg-vanilla-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-jungle-700">
+                                                            {p.uiSize}
+                                                        </span>
+                                                        <span className="rounded-full bg-gold-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-gold-700">
+                                                            {p.uiPackaging.slice(0, 2).join(' / ')}
+                                                        </span>
+                                                    </div>
 
                                                     <div className="flex items-center justify-between pt-4 border-t border-vanilla-100">
                                                         <p className="font-display text-xl text-jungle-950">{p.uiPriceLabel}</p>

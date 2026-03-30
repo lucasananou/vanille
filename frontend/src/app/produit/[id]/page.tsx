@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -116,6 +117,31 @@ function getUiPackaging(product: Product, currentVariant: ProductVariant | null)
 
 function getDescriptionParagraphs(product: Product) {
     return (product.description || '').split(/\n+/).map((text) => text.trim()).filter(Boolean);
+}
+
+function getSeoHeading(product: Product, size: string) {
+    if (/poivre/i.test(product.title)) {
+        return 'Poivre sauvage de Madagascar premium';
+    }
+
+    return `Vanille Bourbon Madagascar premium ${size}`;
+}
+
+function getSeoDescription(product: Product, size: string, grade: string) {
+    if (/poivre/i.test(product.title)) {
+        return 'Poivre sauvage de Madagascar récolté à la main, aux notes boisées et épicées, idéal pour une cuisine premium.';
+    }
+
+    return `Gousses de vanille premium ${grade}, sélectionnées à Nosy-Be à Madagascar, format ${size}, pour pâtisserie, extrait maison et cadeaux gourmands.`;
+}
+
+function getPackHighlights(product: Product) {
+    if (!product.variants?.length) return [];
+
+    return product.variants
+        .map((variant) => variant.title || Object.values(variant.options || {}).join(' • '))
+        .filter(Boolean)
+        .slice(0, 3);
 }
 
 export default function ProductDetailPage() {
@@ -248,6 +274,9 @@ export default function ProductDetailPage() {
     const productSize = extractSize(product);
     const packagingLabel = getUiPackaging(product, selectedVariant);
     const descriptionParagraphs = getDescriptionParagraphs(product);
+    const seoHeading = getSeoHeading(product, productSize);
+    const seoDescription = getSeoDescription(product, productSize, productGrade);
+    const packHighlights = getPackHighlights(product);
     const reviewStats = reviewsData?.stats;
     const topReviews = reviewsData?.reviews?.slice(0, 3) || [];
     const hasReviews = (reviewStats?.totalReviews || 0) > 0;
@@ -291,10 +320,13 @@ export default function ProductDetailPage() {
                             <div className="lg:col-span-7">
                                 <div className="rounded-[2.5rem] border border-vanilla-200 bg-white overflow-hidden">
                                     <div className="aspect-[4/3] relative bg-vanilla-100/30 flex items-center justify-center">
-                                        <img
+                                        <Image
                                             src={getImageUrl(product.images[selectedImageIndex] || product.images[0])}
-                                            alt={product.title}
-                                            className="absolute inset-0 w-full h-full object-contain"
+                                            alt={`${seoHeading} - visuel ${selectedImageIndex + 1}`}
+                                            className="absolute inset-0 h-full w-full object-contain"
+                                            fill
+                                            priority
+                                            sizes="(max-width: 1024px) 100vw, 58vw"
                                         />
                                         <div className="absolute top-4 left-4 flex gap-2">
                                             <span className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold bg-white/80 border border-vanilla-200 backdrop-blur text-jungle-800">
@@ -317,10 +349,12 @@ export default function ProductDetailPage() {
                                                     onClick={() => setSelectedImageIndex(i)}
                                                     className="rounded-2xl bg-vanilla-50 border border-vanilla-200 overflow-hidden focus-ring aspect-square flex items-center justify-center hover:bg-white hover:border-gold-500/30 transition-all"
                                                 >
-                                                    <img
+                                                    <Image
                                                         src={getImageUrl(img)}
-                                                        alt={`${product.title} - view ${i + 1}`}
-                                                        className="w-full h-full object-cover"
+                                                        alt={`${seoHeading} - détail ${i + 1}`}
+                                                        className="h-full w-full object-cover"
+                                                        fill
+                                                        sizes="(max-width: 1024px) 25vw, 12vw"
                                                     />
                                                 </button>
                                             ))}
@@ -351,8 +385,10 @@ export default function ProductDetailPage() {
                                         </div>
                                     </div>
 
-                                    <h1 className="mt-6 font-display text-4xl leading-[1.06] text-jungle-950 italic">{product.title}</h1>
-                                    <p className="mt-3 text-lg text-jungle-700/70 leading-relaxed font-medium">{descriptionParagraphs[0] || product.collection?.name || 'Vanille premium de Madagascar'}</p>
+                                    <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.28em] text-gold-600">Fiche optimisée achat + SEO</p>
+                                    <h1 className="mt-3 font-display text-4xl leading-[1.06] text-jungle-950 italic">{seoHeading}</h1>
+                                    <p className="mt-2 text-sm font-semibold uppercase tracking-widest text-jungle-500">{product.title}</p>
+                                    <p className="mt-3 text-lg text-jungle-700/70 leading-relaxed font-medium">{seoDescription}</p>
 
                                     <div className="mt-8 flex items-end justify-between gap-4">
                                         <div>
@@ -380,6 +416,19 @@ export default function ProductDetailPage() {
                                             ))}
                                         </ul>
                                     </div>
+
+                                    {packHighlights.length > 0 ? (
+                                        <div className="mt-6 rounded-[2rem] border border-gold-200 bg-gold-50 p-6">
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-gold-700">Packs et formats disponibles</p>
+                                            <div className="mt-4 flex flex-wrap gap-2">
+                                                {packHighlights.map((pack) => (
+                                                    <span key={pack} className="rounded-full border border-gold-200 bg-white px-4 py-2 text-xs font-semibold text-jungle-800">
+                                                        {pack}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ) : null}
 
                                     {getVariantOptions(product).length > 0 && (
                                         <div className="mt-8">
@@ -453,6 +502,12 @@ export default function ProductDetailPage() {
                                             </div>
                                         ))}
                                     </div>
+
+                                    {stock > 0 && stock <= 10 ? (
+                                        <div className="mt-6 rounded-[2rem] border border-cacao-900/10 bg-jungle-950 px-5 py-4 text-sm font-semibold text-vanilla-50">
+                                            Stock limité sur ce format : sécurisez votre sélection avant rupture.
+                                        </div>
+                                    ) : null}
                                 </div>
                             </div>
                         </div>
@@ -487,7 +542,7 @@ export default function ProductDetailPage() {
                                         {activeTab === 'desc' && (
                                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
                                                 <div className="space-y-6">
-                                                    <h2 className="font-display text-3xl text-jungle-950 italic">{descriptionParagraphs[0] || product.title}</h2>
+                                                    <h2 className="font-display text-3xl text-jungle-950 italic">{seoHeading}</h2>
                                                     <div className="text-lg text-jungle-800/80 leading-relaxed max-w-3xl space-y-5">
                                                         {descriptionParagraphs.slice(1).length > 0 ? descriptionParagraphs.slice(1).map((paragraph, index) => (
                                                             <p key={index}>{paragraph}</p>

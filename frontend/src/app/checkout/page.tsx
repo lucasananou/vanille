@@ -67,6 +67,11 @@ const SHIPPING_FALLBACKS: Record<string, ShippingRate[]> = {
     ],
 };
 
+const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, '') || '';
+const whatsappHref = whatsappNumber
+    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Bonjour, j’ai besoin d’aide pour finaliser ma commande M.S.V-NOSY BE.')}`
+    : null;
+
 type AddressSuggestion = {
     properties: {
         label: string;
@@ -364,11 +369,16 @@ export default function CheckoutPage() {
                                     <span className="text-sm font-semibold">Offre lancement: -50% sur la livraison</span>
                                 </div>
                                 <h1 className="mt-4 font-display text-3xl sm:text-4xl text-vanilla-50 leading-[1.06]">
-                                    Checkout
+                                    Finaliser votre commande
                                 </h1>
                                 <p className="mt-3 text-sm text-vanilla-100/75 max-w-2xl">
-                                    Renseignez vos informations, choisissez la livraison, puis validez le paiement.
+                                    Renseignez vos informations, visualisez le coût de livraison, puis validez votre paiement en toute sécurité.
                                 </p>
+                                <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-widest text-vanilla-100/75">
+                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">1. Coordonnées</span>
+                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">2. Livraison</span>
+                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">3. Paiement</span>
+                                </div>
                             </div>
 
                             <div className="rounded-[22px] bg-white/5 border border-vanilla-100/15 backdrop-blur p-4 w-full lg:w-[420px]">
@@ -516,6 +526,28 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
                             </div>
+
+                            {whatsappHref ? (
+                                <div className="rounded-[28px] bg-[#25D366]/10 border border-[#25D366]/20 p-6 shadow-sm">
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div>
+                                            <p className="text-xs font-bold uppercase tracking-widest text-[#128C7E]">Besoin d’un coup de main ?</p>
+                                            <h2 className="mt-2 font-display text-2xl text-jungle-950">Support rapide avant paiement</h2>
+                                            <p className="mt-2 text-sm text-cacao-700">
+                                                Ouvrez WhatsApp pour poser une question sur la livraison, le produit ou votre commande avant validation.
+                                            </p>
+                                        </div>
+                                        <a
+                                            href={whatsappHref}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-5 py-3 text-sm font-bold uppercase tracking-widest text-white transition hover:opacity-90"
+                                        >
+                                            Ouvrir WhatsApp
+                                        </a>
+                                    </div>
+                                </div>
+                            ) : null}
 
                             {/* Shipping Section */}
                             <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm">

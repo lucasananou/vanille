@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
@@ -210,13 +211,13 @@ export default function HomePage() {
               <div className="relative">
                 <div className="rounded-[28px] border border-vanilla-100/15 overflow-hidden bg-gradient-to-b from-vanilla-50/10 to-jungle-900/10">
                   <div className="aspect-[4/3] relative">
-                    <img
+                    <Image
                       src="/photos-produit-vanille/galerie-photos-qui-sommes-nous/triage-et-calibrage.jpg"
-                      alt="Triage et calibrage de la vanille MSV Nosy-Be"
-                      className="absolute inset-0 w-full h-full object-cover"
-                      loading="eager"
-                      fetchPriority="high"
-                      decoding="async"
+                      alt="Triage et calibrage des gousses de vanille premium M.S.V Nosy-Be Madagascar"
+                      className="absolute inset-0 h-full w-full object-cover"
+                      fill
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-jungle-900/40 via-transparent to-transparent"></div>
 

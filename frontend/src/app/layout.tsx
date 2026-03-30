@@ -5,6 +5,7 @@ import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import { AuthProvider } from "@/lib/auth-context";
 import CartDrawer from "@/components/cart-drawer";
+import QuickContact from "@/components/quick-contact";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { normalizeGaMeasurementId } from "@/lib/analytics-config";
 import { getSiteUrl } from "@/lib/site";
@@ -90,6 +91,7 @@ export default function RootLayout({
           <CartProvider>
             {children}
             <CartDrawer />
+            <QuickContact />
           </CartProvider>
         </AuthProvider>
         {googleTagManagerId ? (
