@@ -6,12 +6,14 @@ import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { getImageUrl } from '@/lib/utils';
 import ProductQuickView from './product-quick-view';
+import { useLocale } from '@/lib/locale-context';
 
 interface ProductCardProps {
     product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+    const { copy, locale } = useLocale();
     const isOutOfStock = product.stock === 0;
     const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
     const discountPercentage = hasDiscount
@@ -36,7 +38,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                         {/* Size/Stock Badge if needed (Optional) */}
                         {isOutOfStock && (
                             <span className="bg-zinc-900 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white rounded-sm">
-                                Épuisé
+                                {copy.productCard.soldOut}
                             </span>
                         )}
 
@@ -92,7 +94,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                         </>
                     ) : (
                         <div className="h-full w-full flex items-center justify-center bg-zinc-200 text-zinc-400 text-xs">
-                            Pas d'image
+                            {copy.productCard.noImage}
                         </div>
                     )}
 
@@ -111,8 +113,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                                 className="flex-1 flex items-center justify-center bg-white text-zinc-900 text-[10px] font-bold uppercase py-3 rounded-sm hover:bg-zinc-50 tracking-widest cursor-pointer"
                             >
                                 {(product.variants?.length ?? 0) > 0 || (product.options?.length ?? 0) > 0
-                                    ? 'Choisir'
-                                    : 'Ajouter'}
+                                    ? copy.productCard.choose
+                                    : copy.actions.addToCart}
                             </span>
                             <button
                                 onClick={(e) => {
@@ -121,7 +123,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                                     setIsQuickViewOpen(true);
                                 }}
                                 className="flex items-center justify-center w-10 bg-white text-zinc-900 rounded-sm hover:bg-zinc-50 cursor-pointer transition-colors"
-                                aria-label="Aperçu rapide"
+                                aria-label={copy.productCard.quickView}
                             >
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -140,11 +142,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                     <div className="flex items-baseline gap-2">
                         <span className={`text-sm font-bold ${isOutOfStock ? 'text-zinc-400 line-through' : 'text-zinc-900'}`}>
-                            {(product.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                            {(product.price / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}
                         </span>
                         {hasDiscount && (
                             <span className="text-xs text-zinc-400 line-through decoration-zinc-400/50">
-                                {(product.compareAtPrice! / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                {(product.compareAtPrice! / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}
                             </span>
                         )}
                     </div>
@@ -155,7 +157,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                             <span className="relative flex h-1.5 w-1.5">
                                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
                             </span>
-                            <span className="text-[10px] font-bold text-green-600 uppercase tracking-tight">Expédié sous 24h</span>
+                            <span className="text-[10px] font-bold text-green-600 uppercase tracking-tight">{copy.productCard.shipped24h}</span>
                         </div>
                     )}
                 </div>

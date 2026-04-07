@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { normalizeLocale, withLocale } from '@/lib/i18n';
 import { CATALOG } from '@/lib/products-data';
 import { getSiteUrl } from '@/lib/site';
 
@@ -12,28 +14,42 @@ const featuredProducts = [
     CATALOG.find((product) => product.id === 'tk-noir-16'),
 ].filter(Boolean);
 
-export const metadata: Metadata = {
-    title: 'Vanille Bourbon Madagascar premium',
-    description: 'Achetez votre vanille Bourbon de Madagascar premium : gousses sélectionnées à Nosy-Be, packs découverte, livraison France, Europe et USA.',
-    alternates: {
-        canonical: '/vanille-bourbon-madagascar',
-    },
-    openGraph: {
-        title: 'Vanille Bourbon Madagascar premium',
-        description: 'Gousses de vanille premium sélectionnées à Nosy-Be, avec packs découverte et livraison suivie.',
-        url: `${siteUrl}/vanille-bourbon-madagascar`,
-        images: [
-            {
-                url: `${siteUrl}/photos-produit-vanille/photos-vanille-de-14-a-15-cm/img_8387.jpg`,
-                width: 1200,
-                height: 900,
-                alt: 'Vanille Bourbon Madagascar premium',
-            },
-        ],
-    },
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const locale = normalizeLocale((await headers()).get('x-locale'));
+    const canonicalPath = withLocale('/vanille-bourbon-madagascar', locale);
 
-export default function VanillaLandingPage() {
+    return {
+        title: locale === 'en' ? 'Premium Madagascar Bourbon Vanilla' : 'Vanille Bourbon Madagascar premium',
+        description: locale === 'en'
+            ? 'Shop premium Madagascar Bourbon vanilla pods: hand-selected in Nosy-Be, with discovery boxes and tracked delivery across France, Europe and the USA.'
+            : 'Achetez votre vanille Bourbon de Madagascar premium : gousses sélectionnées à Nosy-Be, packs découverte, livraison France, Europe et USA.',
+        alternates: {
+            canonical: canonicalPath,
+            languages: {
+                fr: withLocale('/vanille-bourbon-madagascar', 'fr'),
+                en: withLocale('/vanille-bourbon-madagascar', 'en'),
+            },
+        },
+        openGraph: {
+            title: locale === 'en' ? 'Premium Madagascar Bourbon Vanilla' : 'Vanille Bourbon Madagascar premium',
+            description: locale === 'en'
+                ? 'Premium vanilla pods selected in Nosy-Be, with discovery sets and tracked international delivery.'
+                : 'Gousses de vanille premium sélectionnées à Nosy-Be, avec packs découverte et livraison suivie.',
+            url: `${siteUrl}${canonicalPath}`,
+            images: [
+                {
+                    url: `${siteUrl}/photos-produit-vanille/photos-vanille-de-14-a-15-cm/img_8387.jpg`,
+                    width: 1200,
+                    height: 900,
+                    alt: locale === 'en' ? 'Premium Madagascar Bourbon vanilla' : 'Vanille Bourbon Madagascar premium',
+                },
+            ],
+        },
+    };
+}
+
+export default async function VanillaLandingPage() {
+    const locale = normalizeLocale((await headers()).get('x-locale'));
     const faqItems = [
         {
             question: 'Quelle vanille choisir pour commencer ?',
@@ -81,10 +97,10 @@ export default function VanillaLandingPage() {
                                 Sélectionnées à Nosy-Be, nos gousses de vanille offrent un profil aromatique chaud, gourmand et floral, avec un conditionnement premium et une expédition suivie.
                             </p>
                             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                                <Link href="/shop" className="inline-flex items-center justify-center rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-jungle-900 transition hover:opacity-90">
+                                <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-jungle-900 transition hover:opacity-90">
                                     Découvrir la boutique
                                 </Link>
-                                <Link href="/produit/tk-noir-14-15" className="inline-flex items-center justify-center rounded-full border border-vanilla-100/15 bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-white/10">
+                                <Link href={withLocale('/produit/tk-noir-14-15', locale)} className="inline-flex items-center justify-center rounded-full border border-vanilla-100/15 bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-white/10">
                                     Voir le best-seller
                                 </Link>
                             </div>
@@ -151,7 +167,7 @@ export default function VanillaLandingPage() {
                                             </li>
                                         ))}
                                     </ul>
-                                    <Link href={`/produit/${product!.id}`} className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-jungle-900 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-jungle-800">
+                                    <Link href={withLocale(`/produit/${product!.id}`, locale)} className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-jungle-900 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-jungle-800">
                                         Voir l’offre
                                     </Link>
                                 </article>
@@ -187,7 +203,7 @@ export default function VanillaLandingPage() {
                                 <p>Professionnels : volumes plus importants, demandes rapides et conditions dédiées.</p>
                                 <p>Chaque page produit conserve une logique simple : choix, réassurance, puis passage au panier.</p>
                             </div>
-                            <Link href="/b2b" className="mt-8 inline-flex rounded-full border border-vanilla-100/15 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-white/10">
+                            <Link href={withLocale('/b2b', locale)} className="mt-8 inline-flex rounded-full border border-vanilla-100/15 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-white/10">
                                 Demander une offre pro
                             </Link>
                         </div>
@@ -207,7 +223,7 @@ export default function VanillaLandingPage() {
                             ))}
                         </div>
                         <div className="mt-10 text-center">
-                            <Link href="/shop" className="inline-flex items-center justify-center rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-jungle-900 transition hover:opacity-90">
+                            <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-jungle-900 transition hover:opacity-90">
                                 Commander maintenant
                             </Link>
                         </div>
@@ -223,4 +239,3 @@ export default function VanillaLandingPage() {
         </div>
     );
 }
-

@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { getImageUrl } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import type { Product, ProductVariant } from '@/lib/types';
+import { formatCurrency, withLocale } from '@/lib/i18n';
+import { useLocale } from '@/lib/locale-context';
 
 interface ProductQuickViewProps {
     product: Product;
@@ -14,6 +16,7 @@ interface ProductQuickViewProps {
 }
 
 export default function ProductQuickView({ product, isOpen, onClose }: ProductQuickViewProps) {
+    const { locale } = useLocale();
     const { addItem } = useCart();
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
     const [currentVariant, setCurrentVariant] = useState<ProductVariant | null>(null);
@@ -91,7 +94,7 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 z-20 p-2 text-zinc-400 hover:text-zinc-600 transition"
-                    aria-label="Fermer"
+                    aria-label={locale === 'en' ? 'Close' : 'Fermer'}
                 >
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -130,7 +133,7 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                             </div>
                         </>
                     ) : (
-                        <div className="flex items-center justify-center h-full text-zinc-400">Pas d'image</div>
+                        <div className="flex items-center justify-center h-full text-zinc-400">{locale === 'en' ? 'No image' : "Pas d'image"}</div>
                     )}
                 </div>
 
@@ -145,12 +148,12 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                     {/* Price */}
                     <div className="flex items-baseline gap-3 mb-8">
                         <span className="text-xl font-bold text-zinc-900">
-                            {(price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                            {formatCurrency(price / 100, locale)}
                         </span>
                         {compareAtPrice && compareAtPrice > price && (
                             <>
                                 <span className="text-base text-zinc-400 line-through">
-                                    {(compareAtPrice / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                    {formatCurrency(compareAtPrice / 100, locale)}
                                 </span>
                                 <span className="bg-red-50 text-red-600 px-2 py-0.5 text-xs font-bold uppercase rounded-sm">
                                     -{Math.round(((compareAtPrice - price) / compareAtPrice) * 100)}%
@@ -158,7 +161,7 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                             </>
                         )}
                         {isOutOfStock && (
-                            <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded">Épuisé</span>
+                            <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded">{locale === 'en' ? 'Sold out' : 'Épuisé'}</span>
                         )}
                     </div>
 
@@ -214,26 +217,26 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                                 }
                             `}
                         >
-                            {isAdding ? 'Ajout en cours...' : isOutOfStock ? 'Indisponible' : 'Ajouter au panier'}
+                            {isAdding ? (locale === 'en' ? 'Adding...' : 'Ajout en cours...') : isOutOfStock ? (locale === 'en' ? 'Unavailable' : 'Indisponible') : (locale === 'en' ? 'Add to cart' : 'Ajouter au panier')}
                         </button>
 
                         <p className="text-[10px] text-center text-zinc-500 font-medium flex items-center justify-center gap-2">
-                            <span className="opacity-80">💳 Paiement en 3x sans frais dès 80€</span>
+                            <span className="opacity-80">{locale === 'en' ? '💳 Split payment available from €80' : '💳 Paiement en 3x sans frais dès 80€'}</span>
                         </p>
 
                         <div className="flex items-center justify-center gap-2 text-[11px] text-zinc-600 font-medium pt-1 border-b border-zinc-100 pb-4 mb-2">
                             <svg className="w-3.5 h-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>En stock — <span className="text-zinc-900">expédié sous 24h</span></span>
+                            <span>{locale === 'en' ? <>In stock <span className="text-zinc-900">ships within 24h</span></> : <>En stock — <span className="text-zinc-900">expédié sous 24h</span></>}</span>
                         </div>
 
                         {/* Mini Trust Badges */}
                         <div className="grid grid-cols-3 gap-2 py-2">
                             {[
-                                { title: 'Livraison 2-4j', icon: '🚚' },
-                                { title: 'Retours 30j', icon: 'Rw' }, // Simplified icon or text
-                                { title: 'Paiement Sûr', icon: '🔒' }
+                                { title: locale === 'en' ? '2-4 day delivery' : 'Livraison 2-4j', icon: '🚚' },
+                                { title: locale === 'en' ? '30-day returns' : 'Retours 30j', icon: 'Rw' },
+                                { title: locale === 'en' ? 'Secure payment' : 'Paiement Sûr', icon: '🔒' }
                             ].map((badge, idx) => (
                                 <div key={idx} className="flex flex-col items-center text-center">
                                     {/* Using SVGs for cleaner look matching ProductActions */}
@@ -261,10 +264,10 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
 
                         <div className="text-center pt-2">
                             <Link
-                                href={`/produit/${product.slug}`}
+                                href={withLocale(`/produit/${product.slug}`, locale)}
                                 className="inline-block text-[10px] text-zinc-400 hover:text-zinc-900 transition-colors"
                             >
-                                Voir la page complète
+                                {locale === 'en' ? 'View full page' : 'Voir la page complète'}
                             </Link>
                         </div>
                     </div>

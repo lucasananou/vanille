@@ -1,8 +1,11 @@
-
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { headers } from 'next/headers';
+import { normalizeLocale, withLocale } from '@/lib/i18n';
 
-export default function MentionsLegales() {
+export default async function MentionsLegales() {
+    const locale = normalizeLocale((await headers()).get('x-locale'));
+
     return (
         <div className="flex flex-col min-h-screen bg-white text-zinc-900">
             <Header />
@@ -37,7 +40,7 @@ export default function MentionsLegales() {
 
                     <h2>4. Données personnelles</h2>
                     <p>
-                        Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d’un droit d’accès, de rectification et de suppression des données vous concernant. Pour exercer ce droit, veuillez consulter notre <a href="/legal/politique-de-confidentialite">Politique de Confidentialité</a>.
+                        Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d’un droit d’accès, de rectification et de suppression des données vous concernant. Pour exercer ce droit, veuillez consulter notre <a href={withLocale('/legal/politique-de-confidentialite', locale)}>Politique de Confidentialité</a>.
                     </p>
                 </div>
             </main>

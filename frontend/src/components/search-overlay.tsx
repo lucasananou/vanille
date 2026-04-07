@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 
 import { productsApi } from '@/lib/api/products';
 import type { Product } from '@/lib/types';
+import { formatCurrency, withLocale } from '@/lib/i18n';
+import { useLocale } from '@/lib/locale-context';
 
 
 interface SearchOverlayProps {
@@ -16,6 +18,7 @@ interface SearchOverlayProps {
 }
 
 export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
+    const { locale } = useLocale();
     const inputRef = useRef<HTMLInputElement>(null);
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<Product[]>([]);
@@ -77,7 +80,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
         e.preventDefault();
         if (query.length > 0) {
             onClose();
-            router.push(`/shop?search=${encodeURIComponent(query)}`);
+            router.push(`${withLocale('/shop', locale)}?search=${encodeURIComponent(query)}`);
         }
     };
 
@@ -97,7 +100,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Rechercher une vanille, poivre..."
+                            placeholder={locale === 'en' ? 'Search vanilla, pepper...' : 'Rechercher une vanille, poivre...'}
                             className="w-full text-2xl md:text-4xl font-serif text-zinc-900 placeholder:text-zinc-300 bg-transparent border-transparent focus:border-transparent focus:ring-0 p-0 outline-none shadow-none ring-0 appearance-none"
                         />
                         {isLoading && (
@@ -124,9 +127,11 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                     {query.length === 0 && (
                         <div className="space-y-12 animate-in slide-in-from-bottom-4 duration-500 delay-100">
                             <div>
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">Populaire</h3>
+                                <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">{locale === 'en' ? 'Popular' : 'Populaire'}</h3>
                                 <div className="flex flex-wrap gap-3">
-                                    {['Vanille 18cm', 'Gousses Gourmet', 'Poivre Sauvage', 'Pack Découverte'].map(term => (
+                                    {(locale === 'en'
+                                        ? ['18cm Vanilla', 'Gourmet Pods', 'Wild Pepper', 'Discovery Set']
+                                        : ['Vanille 18cm', 'Gousses Gourmet', 'Poivre Sauvage', 'Pack Découverte']).map(term => (
                                         <button
                                             key={term}
                                             onClick={() => setQuery(term)}
@@ -139,13 +144,13 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             </div>
 
                             <div>
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">Suggestions</h3>
+                                <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">{locale === 'en' ? 'Suggestions' : 'Suggestions'}</h3>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                     {[
-                                        { name: 'Vanille Prestige', slug: 'vanille-prestige', href: '/shop' },
-                                        { name: 'Vanille Gourmet', slug: 'vanille-gourmet', href: '/shop' },
-                                        { name: 'Poivre Sauvage', slug: 'poivre-sauvage', href: '/produit/poivre-sauvage' },
-                                        { name: 'Le Blog', slug: 'blog', href: '/blog' },
+                                        { name: locale === 'en' ? 'Prestige Vanilla' : 'Vanille Prestige', slug: 'vanille-prestige', href: withLocale('/shop', locale) },
+                                        { name: locale === 'en' ? 'Gourmet Vanilla' : 'Vanille Gourmet', slug: 'vanille-gourmet', href: withLocale('/shop', locale) },
+                                        { name: locale === 'en' ? 'Wild Pepper' : 'Poivre Sauvage', slug: 'poivre-sauvage', href: withLocale('/produit/poivre-sauvage', locale) },
+                                        { name: locale === 'en' ? 'Journal' : 'Le Blog', slug: 'blog', href: withLocale('/blog', locale) },
                                     ].map((cat) => (
                                         <CategoryTile key={cat.slug} category={cat} onClose={onClose} />
                                     ))}
@@ -158,13 +163,13 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                     {query.length > 0 && results.length > 0 && (
                         <div className="space-y-6">
                             <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400">
-                                Résultats pour &quot;<span className="text-zinc-900">{query}</span>&quot;
+                                {locale === 'en' ? 'Results for' : 'Résultats pour'} &quot;<span className="text-zinc-900">{query}</span>&quot;
                             </h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                                 {results.map((product) => (
                                     <Link
                                         key={product.id}
-                                        href={`/produit/${product.slug}`}
+                                        href={withLocale(`/produit/${product.slug}`, locale)}
                                         onClick={onClose}
                                         className="group block"
                                     >
@@ -177,14 +182,14 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                                                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                                                 />
                                             ) : (
-                                                <div className="flex items-center justify-center h-full text-zinc-300 text-xs">No Image</div>
+                                                <div className="flex items-center justify-center h-full text-zinc-300 text-xs">{locale === 'en' ? 'No image' : "Pas d'image"}</div>
                                             )}
                                         </div>
                                         <h4 className="text-sm font-medium text-zinc-900 group-hover:underline decoration-zinc-200 underline-offset-4 line-clamp-1">
                                             {product.title}
                                         </h4>
                                         <p className="text-xs text-zinc-500 mt-1">
-                                            {(product.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                            {formatCurrency(product.price / 100, locale)}
                                         </p>
                                     </Link>
                                 ))}
@@ -194,7 +199,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                                     onClick={handleSubmit}
                                     className="px-8 py-3 bg-zinc-900 text-white text-xs font-bold uppercase tracking-widest rounded-sm hover:bg-zinc-800 transition-all"
                                 >
-                                    Voir tous les résultats ({results.length}+)
+                                    {locale === 'en' ? 'View all results' : 'Voir tous les résultats'} ({results.length}+)
                                 </button>
                             </div>
                         </div>
@@ -203,14 +208,14 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                     {/* No Results */}
                     {query.length > 0 && !isLoading && results.length === 0 && debouncedQuery.length >= 2 && (
                         <div className="text-center py-20">
-                            <p className="text-zinc-400 text-lg font-light mb-4">Aucun résultat trouvé pour &quot;{query}&quot;</p>
-                            <p className="text-zinc-500 text-sm">Essayez avec un autre mot-clé ou parcourez nos catégories.</p>
+                            <p className="text-zinc-400 text-lg font-light mb-4">{locale === 'en' ? 'No results found for' : 'Aucun résultat trouvé pour'} &quot;{query}&quot;</p>
+                            <p className="text-zinc-500 text-sm">{locale === 'en' ? 'Try another keyword or browse our collections.' : 'Essayez avec un autre mot-clé ou parcourez nos catégories.'}</p>
                             <Link
-                                href="/shop"
+                                href={withLocale('/shop', locale)}
                                 onClick={onClose}
                                 className="inline-block mt-8 text-xs font-bold uppercase tracking-widest border-b border-zinc-900 pb-1 hover:text-zinc-600 hover:border-zinc-600 transition-all"
                             >
-                                Voir toute la boutique
+                                {locale === 'en' ? 'Browse the full shop' : 'Voir toute la boutique'}
                             </Link>
                         </div>
                     )}

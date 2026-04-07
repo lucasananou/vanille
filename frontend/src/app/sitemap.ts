@@ -1,10 +1,12 @@
 import { MetadataRoute } from 'next';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
+import { withLocale, type Locale } from '@/lib/i18n';
 import { getApiUrl, getSiteUrl } from '@/lib/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = getSiteUrl();
     const apiUrl = getApiUrl();
+    const locales: Locale[] = ['fr', 'en'];
 
     // Static pages
     const staticPages = [
@@ -21,12 +23,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/legal/politique-de-confidentialite',
         '/legal/politique-d-expedition',
         '/legal/politique-de-remboursement',
-    ].map((route) => ({
-        url: `${baseUrl}${route}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: route === '' ? 1 : 0.8,
-    }));
+    ].flatMap((route) =>
+        locales.map((locale) => ({
+            url: `${baseUrl}${withLocale(route || '/', locale)}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: route === '' ? 1 : 0.8,
+        })),
+    );
 
     // Dynamic Products
     let products: any[] = [];
@@ -42,12 +46,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         console.error('Sitemap: Failed to fetch products', error);
     }
 
-    const productUrls = products.map((product: { slug: string; updatedAt?: string }) => ({
-        url: `${baseUrl}/produit/${product.slug}`,
-        lastModified: new Date(product.updatedAt || new Date()),
-        changeFrequency: 'daily' as const,
-        priority: 0.9,
-    }));
+    const productUrls = products.flatMap((product: { slug: string; updatedAt?: string }) =>
+        locales.map((locale) => ({
+            url: `${baseUrl}${withLocale(`/produit/${product.slug}`, locale)}`,
+            lastModified: new Date(product.updatedAt || new Date()),
+            changeFrequency: 'daily' as const,
+            priority: 0.9,
+        })),
+    );
 
     // Hardcoded Collections (Fetching collections API if available would be better, but we know the seed ones)
     // For now, listing known collections directly or fetching if endpoint exists. 
@@ -61,20 +67,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         'bijoux-accessoires'
     ];
 
-    const collectionUrls = collections.map((slug) => ({
-        url: `${baseUrl}/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.9,
-    }));
+    const collectionUrls = collections.flatMap((slug) =>
+        locales.map((locale) => ({
+            url: `${baseUrl}${withLocale(`/${slug}`, locale)}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.9,
+        })),
+    );
 
     // Blog posts
-    const blogUrls = BLOG_POSTS.map((post) => ({
-        url: `${baseUrl}/blog/${post.slug}`,
-        lastModified: new Date(post.date).toISOString(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
-    }));
+    const blogUrls = BLOG_POSTS.flatMap((post) =>
+        locales.map((locale) => ({
+            url: `${baseUrl}${withLocale(`/blog/${post.slug}`, locale)}`,
+            lastModified: new Date(post.date).toISOString(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.7,
+        })),
+    );
 
     return [...staticPages, ...productUrls, ...collectionUrls, ...blogUrls];
 }

@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { CATALOG } from '@/lib/products-data';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
 import { normalizeProductRef } from '@/lib/product-refs';
+import { useLocale } from '@/lib/locale-context';
+import { withLocale } from '@/lib/i18n';
 
 const SparklesIcon = () => (
   <svg className="w-4 h-4 text-gold-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -117,6 +119,7 @@ const VanillaIcon = () => (
 );
 
 export default function HomePage() {
+  const { locale } = useLocale();
   const featuredProduct = CATALOG[1];
 
   return (
@@ -138,54 +141,53 @@ export default function HomePage() {
                 <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 border border-vanilla-100/10">
                   <SparklesIcon />
                   <span className="text-sm font-semibold">Nosy-Be • Madagascar</span>
-                  <span className="text-sm text-vanilla-100/70">• Arôme intense & raffiné</span>
+                  <span className="text-sm text-vanilla-100/70">• {locale === 'en' ? 'Intense, refined aroma' : 'Arôme intense & raffiné'}</span>
                 </div>
 
                 <h1 className="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl leading-[1.05]">
-                  La vanille qui{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">transforme</span>{" "}
-                  vos desserts.
+                  {locale === 'en' ? <>The vanilla that <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">elevates</span> your desserts.</> : <>La vanille qui <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">transforme</span> vos desserts.</>}
                 </h1>
 
                 <p className="mt-5 text-lg text-vanilla-100/80 max-w-xl">
-                  Gousses sélectionnées (TK Noir / Gourmet selon lots), conditionnement premium,
-                  pensées pour la pâtisserie, l’extrait maison et les cadeaux gourmands.
+                  {locale === 'en'
+                    ? 'Selected pods (Black TK / Gourmet depending on the lot), premium packaging, created for pastry, homemade extract and refined gifting.'
+                    : 'Gousses sélectionnées (TK Noir / Gourmet selon lots), conditionnement premium, pensées pour la pâtisserie, l’extrait maison et les cadeaux gourmands.'}
                 </p>
 
                 <div className="mt-6 rounded-[24px] border border-gold-500/25 bg-white/5 backdrop-blur p-5 max-w-xl">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-gold-500 font-semibold">Best-seller</p>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gold-500 font-semibold">{locale === 'en' ? 'Best seller' : 'Best-seller'}</p>
                       <p className="mt-2 text-xl font-display text-vanilla-50">{featuredProduct.title}</p>
                       <p className="mt-1 text-sm text-vanilla-100/70">{featuredProduct.subtitle}</p>
                     </div>
                     <div className="sm:text-right">
-                      <p className="text-xs text-vanilla-100/60">Prix</p>
+                      <p className="text-xs text-vanilla-100/60">{locale === 'en' ? 'Price' : 'Prix'}</p>
                       <p className="mt-1 text-2xl font-bold text-gold-500">{featuredProduct.price_label}</p>
                     </div>
                   </div>
                   <div className="mt-4 flex flex-col sm:flex-row gap-3">
-                    <Link href={`/produit/${featuredProduct.id}`} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                      Ajouter au panier
+                    <Link href={withLocale(`/produit/${featuredProduct.id}`, locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                      {locale === 'en' ? 'Add to cart' : 'Ajouter au panier'}
                       <ArrowRightIcon />
                     </Link>
                     <div className="inline-flex items-center gap-3 rounded-full border border-vanilla-100/10 bg-white/5 px-4 py-3 text-xs text-vanilla-100/75">
-                      <span>Paiement sécurisé</span>
+                      <span>{locale === 'en' ? 'Secure payment' : 'Paiement sécurisé'}</span>
                       <span className="opacity-30">•</span>
-                      <span>Livraison France / Europe / USA</span>
+                      <span>{locale === 'en' ? 'Shipping France / Europe / USA' : 'Livraison France / Europe / USA'}</span>
                       <span className="opacity-30">•</span>
-                      <span>Origine Nosy-Be</span>
+                      <span>{locale === 'en' ? 'Nosy-Be origin' : 'Origine Nosy-Be'}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-7 flex flex-col sm:flex-row gap-3">
-                  <Link href="/shop" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                    Découvrir la boutique
+                  <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                    {locale === 'en' ? 'Discover the shop' : 'Découvrir la boutique'}
                     <ArrowRightIcon />
                   </Link>
                   <Link href="#collection" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring">
-                    Voir la sélection
+                    {locale === 'en' ? 'View the collection' : 'Voir la sélection'}
                     <CompassIcon />
                   </Link>
                 </div>
@@ -193,15 +195,15 @@ export default function HomePage() {
                 {/* Micro trust row */}
                 <div className="mt-8 grid sm:grid-cols-3 gap-3 max-w-xl">
                   <div className="rounded-2xl glass p-4 border border-vanilla-100/10">
-                    <p className="text-xs text-vanilla-100/70">Qualité</p>
-                    <p className="mt-1 font-semibold">TK Noir / Gourmet</p>
+                    <p className="text-xs text-vanilla-100/70">{locale === 'en' ? 'Quality' : 'Qualité'}</p>
+                    <p className="mt-1 font-semibold">{locale === 'en' ? 'Black TK / Gourmet' : 'TK Noir / Gourmet'}</p>
                   </div>
                   <div className="rounded-2xl glass p-4 border border-vanilla-100/10">
-                    <p className="text-xs text-vanilla-100/70">Conditionnement</p>
-                    <p className="mt-1 font-semibold">Sous-vide / Tube</p>
+                    <p className="text-xs text-vanilla-100/70">{locale === 'en' ? 'Packaging' : 'Conditionnement'}</p>
+                    <p className="mt-1 font-semibold">{locale === 'en' ? 'Vacuum-sealed / Gift tube' : 'Sous-vide / Tube'}</p>
                   </div>
                   <div className="rounded-2xl glass p-4 border border-vanilla-100/10">
-                    <p className="text-xs text-vanilla-100/70">Tailles</p>
+                    <p className="text-xs text-vanilla-100/70">{locale === 'en' ? 'Lengths' : 'Tailles'}</p>
                     <p className="mt-1 font-semibold">10–18 cm</p>
                   </div>
                 </div>
@@ -224,16 +226,16 @@ export default function HomePage() {
                     {/* Floating chips */}
                     <div className="absolute inset-0 p-5">
                       <div className="absolute top-5 left-5 rounded-2xl bg-jungle-900/90 backdrop-blur-sm px-4 py-3 border border-vanilla-100/10 animate-float shadow-lg">
-                        <p className="text-xs text-vanilla-100/70">Profil</p>
-                        <p className="text-sm font-semibold text-vanilla-50">Gourmand • Chaud • Floral</p>
+                        <p className="text-xs text-vanilla-100/70">{locale === 'en' ? 'Profile' : 'Profil'}</p>
+                        <p className="text-sm font-semibold text-vanilla-50">{locale === 'en' ? 'Gourmet • Warm • Floral' : 'Gourmand • Chaud • Floral'}</p>
                       </div>
                       <div className="absolute bottom-5 left-5 rounded-2xl bg-jungle-900/90 backdrop-blur-sm px-4 py-3 border border-vanilla-100/10 animate-float [animation-delay:-1.3s] shadow-lg">
-                        <p className="text-xs text-vanilla-100/70">Origine</p>
-                        <p className="text-sm font-semibold text-vanilla-50">Terroir de Nosy-Be</p>
+                        <p className="text-xs text-vanilla-100/70">{locale === 'en' ? 'Origin' : 'Origine'}</p>
+                        <p className="text-sm font-semibold text-vanilla-50">{locale === 'en' ? 'Nosy-Be terroir' : 'Terroir de Nosy-Be'}</p>
                       </div>
                       <div className="absolute bottom-5 right-5 rounded-2xl bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 px-4 py-3 animate-float [animation-delay:-2.1s]">
-                        <p className="text-xs/none font-semibold">Sélection</p>
-                        <p className="text-sm font-extrabold mt-1">TK Noir / Gourmet</p>
+                        <p className="text-xs/none font-semibold">{locale === 'en' ? 'Selection' : 'Sélection'}</p>
+                        <p className="text-sm font-extrabold mt-1">{locale === 'en' ? 'Black TK / Gourmet' : 'TK Noir / Gourmet'}</p>
                       </div>
                     </div>
                   </div>
@@ -247,11 +249,11 @@ export default function HomePage() {
                           </svg>
                         </span>
                         <p className="text-sm text-vanilla-100/80 leading-snug">
-                          Éclat naturel, souplesse préservée.
+                          {locale === 'en' ? 'Natural sheen, preserved suppleness.' : 'Éclat naturel, souplesse préservée.'}
                         </p>
                       </div>
                       <Link href="#signature" className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold hover:underline focus-ring rounded-full px-3 py-2 text-white">
-                        Voir la signature
+                        {locale === 'en' ? 'See the signature' : 'Voir la signature'}
                       </Link>
                     </div>
                   </div>
@@ -268,20 +270,18 @@ export default function HomePage() {
               <div>
                 <p className="inline-flex items-center gap-2 text-sm font-semibold text-cacao-800/80">
                   <LeafIcon />
-                  Signature MSV Nosy-Be
+                  {locale === 'en' ? 'The MSV Nosy-Be signature' : 'Signature MSV Nosy-Be'}
                 </p>
                 <h2 className="mt-3 font-display text-3xl sm:text-4xl">
-                  Une vanille <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-cacao-900">exigeante</span>.
-                  Un rendu <span className="text-transparent bg-clip-text bg-gradient-to-r from-cacao-900 to-gold-600">inoubliable</span>.
+                  {locale === 'en' ? <>A <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-cacao-900">demanding</span> vanilla. A truly <span className="text-transparent bg-clip-text bg-gradient-to-r from-cacao-900 to-gold-600">memorable</span> result.</> : <>Une vanille <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-cacao-900">exigeante</span>. Un rendu <span className="text-transparent bg-clip-text bg-gradient-to-r from-cacao-900 to-gold-600">inoubliable</span>.</>}
                 </h2>
                 <p className="mt-4 text-cacao-600 max-w-2xl">
-                  Ici, on vend une sensation : l’odeur, la chaleur, le “wow” à l’ouverture du tube.
-                  L'excellence de Madagascar directement dans votre cuisine.
+                  {locale === 'en' ? 'This is more than a product: it is a sensory moment, from the aroma to the warmth to the immediate wow when opening the tube. Madagascar excellence, directly in your kitchen.' : 'Ici, on vend une sensation : l’odeur, la chaleur, le “wow” à l’ouverture du tube. L\'excellence de Madagascar directement dans votre cuisine.'}
                 </p>
               </div>
 
-              <Link href="/shop" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                Voir les produits
+              <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                {locale === 'en' ? 'View products' : 'Voir les produits'}
               </Link>
             </div>
 
@@ -320,7 +320,7 @@ export default function HomePage() {
               </div>
 
               <div className="flex lg:justify-end">
-                <Link href="/shop" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
                   Aller à la boutique
                   <ArrowRightIcon />
                 </Link>
@@ -352,10 +352,10 @@ export default function HomePage() {
                     </ul>
 
                     <div className="mt-6 flex gap-3">
-                      <Link href={`/produit/${normalizeProductRef(p.id)}`} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring text-white">
+                      <Link href={withLocale(`/produit/${normalizeProductRef(p.id)}`, locale)} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring text-white">
                         Voir
                       </Link>
-                      <Link href={`/produit/${normalizeProductRef(p.id)}`} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 focus-ring">
+                      <Link href={withLocale(`/produit/${normalizeProductRef(p.id)}`, locale)} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 focus-ring">
                         Acheter
                       </Link>
                     </div>
@@ -409,10 +409,10 @@ export default function HomePage() {
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                  <Link href="/about" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-cacao-900 bg-white border border-vanilla-200 hover:bg-vanilla-100 transition rm-anim focus-ring">
+                  <Link href={withLocale('/about', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-cacao-900 bg-white border border-vanilla-200 hover:bg-vanilla-100 transition rm-anim focus-ring">
                     Lire l’histoire
                   </Link>
-                  <Link href="/shop" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                  <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
                     Acheter maintenant
                   </Link>
                 </div>
@@ -487,7 +487,7 @@ export default function HomePage() {
                 </div>
                 <h2 className="font-display text-3xl sm:text-4xl italic">Nos Meilleures Gousses</h2>
               </div>
-              <Link href="/shop" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gold-600 hover:text-gold-700 transition-colors">
+              <Link href={withLocale('/shop', locale)} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gold-600 hover:text-gold-700 transition-colors">
                 Voir tout le catalogue
                 <ArrowRightIcon />
               </Link>
@@ -497,7 +497,7 @@ export default function HomePage() {
               {CATALOG.slice(0, 3).map((p) => (
                 <Link
                   key={p.id}
-                  href={`/produit/${normalizeProductRef(p.id)}`}
+                  href={withLocale(`/produit/${normalizeProductRef(p.id)}`, locale)}
                   className="group rounded-[2rem] bg-white border border-vanilla-200 p-2 hover:border-gold-500/30 transition-all duration-500 overflow-hidden"
                 >
                   <div className="relative aspect-square rounded-[1.6rem] bg-vanilla-50 flex items-center justify-center overflow-hidden border border-vanilla-100">
@@ -546,7 +546,7 @@ export default function HomePage() {
                   </div>
                   <h2 className="font-display text-3xl sm:text-4xl">Dernières nouvelles de la plantation</h2>
                 </div>
-                <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
+                <Link href={withLocale('/blog', locale)} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
                   Toute l'actualité
                   <ArrowRightIcon />
                 </Link>
@@ -554,7 +554,7 @@ export default function HomePage() {
 
               <div className="grid md:grid-cols-3 gap-8">
                 {BLOG_POSTS.slice(0, 3).map((news, i) => (
-                  <Link key={i} href={`/blog/${news.slug}`} className="group cursor-pointer block">
+                  <Link key={i} href={withLocale(`/blog/${news.slug}`, locale)} className="group cursor-pointer block">
                     <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 border border-vanilla-200">
                       <img src={news.coverImage} alt={news.title} className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-jungle-900 uppercase">
@@ -584,10 +584,10 @@ export default function HomePage() {
                   MSV Nosy-Be accompagne les professionnels exigeants avec des conditions sur-mesure et une qualité constante.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition focus-ring">
+                  <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition focus-ring">
                     Devenir partenaire
                   </Link>
-                  <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition focus-ring text-white">
+                  <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition focus-ring text-white">
                     Demander un devis
                   </Link>
                 </div>
@@ -628,11 +628,11 @@ export default function HomePage() {
                   </p>
 
                   <div className="mt-7 flex flex-col sm:flex-row gap-3">
-                    <Link href="/shop" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                    <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
                       Acheter maintenant
                       <ArrowRightIcon />
                     </Link>
-                    <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring text-white">
+                    <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring text-white">
                       Besoin d’un conseil ?
                     </Link>
                   </div>

@@ -4,6 +4,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useState } from 'react';
 import { communicationsApi } from '@/lib/api/communications';
+import { useLocale } from '@/lib/locale-context';
 
 const EmailIcon = () => (
     <svg className="w-5 h-5 text-deepgreen-800" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -26,6 +27,7 @@ const SendIcon = () => (
 );
 
 export default function ContactPage() {
+    const { locale } = useLocale();
     const [status, setStatus] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
@@ -40,10 +42,10 @@ export default function ContactPage() {
 
         try {
             await communicationsApi.sendContactMessage(formData);
-            setStatus('Message envoyé. Nous vous répondrons rapidement.');
+            setStatus(locale === 'en' ? 'Message sent. We will reply shortly.' : 'Message envoyé. Nous vous répondrons rapidement.');
             setFormData({ name: '', email: '', message: '' });
         } catch (error: any) {
-            setStatus(error?.message || 'Impossible d’envoyer votre message pour le moment.');
+            setStatus(error?.message || (locale === 'en' ? 'We are unable to send your message right now.' : 'Impossible d’envoyer votre message pour le moment.'));
         } finally {
             setIsSubmitting(false);
             setTimeout(() => setStatus(null), 2600);
@@ -60,9 +62,9 @@ export default function ContactPage() {
                     <div className="mx-auto max-w-6xl px-4 pt-10 pb-14 relative">
                         <div className="grid lg:grid-cols-2 gap-10 items-start">
                             <div>
-                                <h1 className="font-display text-4xl text-vanilla-50 italic">Contact</h1>
+                                <h1 className="font-display text-4xl text-vanilla-50 italic">{locale === 'en' ? 'Contact' : 'Contact'}</h1>
                                 <p className="text-vanilla-100/70 mt-4 text-lg">
-                                    Ajoutez vos coordonnées réelles (email, téléphone, horaires). Rien n'est inventé ici.
+                                    {locale === 'en' ? 'Reach our team for orders, bespoke sourcing or trade enquiries.' : 'Ajoutez vos coordonnées réelles (email, téléphone, horaires). Rien n\'est inventé ici.'}
                                 </p>
                                 <div className="mt-6 space-y-4">
                                     <div className="rounded-xxl glass p-5 border border-vanilla-100/10">
@@ -75,7 +77,7 @@ export default function ContactPage() {
                                     <div className="rounded-xxl glass p-5 border border-vanilla-100/10">
                                         <p className="text-sm font-semibold text-vanilla-50 flex items-center gap-2">
                                             <PhoneIcon />
-                                            Téléphone / WhatsApp
+                                            {locale === 'en' ? 'Phone / WhatsApp' : 'Téléphone / WhatsApp'}
                                         </p>
                                         <p className="text-sm text-vanilla-100/70 mt-2">[Téléphone]</p>
                                     </div>
@@ -83,16 +85,16 @@ export default function ContactPage() {
                             </div>
 
                             <div className="rounded-xxl glass p-6 border border-vanilla-100/10">
-                                <h2 className="font-display text-2xl text-vanilla-50">Envoyer un message</h2>
+                                <h2 className="font-display text-2xl text-vanilla-50">{locale === 'en' ? 'Send a message' : 'Envoyer un message'}</h2>
                                 <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                                     <div className="grid sm:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-sm font-semibold text-vanilla-50" htmlFor="name">Nom</label>
+                                            <label className="text-sm font-semibold text-vanilla-50" htmlFor="name">{locale === 'en' ? 'Name' : 'Nom'}</label>
                                             <input
                                                 id="name"
                                                 required
                                                 className="mt-2 w-full rounded-xl border border-vanilla-100/20 bg-vanilla-50/5 px-3 py-2 text-sm text-vanilla-50 focus:outline-none focus:ring-2 focus:ring-gold-500"
-                                                placeholder="Votre nom"
+                                                placeholder={locale === 'en' ? 'Your name' : 'Votre nom'}
                                                 value={formData.name}
                                                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                                             />
@@ -104,20 +106,20 @@ export default function ContactPage() {
                                                 type="email"
                                                 required
                                                 className="mt-2 w-full rounded-xl border border-vanilla-100/20 bg-vanilla-50/5 px-3 py-2 text-sm text-vanilla-50 focus:outline-none focus:ring-2 focus:ring-gold-500"
-                                                placeholder="vous@exemple.com"
+                                                placeholder={locale === 'en' ? 'you@example.com' : 'vous@exemple.com'}
                                                 value={formData.email}
                                                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="text-sm font-semibold text-vanilla-50" htmlFor="message">Message</label>
+                                        <label className="text-sm font-semibold text-vanilla-50" htmlFor="message">{locale === 'en' ? 'Message' : 'Message'}</label>
                                         <textarea
                                             id="message"
                                             rows={5}
                                             required
                                             className="mt-2 w-full rounded-xl border border-vanilla-100/20 bg-vanilla-50/5 px-3 py-2 text-sm text-vanilla-50 focus:outline-none focus:ring-2 focus:ring-gold-500"
-                                            placeholder="Écrivez votre message…"
+                                            placeholder={locale === 'en' ? 'Write your message…' : 'Écrivez votre message…'}
                                             value={formData.message}
                                             onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                                         />
@@ -127,7 +129,7 @@ export default function ContactPage() {
                                         disabled={isSubmitting}
                                         className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-semibold text-jungle-900 hover:opacity-90 transition-all font-bold"
                                     >
-                                        {isSubmitting ? 'Envoi...' : 'Envoyer'} <SendIcon />
+                                        {isSubmitting ? (locale === 'en' ? 'Sending...' : 'Envoi...') : (locale === 'en' ? 'Send' : 'Envoyer')} <SendIcon />
                                     </button>
                                 </form>
                             </div>

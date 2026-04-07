@@ -8,6 +8,9 @@ import Link from 'next/link';
 import { productsApi } from '@/lib/api/products';
 import type { Product } from '@/lib/types';
 import { getImageUrl } from '@/lib/utils';
+import { useLocale } from '@/lib/locale-context';
+import { getLocalizedProduct } from '@/lib/localized-content';
+import { withLocale } from '@/lib/i18n';
 
 const SearchIcon = () => (
     <svg className="w-5 h-5 text-vanilla-100/70" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -52,30 +55,30 @@ function extractSize(product: Product) {
     const fromDetails = (product.details as any)?.size;
     if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
     const match = product.title.match(/(\d+\s*[–-]\s*\d+\s*cm|\d+\s*cm|Assorti|Volume)/i);
-    return match?.[1] || product.options?.map((option) => option.values.join(' / ')).join(' • ') || 'Sélection';
+    return match?.[1] || product.options?.map((option) => option.values.join(' / ')).join(' • ') || 'Selection';
 }
 
 function extractGrade(product: Product) {
     const fromDetails = (product.details as any)?.grade;
     if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
     const match = product.title.match(/(TK\s*\(Noir\)|Gourmet|Noir|Assorti|Poivre Sauvage)/i);
-    return match?.[1] || product.collection?.name || product.tags?.[0] || 'Sélection';
+    return match?.[1] || product.collection?.name || product.tags?.[0] || 'Selection';
 }
 
 function extractPackaging(product: Product) {
     if (product.options?.length) {
         return product.options.flatMap((option) => option.values).filter(Boolean);
     }
-    return ['Sous-vide'];
+    return ['Vacuum-sealed'];
 }
 
 function extractSubtitle(product: Product) {
     const description = product.description || '';
     const firstLine = description.split(/\n+/).map((line) => line.trim()).find(Boolean);
-    return firstLine || 'Vanille premium sélectionnée à Nosy-Be.';
+    return firstLine || 'Premium vanilla selected in Nosy-Be.';
 }
 
-function getPriceLabel(product: Product) {
+function getPriceLabel(product: Product, locale: 'fr' | 'en') {
     if (product.variants?.length) {
         const prices = product.variants
             .map((variant) => variant.price ?? product.price)
@@ -83,11 +86,11 @@ function getPriceLabel(product: Product) {
         if (prices.length > 0) {
             const min = Math.min(...prices);
             const max = Math.max(...prices);
-            if (min !== max) return `À partir de ${(min / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`;
-            return (min / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+            if (min !== max) return `${locale === 'en' ? 'From' : 'À partir de'} ${(min / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}`;
+            return (min / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' });
         }
     }
-    return (product.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+    return (product.price / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' });
 }
 
 function getSeoCategory(product: ShopProduct) {
@@ -96,6 +99,7 @@ function getSeoCategory(product: ShopProduct) {
 }
 
 export default function ShopPage() {
+    const { locale } = useLocale();
     const [products, setProducts] = useState<ShopProduct[]>([]);
     const [search, setSearch] = useState('');
     const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
@@ -118,25 +122,28 @@ export default function ShopPage() {
             setError(null);
             try {
                 const response = await productsApi.getProducts({ take: 100 });
-                const normalized = (response.data || []).map((product) => ({
+                const normalized = (response.data || []).map((rawProduct) => {
+                    const product = getLocalizedProduct(rawProduct, locale);
+                    return {
                     ...product,
                     uiGrade: extractGrade(product),
                     uiSize: extractSize(product),
                     uiSubtitle: extractSubtitle(product),
                     uiPackaging: extractPackaging(product),
-                    uiPriceLabel: getPriceLabel(product),
-                }));
+                    uiPriceLabel: getPriceLabel(product, locale),
+                    };
+                });
                 setProducts(normalized);
             } catch (err) {
                 console.error('Failed to fetch shop products:', err);
-                setError(err instanceof Error ? err.message : 'Impossible de charger la boutique.');
+                setError(err instanceof Error ? err.message : locale === 'en' ? 'Unable to load the shop.' : 'Impossible de charger la boutique.');
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchProducts();
-    }, []);
+    }, [locale]);
 
     const allGrades = useMemo(() => Array.from(new Set(products.map((p) => p.uiGrade))), [products]);
     const allSizes = useMemo(() => Array.from(new Set(products.map((p) => p.uiSize))), [products]);
@@ -189,10 +196,12 @@ export default function ShopPage() {
                                 </div>
 
                                 <h1 className="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl italic leading-tight text-vanilla-50">
-                                    Boutique <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">vanille Madagascar</span>
+                                    {locale === 'en' ? 'Shop our ' : 'Boutique '}<span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">{locale === 'en' ? 'Madagascar vanilla' : 'vanille Madagascar'}</span>
                                 </h1>
                                 <p className="mt-4 text-lg text-vanilla-100/80 max-w-2xl">
-                                    Retrouvez nos gousses de vanille Bourbon premium, packs découverte et formats cadeaux, avec une lecture simple du prix, du grade et du conditionnement.
+                                    {locale === 'en'
+                                        ? 'Discover our premium Bourbon vanilla pods, discovery sets and gift-ready formats, with a clear reading of grade, packaging and price.'
+                                        : 'Retrouvez nos gousses de vanille Bourbon premium, packs découverte et formats cadeaux, avec une lecture simple du prix, du grade et du conditionnement.'}
                                 </p>
                             </div>
 
@@ -202,7 +211,7 @@ export default function ShopPage() {
                                         <SearchIcon />
                                         <input
                                             type="text"
-                                            placeholder="Rechercher une gousse..."
+                                            placeholder={locale === 'en' ? 'Search for a pod...' : 'Rechercher une gousse...'}
                                             className="w-full bg-transparent outline-none text-sm placeholder:text-vanilla-100/40 text-vanilla-50"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
@@ -211,19 +220,19 @@ export default function ShopPage() {
 
                                     <div className="mt-4 flex flex-col sm:flex-row gap-3">
                                         <div className="flex-1">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-vanilla-100/40 ml-1">Trier par</label>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-vanilla-100/40 ml-1">{locale === 'en' ? 'Sort by' : 'Trier par'}</label>
                                             <select
                                                 value={sortBy}
                                                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                                                 className="mt-1 w-full bg-jungle-950/50 border border-vanilla-100/10 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold-500/20 transition-all text-vanilla-50"
                                             >
-                                                <option className="bg-jungle-900" value="featured">Sélection M.S.V-NOSY BE</option>
-                                                <option className="bg-jungle-900" value="name_asc">Nom (A-Z)</option>
-                                                <option className="bg-jungle-900" value="name_desc">Nom (Z-A)</option>
+                                                <option className="bg-jungle-900" value="featured">{locale === 'en' ? 'MSV Nosy-Be selection' : 'Sélection M.S.V-NOSY BE'}</option>
+                                                <option className="bg-jungle-900" value="name_asc">{locale === 'en' ? 'Name (A-Z)' : 'Nom (A-Z)'}</option>
+                                                <option className="bg-jungle-900" value="name_desc">{locale === 'en' ? 'Name (Z-A)' : 'Nom (Z-A)'}</option>
                                             </select>
                                         </div>
                                         <div className="sm:w-24 text-center sm:text-left">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-vanilla-100/40 ml-1">Résultats</label>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-vanilla-100/40 ml-1">{locale === 'en' ? 'Results' : 'Résultats'}</label>
                                             <p className="mt-1 text-2xl font-display italic text-vanilla-50">{filteredProducts.length}</p>
                                         </div>
                                     </div>
@@ -239,12 +248,12 @@ export default function ShopPage() {
                             <aside className="hidden lg:block lg:col-span-3 space-y-8">
                                 <div className="sticky top-28 space-y-8">
                                     <div className="flex items-center justify-between pb-4 border-b border-vanilla-200">
-                                        <h2 className="font-display text-xl italic">Filtres</h2>
-                                        <button onClick={resetFilters} className="text-xs font-bold uppercase tracking-widest text-gold-600 hover:text-gold-700 transition-colors">Réinitialiser</button>
+                                        <h2 className="font-display text-xl italic">{locale === 'en' ? 'Filters' : 'Filtres'}</h2>
+                                        <button onClick={resetFilters} className="text-xs font-bold uppercase tracking-widest text-gold-600 hover:text-gold-700 transition-colors">{locale === 'en' ? 'Reset' : 'Réinitialiser'}</button>
                                     </div>
 
                                     <div className="space-y-4">
-                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">Grade</p>
+                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">{locale === 'en' ? 'Grade' : 'Grade'}</p>
                                         <div className="flex flex-col gap-3">
                                             {allGrades.map((grade) => (
                                                 <label key={grade} className="group flex items-center gap-3 cursor-pointer">
@@ -265,7 +274,7 @@ export default function ShopPage() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">Longueur</p>
+                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">{locale === 'en' ? 'Length' : 'Longueur'}</p>
                                         <div className="flex flex-col gap-3">
                                             {allSizes.map((size) => (
                                                 <label key={size} className="group flex items-center gap-3 cursor-pointer">
@@ -286,7 +295,7 @@ export default function ShopPage() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">Conditionnement</p>
+                                        <p className="text-sm font-bold uppercase tracking-widest text-jungle-800">{locale === 'en' ? 'Packaging' : 'Conditionnement'}</p>
                                         <div className="flex flex-col gap-3">
                                             {allPacks.map((pack) => (
                                                 <label key={pack} className="group flex items-center gap-3 cursor-pointer">
@@ -308,10 +317,10 @@ export default function ShopPage() {
 
                                     <div className="p-6 rounded-3xl bg-jungle-900 text-vanilla-50 border border-vanilla-100/10 relative overflow-hidden group">
                                         <div className="absolute inset-0 grain opacity-20 transition-opacity group-hover:opacity-30"></div>
-                                        <p className="relative font-display text-xl italic text-vanilla-50">Besoin Pro ?</p>
-                                        <p className="relative mt-2 text-xs text-vanilla-100/70">Volumes, fréquences, tarifs dégressifs.</p>
-                                        <Link href="/b2b" className="relative mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gold-500 hover:text-vanilla-50 transition-colors">
-                                            Demande de devis
+                                        <p className="relative font-display text-xl italic text-vanilla-50">{locale === 'en' ? 'Trade enquiry?' : 'Besoin Pro ?'}</p>
+                                        <p className="relative mt-2 text-xs text-vanilla-100/70">{locale === 'en' ? 'Volumes, delivery cadence and preferential rates.' : 'Volumes, fréquences, tarifs dégressifs.'}</p>
+                                        <Link href={withLocale('/b2b', locale)} className="relative mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gold-500 hover:text-vanilla-50 transition-colors">
+                                            {locale === 'en' ? 'Request a quote' : 'Demande de devis'}
                                             <ArrowRightIcon />
                                         </Link>
                                     </div>
@@ -325,7 +334,7 @@ export default function ShopPage() {
                                         className="w-full inline-flex items-center justify-center gap-3 rounded-2xl bg-white border border-vanilla-200 px-6 py-4 font-semibold"
                                     >
                                         <TuneIcon />
-                                        Filtres & Options
+                                        {locale === 'en' ? 'Filters & options' : 'Filtres & Options'}
                                     </button>
                                 </div>
 
@@ -334,11 +343,11 @@ export default function ShopPage() {
                                         <div className="inline-flex w-16 h-16 rounded-full bg-vanilla-100 items-center justify-center mb-6 animate-pulse">
                                             <SearchIcon />
                                         </div>
-                                        <p className="text-jungle-700/60">Chargement de la boutique…</p>
+                                        <p className="text-jungle-700/60">{locale === 'en' ? 'Loading the shop…' : 'Chargement de la boutique…'}</p>
                                     </div>
                                 ) : error ? (
                                     <div className="py-20 text-center">
-                                        <h3 className="font-display text-2xl">Erreur de chargement</h3>
+                                        <h3 className="font-display text-2xl">{locale === 'en' ? 'Loading error' : 'Erreur de chargement'}</h3>
                                         <p className="text-jungle-700/60 mt-2">{error}</p>
                                     </div>
                                 ) : filteredProducts.length === 0 ? (
@@ -346,16 +355,16 @@ export default function ShopPage() {
                                         <div className="inline-flex w-16 h-16 rounded-full bg-vanilla-100 items-center justify-center mb-6">
                                             <SearchIcon />
                                         </div>
-                                        <h3 className="font-display text-2xl">Aucun résultat</h3>
-                                        <p className="text-jungle-700/60 mt-2">Essayez de retirer certains filtres ou changez votre recherche.</p>
-                                        <button onClick={resetFilters} className="mt-6 text-sm font-bold uppercase tracking-widest text-gold-600 hover:underline">Réinitialiser tout</button>
+                                        <h3 className="font-display text-2xl">{locale === 'en' ? 'No results' : 'Aucun résultat'}</h3>
+                                        <p className="text-jungle-700/60 mt-2">{locale === 'en' ? 'Try removing some filters or changing your search.' : 'Essayez de retirer certains filtres ou changez votre recherche.'}</p>
+                                        <button onClick={resetFilters} className="mt-6 text-sm font-bold uppercase tracking-widest text-gold-600 hover:underline">{locale === 'en' ? 'Reset all' : 'Réinitialiser tout'}</button>
                                     </div>
                                 ) : (
                                     <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
                                         {filteredProducts.map((p) => (
                                             <Link
                                                 key={p.id}
-                                                href={`/produit/${p.slug}`}
+                                                href={withLocale(`/produit/${p.slug}`, locale)}
                                                 className="group rounded-[2rem] bg-white border border-vanilla-200 p-2 hover:border-gold-500/30 transition-all duration-500 overflow-hidden"
                                             >
                                                 <div className="relative aspect-square rounded-[1.6rem] bg-vanilla-50 flex items-center justify-center overflow-hidden border border-vanilla-100">
@@ -391,7 +400,7 @@ export default function ShopPage() {
 
                                                     <div className="flex items-center justify-between pt-4 border-t border-vanilla-100">
                                                         <p className="font-display text-xl text-jungle-950">{p.uiPriceLabel}</p>
-                                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">Détails</span>
+                                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">{locale === 'en' ? 'Details' : 'Détails'}</span>
                                                     </div>
                                                 </div>
                                             </Link>
@@ -411,7 +420,7 @@ export default function ShopPage() {
                     <div className="absolute inset-0 bg-jungle-950/60 backdrop-blur-sm" onClick={() => setIsFilterOpen(false)}></div>
                     <aside className="absolute bottom-0 left-0 right-0 bg-vanilla-50 rounded-t-[2.5rem] max-h-[90vh] flex flex-col border-t border-vanilla-200 animate-in slide-in-from-bottom duration-500">
                         <div className="p-6 flex items-center justify-between border-b border-vanilla-200">
-                            <h2 className="font-display text-2xl italic text-jungle-900">Filtres</h2>
+                            <h2 className="font-display text-2xl italic text-jungle-900">{locale === 'en' ? 'Filters' : 'Filtres'}</h2>
                             <button onClick={() => setIsFilterOpen(false)} className="w-10 h-10 rounded-full bg-vanilla-100 flex items-center justify-center transition-transform hover:rotate-90">
                                 <CloseIcon />
                             </button>
@@ -419,7 +428,7 @@ export default function ShopPage() {
 
                         <div className="flex-1 overflow-auto p-8 space-y-10">
                             <div className="space-y-5">
-                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">Grade</p>
+                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">{locale === 'en' ? 'Grade' : 'Grade'}</p>
                                 <div className="flex flex-wrap gap-3">
                                     {allGrades.map((grade) => (
                                         <button
@@ -437,7 +446,7 @@ export default function ShopPage() {
                             </div>
 
                             <div className="space-y-5">
-                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">Longueur</p>
+                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">{locale === 'en' ? 'Length' : 'Longueur'}</p>
                                 <div className="flex flex-wrap gap-3">
                                     {allSizes.map((size) => (
                                         <button
@@ -455,7 +464,7 @@ export default function ShopPage() {
                             </div>
 
                             <div className="space-y-5">
-                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">Conditionnement</p>
+                                <p className="text-xs font-bold uppercase tracking-widest text-jungle-800">{locale === 'en' ? 'Packaging' : 'Conditionnement'}</p>
                                 <div className="flex flex-wrap gap-3">
                                     {allPacks.map((pack) => (
                                         <button
@@ -474,12 +483,12 @@ export default function ShopPage() {
                         </div>
 
                         <div className="p-8 pb-10 border-t border-vanilla-200 flex gap-4">
-                            <button onClick={resetFilters} className="flex-1 py-4 text-sm font-bold uppercase tracking-widest text-jungle-700 hover:text-gold-600 transition-colors">Réinitialiser</button>
+                            <button onClick={resetFilters} className="flex-1 py-4 text-sm font-bold uppercase tracking-widest text-jungle-700 hover:text-gold-600 transition-colors">{locale === 'en' ? 'Reset' : 'Réinitialiser'}</button>
                             <button
                                 onClick={() => setIsFilterOpen(false)}
                                 className="flex-[2] bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900 py-4 rounded-full font-bold"
                             >
-                                Voir {filteredProducts.length} produits
+                                {locale === 'en' ? `View ${filteredProducts.length} products` : `Voir ${filteredProducts.length} produits`}
                             </button>
                         </div>
                     </aside>

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useLocale } from '@/lib/locale-context';
+import { withLocale } from '@/lib/i18n';
 
 interface MobileMenuProps {
     isOpen: boolean;
@@ -9,6 +11,7 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+    const { locale } = useLocale();
     const menuRef = useRef<HTMLDivElement>(null);
 
     // Disable body scroll when menu is open
@@ -41,13 +44,13 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     }, [isOpen, onClose]);
 
     const links = [
-        { href: '/', label: 'Accueil' },
-        { href: '/shop', label: 'Boutique' },
-        { href: '/produit/tk-noir-17-18', label: 'Vanille Prestige (18cm)' },
-        { href: '/produit/tk-noir-14-15', label: 'Vanille Gourmet' },
-        { href: '/produit/poivre-sauvage', label: 'Poivre Sauvage' },
-        { href: '/blog', label: 'Blog' },
-        { href: '/about', label: 'Notre Histoire' },
+        { href: withLocale('/', locale), label: locale === 'en' ? 'Home' : 'Accueil' },
+        { href: withLocale('/shop', locale), label: locale === 'en' ? 'Shop' : 'Boutique' },
+        { href: withLocale('/produit/tk-noir-17-18', locale), label: locale === 'en' ? 'Prestige Vanilla (18cm)' : 'Vanille Prestige (18cm)' },
+        { href: withLocale('/produit/tk-noir-14-15', locale), label: locale === 'en' ? 'Gourmet Vanilla' : 'Vanille Gourmet' },
+        { href: withLocale('/produit/poivre-sauvage', locale), label: locale === 'en' ? 'Wild Pepper' : 'Poivre Sauvage' },
+        { href: withLocale('/blog', locale), label: locale === 'en' ? 'Journal' : 'Blog' },
+        { href: withLocale('/about', locale), label: locale === 'en' ? 'Our Story' : 'Notre Histoire' },
     ];
 
     return (
@@ -99,14 +102,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     {/* Footer Actions */}
                     <div className="p-6 border-t border-zinc-100 bg-zinc-50/50 space-y-4">
                         <Link
-                            href="/account"
+                            href={withLocale('/account', locale)}
                             onClick={onClose}
                             className="flex items-center gap-3 text-zinc-600 hover:text-zinc-900"
                         >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
-                            <span className="font-medium">Mon Compte</span>
+                            <span className="font-medium">{locale === 'en' ? 'My account' : 'Mon Compte'}</span>
                         </Link>
                     </div>
                 </div>

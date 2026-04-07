@@ -13,6 +13,9 @@ import { reviewsApi, type ReviewsResponse } from '@/lib/api/reviews';
 import { normalizeProductRef } from '@/lib/product-refs';
 import { getImageUrl } from '@/lib/utils';
 import { trackViewItem } from '@/lib/analytics';
+import { useLocale } from '@/lib/locale-context';
+import { getLocalizedProduct } from '@/lib/localized-content';
+import { withLocale } from '@/lib/i18n';
 
 const CheckIcon = () => (
     <svg className="w-4 h-4 text-gold-500 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -112,7 +115,7 @@ function getUiPackaging(product: Product, currentVariant: ProductVariant | null)
         if (firstOption) return firstOption;
     }
     const option = product.options?.[0];
-    return option?.values?.[0] || 'Sous-vide';
+    return option?.values?.[0] || 'Vacuum-sealed';
 }
 
 function getDescriptionParagraphs(product: Product) {
@@ -121,18 +124,22 @@ function getDescriptionParagraphs(product: Product) {
 
 function getSeoHeading(product: Product, size: string) {
     if (/poivre/i.test(product.title)) {
-        return 'Poivre sauvage de Madagascar premium';
+        return 'Premium wild Madagascar pepper';
     }
 
-    return `Vanille Bourbon Madagascar premium ${size}`;
+    return `Premium Madagascar Bourbon vanilla ${size}`;
 }
 
-function getSeoDescription(product: Product, size: string, grade: string) {
+function getSeoDescription(product: Product, size: string, grade: string, locale: 'fr' | 'en') {
     if (/poivre/i.test(product.title)) {
-        return 'Poivre sauvage de Madagascar récolté à la main, aux notes boisées et épicées, idéal pour une cuisine premium.';
+        return locale === 'en'
+            ? 'Hand-harvested wild pepper from Madagascar, with woody and spicy notes, ideal for premium cooking.'
+            : 'Poivre sauvage de Madagascar récolté à la main, aux notes boisées et épicées, idéal pour une cuisine premium.';
     }
 
-    return `Gousses de vanille premium ${grade}, sélectionnées à Nosy-Be à Madagascar, format ${size}, pour pâtisserie, extrait maison et cadeaux gourmands.`;
+    return locale === 'en'
+        ? `Premium ${grade} vanilla pods selected in Nosy-Be, Madagascar, ${size} format, created for pastry, homemade extract and refined gifting.`
+        : `Gousses de vanille premium ${grade}, sélectionnées à Nosy-Be à Madagascar, format ${size}, pour pâtisserie, extrait maison et cadeaux gourmands.`;
 }
 
 function getPackHighlights(product: Product) {
@@ -145,6 +152,7 @@ function getPackHighlights(product: Product) {
 }
 
 export default function ProductDetailPage() {
+    const { locale } = useLocale();
     const params = useParams();
     const id = params.id as string;
     const slug = normalizeProductRef(id);
@@ -182,12 +190,12 @@ export default function ProductDetailPage() {
                     response = await productsApi.getProductBySlug(matched.slug);
                 }
 
-                setProduct(response);
+                setProduct(getLocalizedProduct(response, locale));
                 setSelectedImageIndex(0);
                 setSelectedOptions(getInitialSelectedOptions(response));
             } catch (err) {
                 console.error('Failed to fetch product:', err);
-                setError(err instanceof Error ? err.message : 'Produit non trouvé');
+                setError(err instanceof Error ? err.message : locale === 'en' ? 'Product not found' : 'Produit non trouvé');
                 setProduct(null);
             } finally {
                 setLoading(false);
@@ -195,7 +203,7 @@ export default function ProductDetailPage() {
         };
 
         fetchProduct();
-    }, [slug, id]);
+    }, [slug, id, locale]);
 
     const selectedVariant = useMemo(() => product ? findMatchingVariant(product, selectedOptions) : null, [product, selectedOptions]);
 
@@ -258,8 +266,8 @@ export default function ProductDetailPage() {
                 <div className="bg-jungle-900 border-b border-vanilla-100/10"><Header /></div>
                 <main className="flex-grow flex items-center justify-center px-4 text-center">
                     <div>
-                        <h1 className="font-display text-4xl italic">Produit non trouvé</h1>
-                        <p className="mt-3 text-jungle-700/70">{error || 'Cette fiche produit n’est plus disponible.'}</p>
+                        <h1 className="font-display text-4xl italic">{locale === 'en' ? 'Product not found' : 'Produit non trouvé'}</h1>
+                        <p className="mt-3 text-jungle-700/70">{error || (locale === 'en' ? 'This product page is no longer available.' : 'Cette fiche produit n’est plus disponible.')}</p>
                     </div>
                 </main>
                 <Footer />
@@ -275,7 +283,7 @@ export default function ProductDetailPage() {
     const packagingLabel = getUiPackaging(product, selectedVariant);
     const descriptionParagraphs = getDescriptionParagraphs(product);
     const seoHeading = getSeoHeading(product, productSize);
-    const seoDescription = getSeoDescription(product, productSize, productGrade);
+    const seoDescription = getSeoDescription(product, productSize, productGrade, locale);
     const packHighlights = getPackHighlights(product);
     const reviewStats = reviewsData?.stats;
     const topReviews = reviewsData?.reviews?.slice(0, 3) || [];
@@ -284,8 +292,8 @@ export default function ProductDetailPage() {
         ? product.bullets
         : [
             `${productGrade} soigneusement sélectionnée à Nosy-Be.`,
-            `${productSize} pour une infusion intense et gourmande.`,
-            `Conditionnement ${packagingLabel.toLowerCase()} pour préserver les arômes.`
+            locale === 'en' ? `${productSize} format for a rich and elegant infusion.` : `${productSize} pour une infusion intense et gourmande.`,
+            locale === 'en' ? `${packagingLabel} packaging to preserve aromatic depth.` : `Conditionnement ${packagingLabel.toLowerCase()} pour préserver les arômes.`
         ]).slice(0, 3);
 
     const handleAddToCart = () => {
@@ -306,11 +314,11 @@ export default function ProductDetailPage() {
                     <div className="absolute -top-24 -left-24 w-[34rem] h-[34rem] rounded-full bg-gold-500/5 blur-3xl animate-[pulse_7s_ease-in-out_infinite]"></div>
 
                     <div className="relative mx-auto max-w-7xl px-4 pt-10">
-                        <nav aria-label="Fil d'ariane" className="text-sm text-jungle-700/60">
+                        <nav aria-label={locale === 'en' ? 'Breadcrumb' : "Fil d'ariane"} className="text-sm text-jungle-700/60">
                             <ol className="flex flex-wrap items-center gap-2">
-                                <li><Link className="hover:text-gold-600 focus-ring rounded-full px-2 py-1 transition-colors" href="/">Accueil</Link></li>
+                                <li><Link className="hover:text-gold-600 focus-ring rounded-full px-2 py-1 transition-colors" href={withLocale('/', locale)}>{locale === 'en' ? 'Home' : 'Accueil'}</Link></li>
                                 <li className="opacity-40">/</li>
-                                <li><Link className="hover:text-gold-600 focus-ring rounded-full px-2 py-1 transition-colors" href="/shop">Boutique</Link></li>
+                                <li><Link className="hover:text-gold-600 focus-ring rounded-full px-2 py-1 transition-colors" href={withLocale('/shop', locale)}>{locale === 'en' ? 'Shop' : 'Boutique'}</Link></li>
                                 <li className="opacity-40">/</li>
                                 <li className="text-jungle-950 font-semibold">{product.title}</li>
                             </ol>
@@ -336,7 +344,7 @@ export default function ProductDetailPage() {
                                         </div>
                                         <div className="absolute top-4 right-4">
                                             <span className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900">
-                                                Premium
+                                                {locale === 'en' ? 'Premium' : 'Premium'}
                                             </span>
                                         </div>
                                     </div>
@@ -376,37 +384,37 @@ export default function ProductDetailPage() {
                                         <div className="inline-flex items-center gap-2 rounded-full border border-gold-200 bg-gold-50 px-4 py-2 text-xs font-semibold text-jungle-900">
                                             <svg className="w-3.5 h-3.5 text-gold-600" viewBox="0 0 24 24" fill="currentColor"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
                                             {hasReviews
-                                                ? `${reviewStats?.averageRating.toFixed(1)}/5 • ${reviewStats?.totalReviews} avis`
-                                                : 'Sélection premium appréciée en cuisine et pâtisserie'}
+                                                ? `${reviewStats?.averageRating.toFixed(1)}/5 • ${reviewStats?.totalReviews} ${locale === 'en' ? 'reviews' : 'avis'}`
+                                                : (locale === 'en' ? 'A premium selection loved by chefs and pastry lovers' : 'Sélection premium appréciée en cuisine et pâtisserie')}
                                         </div>
                                         <div className="inline-flex items-center gap-2 rounded-full border border-vanilla-200 bg-vanilla-50 px-4 py-2 text-xs font-semibold text-jungle-800">
                                             <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold-500"></span>
-                                            Expédition France, Europe et USA
+                                            {locale === 'en' ? 'Shipping across France, Europe and the USA' : 'Expédition France, Europe et USA'}
                                         </div>
                                     </div>
 
-                                    <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.28em] text-gold-600">Fiche optimisée achat + SEO</p>
+                                    <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.28em] text-gold-600">{locale === 'en' ? 'Conversion-focused product page' : 'Fiche optimisée achat + SEO'}</p>
                                     <h1 className="mt-3 font-display text-4xl leading-[1.06] text-jungle-950 italic">{seoHeading}</h1>
                                     <p className="mt-2 text-sm font-semibold uppercase tracking-widest text-jungle-500">{product.title}</p>
                                     <p className="mt-3 text-lg text-jungle-700/70 leading-relaxed font-medium">{seoDescription}</p>
 
                                     <div className="mt-8 flex items-end justify-between gap-4">
                                         <div>
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 ml-1">Prix de la sélection</p>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 ml-1">{locale === 'en' ? 'Selected offer' : 'Prix de la sélection'}</p>
                                             <div className="flex items-end gap-3 mt-1">
                                                 <p className="text-4xl font-semibold text-jungle-950">
-                                                    {isOnRequest ? 'Sur demande' : `${(currentPrice / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`}
+                                                    {isOnRequest ? (locale === 'en' ? 'On request' : 'Sur demande') : `${(currentPrice / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}`}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="rounded-2xl bg-vanilla-50 border border-vanilla-200 p-4">
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 text-center">Disponibilité</p>
-                                            <p className="text-sm font-semibold text-gold-600 mt-1">{stock > 0 ? 'En stock' : 'Épuisé'}</p>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 text-center">{locale === 'en' ? 'Availability' : 'Disponibilité'}</p>
+                                            <p className="text-sm font-semibold text-gold-600 mt-1">{stock > 0 ? (locale === 'en' ? 'In stock' : 'En stock') : (locale === 'en' ? 'Sold out' : 'Épuisé')}</p>
                                         </div>
                                     </div>
 
                                     <div className="mt-6 rounded-[2rem] border border-vanilla-200 bg-vanilla-50 p-6">
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">Pourquoi cette sélection plaît autant</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">{locale === 'en' ? 'Why this selection stands out' : 'Pourquoi cette sélection plaît autant'}</p>
                                         <ul className="mt-4 space-y-3">
                                             {productBullets.map((bullet) => (
                                                 <li key={bullet} className="flex gap-3 text-sm leading-relaxed text-jungle-800">
@@ -419,7 +427,7 @@ export default function ProductDetailPage() {
 
                                     {packHighlights.length > 0 ? (
                                         <div className="mt-6 rounded-[2rem] border border-gold-200 bg-gold-50 p-6">
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-gold-700">Packs et formats disponibles</p>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-gold-700">{locale === 'en' ? 'Available packs and formats' : 'Packs et formats disponibles'}</p>
                                             <div className="mt-4 flex flex-wrap gap-2">
                                                 {packHighlights.map((pack) => (
                                                     <span key={pack} className="rounded-full border border-gold-200 bg-white px-4 py-2 text-xs font-semibold text-jungle-800">
@@ -432,7 +440,7 @@ export default function ProductDetailPage() {
 
                                     {getVariantOptions(product).length > 0 && (
                                         <div className="mt-8">
-                                            <p className="text-sm font-bold uppercase tracking-widest text-jungle-400 ml-1">Options de sélection</p>
+                                            <p className="text-sm font-bold uppercase tracking-widest text-jungle-400 ml-1">{locale === 'en' ? 'Select your format' : 'Options de sélection'}</p>
                                             <div className="mt-3 space-y-4">
                                                 {getVariantOptions(product).map((option) => (
                                                     <div key={option.id}>
@@ -471,7 +479,7 @@ export default function ProductDetailPage() {
 
                                     <div className="mt-8 grid grid-cols-12 gap-4 items-center">
                                         <div className="col-span-4">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 ml-1">Quantité</label>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 ml-1">{locale === 'en' ? 'Quantity' : 'Quantité'}</label>
                                             <div className="mt-2 inline-flex w-full items-center justify-between rounded-full bg-vanilla-100 border border-vanilla-200 p-1">
                                                 <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-10 rounded-full grid place-items-center hover:bg-white transition-all transition-colors active:scale-90">−</button>
                                                 <span className="text-sm font-bold text-jungle-900">{qty}</span>
@@ -485,7 +493,7 @@ export default function ProductDetailPage() {
                                                 disabled={stock <= 0}
                                                 className="w-full inline-flex items-center justify-center gap-3 rounded-full px-6 py-4 text-sm font-bold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition-all hover:scale-[1.02] active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                Ajouter au panier
+                                                {locale === 'en' ? 'Add to cart' : 'Ajouter au panier'}
                                                 <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="8" cy="21" r="1" /><circle cx="19" cy="21" r="1" /><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
                                             </button>
                                         </div>
@@ -493,9 +501,9 @@ export default function ProductDetailPage() {
 
                                     <div className="mt-6 grid gap-3 sm:grid-cols-3">
                                         {[
-                                            'Paiement sécurisé Stripe',
-                                            'Expédition suivie sous 24 à 72h',
-                                            'Origine contrôlée Nosy-Be'
+                                            locale === 'en' ? 'Secure Stripe payment' : 'Paiement sécurisé Stripe',
+                                            locale === 'en' ? 'Tracked shipping in 24 to 72h' : 'Expédition suivie sous 24 à 72h',
+                                            locale === 'en' ? 'Verified Nosy-Be origin' : 'Origine contrôlée Nosy-Be'
                                         ].map((item) => (
                                             <div key={item} className="rounded-2xl border border-vanilla-200 bg-white px-4 py-4 text-center text-xs font-semibold text-jungle-800">
                                                 {item}
@@ -505,7 +513,7 @@ export default function ProductDetailPage() {
 
                                     {stock > 0 && stock <= 10 ? (
                                         <div className="mt-6 rounded-[2rem] border border-cacao-900/10 bg-jungle-950 px-5 py-4 text-sm font-semibold text-vanilla-50">
-                                            Stock limité sur ce format : sécurisez votre sélection avant rupture.
+                                            {locale === 'en' ? 'Limited stock on this format: secure your selection before it sells out.' : 'Stock limité sur ce format : sécurisez votre sélection avant rupture.'}
                                         </div>
                                     ) : null}
                                 </div>
@@ -521,9 +529,9 @@ export default function ProductDetailPage() {
                                 <div className="rounded-[2.5rem] bg-white border border-vanilla-200 p-8 lg:p-12">
                                     <div className="flex flex-wrap gap-3 border-b border-vanilla-100 pb-8" role="tablist">
                                         {[
-                                            { id: 'desc', label: 'Description' },
-                                            { id: 'usage', label: 'Usage & Conseils' },
-                                            { id: 'specs', label: 'Spécifications' }
+                                            { id: 'desc', label: locale === 'en' ? 'Description' : 'Description' },
+                                            { id: 'usage', label: locale === 'en' ? 'Use & advice' : 'Usage & Conseils' },
+                                            { id: 'specs', label: locale === 'en' ? 'Specifications' : 'Spécifications' }
                                         ].map((tab) => (
                                             <button
                                                 key={tab.id}
@@ -554,14 +562,14 @@ export default function ProductDetailPage() {
 
                                         {activeTab === 'usage' && (
                                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                                                <h2 className="font-display text-3xl text-jungle-950 italic">Sublimez vos créations.</h2>
-                                                <p className="mt-4 text-jungle-800/80">Pour extraire toute la quintessence de nos gousses, suivez le guide :</p>
+                                                <h2 className="font-display text-3xl text-jungle-950 italic">{locale === 'en' ? 'Elevate your creations.' : 'Sublimez vos créations.'}</h2>
+                                                <p className="mt-4 text-jungle-800/80">{locale === 'en' ? 'To reveal the full depth of our pods, follow these steps:' : 'Pour extraire toute la quintessence de nos gousses, suivez le guide :'}</p>
                                                 <ul className="mt-8 space-y-6">
                                                     {[
-                                                        'Utilisez un couteau bien aiguisé pour fendre la gousse sur toute sa longueur.',
-                                                        'Raclez les grains d\'un geste précis, de la base vers la pointe.',
-                                                        'Infusez la gousse et les grains dans un liquide froid que vous porterez doucement à ébullition.',
-                                                        'Laissez infuser au moins 20 minutes hors du feu, à couvert.'
+                                                        locale === 'en' ? 'Use a sharp knife to split the pod open lengthwise.' : 'Utilisez un couteau bien aiguisé pour fendre la gousse sur toute sa longueur.',
+                                                        locale === 'en' ? 'Scrape the seeds from base to tip with a precise motion.' : 'Raclez les grains d\'un geste précis, de la base vers la pointe.',
+                                                        locale === 'en' ? 'Infuse both pod and seeds in a cold liquid, then bring it gently to a simmer.' : 'Infusez la gousse et les grains dans un liquide froid que vous porterez doucement à ébullition.',
+                                                        locale === 'en' ? 'Let it steep for at least 20 minutes off the heat, covered.' : 'Laissez infuser au moins 20 minutes hors du feu, à couvert.'
                                                     ].map((step, i) => (
                                                         <li key={i} className="flex gap-6 items-start">
                                                             <span className="flex-shrink-0 w-10 h-10 rounded-full bg-gold-500 text-jungle-900 flex items-center justify-center font-bold">{i + 1}</span>
@@ -574,22 +582,22 @@ export default function ProductDetailPage() {
 
                                         {activeTab === 'specs' && (
                                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                                                <h2 className="font-display text-3xl text-jungle-950 italic">Informations Techniques</h2>
+                                                <h2 className="font-display text-3xl text-jungle-950 italic">{locale === 'en' ? 'Technical details' : 'Informations Techniques'}</h2>
                                                 <div className="mt-10 grid grid-cols-2 gap-px bg-vanilla-200 border border-vanilla-200 rounded-3xl overflow-hidden">
                                                     <div className="bg-white p-6">
-                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">Origine</p>
+                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">{locale === 'en' ? 'Origin' : 'Origine'}</p>
                                                         <p className="mt-2 text-lg font-semibold text-jungle-900">Nosy-Be, Madagascar</p>
                                                     </div>
                                                     <div className="bg-white p-6">
-                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">Grade</p>
+                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">{locale === 'en' ? 'Grade' : 'Grade'}</p>
                                                         <p className="mt-2 text-lg font-semibold text-jungle-900">{productGrade}</p>
                                                     </div>
                                                     <div className="bg-white p-6">
-                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">Longueur</p>
+                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">{locale === 'en' ? 'Length' : 'Longueur'}</p>
                                                         <p className="mt-2 text-lg font-semibold text-jungle-900">{productSize}</p>
                                                     </div>
                                                     <div className="bg-white p-6">
-                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">Conditionnement</p>
+                                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400">{locale === 'en' ? 'Packaging' : 'Conditionnement'}</p>
                                                         <p className="mt-2 text-lg font-semibold text-jungle-900 uppercase">{packagingLabel}</p>
                                                     </div>
                                                 </div>
@@ -601,13 +609,13 @@ export default function ProductDetailPage() {
                                 <div className="mt-8 rounded-[2.5rem] bg-white border border-vanilla-200 p-8 lg:p-12">
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                                         <div>
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">Preuve sociale</p>
-                                            <h2 className="mt-3 font-display text-3xl text-jungle-950 italic">Ce que disent les clients</h2>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">{locale === 'en' ? 'Social proof' : 'Preuve sociale'}</p>
+                                            <h2 className="mt-3 font-display text-3xl text-jungle-950 italic">{locale === 'en' ? 'What clients say' : 'Ce que disent les clients'}</h2>
                                         </div>
                                         <div className="rounded-2xl border border-gold-200 bg-gold-50 px-5 py-4 text-sm font-semibold text-jungle-900">
                                             {hasReviews
-                                                ? `${reviewStats?.averageRating.toFixed(1)}/5 de moyenne sur ${reviewStats?.totalReviews} avis`
-                                                : 'Les premiers retours clients apparaîtront ici'}
+                                                ? `${reviewStats?.averageRating.toFixed(1)}/5 ${locale === 'en' ? `average across ${reviewStats?.totalReviews} reviews` : `de moyenne sur ${reviewStats?.totalReviews} avis`}`
+                                                : (locale === 'en' ? 'Client reviews will appear here shortly' : 'Les premiers retours clients apparaîtront ici')}
                                         </div>
                                     </div>
 
@@ -617,7 +625,7 @@ export default function ProductDetailPage() {
                                                 <article key={review.id} className="rounded-[2rem] border border-vanilla-200 bg-vanilla-50 p-6">
                                                     <div className="flex items-center justify-between gap-3">
                                                         <p className="text-sm font-bold text-jungle-900">
-                                                            {review.customer?.firstName || 'Client'} {review.customer?.lastName?.slice(0, 1) ? `${review.customer.lastName.slice(0, 1)}.` : ''}
+                                                        {review.customer?.firstName || (locale === 'en' ? 'Client' : 'Client')} {review.customer?.lastName?.slice(0, 1) ? `${review.customer.lastName.slice(0, 1)}.` : ''}
                                                         </p>
                                                         <div className="flex items-center gap-1 text-gold-600">
                                                             {Array.from({ length: 5 }).map((_, index) => (
@@ -630,14 +638,14 @@ export default function ProductDetailPage() {
                                                     ) : null}
                                                     <p className="mt-3 text-sm leading-relaxed text-jungle-800/80">{review.comment}</p>
                                                     <p className="mt-4 text-[11px] font-semibold uppercase tracking-widest text-jungle-500">
-                                                        {review.verifiedPurchase ? 'Achat vérifié' : 'Avis client'}
+                                                        {review.verifiedPurchase ? (locale === 'en' ? 'Verified purchase' : 'Achat vérifié') : (locale === 'en' ? 'Client review' : 'Avis client')}
                                                     </p>
                                                 </article>
                                             ))}
                                         </div>
                                     ) : (
                                         <div className="mt-8 rounded-[2rem] border border-dashed border-vanilla-300 bg-vanilla-50 px-6 py-8 text-sm leading-relaxed text-jungle-800/75">
-                                            Cette fiche est prête à accueillir les avis clients pour renforcer la confiance et soutenir la conversion des campagnes Google Ads.
+                                            {locale === 'en' ? 'This product page is ready to host reviews and reinforce trust for Google Ads traffic.' : 'Cette fiche est prête à accueillir les avis clients pour renforcer la confiance et soutenir la conversion des campagnes Google Ads.'}
                                         </div>
                                     )}
                                 </div>
@@ -645,30 +653,30 @@ export default function ProductDetailPage() {
 
                             <aside className="lg:col-span-4 space-y-8">
                                 <div className="rounded-[2.5rem] bg-white border border-vanilla-200 p-10">
-                                    <p className="font-display text-2xl text-jungle-950 italic">Votre confiance.</p>
+                                    <p className="font-display text-2xl text-jungle-950 italic">{locale === 'en' ? 'Why clients trust us.' : 'Votre confiance.'}</p>
                                     <div className="mt-8 space-y-10">
                                         <div className="group">
                                             <div className="flex items-center gap-4 text-gold-600 mb-3">
                                                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /></svg>
-                                                <p className="font-bold text-sm uppercase tracking-widest">Affinage Naturel</p>
+                                                <p className="font-bold text-sm uppercase tracking-widest">{locale === 'en' ? 'Natural curing' : 'Affinage Naturel'}</p>
                                             </div>
                                             <p className="text-sm text-jungle-750 leading-relaxed">
-                                                Nous ne brûlons aucune étape. L&apos;arôme se développe naturellement au fil des mois dans nos malles de bois.
+                                                {locale === 'en' ? 'We do not rush the process. Aroma develops naturally over several months in our wooden curing chests.' : 'Nous ne brûlons aucune étape. L&apos;arôme se développe naturellement au fil des mois dans nos malles de bois.'}
                                             </p>
                                         </div>
                                         <div className="group">
                                             <div className="flex items-center gap-4 text-gold-600 mb-3">
                                                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></svg>
-                                                <p className="font-bold text-sm uppercase tracking-widest">Traçabilité Totale</p>
+                                                <p className="font-bold text-sm uppercase tracking-widest">{locale === 'en' ? 'Full traceability' : 'Traçabilité Totale'}</p>
                                             </div>
                                             <p className="text-sm text-jungle-750 leading-relaxed">
-                                                Chaque gousse provient directement de nos plantations ou de nos petits producteurs partenaires à Nosy-Be.
+                                                {locale === 'en' ? 'Each pod comes directly from our plantations or from our trusted partner growers in Nosy-Be.' : 'Chaque gousse provient directement de nos plantations ou de nos petits producteurs partenaires à Nosy-Be.'}
                                             </p>
                                         </div>
                                     </div>
 
-                                    <Link href="/contact" className="mt-12 w-full inline-flex items-center justify-center gap-3 rounded-full bg-vanilla-100 text-jungle-900 px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-jungle-900 hover:text-vanilla-50 transition-all duration-300">
-                                        Poser une question
+                                    <Link href={withLocale('/contact', locale)} className="mt-12 w-full inline-flex items-center justify-center gap-3 rounded-full bg-vanilla-100 text-jungle-900 px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-jungle-900 hover:text-vanilla-50 transition-all duration-300">
+                                        {locale === 'en' ? 'Ask a question' : 'Poser une question'}
                                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
                                     </Link>
                                 </div>
@@ -676,10 +684,10 @@ export default function ProductDetailPage() {
                                 <div className="p-1 rounded-[2.8rem] bg-gradient-to-br from-gold-500/30 to-vanilla-300">
                                     <div className="rounded-[2.5rem] bg-jungle-900 p-10 text-center relative overflow-hidden group">
                                         <div className="absolute inset-0 shine opacity-10"></div>
-                                        <p className="relative font-display text-3xl text-gold-500 italic">Offre B2B</p>
-                                        <p className="relative mt-4 text-vanilla-100/70 text-sm leading-relaxed">Professionnels, restaurateurs ? Bénéficiez de conditions préférentielles.</p>
-                                        <Link href="/b2b" className="relative mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-vanilla-50 hover:text-gold-500 transition-colors">
-                                            Espace Professionnel
+                                        <p className="relative font-display text-3xl text-gold-500 italic">{locale === 'en' ? 'B2B offer' : 'Offre B2B'}</p>
+                                        <p className="relative mt-4 text-vanilla-100/70 text-sm leading-relaxed">{locale === 'en' ? 'For chefs, retailers and hospitality buyers looking for preferred trade terms.' : 'Professionnels, restaurateurs ? Bénéficiez de conditions préférentielles.'}</p>
+                                        <Link href={withLocale('/b2b', locale)} className="relative mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-vanilla-50 hover:text-gold-500 transition-colors">
+                                            {locale === 'en' ? 'Wholesale access' : 'Espace Professionnel'}
                                             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                                         </Link>
                                     </div>

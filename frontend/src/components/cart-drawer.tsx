@@ -2,6 +2,8 @@
 
 import { useCart } from '@/lib/cart-context';
 import Link from 'next/link';
+import { useLocale } from '@/lib/locale-context';
+import { withLocale } from '@/lib/i18n';
 
 const CloseIcon = () => (
     <svg className="w-6 h-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -51,8 +53,9 @@ const LockIcon = () => (
 
 export default function CartDrawer() {
     const { items, total, isCartOpen, closeCart, removeItem, updateQuantity } = useCart();
+    const { copy, locale } = useLocale();
 
-    const fmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+    const fmt = new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'fr-FR', { style: "currency", currency: "EUR" });
 
     if (!isCartOpen) return null;
 
@@ -72,11 +75,11 @@ export default function CartDrawer() {
                     <div className="p-5 flex items-center justify-between border-b border-vanilla-100/10">
                         <div>
                             <p className="font-display text-xl">Votre panier</p>
-                            <p className="text-xs text-vanilla-100/70">Finalisez en 2 minutes</p>
+                            <p className="text-xs text-vanilla-100/70">{copy.cart.subtitle}</p>
                         </div>
                         <button
                             onClick={closeCart}
-                            className="w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring flex items-center justify-center" aria-label="Fermer le panier">
+                            className="w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring flex items-center justify-center" aria-label={copy.actions.closeCart}>
                             <CloseIcon />
                         </button>
                     </div>
@@ -87,12 +90,12 @@ export default function CartDrawer() {
                                 <div className="inline-flex w-12 h-12 rounded-2xl bg-vanilla-50/10 border border-vanilla-100/12 items-center justify-center">
                                     <CartIcon />
                                 </div>
-                                <p className="mt-4 font-semibold">Panier vide</p>
-                                <p className="mt-1 text-sm text-vanilla-100/70">Ajoutez vos gousses préférées.</p>
+                                <p className="mt-4 font-semibold">{copy.cart.empty}</p>
+                                <p className="mt-1 text-sm text-vanilla-100/70">{copy.cart.emptyText}</p>
                                 <button
                                     onClick={closeCart}
                                     className="mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                                    Aller à la boutique <ArrowRightIcon />
+                                    {copy.cart.goToShop} <ArrowRightIcon />
                                 </button>
                             </div>
                         ) : (
@@ -110,12 +113,12 @@ export default function CartDrawer() {
                                             <div className="flex items-start justify-between gap-3">
                                                 <div className="min-w-0">
                                                     <p className="font-semibold truncate">{item.product.title}</p>
-                                                    <p className="text-sm text-vanilla-100/70">{fmt.format(item.price / 100)} <span className="text-xs">/ unité</span></p>
+                                                    <p className="text-sm text-vanilla-100/70">{fmt.format(item.price / 100)} <span className="text-xs">{copy.cart.perUnit}</span></p>
                                                 </div>
                                                 <button
                                                     onClick={() => removeItem(item.id)}
                                                     className="p-2 rounded-xl hover:bg-vanilla-50/10 focus-ring flex items-center justify-center"
-                                                    aria-label="Supprimer"
+                                                    aria-label={copy.actions.remove}
                                                 >
                                                     <TrashIcon />
                                                 </button>
@@ -126,7 +129,7 @@ export default function CartDrawer() {
                                                     <button
                                                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                                         className="w-10 h-9 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
-                                                        aria-label="Diminuer quantité"
+                                                        aria-label={copy.actions.quantityDown}
                                                     >
                                                         <MinusIcon />
                                                     </button>
@@ -134,7 +137,7 @@ export default function CartDrawer() {
                                                     <button
                                                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                                         className="w-10 h-9 grid place-items-center hover:bg-vanilla-50/10 focus-ring"
-                                                        aria-label="Augmenter quantité"
+                                                        aria-label={copy.actions.quantityUp}
                                                     >
                                                         <PlusIcon />
                                                     </button>
@@ -151,25 +154,25 @@ export default function CartDrawer() {
                     <div className="p-5 border-t border-vanilla-100/10">
                         <div className="rounded-xxl glass p-4">
                             <div className="flex items-center justify-between">
-                                <p className="text-sm text-vanilla-100/75">Sous-total</p>
+                                <p className="text-sm text-vanilla-100/75">{copy.cart.subtotal}</p>
                                 <p className="text-lg font-semibold">{fmt.format(total / 100)}</p>
                             </div>
-                            <p className="mt-1 text-xs text-vanilla-100/60">Livraison & taxes calculées au paiement.</p>
+                            <p className="mt-1 text-xs text-vanilla-100/60">{copy.cart.taxesAndShipping}</p>
 
                             <div className="mt-4 grid grid-cols-2 gap-3">
                                 <Link
-                                    href="/cart"
+                                    href={withLocale('/cart', locale)}
                                     onClick={closeCart}
                                     className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring"
                                 >
-                                    Voir panier <ArrowRightIcon />
+                                    {copy.actions.viewCart} <ArrowRightIcon />
                                 </Link>
                                 <Link
-                                    href="/checkout"
+                                    href={withLocale('/checkout', locale)}
                                     onClick={closeCart}
                                     className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring"
                                 >
-                                    Commander <LockIcon />
+                                    {copy.actions.checkout} <LockIcon />
                                 </Link>
                             </div>
                         </div>

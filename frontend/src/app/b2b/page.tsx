@@ -4,6 +4,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useState } from 'react';
 import { communicationsApi } from '@/lib/api/communications';
+import { useLocale } from '@/lib/locale-context';
 
 const ArrowRightIcon = () => (
     <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -20,6 +21,7 @@ const BuildingIcon = () => (
 );
 
 export default function B2BPage() {
+    const { locale } = useLocale();
     const [status, setStatus] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
@@ -34,10 +36,10 @@ export default function B2BPage() {
 
         try {
             await communicationsApi.sendB2BLead(formData);
-            setStatus('Demande de devis envoyée. Notre équipe commerciale vous recontactera.');
+            setStatus(locale === 'en' ? 'Quote request sent. Our sales team will contact you shortly.' : 'Demande de devis envoyée. Notre équipe commerciale vous recontactera.');
             setFormData({ company: '', email: '', need: '' });
         } catch (error: any) {
-            setStatus(error?.message || 'Impossible d’envoyer votre demande pour le moment.');
+            setStatus(error?.message || (locale === 'en' ? 'We are unable to send your request right now.' : 'Impossible d’envoyer votre demande pour le moment.'));
         } finally {
             setIsSubmitting(false);
             setTimeout(() => setStatus(null), 3000);
@@ -55,13 +57,10 @@ export default function B2BPage() {
                         <div className="grid lg:grid-cols-2 gap-16 items-start">
                             <div className="max-w-xl">
                                 <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight">
-                                    Professionnels <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-jungle-800 italic">
-                                        & Gastronomie.
-                                    </span>
+                                    {locale === 'en' ? <>Wholesale <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-jungle-800 italic">& fine food.</span></> : <>Professionnels <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-jungle-800 italic">& Gastronomie.</span></>}
                                 </h1>
                                 <p className="text-jungle-700 mt-6 text-lg">
-                                    Chef pâtissier, chocolatier ou distributeur ? Accédez à des volumes importants et des tarifs préférentiels pour sublimer vos créations.
+                                    {locale === 'en' ? 'Pastry chef, chocolatier or distributor? Access larger volumes and preferential pricing tailored to premium applications.' : 'Chef pâtissier, chocolatier ou distributeur ? Accédez à des volumes importants et des tarifs préférentiels pour sublimer vos créations.'}
                                 </p>
 
                                 <div className="mt-10 space-y-6">
@@ -72,15 +71,15 @@ export default function B2BPage() {
                                         <div>
                                             <p className="font-display text-xl text-gold-600">MORIDY SOANJARA VANILLA NOSY-BE</p>
                                             <p className="text-sm text-jungle-700 mt-2">
-                                                SARL de droit malgache spécialisée dans la production, la transformation, le stockage et l’exportation de vanille naturelle.
+                                                {locale === 'en' ? 'A Malagasy limited company specialised in the production, processing, storage and export of natural vanilla.' : 'SARL de droit malgache spécialisée dans la production, la transformation, le stockage et l’exportation de vanille naturelle.'}
                                             </p>
                                             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-jungle-600 border-t border-vanilla-100 pt-4">
                                                 <div>
-                                                    <p className="font-semibold text-jungle-900">Siège Social</p>
+                                                    <p className="font-semibold text-jungle-900">{locale === 'en' ? 'Registered office' : 'Siège Social'}</p>
                                                     <p>Lot n° 109B 0163, Befitina, Nosy-Be</p>
                                                 </div>
                                                 <div>
-                                                    <p className="font-semibold text-jungle-900">Identifiants</p>
+                                                    <p className="font-semibold text-jungle-900">{locale === 'en' ? 'Registration details' : 'Identifiants'}</p>
                                                     <p>RCS Nosy-Be : 2023 B 00054</p>
                                                     <p>N° STAT : 46101 71 2023 0 10373</p>
                                                 </div>
@@ -89,13 +88,13 @@ export default function B2BPage() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <h3 className="font-display text-2xl italic text-jungle-900">Notre activité</h3>
+                                        <h3 className="font-display text-2xl italic text-jungle-900">{locale === 'en' ? 'What we do' : 'Notre activité'}</h3>
                                         <ul className="grid grid-cols-2 gap-4">
                                             {[
-                                                { title: "Production", desc: "Maîtrise agricole" },
-                                                { title: "Transformation", desc: "Affinage traditionnel" },
-                                                { title: "Stockage", desc: "Conditions contrôlées" },
-                                                { title: "Exportation", desc: "Normes internationales" }
+                                                locale === 'en' ? { title: "Production", desc: "Controlled agriculture" } : { title: "Production", desc: "Maîtrise agricole" },
+                                                locale === 'en' ? { title: "Processing", desc: "Traditional curing" } : { title: "Transformation", desc: "Affinage traditionnel" },
+                                                locale === 'en' ? { title: "Storage", desc: "Controlled conditions" } : { title: "Stockage", desc: "Conditions contrôlées" },
+                                                locale === 'en' ? { title: "Export", desc: "International standards" } : { title: "Exportation", desc: "Normes internationales" }
                                             ].map((item, i) => (
                                                 <li key={i} className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
                                                     <p className="font-semibold text-gold-600">{item.title}</p>
@@ -106,23 +105,23 @@ export default function B2BPage() {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <h3 className="font-display text-2xl italic text-jungle-900">Nos Produits</h3>
+                                        <h3 className="font-display text-2xl italic text-jungle-900">{locale === 'en' ? 'Our grades' : 'Nos Produits'}</h3>
                                         <div className="grid gap-4">
                                             <div className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
                                                 <p className="font-semibold text-gold-600">Grade GOURMET</p>
-                                                <p className="text-sm text-jungle-700">Gastronomie fine et pâtisserie haut de gamme.</p>
+                                                <p className="text-sm text-jungle-700">{locale === 'en' ? 'Fine dining and high-end pastry applications.' : 'Gastronomie fine et pâtisserie haut de gamme.'}</p>
                                             </div>
                                             <div className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
                                                 <p className="font-semibold text-gold-600">Grade TK</p>
-                                                <p className="text-sm text-jungle-700">Industrie agroalimentaire et transformation.</p>
+                                                <p className="text-sm text-jungle-700">{locale === 'en' ? 'Food industry and processing applications.' : 'Industrie agroalimentaire et transformation.'}</p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="space-y-4">
-                                        <h3 className="font-display text-2xl italic text-jungle-900">Partenaires Cibles</h3>
+                                        <h3 className="font-display text-2xl italic text-jungle-900">{locale === 'en' ? 'Target partners' : 'Partenaires Cibles'}</h3>
                                         <div className="flex flex-wrap gap-2">
-                                            {["Importateurs", "Industriels", "Pâtissiers", "Confiseurs", "Négociants"].map((tag, i) => (
+                                            {(locale === 'en' ? ["Importers", "Manufacturers", "Pastry chefs", "Confectioners", "Traders"] : ["Importateurs", "Industriels", "Pâtissiers", "Confiseurs", "Négociants"]).map((tag, i) => (
                                                 <span key={i} className="px-3 py-1 rounded-full bg-vanilla-100 border border-vanilla-200 text-xs text-jungle-700">
                                                     {tag}
                                                 </span>
@@ -133,41 +132,41 @@ export default function B2BPage() {
                             </div>
 
                             <div className="lg:sticky lg:top-24 rounded-3xl bg-white shadow-2xl border border-vanilla-200 p-8 relative">
-                                <h2 className="font-display text-3xl italic text-jungle-900">Demande de devis</h2>
+                                <h2 className="font-display text-3xl italic text-jungle-900">{locale === 'en' ? 'Request a quote' : 'Demande de devis'}</h2>
                                 <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
                                     <div className="grid sm:grid-cols-2 gap-5">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-jungle-700" htmlFor="company">Entreprise / Restaurant</label>
+                                            <label className="text-sm font-medium text-jungle-700" htmlFor="company">{locale === 'en' ? 'Company / Restaurant' : 'Entreprise / Restaurant'}</label>
                                             <input
                                                 id="company"
                                                 required
                                                 className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
-                                                placeholder="Nom de l’établissement"
+                                                placeholder={locale === 'en' ? 'Business name' : 'Nom de l’établissement'}
                                                 value={formData.company}
                                                 onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-jungle-700" htmlFor="b2bemail">Email pro</label>
+                                            <label className="text-sm font-medium text-jungle-700" htmlFor="b2bemail">{locale === 'en' ? 'Business email' : 'Email pro'}</label>
                                             <input
                                                 id="b2bemail"
                                                 type="email"
                                                 required
                                                 className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
-                                                placeholder="contact@entreprise.fr"
+                                                placeholder={locale === 'en' ? 'contact@company.com' : 'contact@entreprise.fr'}
                                                 value={formData.email}
                                                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                                             />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-jungle-700" htmlFor="need">Votre besoin (Volumes, Types...)</label>
+                                        <label className="text-sm font-medium text-jungle-700" htmlFor="need">{locale === 'en' ? 'Your needs (volumes, formats...)' : 'Votre besoin (Volumes, Types...)'}</label>
                                         <textarea
                                             id="need"
                                             rows={5}
                                             required
                                             className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
-                                            placeholder="Ex: 5kg Gousses TK, Livraison mensuelle..."
+                                            placeholder={locale === 'en' ? 'Ex: 5kg TK pods, monthly delivery...' : 'Ex: 5kg Gousses TK, Livraison mensuelle...'}
                                             value={formData.need}
                                             onChange={(e) => setFormData(prev => ({ ...prev, need: e.target.value }))}
                                         />
@@ -177,7 +176,7 @@ export default function B2BPage() {
                                         disabled={isSubmitting}
                                         className="w-full inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-4 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all shadow-lg"
                                     >
-                                        {isSubmitting ? 'Envoi en cours...' : 'Envoyer ma demande'} <ArrowRightIcon />
+                                        {isSubmitting ? (locale === 'en' ? 'Sending...' : 'Envoi en cours...') : (locale === 'en' ? 'Submit request' : 'Envoyer ma demande')} <ArrowRightIcon />
                                     </button>
                                 </form>
                             </div>

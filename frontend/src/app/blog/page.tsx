@@ -1,26 +1,34 @@
+'use client';
+
 import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Image from 'next/image';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
+import { useLocale } from '@/lib/locale-context';
+import { getLocalizedBlogPost } from '@/lib/localized-content';
+import { withLocale } from '@/lib/i18n';
 
 export default function BlogPage() {
+    const { locale } = useLocale();
+    const posts = BLOG_POSTS.map((post) => getLocalizedBlogPost(post, locale));
+
     return (
         <div className="flex flex-col min-h-screen bg-white text-zinc-900">
             <Header />
             <main className="flex-grow mx-auto max-w-7xl w-full px-6 py-12">
                 <div className="text-center mb-16">
-                    <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-gold-600">Terroir d'Excellence</span>
-                    <h1 className="text-4xl font-serif text-zinc-900">Le Mag de la Vanille</h1>
+                    <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-gold-600">{locale === 'en' ? 'Terroir of distinction' : "Terroir d'Excellence"}</span>
+                    <h1 className="text-4xl font-serif text-zinc-900">{locale === 'en' ? 'The Vanilla Journal' : 'Le Mag de la Vanille'}</h1>
                     <p className="mt-4 text-zinc-500 max-w-2xl mx-auto">
-                        Découvrez les secrets de la vanille de Madagascar, nos conseils pour sublimer vos recettes et l'histoire de notre plantation à Nosy-Be.
+                        {locale === 'en' ? 'Discover the secrets of Madagascar vanilla, our culinary advice and the story behind our plantation in Nosy-Be.' : "Découvrez les secrets de la vanille de Madagascar, nos conseils pour sublimer vos recettes et l'histoire de notre plantation à Nosy-Be."}
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8">
-                    {BLOG_POSTS.map((post) => (
+                    {posts.map((post) => (
                         <article key={post.slug} className="group flex flex-col">
-                            <Link href={`/blog/${post.slug}`} className="relative h-64 w-full overflow-hidden rounded-lg bg-zinc-100 mb-6">
+                            <Link href={withLocale(`/blog/${post.slug}`, locale)} className="relative h-64 w-full overflow-hidden rounded-lg bg-zinc-100 mb-6">
                                 <Image
                                     src={post.coverImage}
                                     alt={post.title}
@@ -33,18 +41,18 @@ export default function BlogPage() {
                                 <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-500 mb-3">
                                     <span>{post.category}</span>
                                     <span>•</span>
-                                    <span>{post.readTime} de lecture</span>
+                                    <span>{post.readTime}</span>
                                 </div>
                                 <h2 className="text-xl font-medium text-zinc-900 mb-3 group-hover:text-gold-600 transition-colors">
-                                    <Link href={`/blog/${post.slug}`}>
+                                    <Link href={withLocale(`/blog/${post.slug}`, locale)}>
                                         {post.title}
                                     </Link>
                                 </h2>
                                 <p className="text-zinc-600 font-light mb-4 line-clamp-3">
                                     {post.excerpt}
                                 </p>
-                                <Link href={`/blog/${post.slug}`} className="mt-auto inline-flex items-center text-sm font-medium text-gold-600 hover:text-gold-700">
-                                    Lire l'article →
+                                <Link href={withLocale(`/blog/${post.slug}`, locale)} className="mt-auto inline-flex items-center text-sm font-medium text-gold-600 hover:text-gold-700">
+                                    {locale === 'en' ? 'Read article →' : "Lire l'article →"}
                                 </Link>
                             </div>
                         </article>

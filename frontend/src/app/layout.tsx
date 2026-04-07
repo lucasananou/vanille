@@ -9,6 +9,10 @@ import QuickContact from "@/components/quick-contact";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { normalizeGaMeasurementId } from "@/lib/analytics-config";
 import { getSiteUrl } from "@/lib/site";
+import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
+import { LocaleProvider } from '@/lib/locale-context';
+import { normalizeLocale, stripLocalePrefix, withLocale } from '@/lib/i18n';
 
 const googleAnalyticsId = normalizeGaMeasurementId(process.env.NEXT_PUBLIC_GA_ID || 'G-R6KF4N6CCF');
 const googleTagManagerId = process.env.NEXT_PUBLIC_GTM_ID?.trim() || '';
@@ -28,54 +32,87 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: "M.S.V-NOSY BE | Vanille de Madagascar premium",
-    template: "%s | M.S.V-NOSY BE",
-  },
-  description: "Vanille de Madagascar premium sélectionnée à Nosy-Be. Gousses de vanille Bourbon, packs découverte, livraison France, Europe et USA.",
-  keywords: [
-    "vanille Madagascar",
-    "vanille bourbon",
-    "gousses de vanille premium",
-    "vanille Nosy-Be",
-    "vanille de Madagascar premium",
-  ],
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'fr_FR',
-    url: siteUrl,
-    siteName: 'M.S.V-NOSY BE',
-    title: 'M.S.V-NOSY BE | Vanille de Madagascar premium',
-    description: 'Gousses de vanille Bourbon de Madagascar, sélection premium, packs découverte et expédition France, Europe et USA.',
-    images: [
-      {
-        url: '/logo_msv.png',
-        width: 1200,
-        height: 1200,
-        alt: 'Logo M.S.V-NOSY BE',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'M.S.V-NOSY BE | Vanille de Madagascar premium',
-    description: 'Vanille Bourbon de Madagascar sélectionnée à Nosy-Be pour pâtisserie, cadeaux gourmands et usages professionnels.',
-    images: ['/logo_msv.png'],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const headerStore = await headers();
+  const locale = normalizeLocale(headerStore.get('x-locale'));
+  const visiblePath = headerStore.get('x-visible-pathname') || `/${locale}`;
+  const strippedPath = stripLocalePrefix(visiblePath);
+  const frPath = withLocale(strippedPath, 'fr');
+  const enPath = withLocale(strippedPath, 'en');
 
-export default function RootLayout({
+  const title = locale === 'en'
+    ? 'M.S.V-NOSY BE | Premium Madagascar Vanilla'
+    : 'M.S.V-NOSY BE | Vanille de Madagascar premium';
+  const description = locale === 'en'
+    ? 'Premium Madagascar vanilla selected in Nosy-Be. Bourbon vanilla pods, discovery sets, and delivery across France, Europe and the USA.'
+    : 'Vanille de Madagascar premium sélectionnée à Nosy-Be. Gousses de vanille Bourbon, packs découverte, livraison France, Europe et USA.';
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: title,
+      template: '%s | M.S.V-NOSY BE',
+    },
+    description,
+    keywords: locale === 'en'
+      ? [
+          'Madagascar vanilla',
+          'Bourbon vanilla',
+          'premium vanilla pods',
+          'Nosy-Be vanilla',
+          'Madagascar gourmet vanilla',
+        ]
+      : [
+          'vanille Madagascar',
+          'vanille bourbon',
+          'gousses de vanille premium',
+          'vanille Nosy-Be',
+          'vanille de Madagascar premium',
+        ],
+    alternates: {
+      canonical: locale === 'en' ? enPath : frPath,
+      languages: {
+        'fr-FR': frPath,
+        'en-US': enPath,
+        'x-default': frPath,
+      },
+    },
+    openGraph: {
+      type: 'website',
+      locale: locale === 'en' ? 'en_US' : 'fr_FR',
+      url: `${siteUrl}${locale === 'en' ? enPath : frPath}`,
+      siteName: 'M.S.V-NOSY BE',
+      title,
+      description,
+      images: [
+        {
+          url: '/logo_msv.png',
+          width: 1200,
+          height: 1200,
+          alt: 'Logo M.S.V-NOSY BE',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/logo_msv.png'],
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const headerStore = await headers();
+  const locale = normalizeLocale(headerStore.get('x-locale') || cookieStore.get('site_locale')?.value);
+
   return (
-    <html lang="fr" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${fraunces.variable}`}>
       <body className="antialiased bg-jungle-900 text-vanilla-50 font-sans">
         {googleTagManagerId ? (
           <noscript>
@@ -87,13 +124,15 @@ export default function RootLayout({
             />
           </noscript>
         ) : null}
-        <AuthProvider>
-          <CartProvider>
-            {children}
-            <CartDrawer />
-            <QuickContact />
-          </CartProvider>
-        </AuthProvider>
+        <LocaleProvider initialLocale={locale}>
+          <AuthProvider>
+            <CartProvider>
+              {children}
+              <CartDrawer />
+              <QuickContact />
+            </CartProvider>
+          </AuthProvider>
+        </LocaleProvider>
         {googleTagManagerId ? (
           <Script id="google-tag-manager" strategy="afterInteractive">
             {`

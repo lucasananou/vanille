@@ -6,8 +6,11 @@ import { useParams } from 'next/navigation';
 import { ordersApi } from '@/lib/api/orders';
 import type { Order } from '@/lib/types';
 import { trackPurchase } from '@/lib/analytics';
+import { useLocale } from '@/lib/locale-context';
+import { withLocale } from '@/lib/i18n';
 
 export default function OrderConfirmationPage() {
+    const { locale } = useLocale();
     const params = useParams();
     const orderId = params.id as string;
 
@@ -22,7 +25,7 @@ export default function OrderConfirmationPage() {
                 setOrder(orderData);
             } catch (err) {
                 console.error('Failed to fetch order:', err);
-                setError('Impossible de charger les détails de la commande');
+                setError(locale === 'en' ? 'Unable to load order details' : 'Impossible de charger les détails de la commande');
             } finally {
                 setIsLoading(false);
             }
@@ -31,7 +34,7 @@ export default function OrderConfirmationPage() {
         if (orderId) {
             fetchOrder();
         }
-    }, [orderId]);
+    }, [orderId, locale]);
 
     useEffect(() => {
         if (!order) return;
@@ -46,7 +49,7 @@ export default function OrderConfirmationPage() {
     if (isLoading) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center">
-                <p className="text-zinc-500">Chargement de la commande...</p>
+                <p className="text-zinc-500">{locale === 'en' ? 'Loading your order...' : 'Chargement de la commande...'}</p>
             </div>
         );
     }
@@ -56,15 +59,15 @@ export default function OrderConfirmationPage() {
             <div className="min-h-screen bg-white">
                 <nav className="border-b border-zinc-100">
                     <div className="mx-auto flex h-20 max-w-7xl items-center px-6">
-                        <Link href="/" className="text-xl font-medium tracking-tight text-zinc-900 uppercase hover:text-amber-700 transition-colors">
+                        <Link href={withLocale('/', locale)} className="text-xl font-medium tracking-tight text-zinc-900 uppercase hover:text-amber-700 transition-colors">
                             M.S.V-NOSY BE
                         </Link>
                     </div>
                 </nav>
                 <div className="mx-auto max-w-7xl px-6 py-24 text-center">
-                    <p className="text-red-600">{error || 'Commande non trouvée'}</p>
-                    <Link href="/" className="mt-4 inline-block text-amber-700 hover:text-amber-800">
-                        Retour à l&apos;accueil
+                    <p className="text-red-600">{error || (locale === 'en' ? 'Order not found' : 'Commande non trouvée')}</p>
+                    <Link href={withLocale('/', locale)} className="mt-4 inline-block text-amber-700 hover:text-amber-800">
+                        {locale === 'en' ? 'Back to home' : 'Retour à l&apos;accueil'}
                     </Link>
                 </div>
             </div>
@@ -75,7 +78,7 @@ export default function OrderConfirmationPage() {
         <div className="min-h-screen bg-white">
             <nav className="border-b border-zinc-100">
                 <div className="mx-auto flex h-20 max-w-7xl items-center px-6 gap-3">
-                    <Link href="/" className="flex items-center gap-3">
+                    <Link href={withLocale('/', locale)} className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-xl overflow-hidden">
                             <img
                                 src="/logo_msv.png"
@@ -98,46 +101,46 @@ export default function OrderConfirmationPage() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
-                    <h1 className="text-3xl font-medium text-zinc-900 mb-2">Commande confirmée !</h1>
-                    <p className="text-zinc-600">Merci pour votre achat</p>
+                    <h1 className="text-3xl font-medium text-zinc-900 mb-2">{locale === 'en' ? 'Order confirmed!' : 'Commande confirmée !'}</h1>
+                    <p className="text-zinc-600">{locale === 'en' ? 'Thank you for your purchase' : 'Merci pour votre achat'}</p>
                 </div>
 
                 {/* Order Details */}
                 <div className="rounded-lg border border-zinc-200 p-6 mb-6">
                     <div className="grid grid-cols-2 gap-6 mb-6">
                         <div>
-                            <p className="text-sm font-medium text-zinc-700 mb-1">N° de commande</p>
+                            <p className="text-sm font-medium text-zinc-700 mb-1">{locale === 'en' ? 'Order number' : 'N° de commande'}</p>
                             <p className="text-zinc-900">{order.orderNumber}</p>
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-zinc-700 mb-1">Date de commande</p>
+                            <p className="text-sm font-medium text-zinc-700 mb-1">{locale === 'en' ? 'Order date' : 'Date de commande'}</p>
                             <p className="text-zinc-900">
                                 {new Date(order.createdAt).toLocaleDateString()}
                             </p>
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-zinc-700 mb-1">Statut</p>
+                            <p className="text-sm font-medium text-zinc-700 mb-1">{locale === 'en' ? 'Status' : 'Statut'}</p>
                             <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
-                                {order.status === 'PENDING' ? 'En attente' :
-                                    order.status === 'PAID' ? 'Payée' :
-                                        order.status === 'PROCESSING' ? 'En préparation' :
-                                            order.status === 'SHIPPED' ? 'Expédiée' :
-                                                order.status === 'DELIVERED' ? 'Livrée' :
-                                                order.status === 'CANCELLED' ? 'Annulée' :
-                                                    order.status === 'REFUNDED' ? 'Remboursée' : order.status}
+                                {order.status === 'PENDING' ? (locale === 'en' ? 'Pending' : 'En attente') :
+                                    order.status === 'PAID' ? (locale === 'en' ? 'Paid' : 'Payée') :
+                                        order.status === 'PROCESSING' ? (locale === 'en' ? 'Processing' : 'En préparation') :
+                                            order.status === 'SHIPPED' ? (locale === 'en' ? 'Shipped' : 'Expédiée') :
+                                                order.status === 'DELIVERED' ? (locale === 'en' ? 'Delivered' : 'Livrée') :
+                                                order.status === 'CANCELLED' ? (locale === 'en' ? 'Cancelled' : 'Annulée') :
+                                                    order.status === 'REFUNDED' ? (locale === 'en' ? 'Refunded' : 'Remboursée') : order.status}
                             </span>
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-zinc-700 mb-1">Total</p>
+                            <p className="text-sm font-medium text-zinc-700 mb-1">{locale === 'en' ? 'Total' : 'Total'}</p>
                             <p className="text-lg font-medium text-zinc-900">
-                                {(order.total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                {(order.total / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}
                             </p>
                         </div>
                     </div>
 
                     {/* Shipping Address */}
                     <div className="border-t border-zinc-200 pt-6">
-                        <p className="text-sm font-medium text-zinc-700 mb-2">Adresse de livraison</p>
+                        <p className="text-sm font-medium text-zinc-700 mb-2">{locale === 'en' ? 'Shipping address' : 'Adresse de livraison'}</p>
                         <p className="text-sm text-zinc-900">
                             {order.shippingAddress.firstName} {order.shippingAddress.lastName}<br />
                             {order.shippingAddress.address1}
@@ -150,16 +153,16 @@ export default function OrderConfirmationPage() {
 
                 {/* Order Items */}
                 <div className="rounded-lg border border-zinc-200 p-6 mb-6">
-                    <h2 className="text-lg font-medium text-zinc-900 mb-4">Articles commandés</h2>
+                    <h2 className="text-lg font-medium text-zinc-900 mb-4">{locale === 'en' ? 'Items ordered' : 'Articles commandés'}</h2>
                     <div className="space-y-4">
                         {order.items.map((item) => (
                             <div key={item.id} className="flex justify-between text-sm">
                                 <div>
                                     <p className="font-medium text-zinc-900">{item.product.title}</p>
-                                    <p className="text-zinc-500">Quantité : {item.quantity}</p>
+                                    <p className="text-zinc-500">{locale === 'en' ? 'Quantity:' : 'Quantité :'} {item.quantity}</p>
                                 </div>
                                 <p className="font-medium text-zinc-900">
-                                    {((item.price / 100) * item.quantity).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                    {((item.price / 100) * item.quantity).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}
                                 </p>
                             </div>
                         ))}
@@ -167,21 +170,21 @@ export default function OrderConfirmationPage() {
 
                     <div className="mt-6 border-t border-zinc-200 pt-4 space-y-2">
                         <div className="flex justify-between text-sm">
-                            <span className="text-zinc-600">Sous-total</span>
-                            <span className="text-zinc-900">{(order.subtotal / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                            <span className="text-zinc-600">{locale === 'en' ? 'Subtotal' : 'Sous-total'}</span>
+                            <span className="text-zinc-900">{(order.subtotal / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span className="text-zinc-600">Livraison</span>
-                            <span className="text-zinc-900">{(order.shippingCost / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                            <span className="text-zinc-600">{locale === 'en' ? 'Shipping' : 'Livraison'}</span>
+                            <span className="text-zinc-900">{(order.shippingCost / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span className="text-zinc-600">Taxes</span>
-                            <span className="text-zinc-900">{(order.tax / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+                            <span className="text-zinc-600">{locale === 'en' ? 'Taxes' : 'Taxes'}</span>
+                            <span className="text-zinc-900">{(order.tax / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}</span>
                         </div>
                         <div className="flex justify-between border-t border-zinc-200 pt-2">
-                            <span className="font-medium text-zinc-900">Total</span>
+                            <span className="font-medium text-zinc-900">{locale === 'en' ? 'Total' : 'Total'}</span>
                             <span className="text-lg font-medium text-zinc-900">
-                                {(order.total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                {(order.total / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}
                             </span>
                         </div>
                     </div>
@@ -190,21 +193,21 @@ export default function OrderConfirmationPage() {
                 {/* Actions */}
                 <div className="flex gap-4">
                     <Link
-                        href="/"
+                        href={withLocale('/', locale)}
                         className="flex-1 bg-zinc-900 py-3 text-center text-sm font-medium uppercase tracking-widest text-white transition hover:bg-zinc-800"
                     >
-                        Continuer mes achats
+                        {locale === 'en' ? 'Continue shopping' : 'Continuer mes achats'}
                     </Link>
                     <Link
-                        href="/account"
+                        href={withLocale('/account', locale)}
                         className="flex-1 border border-zinc-900 py-3 text-center text-sm font-medium uppercase tracking-widest text-zinc-900 transition hover:bg-zinc-50"
                     >
-                        Voir mes commandes
+                        {locale === 'en' ? 'View my orders' : 'Voir mes commandes'}
                     </Link>
                 </div>
 
                 <p className="mt-6 text-center text-sm text-zinc-500">
-                    Un email de confirmation a été envoyé à <strong>{order.email}</strong>
+                    {locale === 'en' ? <>A confirmation email has been sent to <strong>{order.email}</strong></> : <>Un email de confirmation a été envoyé à <strong>{order.email}</strong></>}
                 </p>
             </div>
         </div>

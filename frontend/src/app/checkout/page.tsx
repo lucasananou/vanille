@@ -15,6 +15,8 @@ import PayPalButton from '@/components/checkout/paypal-button';
 import { useRouter } from 'next/navigation';
 import type { Product } from '@/lib/types';
 import { trackBeginCheckout } from '@/lib/analytics';
+import { useLocale } from '@/lib/locale-context';
+import { withLocale } from '@/lib/i18n';
 
 // Initialize Stripe outside of component
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
@@ -84,6 +86,7 @@ type AddressSuggestion = {
 
 export default function CheckoutPage() {
     const SHIPPING_LAUNCH_DISCOUNT_RATE = 0.5;
+    const { locale } = useLocale();
     const router = useRouter();
     const { items, total, clearCart } = useCart();
     const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -108,7 +111,7 @@ export default function CheckoutPage() {
     const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null);
     const [isLoadingRates, setIsLoadingRates] = useState(false);
 
-    const fmt = useMemo(() => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }), []);
+    const fmt = useMemo(() => new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'fr-FR', { style: "currency", currency: "EUR" }), [locale]);
     const subtotal = total / 100;
     const originalShipping = selectedRate ? selectedRate.price / 100 : 0;
     const shippingDiscount = originalShipping * SHIPPING_LAUNCH_DISCOUNT_RATE;
@@ -237,7 +240,7 @@ export default function CheckoutPage() {
             const orderPayload = await buildOrderPayload();
             const result = await paymentsApi.finalizePayPalOrder(paypalOrderId, orderPayload);
             clearCart();
-            router.push(`/order-confirmation/${result.orderId}`);
+            router.push(withLocale(`/order-confirmation/${result.orderId}`, locale));
         } catch (error: unknown) {
             console.error('PayPal finalization failed:', error);
             setPaypalError(error instanceof Error ? error.message : 'Le paiement PayPal a échoué.');
@@ -327,7 +330,7 @@ export default function CheckoutPage() {
                 style={{ backgroundColor: 'rgba(10, 44, 29, 0.7)' }}
             >
                 <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
-                    <Link href="/" className="flex items-center gap-3 rounded-2xl px-1 py-1 focus:ring-2 focus:ring-gold-500/50 outline-none">
+                    <Link href={withLocale('/', locale)} className="flex items-center gap-3 rounded-2xl px-1 py-1 focus:ring-2 focus:ring-gold-500/50 outline-none">
                         <div className="w-14 h-14 rounded-2xl overflow-hidden">
                             <img
                                 src="/logo_msv.png"
@@ -342,7 +345,7 @@ export default function CheckoutPage() {
                     </Link>
 
                     <div className="flex items-center gap-2">
-                        <Link href="/cart" className="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:shadow-lg transition-all">
+                        <Link href={withLocale('/cart', locale)} className="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:shadow-lg transition-all">
                             Retour panier
                             <ArrowRightIcon />
                         </Link>
@@ -686,7 +689,7 @@ export default function CheckoutPage() {
                                 <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm">
                                     <div className="flex items-center justify-between gap-3 mb-5">
                                         <h3 className="font-display text-xl text-jungle-950">Récapitulatif</h3>
-                                        <Link href="/cart" className="text-sm font-semibold text-cacao-700 hover:text-cacao-900 underline underline-offset-4">
+                                        <Link href={withLocale('/cart', locale)} className="text-sm font-semibold text-cacao-700 hover:text-cacao-900 underline underline-offset-4">
                                             Modifier
                                         </Link>
                                     </div>

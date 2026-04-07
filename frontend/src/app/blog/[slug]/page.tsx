@@ -6,6 +6,9 @@ import Footer from '@/components/footer';
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
 import { getSiteUrl } from '@/lib/site';
+import { cookies } from 'next/headers';
+import { getLocalizedBlogPost } from '@/lib/localized-content';
+import { normalizeLocale, withLocale } from '@/lib/i18n';
 
 interface BlogPostPageProps {
     params: Promise<{
@@ -15,22 +18,24 @@ interface BlogPostPageProps {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
     const { slug } = await params;
-    const post = BLOG_POSTS.find((p) => p.slug === slug);
+    const locale = normalizeLocale((await cookies()).get('site_locale')?.value);
+    const sourcePost = BLOG_POSTS.find((p) => p.slug === slug);
+    const post = sourcePost ? getLocalizedBlogPost(sourcePost, locale) : null;
     const siteUrl = getSiteUrl();
 
     if (!post) {
         return {
-            title: 'Article non trouvé | M.S.V-NOSY BE Shop',
+            title: locale === 'en' ? 'Article not found | M.S.V-NOSY BE Shop' : 'Article non trouvé | M.S.V-NOSY BE Shop',
         };
     }
 
     return {
-        title: `${post.title} | Blog M.S.V-NOSY BE Shop`,
+        title: `${post.title} | ${locale === 'en' ? 'MSV Nosy-Be Journal' : 'Blog M.S.V-NOSY BE Shop'}`,
         description: post.excerpt,
         openGraph: {
             title: post.title,
             description: post.excerpt,
-            url: `${siteUrl}/blog/${slug}`,
+            url: `${siteUrl}${withLocale(`/blog/${slug}`, locale)}`,
             images: [
                 {
                     url: post.coverImage,
@@ -44,14 +49,20 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
             authors: [post.author],
         },
         alternates: {
-            canonical: `/blog/${slug}`,
+            canonical: withLocale(`/blog/${slug}`, locale),
+            languages: {
+                fr: withLocale(`/blog/${slug}`, 'fr'),
+                en: withLocale(`/blog/${slug}`, 'en'),
+            },
         },
     };
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const { slug } = await params;
-    const post = BLOG_POSTS.find((p) => p.slug === slug);
+    const locale = normalizeLocale((await cookies()).get('site_locale')?.value);
+    const sourcePost = BLOG_POSTS.find((p) => p.slug === slug);
+    const post = sourcePost ? getLocalizedBlogPost(sourcePost, locale) : null;
 
     if (!post) {
         notFound();
@@ -60,6 +71,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     // Related posts logic (simple: take 3 other posts)
     const relatedPosts = BLOG_POSTS
         .filter(p => p.slug !== slug)
+        .map((entry) => getLocalizedBlogPost(entry, locale))
         .slice(0, 3);
 
     return (
@@ -72,16 +84,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <div className="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-widest text-gold-600 mb-6">
                         <span>{post.category}</span>
                         <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
-                        <span>{post.readTime} de lecture</span>
+                        <span>{post.readTime}</span>
                     </div>
                     <h1 className="text-3xl md:text-5xl font-serif text-zinc-900 leading-tight mb-6">
                         {post.title}
                     </h1>
                     <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 italic">
-                        <span>Par {post.author}</span>
+                        <span>{locale === 'en' ? 'By' : 'Par'} {post.author}</span>
                         <span>•</span>
                         <time dateTime={post.date}>
-                            {new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            {new Date(post.date).toLocaleDateString(locale === 'en' ? 'en-US' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                         </time>
                     </div>
                 </header>
@@ -133,10 +145,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {relatedPosts.length > 0 && (
                     <section className="bg-zinc-50 mt-24 py-16 border-t border-zinc-100">
                         <div className="max-w-7xl mx-auto px-6">
-                            <h2 className="text-2xl font-serif text-zinc-900 mb-8 text-center">Vous aimerez aussi</h2>
+                            <h2 className="text-2xl font-serif text-zinc-900 mb-8 text-center">{locale === 'en' ? 'You may also like' : 'Vous aimerez aussi'}</h2>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 {relatedPosts.map((related) => (
-                                    <Link key={related.slug} href={`/blog/${related.slug}`} className="group block">
+                                    <Link key={related.slug} href={withLocale(`/blog/${related.slug}`, locale)} className="group block">
                                         <div className="relative aspect-[3/2] overflow-hidden rounded-sm mb-4 bg-zinc-200">
                                             <img
                                                 src={related.coverImage}

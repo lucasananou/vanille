@@ -10,9 +10,12 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import ProductCard from '@/components/product-card';
 import FilterSidebar from '@/components/filter-sidebar';
+import { useLocale } from '@/lib/locale-context';
+import { withLocale } from '@/lib/i18n';
 
 
 export default function CollectionPage() {
+    const { locale } = useLocale();
     const { slug } = useParams() as { slug: string };
     const router = useRouter();
     const pathname = usePathname();
@@ -127,8 +130,8 @@ export default function CollectionPage() {
                 <div className="flex flex-col items-center justify-center min-h-[60vh] px-6">
                     <h2 className="text-2xl font-medium text-zinc-900 mb-4">Oups !</h2>
                     <p className="text-zinc-500 mb-8">{error}</p>
-                    <Link href="/" className="bg-zinc-900 text-white px-8 py-3 text-sm font-medium transition-all hover:bg-zinc-800">
-                        Retour à la boutique
+                    <Link href={withLocale('/', locale)} className="bg-zinc-900 text-white px-8 py-3 text-sm font-medium transition-all hover:bg-zinc-800">
+                        {locale === 'en' ? 'Back to home' : 'Retour à la boutique'}
                     </Link>
                 </div>
             </>

@@ -2,13 +2,9 @@
 
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
-import { useState, useEffect } from 'react';
-
-const VanillaIcon = () => (
-    <svg className="w-5 h-5 text-gold-500" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-    </svg>
-);
+import { useLocale } from '@/lib/locale-context';
+import LocaleSwitcher from '@/components/locale-switcher';
+import { withLocale } from '@/lib/i18n';
 
 const CartIcon = () => (
     <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -27,15 +23,7 @@ const ArrowRightIcon = () => (
 
 export default function Header() {
     const { itemCount, openCart } = useCart();
-    const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    const { copy, locale } = useLocale();
 
     return (
         <header
@@ -43,46 +31,45 @@ export default function Header() {
             style={{ backgroundColor: '#0a2c1d' }}
         >
             <div className="mx-auto max-w-7xl px-4 flex items-center justify-between gap-3">
-                <Link href="/" className="flex items-center gap-3 rounded-2xl px-1 py-1 focus-ring group">
+                <Link href={withLocale('/', locale)} className="flex items-center gap-3 rounded-2xl px-1 py-1 focus-ring group">
                     <div className="w-16 h-16 rounded-2xl overflow-hidden transition-all duration-300">
                         <img
                             src="/logo_msv.png"
-                            alt="Logo MSV Nosy-Be"
+                            alt="MSV Nosy-Be logo"
                             className="w-full h-full object-contain"
                         />
                     </div>
                     <div className="leading-tight">
                         <p className="font-display text-lg">M.S.V-NOSY BE</p>
-                        <p className="text-xs text-vanilla-100/70">Vanille de Madagascar</p>
+                        <p className="text-xs text-vanilla-100/70">{copy.footer.baseline}</p>
                     </div>
                 </Link>
 
-                {/* Nav */}
                 <nav className="hidden md:flex items-center gap-8">
-                    <Link href="/" className="text-sm font-semibold hover:text-gold-500 transition-colors">Accueil</Link>
-                    <Link href="/shop" className="text-sm font-semibold hover:text-gold-500 transition-colors">Boutique</Link>
-                    <Link href="/blog" className="text-sm font-semibold hover:text-gold-500 transition-colors">Blog</Link>
-                    <Link href="/about" className="text-sm font-semibold hover:text-gold-500 transition-colors">À propos</Link>
-                    <Link href="/b2b" className="text-sm font-semibold hover:text-gold-500 transition-colors">Professionnels</Link>
-                    <Link href="/contact" className="text-sm font-semibold hover:text-gold-500 transition-colors">Contact</Link>
+                    <Link href={withLocale('/', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.home}</Link>
+                    <Link href={withLocale('/shop', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.shop}</Link>
+                    <Link href={withLocale('/blog', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.blog}</Link>
+                    <Link href={withLocale('/about', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.about}</Link>
+                    <Link href={withLocale('/b2b', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.professionals}</Link>
+                    <Link href={withLocale('/contact', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.contact}</Link>
                 </nav>
 
-                {/* Actions */}
                 <div className="flex items-center gap-2">
-                    <Link href="/shop" className="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                        Boutique
+                    <div className="hidden sm:block">
+                        <LocaleSwitcher />
+                    </div>
+                    <Link href={withLocale('/shop', locale)} className="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
+                        {copy.actions.discoverShop}
                         <ArrowRightIcon />
                     </Link>
 
-                    {/* Cart button */}
                     <button
                         onClick={openCart}
                         className="relative inline-flex items-center justify-center w-11 h-11 rounded-2xl glass hover:bg-vanilla-50/10 transition rm-anim focus-ring"
-                        aria-label="Ouvrir le panier"
+                        aria-label={copy.actions.openCart}
                     >
                         <CartIcon />
-                        <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold grid place-items-center
-                                 bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900">
+                        <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold grid place-items-center bg-gradient-to-b from-gold-500 to-gold-600 text-jungle-900">
                             {itemCount}
                         </span>
                     </button>
