@@ -346,12 +346,12 @@ export default function CheckoutPage() {
 
                     <div className="flex items-center gap-2">
                         <Link href={withLocale('/cart', locale)} className="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:shadow-lg transition-all">
-                            Retour panier
+                            {locale === 'en' ? 'Back to cart' : 'Retour panier'}
                             <ArrowRightIcon />
                         </Link>
                         <span className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold bg-white/5 border border-vanilla-100/15 backdrop-blur text-vanilla-50">
                             <span className="text-gold-500"><LockIcon /></span>
-                            Paiement sécurisé
+                            {locale === 'en' ? 'Secure checkout' : 'Paiement sécurisé'}
                         </span>
                     </div>
                 </div>
@@ -365,43 +365,45 @@ export default function CheckoutPage() {
                             <div>
                                 <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-vanilla-100/15 backdrop-blur px-4 py-2 text-vanilla-50">
                                     <SealIcon />
-                                    <span className="text-sm font-semibold">Finalisation</span>
-                                    <span className="text-sm text-vanilla-100/70">• 2 minutes chrono</span>
+                                    <span className="text-sm font-semibold">{locale === 'en' ? 'Checkout' : 'Finalisation'}</span>
+                                    <span className="text-sm text-vanilla-100/70">• {locale === 'en' ? 'About 2 minutes' : '2 minutes chrono'}</span>
                                 </div>
                                 <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-gold-500/20 border border-gold-500/50 px-4 py-2 text-gold-100">
-                                    <span className="text-sm font-semibold">Offre lancement: -50% sur la livraison</span>
+                                    <span className="text-sm font-semibold">{locale === 'en' ? 'Launch offer: 50% off shipping' : 'Offre lancement: -50% sur la livraison'}</span>
                                 </div>
                                 <h1 className="mt-4 font-display text-3xl sm:text-4xl text-vanilla-50 leading-[1.06]">
-                                    Finaliser votre commande
+                                    {locale === 'en' ? 'Complete your order' : 'Finaliser votre commande'}
                                 </h1>
                                 <p className="mt-3 text-sm text-vanilla-100/75 max-w-2xl">
-                                    Renseignez vos informations, visualisez le coût de livraison, puis validez votre paiement en toute sécurité.
+                                    {locale === 'en'
+                                        ? 'Fill in your details, review shipping costs, then confirm your payment securely.'
+                                        : 'Renseignez vos informations, visualisez le coût de livraison, puis validez votre paiement en toute sécurité.'}
                                 </p>
                                 <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-widest text-vanilla-100/75">
-                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">1. Coordonnées</span>
-                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">2. Livraison</span>
-                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">3. Paiement</span>
+                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">{locale === 'en' ? '1. Details' : '1. Coordonnées'}</span>
+                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">{locale === 'en' ? '2. Shipping' : '2. Livraison'}</span>
+                                    <span className="rounded-full border border-vanilla-100/10 bg-white/5 px-3 py-2">{locale === 'en' ? '3. Payment' : '3. Paiement'}</span>
                                 </div>
                             </div>
 
                             <div className="rounded-[22px] bg-white/5 border border-vanilla-100/15 backdrop-blur p-4 w-full lg:w-[420px]">
-                                <p className="text-sm font-semibold text-vanilla-50">Récapitulatif total</p>
+                                <p className="text-sm font-semibold text-vanilla-50">{locale === 'en' ? 'Order summary' : 'Récapitulatif total'}</p>
                                 <div className="mt-3 flex items-center justify-between text-sm">
-                                    <span className="text-vanilla-100/70">Total à payer</span>
+                                    <span className="text-vanilla-100/70">{locale === 'en' ? 'Total due' : 'Total à payer'}</span>
                                     <span className="font-semibold text-2xl text-vanilla-50">{fmt.format(totalWithShipping)}</span>
                                 </div>
                                 <div className="mt-4 grid sm:grid-cols-3 gap-3 text-xs">
                                     <div className="rounded-2xl bg-white/5 border border-vanilla-100/15 px-3 py-3">
-                                        <p className="font-semibold text-vanilla-50">Paiement sécurisé</p>
-                                        <p className="mt-1 text-vanilla-100/70">Stripe et PayPal, 3DS et données protégées.</p>
+                                        <p className="font-semibold text-vanilla-50">{locale === 'en' ? 'Secure payment' : 'Paiement sécurisé'}</p>
+                                        <p className="mt-1 text-vanilla-100/70">{locale === 'en' ? 'Stripe and PayPal with 3DS and protected customer data.' : 'Stripe et PayPal, 3DS et données protégées.'}</p>
                                     </div>
                                     <div className="rounded-2xl bg-white/5 border border-vanilla-100/15 px-3 py-3">
-                                        <p className="font-semibold text-vanilla-50">Livraison visible</p>
-                                        <p className="mt-1 text-vanilla-100/70">France, Europe et USA avec coûts affichés avant paiement.</p>
+                                        <p className="font-semibold text-vanilla-50">{locale === 'en' ? 'Shipping shown upfront' : 'Livraison visible'}</p>
+                                        <p className="mt-1 text-vanilla-100/70">{locale === 'en' ? 'France, Europe and USA with costs displayed before payment.' : 'France, Europe et USA avec coûts affichés avant paiement.'}</p>
                                     </div>
                                     <div className="rounded-2xl bg-white/5 border border-vanilla-100/15 px-3 py-3">
-                                        <p className="font-semibold text-vanilla-50">Origine garantie</p>
-                                        <p className="mt-1 text-vanilla-100/70">Vanille sélectionnée à Nosy-Be, Madagascar.</p>
+                                        <p className="font-semibold text-vanilla-50">{locale === 'en' ? 'Verified origin' : 'Origine garantie'}</p>
+                                        <p className="mt-1 text-vanilla-100/70">{locale === 'en' ? 'Vanilla selected in Nosy-Be, Madagascar.' : 'Vanille sélectionnée à Nosy-Be, Madagascar.'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -417,10 +419,10 @@ export default function CheckoutPage() {
                             {/* Contact Section */}
                             <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm">
                                 <div className="flex items-center justify-between gap-3">
-                                    <h2 className="font-display text-2xl text-jungle-950">1. Vos informations</h2>
+                                    <h2 className="font-display text-2xl text-jungle-950">{locale === 'en' ? '1. Your details' : '1. Vos informations'}</h2>
                                     <span className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold bg-vanilla-100 border border-cacao-900/10 text-cacao-700">
                                         <span className="text-gold-600"><ShieldIcon /></span>
-                                        Données protégées
+                                        {locale === 'en' ? 'Protected data' : 'Données protégées'}
                                     </span>
                                 </div>
 
@@ -435,7 +437,7 @@ export default function CheckoutPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="phone">Téléphone</label>
+                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="phone">{locale === 'en' ? 'Phone' : 'Téléphone'}</label>
                                         <input
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="phone" type="tel" placeholder="+33…"
@@ -447,7 +449,7 @@ export default function CheckoutPage() {
 
                                 <div className="mt-5 grid sm:grid-cols-2 gap-3">
                                     <div>
-                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="firstName">Prénom</label>
+                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="firstName">{locale === 'en' ? 'First name' : 'Prénom'}</label>
                                         <input
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="firstName" type="text" placeholder="Jan" required
@@ -465,7 +467,7 @@ export default function CheckoutPage() {
                                         />
                                     </div>
                                     <div className="sm:col-span-2 relative z-30">
-                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="address">Adresse</label>
+                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="address">{locale === 'en' ? 'Address' : 'Adresse'}</label>
                                         <div className="relative">
                                             <input
                                                 className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
@@ -493,7 +495,7 @@ export default function CheckoutPage() {
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="zip">Code postal</label>
+                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="zip">{locale === 'en' ? 'Postal code' : 'Code postal'}</label>
                                         <input
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="zip" type="text" placeholder="75000" required
@@ -502,7 +504,7 @@ export default function CheckoutPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="city">Ville</label>
+                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="city">{locale === 'en' ? 'City' : 'Ville'}</label>
                                         <input
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all"
                                             id="city" type="text" placeholder="Paris" required
@@ -511,7 +513,7 @@ export default function CheckoutPage() {
                                         />
                                     </div>
                                     <div className="sm:col-span-2">
-                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="country">Pays</label>
+                                        <label className="text-xs font-semibold text-cacao-700" htmlFor="country">{locale === 'en' ? 'Country' : 'Pays'}</label>
                                         <select
                                             className="w-full mt-2 rounded-full border border-cacao-900/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/25 transition-all appearance-none"
                                             id="country" required
@@ -519,10 +521,10 @@ export default function CheckoutPage() {
                                             autoComplete="country-name"
                                         >
                                             <option value="FR">France</option>
-                                            <option value="BE">Belgique</option>
+                                            <option value="BE">{locale === 'en' ? 'Belgium' : 'Belgique'}</option>
                                             <option value="CH">Suisse</option>
                                             <option value="LU">Luxembourg</option>
-                                            <option value="US">États-Unis</option>
+                                            <option value="US">{locale === 'en' ? 'United States' : 'États-Unis'}</option>
                                             <option value="RE">Réunion (974)</option>
                                             <option value="MG">Madagascar</option>
                                         </select>
@@ -532,13 +534,11 @@ export default function CheckoutPage() {
 
                             {whatsappHref ? (
                                 <div className="rounded-[28px] bg-[#25D366]/10 border border-[#25D366]/20 p-6 shadow-sm">
-                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                        <div>
-                                            <p className="text-xs font-bold uppercase tracking-widest text-[#128C7E]">Besoin d’un coup de main ?</p>
-                                            <h2 className="mt-2 font-display text-2xl text-jungle-950">Support rapide avant paiement</h2>
-                                            <p className="mt-2 text-sm text-cacao-700">
-                                                Ouvrez WhatsApp pour poser une question sur la livraison, le produit ou votre commande avant validation.
-                                            </p>
+                                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                            <p className="text-xs font-bold uppercase tracking-widest text-[#128C7E]">{locale === 'en' ? 'Need a quick hand?' : 'Besoin d’un coup de main ?'}</p>
+                                            <h2 className="mt-2 font-display text-2xl text-jungle-950">{locale === 'en' ? 'Fast support before payment' : 'Support rapide avant paiement'}</h2>
+                                            <p className="mt-2 text-sm text-cacao-700">{locale === 'en' ? 'Open WhatsApp to ask a quick question about shipping, products or your order before checkout.' : 'Ouvrez WhatsApp pour poser une question sur la livraison, le produit ou votre commande avant validation.'}</p>
                                         </div>
                                         <a
                                             href={whatsappHref}
@@ -546,7 +546,7 @@ export default function CheckoutPage() {
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-5 py-3 text-sm font-bold uppercase tracking-widest text-white transition hover:opacity-90"
                                         >
-                                            Ouvrir WhatsApp
+                                            {locale === 'en' ? 'Open WhatsApp' : 'Ouvrir WhatsApp'}
                                         </a>
                                     </div>
                                 </div>
@@ -555,7 +555,7 @@ export default function CheckoutPage() {
                             {/* Shipping Section */}
                             <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm">
                                 <div className="flex items-center justify-between gap-3 mb-6">
-                                    <h2 className="font-display text-2xl text-jungle-950">2. Mode de livraison</h2>
+                                    <h2 className="font-display text-2xl text-jungle-950">{locale === 'en' ? '2. Shipping method' : '2. Mode de livraison'}</h2>
                                     {isLoadingRates && <div className="w-4 h-4 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div>}
                                 </div>
 
@@ -580,7 +580,7 @@ export default function CheckoutPage() {
                                                 </div>
                                                 <div className="text-right">
                                                     {rate.price === 0 ? (
-                                                        <p className="font-bold text-cacao-900">Gratuit</p>
+                                                        <p className="font-bold text-cacao-900">{locale === 'en' ? 'Free' : 'Gratuit'}</p>
                                                     ) : (
                                                         <>
                                                             <p className="text-xs text-cacao-500 line-through">{fmt.format(rate.price / 100)}</p>
@@ -598,14 +598,14 @@ export default function CheckoutPage() {
                                             </label>
                                         ))
                                     ) : (
-                                        <p className="text-sm text-cacao-600 italic">Aucun mode de livraison disponible pour cette destination.</p>
+                                        <p className="text-sm text-cacao-600 italic">{locale === 'en' ? 'No shipping method is currently available for this destination.' : 'Aucun mode de livraison disponible pour cette destination.'}</p>
                                     )}
                                 </div>
                             </div>
 
                             {/* Payment Method Selector */}
                             <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm mt-6">
-                                <h2 className="font-display text-2xl text-jungle-950 mb-6">3. Mode de paiement</h2>
+                                <h2 className="font-display text-2xl text-jungle-950 mb-6">{locale === 'en' ? '3. Payment method' : '3. Mode de paiement'}</h2>
                                 <div className="grid grid-cols-2 gap-4">
                                     <button
                                         onClick={() => setPaymentMethod('stripe')}
@@ -615,7 +615,7 @@ export default function CheckoutPage() {
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-4 w-auto" />
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" className="h-3 w-auto opacity-50" />
                                         </div>
-                                        <p className="text-sm font-semibold">Carte bancaire</p>
+                                        <p className="text-sm font-semibold">{locale === 'en' ? 'Card payment' : 'Carte bancaire'}</p>
                                     </button>
                                     <button
                                         onClick={() => setPaymentMethod('paypal')}
@@ -652,15 +652,15 @@ export default function CheckoutPage() {
                                     ) : (
                                         <div className="rounded-[28px] bg-white/80 p-12 text-center border border-cacao-900/10">
                                             <div className="w-10 h-10 border-4 border-gold-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                                            <p className="text-sm text-cacao-700">Initialisation du paiement sécurisé...</p>
+                                            <p className="text-sm text-cacao-700">{locale === 'en' ? 'Initializing secure payment...' : 'Initialisation du paiement sécurisé...'}</p>
                                         </div>
                                     )
                                 ) : (
                                     <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-10 shadow-sm text-center">
                                         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-8 mx-auto mb-6" />
-                                        <h3 className="text-xl font-display text-jungle-950 mb-4">Payer avec PayPal</h3>
+                                        <h3 className="text-xl font-display text-jungle-950 mb-4">{locale === 'en' ? 'Pay with PayPal' : 'Payer avec PayPal'}</h3>
                                         <p className="text-sm text-cacao-700 mb-6 max-w-sm mx-auto">
-                                            Vous allez être redirigé vers PayPal pour autoriser le paiement, puis revenir automatiquement.
+                                            {locale === 'en' ? 'You will be redirected to PayPal to authorize payment, then brought back automatically.' : 'Vous allez être redirigé vers PayPal pour autoriser le paiement, puis revenir automatiquement.'}
                                         </p>
                                         <PayPalButton
                                             amountInCents={Math.round(totalWithShipping * 100)}
@@ -673,7 +673,7 @@ export default function CheckoutPage() {
                                             onError={handlePayPalError}
                                         />
                                         {isFinalizingPayPal && (
-                                            <p className="text-sm text-cacao-700 mt-4">Validation du paiement en cours...</p>
+                                            <p className="text-sm text-cacao-700 mt-4">{locale === 'en' ? 'Confirming payment...' : 'Validation du paiement en cours...'}</p>
                                         )}
                                         {paypalError && (
                                             <p className="text-sm text-red-600 mt-4">{paypalError}</p>
@@ -688,15 +688,15 @@ export default function CheckoutPage() {
                             <div className="lg:sticky lg:top-24 space-y-4">
                                 <div className="rounded-[28px] bg-white/80 backdrop-blur border border-cacao-900/10 p-6 shadow-sm">
                                     <div className="flex items-center justify-between gap-3 mb-5">
-                                        <h3 className="font-display text-xl text-jungle-950">Récapitulatif</h3>
+                                        <h3 className="font-display text-xl text-jungle-950">{locale === 'en' ? 'Summary' : 'Récapitulatif'}</h3>
                                         <Link href={withLocale('/cart', locale)} className="text-sm font-semibold text-cacao-700 hover:text-cacao-900 underline underline-offset-4">
-                                            Modifier
+                                            {locale === 'en' ? 'Edit' : 'Modifier'}
                                         </Link>
                                     </div>
 
                                     {items.length === 0 ? (
                                         <div className="text-center py-6">
-                                            <p className="text-sm text-cacao-600">Votre panier est vide.</p>
+                                            <p className="text-sm text-cacao-600">{locale === 'en' ? 'Your cart is empty.' : 'Votre panier est vide.'}</p>
                                         </div>
                                     ) : (
                                         <div className="space-y-3">
@@ -715,23 +715,23 @@ export default function CheckoutPage() {
 
                                             <div className="mt-6 pt-6 border-t border-cacao-900/10 space-y-3">
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-cacao-700">Sous-total</span>
+                                                    <span className="text-cacao-700">{locale === 'en' ? 'Subtotal' : 'Sous-total'}</span>
                                                     <span className="font-semibold">{fmt.format(subtotal)}</span>
                                                 </div>
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-cacao-700">Livraison</span>
+                                                    <span className="text-cacao-700">{locale === 'en' ? 'Shipping' : 'Livraison'}</span>
                                                     <span className={shipping === 0 ? "text-gold-600 font-bold" : "font-semibold"}>
-                                                        {shipping === 0 ? 'Gratuite' : fmt.format(shipping)}
+                                                        {shipping === 0 ? (locale === 'en' ? 'Free' : 'Gratuite') : fmt.format(shipping)}
                                                     </span>
                                                 </div>
                                                 {originalShipping > 0 && (
                                                     <div className="flex justify-between text-xs -mt-1">
-                                                        <span className="text-cacao-500">Remise lancement livraison</span>
+                                                        <span className="text-cacao-500">{locale === 'en' ? 'Launch shipping discount' : 'Remise lancement livraison'}</span>
                                                         <span className="font-semibold text-gold-700">- {fmt.format(shippingDiscount)}</span>
                                                     </div>
                                                 )}
                                                 <div className="flex justify-between text-lg font-display pt-3 border-t border-cacao-900/10">
-                                                    <span className="text-jungle-950">Total</span>
+                                                    <span className="text-jungle-950">{locale === 'en' ? 'Total' : 'Total'}</span>
                                                     <span className="text-jungle-950">{fmt.format(totalWithShipping)}</span>
                                                 </div>
                                             </div>

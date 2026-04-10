@@ -52,14 +52,14 @@ type ShopProduct = Product & {
 };
 
 function extractSize(product: Product) {
-    const fromDetails = (product.details as any)?.size;
+    const fromDetails = product.size;
     if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
     const match = product.title.match(/(\d+\s*[–-]\s*\d+\s*cm|\d+\s*cm|Assorti|Volume)/i);
     return match?.[1] || product.options?.map((option) => option.values.join(' / ')).join(' • ') || 'Selection';
 }
 
 function extractGrade(product: Product) {
-    const fromDetails = (product.details as any)?.grade;
+    const fromDetails = product.grade;
     if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
     const match = product.title.match(/(TK\s*\(Noir\)|Gourmet|Noir|Assorti|Poivre Sauvage)/i);
     return match?.[1] || product.collection?.name || product.tags?.[0] || 'Selection';
@@ -93,9 +93,11 @@ function getPriceLabel(product: Product, locale: 'fr' | 'en') {
     return (product.price / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' });
 }
 
-function getSeoCategory(product: ShopProduct) {
-    if (/poivre/i.test(product.title)) return 'Poivre sauvage de Madagascar';
-    return 'Vanille Bourbon Madagascar premium';
+function getSeoCategory(product: ShopProduct, locale: 'fr' | 'en') {
+    if (/poivre/i.test(product.title)) {
+        return locale === 'en' ? 'Madagascar wild pepper' : 'Poivre sauvage de Madagascar';
+    }
+    return locale === 'en' ? 'Premium Madagascar Bourbon vanilla' : 'Vanille Bourbon Madagascar premium';
 }
 
 export default function ShopPage() {
@@ -371,7 +373,7 @@ export default function ShopPage() {
                                                     <div className="absolute inset-0 bg-gradient-to-tr from-vanilla-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                                     <Image
                                                         src={getImageUrl(p.images[0])}
-                                                        alt={`${getSeoCategory(p)} - ${p.title}`}
+                                                        alt={`${getSeoCategory(p, locale)} - ${p.title}`}
                                                         className="absolute inset-0 h-full w-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                                         fill
                                                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"

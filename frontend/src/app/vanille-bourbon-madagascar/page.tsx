@@ -52,16 +52,22 @@ export default async function VanillaLandingPage() {
     const locale = normalizeLocale((await headers()).get('x-locale'));
     const faqItems = [
         {
-            question: 'Quelle vanille choisir pour commencer ?',
-            answer: 'Le format 14–15 cm est le plus polyvalent pour la pâtisserie maison. Le pack découverte est idéal pour tester plusieurs longueurs.',
+            question: locale === 'en' ? 'Which vanilla should I start with?' : 'Quelle vanille choisir pour commencer ?',
+            answer: locale === 'en'
+                ? 'The 14–15 cm format is the most versatile for home baking. The discovery set is ideal if you want to compare several lengths.'
+                : 'Le format 14–15 cm est le plus polyvalent pour la pâtisserie maison. Le pack découverte est idéal pour tester plusieurs longueurs.',
         },
         {
-            question: 'Livrez-vous hors de France ?',
-            answer: 'Oui, la livraison est disponible en France, en Europe et aux États-Unis avec affichage du coût au checkout.',
+            question: locale === 'en' ? 'Do you ship outside France?' : 'Livrez-vous hors de France ?',
+            answer: locale === 'en'
+                ? 'Yes. Shipping is available across France, Europe and the United States, with delivery costs shown before payment.'
+                : 'Oui, la livraison est disponible en France, en Europe et aux États-Unis avec affichage du coût au checkout.',
         },
         {
-            question: 'La vanille convient-elle à un usage professionnel ?',
-            answer: 'Oui, nous proposons aussi des solutions B2B pour restaurateurs, pâtissiers et revendeurs.',
+            question: locale === 'en' ? 'Is your vanilla suitable for professional use?' : 'La vanille convient-elle à un usage professionnel ?',
+            answer: locale === 'en'
+                ? 'Yes. We also offer B2B solutions for chefs, pastry teams, retailers and hospitality buyers.'
+                : 'Oui, nous proposons aussi des solutions B2B pour restaurateurs, pâtissiers et revendeurs.',
         },
     ];
 
@@ -88,27 +94,31 @@ export default async function VanillaLandingPage() {
                     <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-2 lg:items-center lg:py-24">
                         <div>
                             <p className="inline-flex items-center gap-2 rounded-full border border-vanilla-100/10 bg-white/5 px-4 py-2 text-sm font-semibold text-vanilla-100">
-                                Vanille Bourbon de Madagascar
+                                {locale === 'en' ? 'Madagascar Bourbon Vanilla' : 'Vanille Bourbon de Madagascar'}
                             </p>
                             <h1 className="mt-6 font-display text-4xl leading-[1.04] text-vanilla-50 sm:text-5xl lg:text-6xl">
-                                Des gousses premium pensées pour <span className="text-gold-500">vraiment convertir</span> vos desserts.
+                                {locale === 'en'
+                                    ? <>Premium pods designed to <span className="text-gold-500">truly elevate</span> your desserts.</>
+                                    : <>Des gousses premium pensées pour <span className="text-gold-500">vraiment convertir</span> vos desserts.</>}
                             </h1>
                             <p className="mt-5 max-w-xl text-lg leading-relaxed text-vanilla-100/80">
-                                Sélectionnées à Nosy-Be, nos gousses de vanille offrent un profil aromatique chaud, gourmand et floral, avec un conditionnement premium et une expédition suivie.
+                                {locale === 'en'
+                                    ? 'Selected in Nosy-Be, our vanilla pods offer a warm, gourmet and floral aromatic profile, with premium packaging and tracked delivery.'
+                                    : 'Sélectionnées à Nosy-Be, nos gousses de vanille offrent un profil aromatique chaud, gourmand et floral, avec un conditionnement premium et une expédition suivie.'}
                             </p>
                             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                                 <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-jungle-900 transition hover:opacity-90">
-                                    Découvrir la boutique
+                                    {locale === 'en' ? 'Discover the shop' : 'Découvrir la boutique'}
                                 </Link>
                                 <Link href={withLocale('/produit/tk-noir-14-15', locale)} className="inline-flex items-center justify-center rounded-full border border-vanilla-100/15 bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-white/10">
-                                    Voir le best-seller
+                                    {locale === 'en' ? 'View the best seller' : 'Voir le best-seller'}
                                 </Link>
                             </div>
                             <div className="mt-8 grid gap-3 sm:grid-cols-3">
                                 {[
-                                    'Paiement sécurisé',
-                                    'Livraison France, Europe, USA',
-                                    'Origine contrôlée Nosy-Be',
+                                    locale === 'en' ? 'Secure payment' : 'Paiement sécurisé',
+                                    locale === 'en' ? 'Shipping France, Europe, USA' : 'Livraison France, Europe, USA',
+                                    locale === 'en' ? 'Verified Nosy-Be origin' : 'Origine contrôlée Nosy-Be',
                                 ].map((item) => (
                                     <div key={item} className="rounded-2xl border border-vanilla-100/10 bg-white/5 p-4 text-sm font-semibold text-vanilla-100">
                                         {item}
@@ -121,7 +131,7 @@ export default async function VanillaLandingPage() {
                             <div className="overflow-hidden rounded-[1.5rem]">
                                 <img
                                     src="/photos-produit-vanille/photos-vanille-de-14-a-15-cm/img_8387.jpg"
-                                    alt="Gousses de vanille Bourbon de Madagascar premium"
+                                    alt={locale === 'en' ? 'Premium Madagascar Bourbon vanilla pods' : 'Gousses de vanille Bourbon de Madagascar premium'}
                                     className="h-full w-full object-cover"
                                     loading="eager"
                                     fetchPriority="high"
@@ -129,9 +139,9 @@ export default async function VanillaLandingPage() {
                             </div>
                             <div className="grid gap-3 p-4 sm:grid-cols-3">
                                 {[
-                                    'Parfum intense',
-                                    'Souplesse préservée',
-                                    'Conditionnement premium',
+                                    locale === 'en' ? 'Intense aroma' : 'Parfum intense',
+                                    locale === 'en' ? 'Supple texture preserved' : 'Souplesse préservée',
+                                    locale === 'en' ? 'Premium packaging' : 'Conditionnement premium',
                                 ].map((item) => (
                                     <div key={item} className="rounded-2xl bg-jungle-950 px-4 py-4 text-center text-xs font-bold uppercase tracking-widest text-vanilla-100">
                                         {item}
@@ -145,10 +155,12 @@ export default async function VanillaLandingPage() {
                 <section className="bg-vanilla-50 py-16 text-jungle-900 lg:py-24">
                     <div className="mx-auto max-w-7xl px-4">
                         <div className="max-w-3xl">
-                            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-600">Une page pensée pour l’intention d’achat</p>
-                            <h2 className="mt-4 font-display text-4xl italic">Choisissez votre format selon votre usage</h2>
+                            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-600">{locale === 'en' ? 'Designed for buying intent' : 'Une page pensée pour l’intention d’achat'}</p>
+                            <h2 className="mt-4 font-display text-4xl italic">{locale === 'en' ? 'Choose the right format for your use case' : 'Choisissez votre format selon votre usage'}</h2>
                             <p className="mt-4 text-lg leading-relaxed text-jungle-800/75">
-                                Pour des campagnes Google Ads rentables, nous orientons ici directement le visiteur vers les offres les plus simples à comprendre et à acheter.
+                                {locale === 'en'
+                                    ? 'For profitable Google Ads campaigns, this page sends visitors straight to the offers that are the easiest to understand and buy.'
+                                    : 'Pour des campagnes Google Ads rentables, nous orientons ici directement le visiteur vers les offres les plus simples à comprendre et à acheter.'}
                             </p>
                         </div>
 
@@ -168,7 +180,7 @@ export default async function VanillaLandingPage() {
                                         ))}
                                     </ul>
                                     <Link href={withLocale(`/produit/${product!.id}`, locale)} className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-jungle-900 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-jungle-800">
-                                        Voir l’offre
+                                        {locale === 'en' ? 'View offer' : 'Voir l’offre'}
                                     </Link>
                                 </article>
                             ))}
@@ -179,14 +191,14 @@ export default async function VanillaLandingPage() {
                 <section className="bg-white py-16 text-jungle-900 lg:py-24">
                     <div className="mx-auto grid max-w-7xl gap-8 px-4 lg:grid-cols-2">
                         <div className="rounded-[2rem] border border-vanilla-200 bg-vanilla-50 p-8">
-                            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-600">Réassurance</p>
-                            <h2 className="mt-4 font-display text-4xl italic">Ce qui rassure avant l’achat</h2>
+                            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-600">{locale === 'en' ? 'Trust markers' : 'Réassurance'}</p>
+                            <h2 className="mt-4 font-display text-4xl italic">{locale === 'en' ? 'What reassures buyers before checkout' : 'Ce qui rassure avant l’achat'}</h2>
                             <div className="mt-8 grid gap-4">
                                 {[
-                                    'Prix visibles dès l’arrivée sur la page',
-                                    'Livraison affichée avant la validation',
-                                    'Paiement Stripe sécurisé',
-                                    'Origine Madagascar clairement mise en avant',
+                                    locale === 'en' ? 'Visible pricing from the first screen' : 'Prix visibles dès l’arrivée sur la page',
+                                    locale === 'en' ? 'Shipping shown before payment' : 'Livraison affichée avant la validation',
+                                    locale === 'en' ? 'Secure Stripe checkout' : 'Paiement Stripe sécurisé',
+                                    locale === 'en' ? 'Madagascar origin clearly highlighted' : 'Origine Madagascar clairement mise en avant',
                                 ].map((item) => (
                                     <div key={item} className="rounded-2xl border border-vanilla-200 bg-white px-5 py-4 text-sm font-semibold text-jungle-900">
                                         {item}
@@ -196,15 +208,15 @@ export default async function VanillaLandingPage() {
                         </div>
 
                         <div className="rounded-[2rem] bg-jungle-900 p-8 text-vanilla-50">
-                            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-500">Professionnels et particuliers</p>
-                            <h2 className="mt-4 font-display text-4xl italic">Une offre claire pour chaque besoin</h2>
+                            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-500">{locale === 'en' ? 'Wholesale and retail' : 'Professionnels et particuliers'}</p>
+                            <h2 className="mt-4 font-display text-4xl italic">{locale === 'en' ? 'A clear offer for every need' : 'Une offre claire pour chaque besoin'}</h2>
                             <div className="mt-8 space-y-5 text-sm leading-relaxed text-vanilla-100/80">
-                                <p>Particuliers : formats accessibles, packs découverte et idées cadeaux.</p>
-                                <p>Professionnels : volumes plus importants, demandes rapides et conditions dédiées.</p>
-                                <p>Chaque page produit conserve une logique simple : choix, réassurance, puis passage au panier.</p>
+                                <p>{locale === 'en' ? 'Retail customers: accessible formats, discovery sets and gift-ready options.' : 'Particuliers : formats accessibles, packs découverte et idées cadeaux.'}</p>
+                                <p>{locale === 'en' ? 'Professionals: larger volumes, quick quote requests and dedicated terms.' : 'Professionnels : volumes plus importants, demandes rapides et conditions dédiées.'}</p>
+                                <p>{locale === 'en' ? 'Each product page follows a simple structure: selection, reassurance, then add to cart.' : 'Chaque page produit conserve une logique simple : choix, réassurance, puis passage au panier.'}</p>
                             </div>
                             <Link href={withLocale('/b2b', locale)} className="mt-8 inline-flex rounded-full border border-vanilla-100/15 px-6 py-3 text-sm font-bold uppercase tracking-widest text-vanilla-50 transition hover:bg-white/10">
-                                Demander une offre pro
+                                {locale === 'en' ? 'Request a wholesale offer' : 'Demander une offre pro'}
                             </Link>
                         </div>
                     </div>
@@ -213,7 +225,7 @@ export default async function VanillaLandingPage() {
                 <section className="bg-vanilla-50 py-16 text-jungle-900 lg:py-24">
                     <div className="mx-auto max-w-4xl px-4">
                         <p className="text-center text-xs font-bold uppercase tracking-[0.24em] text-gold-600">FAQ</p>
-                        <h2 className="mt-4 text-center font-display text-4xl italic">Questions fréquentes avant commande</h2>
+                        <h2 className="mt-4 text-center font-display text-4xl italic">{locale === 'en' ? 'Frequently asked questions before ordering' : 'Questions fréquentes avant commande'}</h2>
                         <div className="mt-10 space-y-4">
                             {faqItems.map((item) => (
                                 <article key={item.question} className="rounded-[2rem] border border-vanilla-200 bg-white p-6">
@@ -224,7 +236,7 @@ export default async function VanillaLandingPage() {
                         </div>
                         <div className="mt-10 text-center">
                             <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-jungle-900 transition hover:opacity-90">
-                                Commander maintenant
+                                {locale === 'en' ? 'Order now' : 'Commander maintenant'}
                             </Link>
                         </div>
                     </div>

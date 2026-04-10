@@ -23,12 +23,6 @@ const CheckIcon = () => (
     </svg>
 );
 
-const ArrowRightIcon = () => (
-    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-    </svg>
-);
-
 function getVariantOptions(product: Product) {
     return product.options || [];
 }
@@ -95,17 +89,17 @@ function getOptionValuePrice(product: Product, selectedOptions: Record<string, s
 }
 
 function extractGrade(product: Product) {
-    const fromDetails = (product.details as any)?.grade;
+    const fromDetails = product.grade;
     if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
     const match = product.title.match(/(TK\s*\(Noir\)|Gourmet|Noir|Assorti|Poivre Sauvage)/i);
-    return match?.[1] || product.collection?.name || product.tags?.[0] || 'Sélection';
+    return match?.[1] || product.collection?.name || product.tags?.[0] || 'Selection';
 }
 
 function extractSize(product: Product) {
-    const fromDetails = (product.details as any)?.size;
+    const fromDetails = product.size;
     if (typeof fromDetails === 'string' && fromDetails.trim()) return fromDetails;
     const match = product.title.match(/(\d+\s*[–-]\s*\d+\s*cm|\d+\s*cm|Assorti|Volume)/i);
-    return match?.[1] || 'Sélection';
+    return match?.[1] || 'Selection';
 }
 
 function getUiPackaging(product: Product, currentVariant: ProductVariant | null) {
@@ -291,7 +285,7 @@ export default function ProductDetailPage() {
     const productBullets = (product.bullets && product.bullets.length > 0
         ? product.bullets
         : [
-            `${productGrade} soigneusement sélectionnée à Nosy-Be.`,
+            locale === 'en' ? `${productGrade} carefully selected in Nosy-Be.` : `${productGrade} soigneusement sélectionnée à Nosy-Be.`,
             locale === 'en' ? `${productSize} format for a rich and elegant infusion.` : `${productSize} pour une infusion intense et gourmande.`,
             locale === 'en' ? `${packagingLabel} packaging to preserve aromatic depth.` : `Conditionnement ${packagingLabel.toLowerCase()} pour préserver les arômes.`
         ]).slice(0, 3);
@@ -330,7 +324,7 @@ export default function ProductDetailPage() {
                                     <div className="aspect-[4/3] relative bg-vanilla-100/30 flex items-center justify-center">
                                         <Image
                                             src={getImageUrl(product.images[selectedImageIndex] || product.images[0])}
-                                            alt={`${seoHeading} - visuel ${selectedImageIndex + 1}`}
+                                            alt={locale === 'en' ? `${seoHeading} - image ${selectedImageIndex + 1}` : `${seoHeading} - visuel ${selectedImageIndex + 1}`}
                                             className="absolute inset-0 h-full w-full object-contain"
                                             fill
                                             priority
@@ -359,7 +353,7 @@ export default function ProductDetailPage() {
                                                 >
                                                     <Image
                                                         src={getImageUrl(img)}
-                                                        alt={`${seoHeading} - détail ${i + 1}`}
+                                                        alt={locale === 'en' ? `${seoHeading} - detail ${i + 1}` : `${seoHeading} - détail ${i + 1}`}
                                                         className="h-full w-full object-cover"
                                                         fill
                                                         sizes="(max-width: 1024px) 25vw, 12vw"

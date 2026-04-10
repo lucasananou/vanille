@@ -257,11 +257,11 @@ export default function CartPage() {
                                     <ul className="mt-4 space-y-3 text-[13px] text-cacao-700 font-medium italic">
                                         <li className="flex gap-2">
                                             <svg className="w-4 h-4 text-gold-600 shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-                                            Panier sauvegardé automatiquement
+                                            {locale === 'en' ? 'Cart saved automatically' : 'Panier sauvegardé automatiquement'}
                                         </li>
                                         <li className="flex gap-2">
                                             <svg className="w-4 h-4 text-gold-600 shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-                                            Paiement 100% sécurisé
+                                            {locale === 'en' ? '100% secure payment' : 'Paiement 100% sécurisé'}
                                         </li>
                                     </ul>
                                 </div>
@@ -278,14 +278,14 @@ export default function CartPage() {
                 <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/85 backdrop-blur-md border-t border-cacao-900/5 p-4 safe-area-pb shadow-none">
                     <div className="flex items-center justify-between gap-4">
                         <div>
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-cacao-400">Total estimé</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-cacao-400">{locale === 'en' ? 'Estimated total' : 'Total estimé'}</p>
                             <p className="text-xl font-display text-jungle-950 leading-none mt-0.5">{fmt.format(subtotal)}</p>
                         </div>
                         <Link
                             href={withLocale('/checkout', locale)}
                             className="inline-flex items-center justify-center gap-2 rounded-full bg-jungle-900 px-8 py-3.5 text-sm font-bold text-vanilla-50 uppercase tracking-widest transition-all shadow-none"
                         >
-                            Payer
+                            {locale === 'en' ? 'Pay' : 'Payer'}
                             <svg className="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                         </Link>
                     </div>

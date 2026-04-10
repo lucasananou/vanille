@@ -112,12 +112,6 @@ const CheckCircleIcon = () => (
   </svg>
 );
 
-const VanillaIcon = () => (
-  <svg className="w-6 h-6 text-gold-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-  </svg>
-);
-
 export default function HomePage() {
   const { locale } = useLocale();
   const featuredProduct = CATALOG[1];
@@ -287,10 +281,26 @@ export default function HomePage() {
 
             <div className="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
               {[
-                { icon: <ShieldStarIcon />, title: "Sélection qualité", desc: "TK (Noir) / Gourmet selon lots. Tri + contrôle rigoureux." },
-                { icon: <ArchiveIcon />, title: "Conservation premium", desc: "Sous-vide pour la stabilité, tube pour l’expérience cadeau." },
-                { icon: <FlaskIcon />, title: "Riche en arômes", desc: "Un parfum chaud & intense, idéal pour la haute pâtisserie." },
-                { icon: <SilverwareIcon />, title: "Pensée cuisine", desc: "Pâtisserie, glaces, rhum arrangé, extrait maison." }
+                {
+                  icon: <ShieldStarIcon />,
+                  title: locale === 'en' ? 'Quality selection' : 'Sélection qualité',
+                  desc: locale === 'en' ? 'Black TK / Gourmet depending on the lot, with rigorous sorting and quality control.' : 'TK (Noir) / Gourmet selon lots. Tri + contrôle rigoureux.'
+                },
+                {
+                  icon: <ArchiveIcon />,
+                  title: locale === 'en' ? 'Premium preservation' : 'Conservation premium',
+                  desc: locale === 'en' ? 'Vacuum-sealed for stability, gift tubes for a premium unboxing experience.' : 'Sous-vide pour la stabilité, tube pour l’expérience cadeau.'
+                },
+                {
+                  icon: <FlaskIcon />,
+                  title: locale === 'en' ? 'Aromatic depth' : 'Riche en arômes',
+                  desc: locale === 'en' ? 'A warm, intense aromatic profile designed for refined pastry and gourmet cooking.' : 'Un parfum chaud & intense, idéal pour la haute pâtisserie.'
+                },
+                {
+                  icon: <SilverwareIcon />,
+                  title: locale === 'en' ? 'Built for the kitchen' : 'Pensée cuisine',
+                  desc: locale === 'en' ? 'Pastry, ice cream, infused rum and homemade vanilla extract.' : 'Pâtisserie, glaces, rhum arrangé, extrait maison.'
+                }
               ].map((item, idx) => (
                 <article key={idx} className="rounded-xxl bg-white border border-vanilla-200 p-6 hover:border-gold-500/30 transition rm-anim">
                   <div className="w-12 h-12 rounded-2xl bg-vanilla-100 border border-vanilla-200 grid place-items-center">
@@ -311,17 +321,17 @@ export default function HomePage() {
               <div>
                 <p className="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
                   <DiamondsIcon />
-                  Collection
+                  {locale === 'en' ? 'Collection' : 'Collection'}
                 </p>
-                <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">Choisis ta longueur. Ressens la différence.</h2>
+                <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">{locale === 'en' ? 'Choose your length. Feel the difference.' : 'Choisis ta longueur. Ressens la différence.'}</h2>
                 <p className="mt-4 text-vanilla-100/75 max-w-2xl">
-                  Plus c’est long, plus c’est premium. Une sélection rigoureuse pour tous les usages.
+                  {locale === 'en' ? 'The longer the pod, the more premium the experience. A rigorous selection for every use case.' : 'Plus c’est long, plus c’est premium. Une sélection rigoureuse pour tous les usages.'}
                 </p>
               </div>
 
               <div className="flex lg:justify-end">
                 <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                  Aller à la boutique
+                  {locale === 'en' ? 'Go to shop' : 'Aller à la boutique'}
                   <ArrowRightIcon />
                 </Link>
               </div>
@@ -353,10 +363,10 @@ export default function HomePage() {
 
                     <div className="mt-6 flex gap-3">
                       <Link href={withLocale(`/produit/${normalizeProductRef(p.id)}`, locale)} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold bg-vanilla-50/10 border border-vanilla-100/12 hover:bg-vanilla-50/15 focus-ring text-white">
-                        Voir
+                        {locale === 'en' ? 'View' : 'Voir'}
                       </Link>
                       <Link href={withLocale(`/produit/${normalizeProductRef(p.id)}`, locale)} className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 focus-ring">
-                        Acheter
+                        {locale === 'en' ? 'Buy' : 'Acheter'}
                       </Link>
                     </div>
                   </div>
@@ -373,12 +383,13 @@ export default function HomePage() {
               <div>
                 <p className="inline-flex items-center gap-2 text-sm font-semibold text-cacao-800/80">
                   <MapPinIcon />
-                  Terroir & histoire
+                  {locale === 'en' ? 'Terroir & story' : 'Terroir & histoire'}
                 </p>
-                <h2 className="mt-3 font-display text-3xl sm:text-4xl">Nosy-Be, l’île qui parfume tout.</h2>
+                <h2 className="mt-3 font-display text-3xl sm:text-4xl">{locale === 'en' ? 'Nosy-Be, the island that perfumes everything.' : 'Nosy-Be, l’île qui parfume tout.'}</h2>
                 <p className="mt-4 text-cacao-600">
-                  Un climat unique, un savoir-faire transmis de génération en génération.
-                  Chaque gousse MSV Nosy-Be porte en elle l'exotisme et la pureté de Madagascar.
+                  {locale === 'en'
+                    ? 'A unique climate and expertise passed down from generation to generation. Every MSV Nosy-Be pod carries the purity and exotic depth of Madagascar.'
+                    : 'Un climat unique, un savoir-faire transmis de génération en génération. Chaque gousse MSV Nosy-Be porte en elle l\'exotisme et la pureté de Madagascar.'}
                 </p>
 
                 <div className="mt-6 grid sm:grid-cols-2 gap-4">
@@ -389,9 +400,9 @@ export default function HomePage() {
                           <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                         </svg>
                       </span>
-                      Filière & engagement
+                      {locale === 'en' ? 'Supply chain & commitment' : 'Filière & engagement'}
                     </p>
-                    <p className="mt-2 text-sm text-cacao-600">Soutenir les planteurs locaux et garantir une qualité constante.</p>
+                    <p className="mt-2 text-sm text-cacao-600">{locale === 'en' ? 'Supporting local growers while ensuring consistent quality over time.' : 'Soutenir les planteurs locaux et garantir une qualité constante.'}</p>
                   </div>
                   <div className="rounded-xxl bg-white border border-vanilla-200 p-5">
                     <p className="text-sm font-semibold flex items-center gap-2">
@@ -402,18 +413,18 @@ export default function HomePage() {
                           <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
                       </span>
-                      Affinage
+                      {locale === 'en' ? 'Curing' : 'Affinage'}
                     </p>
-                    <p className="mt-2 text-sm text-cacao-600">Plusieurs mois de patience pour un profil aromatique d'exception.</p>
+                    <p className="mt-2 text-sm text-cacao-600">{locale === 'en' ? 'Several months of patience to achieve an exceptional aromatic profile.' : 'Plusieurs mois de patience pour un profil aromatique d\'exception.'}</p>
                   </div>
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row gap-3">
                   <Link href={withLocale('/about', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-cacao-900 bg-white border border-vanilla-200 hover:bg-vanilla-100 transition rm-anim focus-ring">
-                    Lire l’histoire
+                    {locale === 'en' ? 'Read the story' : 'Lire l’histoire'}
                   </Link>
                   <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                    Acheter maintenant
+                    {locale === 'en' ? 'Shop now' : 'Acheter maintenant'}
                   </Link>
                 </div>
               </div>
@@ -421,14 +432,23 @@ export default function HomePage() {
               <div className="relative">
                 <div className="rounded-[28px] bg-jungle-900 text-vanilla-50 border border-jungle-800 overflow-hidden">
                   <div className="p-6">
-                    <p className="text-sm font-semibold text-white/80">Le process</p>
-                    <h3 className="mt-2 font-display text-2xl text-white">De la fleur au tube.</h3>
+                    <p className="text-sm font-semibold text-white/80">{locale === 'en' ? 'The process' : 'Le process'}</p>
+                    <h3 className="mt-2 font-display text-2xl text-white">{locale === 'en' ? 'From flower to tube.' : 'De la fleur au tube.'}</h3>
                   </div>
                   <div className="px-6 pb-6 grid gap-3">
                     {[
-                      { title: "Pollinisation & récolte", desc: "Un geste précis, une fois par an." },
-                      { title: "Étuvage & séchage", desc: "Le secret de la couleur et du parfum." },
-                      { title: "Tri & sélection", desc: "Seules les meilleures gousses sont retenues." }
+                      {
+                        title: locale === 'en' ? 'Pollination & harvest' : 'Pollinisation & récolte',
+                        desc: locale === 'en' ? 'A precise hand movement, once every season.' : 'Un geste précis, une fois par an.'
+                      },
+                      {
+                        title: locale === 'en' ? 'Sweating & drying' : 'Étuvage & séchage',
+                        desc: locale === 'en' ? 'The secret behind colour, suppleness and aroma.' : 'Le secret de la couleur et du parfum.'
+                      },
+                      {
+                        title: locale === 'en' ? 'Sorting & selection' : 'Tri & sélection',
+                        desc: locale === 'en' ? 'Only the finest pods make it into the final selection.' : 'Seules les meilleures gousses sont retenues.'
+                      }
                     ].map((step, i) => (
                       <div key={i} className="rounded-2xl bg-vanilla-50/7 border border-vanilla-100/12 p-4">
                         <p className="text-sm font-semibold flex items-center gap-2 text-white">
@@ -454,17 +474,29 @@ export default function HomePage() {
               <div>
                 <p className="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
                   <QuoteIcon />
-                  Preuve sociale
+                  {locale === 'en' ? 'Social proof' : 'Preuve sociale'}
                 </p>
-                <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">Quand la vanille devient une addiction.</h2>
+                <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">{locale === 'en' ? 'When vanilla becomes unforgettable.' : 'Quand la vanille devient une addiction.'}</h2>
               </div>
             </div>
 
             <div className="mt-10 grid md:grid-cols-3 gap-6">
               {[
-                { text: "“Parfum incroyable. On sent la différence dès la première crème.”", author: "Client(e) #1", category: "Pâtisserie maison" },
-                { text: "“Le tube fait vraiment cadeau premium. Service impeccable.”", author: "Client(e) #2", category: "Cadeau gourmand" },
-                { text: "“Idéal pour extrait maison. Résultat puissant, très rond.”", author: "Client(e) #3", category: "Extrait / rhum arrangé" }
+                {
+                  text: locale === 'en' ? '"Incredible aroma. You notice the difference from the very first custard."' : '“Parfum incroyable. On sent la différence dès la première crème.”',
+                  author: locale === 'en' ? 'Client #1' : 'Client(e) #1',
+                  category: locale === 'en' ? 'Home pastry' : 'Pâtisserie maison'
+                },
+                {
+                  text: locale === 'en' ? '"The tube feels like a real premium gift. Impeccable service."' : '“Le tube fait vraiment cadeau premium. Service impeccable.”',
+                  author: locale === 'en' ? 'Client #2' : 'Client(e) #2',
+                  category: locale === 'en' ? 'Gourmet gift' : 'Cadeau gourmand'
+                },
+                {
+                  text: locale === 'en' ? '"Perfect for homemade extract. Powerful result, beautifully rounded."' : '“Idéal pour extrait maison. Résultat puissant, très rond.”',
+                  author: locale === 'en' ? 'Client #3' : 'Client(e) #3',
+                  category: locale === 'en' ? 'Extract / infused rum' : 'Extrait / rhum arrangé'
+                }
               ].map((review, idx) => (
                 <article key={idx} className="rounded-xxl glass p-6 border border-vanilla-100/10 hover:bg-vanilla-50/5 transition rm-anim">
                   <p className="text-sm text-vanilla-100/85">{review.text}</p>
@@ -483,12 +515,12 @@ export default function HomePage() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-jungle-900/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-jungle-800 border border-jungle-900/10 mb-4">
                   <SparklesIcon />
-                  Notre Sélection
+                  {locale === 'en' ? 'Our selection' : 'Notre Sélection'}
                 </div>
-                <h2 className="font-display text-3xl sm:text-4xl italic">Nos Meilleures Gousses</h2>
+                <h2 className="font-display text-3xl sm:text-4xl italic">{locale === 'en' ? 'Our best vanilla pods' : 'Nos Meilleures Gousses'}</h2>
               </div>
               <Link href={withLocale('/shop', locale)} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gold-600 hover:text-gold-700 transition-colors">
-                Voir tout le catalogue
+                {locale === 'en' ? 'View the full catalogue' : 'Voir tout le catalogue'}
                 <ArrowRightIcon />
               </Link>
             </div>
@@ -523,9 +555,11 @@ export default function HomePage() {
 
                     <div className="flex items-center justify-between pt-4 border-t border-vanilla-100">
                       <p className="font-display text-xl text-jungle-950">
-                        {p.price_label === '—' ? 'Sur demande' : (p.price_label === 'Devis' ? 'Prix Pro' : p.price_label)}
+                        {p.price_label === '—'
+                          ? (locale === 'en' ? 'On request' : 'Sur demande')
+                          : (p.price_label === 'Devis' ? (locale === 'en' ? 'Wholesale pricing' : 'Prix Pro') : p.price_label)}
                       </p>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">Détails</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">{locale === 'en' ? 'Details' : 'Détails'}</span>
                     </div>
                   </div>
                 </Link>
@@ -542,12 +576,12 @@ export default function HomePage() {
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-gold-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-gold-700 border border-gold-500/20 mb-4">
                     <SparklesIcon />
-                    Actualités
+                    {locale === 'en' ? 'News' : 'Actualités'}
                   </div>
-                  <h2 className="font-display text-3xl sm:text-4xl">Dernières nouvelles de la plantation</h2>
+                  <h2 className="font-display text-3xl sm:text-4xl">{locale === 'en' ? 'Latest news from the plantation' : 'Dernières nouvelles de la plantation'}</h2>
                 </div>
                 <Link href={withLocale('/blog', locale)} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
-                  Toute l'actualité
+                  {locale === 'en' ? 'All news' : 'Toute l&apos;actualité'}
                   <ArrowRightIcon />
                 </Link>
               </div>
@@ -564,7 +598,7 @@ export default function HomePage() {
                     <h3 className="font-display text-xl mb-3 group-hover:text-gold-600 transition-colors">{news.title}</h3>
                     <p className="text-sm text-cacao-600 line-clamp-2 mb-4">{news.excerpt}</p>
                     <span className="text-xs font-bold uppercase tracking-tighter text-gold-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Lire la suite <ArrowRightIcon />
+                      {locale === 'en' ? 'Read more' : 'Lire la suite'} <ArrowRightIcon />
                     </span>
                   </Link>
                 ))}
@@ -578,17 +612,18 @@ export default function HomePage() {
           <div className="mx-auto max-w-7xl px-4">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-display text-3xl sm:text-4xl mb-6">Partenariats & Professionnels</h2>
+                <h2 className="font-display text-3xl sm:text-4xl mb-6">{locale === 'en' ? 'Partnerships & trade' : 'Partenariats & Professionnels'}</h2>
                 <p className="text-white/60 mb-8 max-w-lg">
-                  Vous êtes chef pâtissier, artisan chocolatier ou distributeur de produits d'exception ?
-                  MSV Nosy-Be accompagne les professionnels exigeants avec des conditions sur-mesure et une qualité constante.
+                  {locale === 'en'
+                    ? 'Are you a pastry chef, chocolatier or distributor of premium ingredients? MSV Nosy-Be supports trade buyers with tailored terms and consistent quality.'
+                    : 'Vous êtes chef pâtissier, artisan chocolatier ou distributeur de produits d&apos;exception ? MSV Nosy-Be accompagne les professionnels exigeants avec des conditions sur-mesure et une qualité constante.'}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition focus-ring">
-                    Devenir partenaire
+                    {locale === 'en' ? 'Become a partner' : 'Devenir partenaire'}
                   </Link>
                   <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition focus-ring text-white">
-                    Demander un devis
+                    {locale === 'en' ? 'Request a quote' : 'Demander un devis'}
                   </Link>
                 </div>
               </div>
@@ -598,7 +633,7 @@ export default function HomePage() {
                 <div className="relative grid grid-cols-2 gap-4">
                   {[1, 2, 3, 4].map(idx => (
                     <div key={idx} className="aspect-video rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 flex items-center justify-center p-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 group">
-                      <span className="text-xs font-bold tracking-[0.2em] uppercase text-vanilla-100/30 group-hover:text-gold-500 transition-colors">Futur Partenaire</span>
+                      <span className="text-xs font-bold tracking-[0.2em] uppercase text-vanilla-100/30 group-hover:text-gold-500 transition-colors">{locale === 'en' ? 'Future partner' : 'Futur Partenaire'}</span>
                     </div>
                   ))}
                 </div>
@@ -618,33 +653,35 @@ export default function HomePage() {
                 <div>
                   <p className="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
                     <SparklesIcon />
-                    Prêt à passer au niveau au-dessus ?
+                    {locale === 'en' ? 'Ready to level up your pantry?' : 'Prêt à passer au niveau au-dessus ?'}
                   </p>
                   <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">
-                    Faites sentir la vanille <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 to-vanilla-100">avant</span> même de goûter.
+                    {locale === 'en'
+                      ? <>Make people notice the vanilla <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 to-vanilla-100">before</span> they even taste it.</>
+                      : <>Faites sentir la vanille <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 to-vanilla-100">avant</span> même de goûter.</>}
                   </h2>
                   <p className="mt-4 text-vanilla-100/75">
-                    Cliquez, choisissez votre longueur, et recevez une vanille qui change tout.
+                    {locale === 'en' ? 'Choose your preferred length and receive vanilla that transforms every recipe.' : 'Cliquez, choisissez votre longueur, et recevez une vanille qui change tout.'}
                   </p>
 
                   <div className="mt-7 flex flex-col sm:flex-row gap-3">
                     <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
-                      Acheter maintenant
+                      {locale === 'en' ? 'Shop now' : 'Acheter maintenant'}
                       <ArrowRightIcon />
                     </Link>
                     <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring text-white">
-                      Besoin d’un conseil ?
+                      {locale === 'en' ? 'Need advice?' : 'Besoin d’un conseil ?'}
                     </Link>
                   </div>
                 </div>
 
                 <div className="rounded-xxl bg-vanilla-50/6 border border-vanilla-100/12 p-6">
-                  <p className="text-sm font-semibold text-vanilla-50">L'excellence au quotidien :</p>
+                  <p className="text-sm font-semibold text-vanilla-50">{locale === 'en' ? 'Daily excellence:' : 'L&apos;excellence au quotidien :'}</p>
                   <ul className="mt-4 space-y-3 text-sm text-vanilla-100/80">
-                    <li className="flex gap-2"><CheckCircleIcon /><span>Gousses fraîches & souples.</span></li>
-                    <li className="flex gap-2"><CheckCircleIcon /><span>Arôme intense & persistant.</span></li>
-                    <li className="flex gap-2"><CheckCircleIcon /><span>Origine garantie Nosy-Be.</span></li>
-                    <li className="flex gap-2"><CheckCircleIcon /><span>Expédition rapide & soignée.</span></li>
+                    <li className="flex gap-2"><CheckCircleIcon /><span>{locale === 'en' ? 'Fresh, supple pods.' : 'Gousses fraîches & souples.'}</span></li>
+                    <li className="flex gap-2"><CheckCircleIcon /><span>{locale === 'en' ? 'Intense, lingering aroma.' : 'Arôme intense & persistant.'}</span></li>
+                    <li className="flex gap-2"><CheckCircleIcon /><span>{locale === 'en' ? 'Guaranteed Nosy-Be origin.' : 'Origine garantie Nosy-Be.'}</span></li>
+                    <li className="flex gap-2"><CheckCircleIcon /><span>{locale === 'en' ? 'Fast, careful shipping.' : 'Expédition rapide & soignée.'}</span></li>
                   </ul>
                 </div>
               </div>
