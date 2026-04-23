@@ -16,6 +16,7 @@ import { trackViewItem } from '@/lib/analytics';
 import { useLocale } from '@/lib/locale-context';
 import { getLocalizedProduct } from '@/lib/localized-content';
 import { withLocale } from '@/lib/i18n';
+import { getContactPhoneDisplay, getContactPhoneHref, getWhatsappHref } from '@/lib/site';
 
 const CheckIcon = () => (
     <svg className="w-4 h-4 text-gold-500 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -147,6 +148,9 @@ function getPackHighlights(product: Product) {
 
 export default function ProductDetailPage() {
     const { locale } = useLocale();
+    const whatsappHref = getWhatsappHref(locale);
+    const phoneHref = getContactPhoneHref();
+    const phoneDisplay = getContactPhoneDisplay();
     const params = useParams();
     const id = params.id as string;
     const slug = normalizeProductRef(id);
@@ -387,7 +391,7 @@ export default function ProductDetailPage() {
                                         </div>
                                     </div>
 
-                                    <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.28em] text-gold-600">{locale === 'en' ? 'Conversion-focused product page' : 'Fiche optimisée achat + SEO'}</p>
+                                    <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.28em] text-gold-600">{locale === 'en' ? 'Selected vanilla from Nosy-Be' : 'Vanille sélectionnée à Nosy-Be'}</p>
                                     <h1 className="mt-3 font-display text-4xl leading-[1.06] text-jungle-950 italic">{seoHeading}</h1>
                                     <p className="mt-2 text-sm font-semibold uppercase tracking-widest text-jungle-500">{product.title}</p>
                                     <p className="mt-3 text-lg text-jungle-700/70 leading-relaxed font-medium">{seoDescription}</p>
@@ -505,6 +509,35 @@ export default function ProductDetailPage() {
                                         ))}
                                     </div>
 
+                                    <div className="mt-6 rounded-[2rem] border border-[#25D366]/25 bg-[#25D366]/10 p-6">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#128C7E]">
+                                            {locale === 'en' ? 'Need a quick answer before ordering?' : 'Besoin d’une réponse rapide avant commande ?'}
+                                        </p>
+                                        <p className="mt-3 text-sm leading-relaxed text-jungle-800">
+                                            {locale === 'en'
+                                                ? 'Use WhatsApp for advice on grade, quantity, delivery timing or the best format for pastry, gifting or homemade extract.'
+                                                : 'Utilisez WhatsApp pour demander conseil sur le grade, la quantité, le délai de livraison ou le bon format pour la pâtisserie, le cadeau ou l’extrait maison.'}
+                                        </p>
+                                        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                                            {whatsappHref ? (
+                                                <a
+                                                    href={whatsappHref}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
+                                                >
+                                                    {locale === 'en' ? 'Ask on WhatsApp' : 'Poser ma question sur WhatsApp'}
+                                                </a>
+                                            ) : null}
+                                            <a
+                                                href={phoneHref}
+                                                className="inline-flex items-center justify-center rounded-full border border-vanilla-200 bg-white px-5 py-3 text-sm font-semibold text-jungle-900 transition hover:border-gold-500/40"
+                                            >
+                                                {locale === 'en' ? `Call ${phoneDisplay}` : `Appeler ${phoneDisplay}`}
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     {stock > 0 && stock <= 10 ? (
                                         <div className="mt-6 rounded-[2rem] border border-cacao-900/10 bg-jungle-950 px-5 py-4 text-sm font-semibold text-vanilla-50">
                                             {locale === 'en' ? 'Limited stock on this format: secure your selection before it sells out.' : 'Stock limité sur ce format : sécurisez votre sélection avant rupture.'}
@@ -571,6 +604,29 @@ export default function ProductDetailPage() {
                                                         </li>
                                                     ))}
                                                 </ul>
+
+                                                <div className="mt-10 grid gap-4 lg:grid-cols-2">
+                                                    <div className="rounded-[2rem] border border-vanilla-200 bg-vanilla-50 p-6">
+                                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-jungle-500">
+                                                            {locale === 'en' ? 'Storage advice' : 'Conseils de conservation'}
+                                                        </p>
+                                                        <p className="mt-3 text-sm leading-relaxed text-jungle-800">
+                                                            {locale === 'en'
+                                                                ? 'Keep pods in their tube or airtight packaging, away from heat, light and humidity. They stay supple longer at room temperature than in the fridge.'
+                                                                : 'Conservez les gousses dans leur tube ou emballage hermétique, à l’abri de la chaleur, de la lumière et de l’humidité. Elles restent plus souples à température ambiante qu’au réfrigérateur.'}
+                                                        </p>
+                                                    </div>
+                                                    <div className="rounded-[2rem] border border-gold-200 bg-gold-50 p-6">
+                                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                                            {locale === 'en' ? 'Delivery guidance' : 'Repères livraison'}
+                                                        </p>
+                                                        <p className="mt-3 text-sm leading-relaxed text-jungle-800">
+                                                            {locale === 'en'
+                                                                ? 'Orders are prepared with care and shipped with tracking. Use WhatsApp if you need a delivery estimate before confirming your order.'
+                                                                : 'Les commandes sont préparées avec soin et expédiées avec suivi. Utilisez WhatsApp si vous avez besoin d’un délai estimé avant de confirmer votre panier.'}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
 
@@ -603,7 +659,7 @@ export default function ProductDetailPage() {
                                 <div className="mt-8 rounded-[2.5rem] bg-white border border-vanilla-200 p-8 lg:p-12">
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                                         <div>
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">{locale === 'en' ? 'Social proof' : 'Preuve sociale'}</p>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-500">{locale === 'en' ? 'Client reviews' : 'Avis clients'}</p>
                                             <h2 className="mt-3 font-display text-3xl text-jungle-950 italic">{locale === 'en' ? 'What clients say' : 'Ce que disent les clients'}</h2>
                                         </div>
                                         <div className="rounded-2xl border border-gold-200 bg-gold-50 px-5 py-4 text-sm font-semibold text-jungle-900">
@@ -639,7 +695,7 @@ export default function ProductDetailPage() {
                                         </div>
                                     ) : (
                                         <div className="mt-8 rounded-[2rem] border border-dashed border-vanilla-300 bg-vanilla-50 px-6 py-8 text-sm leading-relaxed text-jungle-800/75">
-                                            {locale === 'en' ? 'This product page is ready to host reviews and reinforce trust for Google Ads traffic.' : 'Cette fiche est prête à accueillir les avis clients pour renforcer la confiance et soutenir la conversion des campagnes Google Ads.'}
+                                            {locale === 'en' ? 'Client reviews will appear here as orders are completed and verified.' : 'Les avis clients apparaîtront ici à mesure que les premières commandes seront confirmées et vérifiées.'}
                                         </div>
                                     )}
                                 </div>
@@ -647,12 +703,12 @@ export default function ProductDetailPage() {
 
                             <aside className="lg:col-span-4 space-y-8">
                                 <div className="rounded-[2.5rem] bg-white border border-vanilla-200 p-10">
-                                    <p className="font-display text-2xl text-jungle-950 italic">{locale === 'en' ? 'Why clients trust us.' : 'Votre confiance.'}</p>
+                                    <p className="font-display text-2xl text-jungle-950 italic">{locale === 'en' ? 'Why clients trust us' : 'Pourquoi nous faire confiance'}</p>
                                     <div className="mt-8 space-y-10">
                                         <div className="group">
                                             <div className="flex items-center gap-4 text-gold-600 mb-3">
                                                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /></svg>
-                                                <p className="font-bold text-sm uppercase tracking-widest">{locale === 'en' ? 'Natural curing' : 'Affinage Naturel'}</p>
+                                                <p className="font-bold text-sm uppercase tracking-widest">{locale === 'en' ? 'Natural curing' : 'Affinage naturel'}</p>
                                             </div>
                                             <p className="text-sm text-jungle-750 leading-relaxed">
                                                 {locale === 'en' ? 'We do not rush the process. Aroma develops naturally over several months in our wooden curing chests.' : 'Nous ne brûlons aucune étape. L&apos;arôme se développe naturellement au fil des mois dans nos malles de bois.'}
@@ -661,7 +717,7 @@ export default function ProductDetailPage() {
                                         <div className="group">
                                             <div className="flex items-center gap-4 text-gold-600 mb-3">
                                                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></svg>
-                                                <p className="font-bold text-sm uppercase tracking-widest">{locale === 'en' ? 'Full traceability' : 'Traçabilité Totale'}</p>
+                                                <p className="font-bold text-sm uppercase tracking-widest">{locale === 'en' ? 'Full traceability' : 'Traçabilité totale'}</p>
                                             </div>
                                             <p className="text-sm text-jungle-750 leading-relaxed">
                                                 {locale === 'en' ? 'Each pod comes directly from our plantations or from our trusted partner growers in Nosy-Be.' : 'Chaque gousse provient directement de nos plantations ou de nos petits producteurs partenaires à Nosy-Be.'}
@@ -681,7 +737,7 @@ export default function ProductDetailPage() {
                                         <p className="relative font-display text-3xl text-gold-500 italic">{locale === 'en' ? 'B2B offer' : 'Offre B2B'}</p>
                                         <p className="relative mt-4 text-vanilla-100/70 text-sm leading-relaxed">{locale === 'en' ? 'For chefs, retailers and hospitality buyers looking for preferred trade terms.' : 'Professionnels, restaurateurs ? Bénéficiez de conditions préférentielles.'}</p>
                                         <Link href={withLocale('/b2b', locale)} className="relative mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-vanilla-50 hover:text-gold-500 transition-colors">
-                                            {locale === 'en' ? 'Wholesale access' : 'Espace Professionnel'}
+                                            {locale === 'en' ? 'Wholesale access' : 'Espace professionnel'}
                                             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                                         </Link>
                                     </div>

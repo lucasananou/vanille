@@ -11,6 +11,7 @@ import { getImageUrl } from '@/lib/utils';
 import { useLocale } from '@/lib/locale-context';
 import { getLocalizedProduct } from '@/lib/localized-content';
 import { withLocale } from '@/lib/i18n';
+import { getWhatsappHref } from '@/lib/site';
 
 const SearchIcon = () => (
     <svg className="w-5 h-5 text-vanilla-100/70" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -102,6 +103,7 @@ function getSeoCategory(product: ShopProduct, locale: 'fr' | 'en') {
 
 export default function ShopPage() {
     const { locale } = useLocale();
+    const whatsappHref = getWhatsappHref(locale);
     const [products, setProducts] = useState<ShopProduct[]>([]);
     const [search, setSearch] = useState('');
     const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
@@ -239,6 +241,40 @@ export default function ShopPage() {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-8 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+                            <div className="rounded-3xl border border-vanilla-100/10 bg-white/5 p-5 text-vanilla-50">
+                                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-500">
+                                    {locale === 'en' ? 'Shop reassurance' : 'Reassurance boutique'}
+                                </p>
+                                <p className="mt-3 text-sm text-vanilla-100/80">
+                                    {locale === 'en'
+                                        ? 'Each product page highlights grade, size, packaging and shipping guidance so visitors can compare formats without friction.'
+                                        : 'Chaque fiche met en avant le grade, la longueur, le conditionnement et les infos de livraison pour comparer les formats sans hésiter.'}
+                                </p>
+                            </div>
+                            <div className="rounded-3xl border border-[#25D366]/30 bg-[#25D366]/10 p-5 text-vanilla-50">
+                                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#7CFFB0]">
+                                    {locale === 'en' ? 'Need help choosing?' : 'Besoin d’aide pour choisir ?'}
+                                </p>
+                                <p className="mt-3 text-sm text-vanilla-100/80">
+                                    {locale === 'en'
+                                        ? 'Ask us directly about the right grade, delivery timing or a trade request before ordering.'
+                                        : 'Posez votre question sur le bon grade, le délai de livraison ou une demande pro avant de commander.'}
+                                </p>
+                                {whatsappHref ? (
+                                    <a
+                                        href={whatsappHref}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
+                                    >
+                                        {locale === 'en' ? 'Open WhatsApp' : 'Ouvrir WhatsApp'}
+                                        <ArrowRightIcon />
+                                    </a>
+                                ) : null}
                             </div>
                         </div>
                     </div>

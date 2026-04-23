@@ -1,18 +1,19 @@
 'use client';
 
-const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, '') || '';
-const whatsappMessage = encodeURIComponent(
-    process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Bonjour, j’ai une question avant de commander sur M.S.V-NOSY BE.'
-);
+import { useLocale } from '@/lib/locale-context';
+import { getContactPhoneRaw, getWhatsappHref } from '@/lib/site';
 
 export default function QuickContact() {
+    const { locale } = useLocale();
+    const whatsappNumber = getContactPhoneRaw();
+
     if (!whatsappNumber) {
         return null;
     }
 
     return (
         <a
-            href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+            href={getWhatsappHref(locale)}
             target="_blank"
             rel="noopener noreferrer"
             className="fixed bottom-5 right-5 z-[80] inline-flex items-center gap-3 rounded-full border border-[#25D366]/20 bg-[#25D366] px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:scale-[1.02] hover:shadow-xl"
@@ -25,4 +26,3 @@ export default function QuickContact() {
         </a>
     );
 }
-

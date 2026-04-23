@@ -5,10 +5,12 @@ import Footer from '@/components/footer';
 import Link from 'next/link';
 import { useLocale } from '@/lib/locale-context';
 import { withLocale } from '@/lib/i18n';
+import { getContactPhoneDisplay, getWhatsappHref } from '@/lib/site';
 
-const VanillaIcon = () => (
-    <svg className="w-8 h-8 text-gold-500" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+const ArrowRightIcon = () => (
+    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
     </svg>
 );
 
@@ -19,76 +21,99 @@ const LeafIcon = () => (
     </svg>
 );
 
-const ArrowRightIcon = () => (
-    <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+const CheckIcon = () => (
+    <svg className="w-4 h-4 text-gold-500 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12" />
     </svg>
 );
 
 export default function AboutPage() {
     const { locale } = useLocale();
+    const whatsappHref = getWhatsappHref(locale);
+    const phoneDisplay = getContactPhoneDisplay();
+
     return (
-        <div className="flex flex-col min-h-screen bg-jungle-900 font-sans antialiased text-vanilla-50">
+        <div className="flex min-h-screen flex-col bg-jungle-900 font-sans antialiased text-vanilla-50">
             <Header />
 
             <main id="content" className="flex-grow">
-                {/* HERO SECTION - Jungle Dark */}
                 <section className="relative overflow-hidden bg-jungle-900 pb-20">
-                    <div className="absolute inset-0 shine grain opacity-40" aria-hidden="true"></div>
+                    <div className="absolute inset-0 grain opacity-40" aria-hidden="true"></div>
+                    <div className="absolute -top-24 -left-24 h-[34rem] w-[34rem] rounded-full bg-gold-500/10 blur-3xl"></div>
 
-                    {/* Decorative halos */}
-                    <div className="absolute -top-24 -left-24 w-[34rem] h-[34rem] rounded-full bg-gold-500/10 blur-3xl animate-[pulse_7s_ease-in-out_infinite]"></div>
-
-                    <div className="relative mx-auto max-w-7xl px-4 pt-14 lg:pt-20">
-                        <div className="grid lg:grid-cols-2 gap-16 items-center">
-                            <div>
-                                <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-vanilla-50">
-                                    <LeafIcon />
-                                    <span className="text-sm font-semibold uppercase tracking-widest">{locale === 'en' ? 'Our Story • M.S.V-NOSY BE' : 'Notre Histoire • M.S.V-NOSY BE'}</span>
-                                </div>
-
-                                <h1 className="mt-8 font-display text-4xl sm:text-5xl lg:text-7xl italic leading-tight text-vanilla-50">
-                                    {locale === 'en' ? <>From the soils of <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">Nosy-Be</span> to your table.</> : <>De la terre de <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">Nosy-Be</span> à votre assiette.</>}
-                                </h1>
-                                <p className="mt-6 text-xl text-vanilla-100/80 leading-relaxed max-w-xl">
-                                    {locale === 'en' ? 'More than a spice, it is a pursuit of excellence. Discover how we select and cure some of Madagascar’s finest vanilla.' : 'Plus qu&apos;une épice, une passion pour l&apos;excellence. Découvrez comment nous sélectionnons et affinons la meilleure vanille de Madagascar.'}
-                                </p>
-
-                                <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                                    <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 text-sm font-bold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition-all">
-                                        {locale === 'en' ? 'Visit the shop' : 'Voir la boutique'}
-                                        <ArrowRightIcon />
-                                    </Link>
-                                    <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 text-sm font-bold glass hover:bg-vanilla-50/10 transition-all text-vanilla-50">
-                                        {locale === 'en' ? 'Contact us' : 'Nous contacter'}
-                                    </Link>
-                                </div>
+                    <div className="relative mx-auto grid max-w-7xl gap-14 px-4 pb-8 pt-14 lg:grid-cols-2 lg:items-center lg:pt-20">
+                        <div>
+                            <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-vanilla-50">
+                                <LeafIcon />
+                                <span className="text-sm font-semibold uppercase tracking-widest">
+                                    {locale === 'en' ? 'About M.S.V Nosy-Be' : 'À propos de M.S.V Nosy-Be'}
+                                </span>
                             </div>
 
-                            <div className="relative">
-                                <div className="rounded-[3rem] border border-vanilla-100/10 bg-vanilla-50/5 overflow-hidden p-3 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] relative">
-                                    <div className="w-full h-full rounded-[2.5rem] bg-jungle-950/40 relative overflow-hidden">
-                                        <img
-                                            src="/photos-produit-vanille/galerie-photos-qui-sommes-nous/pdg-sur-le-terrain.jpg"
-                                            alt="L'art de l'affinage"
-                                            className="absolute inset-0 w-full h-full object-cover opacity-60"
-                                        />
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="relative text-center px-8">
-                                                <p className="font-display text-3xl italic text-vanilla-50">{locale === 'en' ? 'The art of curing' : 'L&apos;art de l&apos;affinage'}</p>
-                                                <p className="mt-4 text-sm text-vanilla-100/60 max-w-xs">{locale === 'en' ? 'Every batch is inspected, smelled and selected with uncompromising rigour.' : 'Chaque lot est scruté, senti et sélectionné avec une rigueur absolue.'}</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <h1 className="mt-8 font-display text-4xl italic leading-tight sm:text-5xl lg:text-6xl">
+                                {locale === 'en'
+                                    ? <>A vanilla rooted in <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">Nosy-Be</span>, prepared for demanding kitchens.</>
+                                    : <>Une vanille enracinée à <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-vanilla-100 to-gold-600">Nosy-Be</span>, pensée pour les cuisines exigeantes.</>}
+                            </h1>
 
-                                    {/* Floating stats */}
-                                    <div className="absolute -bottom-6 -left-6 rounded-3xl glass p-6 border border-vanilla-100/10 animate-float">
-                                        <p className="text-3xl font-display italic text-gold-500">100%</p>
-                                        <p className="text-xs font-bold uppercase tracking-widest text-vanilla-100/60">Naturel</p>
+                            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-vanilla-100/80">
+                                {locale === 'en'
+                                    ? 'M.S.V Nosy-Be is the company and operating structure behind the brand. Vanille Moridy is the commercial signature used to present the vanilla itself, its origin and its selection work.'
+                                    : 'M.S.V Nosy-Be est la société et la structure d’exploitation derrière la marque. Vanille Moridy correspond à la signature commerciale utilisée pour présenter la vanille, son origine et le travail de sélection.'}
+                            </p>
+
+                            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                                {[
+                                    locale === 'en' ? 'Nosy-Be origin' : 'Origine Nosy-Be',
+                                    locale === 'en' ? 'Hand selection' : 'Sélection à la main',
+                                    locale === 'en' ? 'Direct contact' : 'Contact direct',
+                                ].map((item) => (
+                                    <div key={item} className="rounded-2xl border border-vanilla-100/10 bg-white/5 px-4 py-4 text-sm font-semibold text-vanilla-50">
+                                        {item}
                                     </div>
-                                    <div className="absolute -top-6 -right-6 rounded-3xl glass p-6 border border-vanilla-100/10 animate-float [animation-delay:-2s]">
-                                        <p className="text-3xl font-display italic text-gold-500">Direct</p>
-                                        <p className="text-xs font-bold uppercase tracking-widest text-vanilla-100/60">Producteur</p>
+                                ))}
+                            </div>
+
+                            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+                                <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-4 text-sm font-bold text-jungle-900 transition-all hover:opacity-90">
+                                    {locale === 'en' ? 'View the shop' : 'Voir la boutique'}
+                                    <ArrowRightIcon />
+                                </Link>
+                                {whatsappHref ? (
+                                    <a
+                                        href={whatsappHref}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center justify-center gap-3 rounded-full bg-[#25D366] px-8 py-4 text-sm font-bold text-white transition-all hover:opacity-90"
+                                    >
+                                        {locale === 'en' ? 'Talk on WhatsApp' : 'Parler sur WhatsApp'}
+                                    </a>
+                                ) : (
+                                    <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-3 rounded-full glass px-8 py-4 text-sm font-bold text-vanilla-50 transition-all hover:bg-vanilla-50/10">
+                                        {locale === 'en' ? 'Contact us' : 'Nous contacter'}
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="relative">
+                            <div className="overflow-hidden rounded-[2.8rem] border border-vanilla-100/10 bg-vanilla-50/5 p-3">
+                                <div className="relative aspect-[4/5] overflow-hidden rounded-[2.3rem]">
+                                    <img
+                                        src="/photos-produit-vanille/galerie-photos-qui-sommes-nous/pdg-sur-le-terrain.jpg"
+                                        alt={locale === 'en' ? 'Field visit in Nosy-Be' : 'Visite sur le terrain à Nosy-Be'}
+                                        className="absolute inset-0 h-full w-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-jungle-950/70 via-jungle-950/10 to-transparent"></div>
+                                    <div className="absolute bottom-0 p-8">
+                                        <p className="font-display text-3xl italic text-vanilla-50">
+                                            {locale === 'en' ? 'From field to preparation' : 'Du terrain à la préparation'}
+                                        </p>
+                                        <p className="mt-3 max-w-md text-sm leading-relaxed text-vanilla-100/75">
+                                            {locale === 'en'
+                                                ? 'The site must show a real origin, a real team and a direct way to ask questions before ordering.'
+                                                : 'Le site doit montrer une origine réelle, une équipe réelle et un contact direct pour poser des questions avant commande.'}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -96,62 +121,132 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                {/* CONTENT SECTION - Vanilla Light */}
-                <section className="bg-vanilla-50 text-jungle-900 py-20 lg:py-32">
-                    <div className="mx-auto max-w-4xl px-4">
-                        <div className="space-y-12 text-lg leading-relaxed text-jungle-800/80">
-                            <div className="space-y-6">
-                                <h2 className="font-display text-4xl text-jungle-950 italic">{locale === 'en' ? 'The origin of Bourbon vanilla' : 'L&apos;Origine de la Vanille Bourbon'}</h2>
-                                <p>
-                                    {locale === 'en' ? 'Born on the island of Nosy-Be, where vanilla was first introduced to Madagascar in 1880, Vanille Moridy® embodies the very origin of Bourbon vanilla. Shaped by volcanic soils, marine breezes and generations of expertise, each pod expresses a naturally intense aroma and remarkable sensory depth.' : 'Née sur l’île de Nosy-Be, là où la vanille fut introduite pour la première fois à Madagascar en 1880, Vanille Moridy® incarne l’origine même de la vanille Bourbon. Façonnée par un terroir volcanique, les brises marines et des générations de savoir-faire, chaque gousse exprime un arôme naturellement intense et une profondeur sensorielle remarquable.'}
-                                </p>
-                                <p>
-                                    {locale === 'en' ? 'Carefully cultivated, harvested at full maturity and slowly cured according to traditional methods, Vanille Moridy® reveals a warm, rounded and elegant aromatic profile. It is a vanilla of character and authenticity, created for chefs, artisans and brands seeking excellence, emotion and origin in every creation.' : 'Cultivée avec soin, récoltée à pleine maturité et affinée lentement selon des méthodes traditionnelles, Vanille Moridy® révèle un profil aromatique chaud, rond et élégant. C’est une vanille de caractère et d’authenticité, créée pour les chefs, artisans et marques en quête d’excellence, d’émotion et d’origine dans chacune de leurs créations.'}
-                                </p>
-                                <p className="italic font-display text-2xl text-gold-600 border-l-2 border-gold-500 pl-6">
-                                    {locale === 'en' ? 'Vanille Moridy® is more than vanilla — it is the expression of Nosy-Be heritage.' : 'Vanille Moridy® est plus qu’une vanille — c’est l’expression du patrimoine de Nosy-Be.'}
-                                </p>
-                            </div>
-
-                            <div className="grid sm:grid-cols-2 gap-8 py-8">
-                                <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8 shadow-sm">
-                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">{locale === 'en' ? 'Technical excellence' : 'Excellence Technique'}</h3>
-                                    <p className="text-sm leading-relaxed mb-4">
-                                        {locale === 'en' ? 'Vanille Moridy® stands out for its naturally high aromatic concentration and strict quality control throughout the supply chain.' : 'Vanille Moridy® se distingue par une concentration aromatique naturellement élevée et un contrôle qualité strict tout au long de la chaîne d’approvisionnement.'}
+                <section className="bg-vanilla-50 py-20 text-jungle-900 lg:py-24">
+                    <div className="mx-auto max-w-7xl px-4">
+                        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+                            <div className="space-y-10">
+                                <div className="rounded-[2rem] border border-vanilla-200 bg-white p-8 lg:p-10">
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                        {locale === 'en' ? 'Brand clarity' : 'Clarté de marque'}
                                     </p>
-                                    <p className="text-sm leading-relaxed text-jungle-700">
-                                        {locale === 'en' ? 'Our production relies on controlled agricultural practices, ensuring consistency, uniformity and aromatic integrity.' : 'Notre production repose sur des pratiques agricoles maîtrisées, garantissant stabilité, homogénéité et intégrité aromatique.'}
-                                    </p>
+                                    <h2 className="mt-4 font-display text-3xl italic text-jungle-950">
+                                        {locale === 'en' ? 'M.S.V Nosy-Be and Vanille Moridy' : 'M.S.V Nosy-Be et Vanille Moridy'}
+                                    </h2>
+                                    <div className="mt-6 space-y-5 text-base leading-relaxed text-jungle-800/85">
+                                        <p>
+                                            {locale === 'en'
+                                                ? 'M.S.V Nosy-Be names the company and the production, storage and export activity based in Nosy-Be, Madagascar.'
+                                                : 'M.S.V Nosy-Be désigne la société et l’activité de production, stockage et export basée à Nosy-Be, Madagascar.'}
+                                        </p>
+                                        <p>
+                                            {locale === 'en'
+                                                ? 'Vanille Moridy is the commercial expression used on the site to present the product universe, the grades and the customer-facing selection.'
+                                                : 'Vanille Moridy est l’expression commerciale utilisée sur le site pour présenter l’univers produit, les grades et la sélection tournée vers le client.'}
+                                        </p>
+                                        <p>
+                                            {locale === 'en'
+                                                ? 'This distinction matters because visitors need both: a clear company identity for trust, and a readable product signature for buying.'
+                                                : 'Cette distinction compte parce que les visiteurs ont besoin des deux: une identité société claire pour la confiance, et une signature produit lisible pour l’achat.'}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="rounded-[2rem] bg-white border border-vanilla-200 p-8 shadow-sm">
-                                    <h3 className="font-display text-2xl text-jungle-950 italic mb-4">{locale === 'en' ? 'Quality & traceability' : 'Qualité & Traçabilité'}</h3>
-                                    <p className="text-sm leading-relaxed mb-4">
-                                        {locale === 'en' ? 'Designed to meet the technical and traceability expectations of the most demanding international partners.' : 'Répond aux exigences techniques et de traçabilité des partenaires internationaux les plus exigeants au monde.'}
+
+                                <div className="rounded-[2rem] border border-vanilla-200 bg-white p-8 lg:p-10">
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                        {locale === 'en' ? 'What reassures visitors' : 'Ce qui rassure les visiteurs'}
                                     </p>
-                                    <p className="text-sm leading-relaxed text-jungle-700">
-                                        {locale === 'en' ? 'Intended for premium food applications, flavour houses and high-performance extracts.' : 'Destinée aux applications alimentaires premium, aux arômes et aux extraits de haute performance.'}
+                                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                                        {[
+                                            locale === 'en'
+                                                ? 'Clear origin and company details'
+                                                : 'Origine et identité société clairement présentées',
+                                            locale === 'en'
+                                                ? 'Visible contact by email, phone and WhatsApp'
+                                                : 'Contact visible par email, téléphone et WhatsApp',
+                                            locale === 'en'
+                                                ? 'A readable explanation of grades and uses'
+                                                : 'Une explication lisible des grades et usages',
+                                            locale === 'en'
+                                                ? 'Real photos of the team, production and preparation'
+                                                : 'De vraies photos de l’équipe, de la production et de la préparation',
+                                        ].map((item) => (
+                                            <div key={item} className="flex gap-3 rounded-2xl bg-vanilla-50 p-4 text-sm leading-relaxed text-jungle-800">
+                                                <CheckIcon />
+                                                <span>{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="rounded-[2rem] border border-vanilla-200 bg-white p-8 lg:p-10">
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                        {locale === 'en' ? 'What still strengthens the page' : 'Ce qui renforcera encore la page'}
                                     </p>
+                                    <div className="mt-6 space-y-4 text-base leading-relaxed text-jungle-800/85">
+                                        <p>
+                                            {locale === 'en'
+                                                ? 'Real production photos, team portraits and a short founder statement would make this page much stronger.'
+                                                : 'De vraies photos de production, des portraits d’équipe et un court mot du fondateur rendraient cette page beaucoup plus forte.'}
+                                        </p>
+                                        <p>
+                                            {locale === 'en'
+                                                ? 'For now, the structure is ready and the distinction between company and brand is clear.'
+                                                : 'Pour l’instant, la structure est prête et la distinction entre société et marque est clarifiée.'}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-6">
-                                <h2 className="font-display text-4xl text-jungle-950 italic">{locale === 'en' ? 'Cultivation & quality' : 'Culture & Qualité'}</h2>
-                                <p>
-                                    {locale === 'en' ? 'Our 100% natural, non-GMO vanilla is cultivated at altitude. Every step is performed by hand, from pollination to harvest, followed by a carefully controlled curing and maturation process to ensure a rich, refined aroma and lasting fragrance.' : 'Notre vanille 100% naturelle et non OGM est cultivée en altitude. Chaque étape est réalisée à la main : de la pollinisation manuelle à la récolte, suivie d&apos;un processus de séchage et d&apos;affinage rigoureusement maîtrisé pour garantir un arôme riche, raffiné et une fragrance stable.'}
-                                </p>
-                            </div>
-                        </div>
+                            <aside className="space-y-8">
+                                <div className="rounded-[2rem] border border-vanilla-200 bg-jungle-900 p-8 text-vanilla-50">
+                                    <p className="font-display text-2xl italic">
+                                        {locale === 'en' ? 'Quick trust snapshot' : 'Repères de confiance'}
+                                    </p>
+                                    <div className="mt-6 space-y-5 text-sm leading-relaxed text-vanilla-100/80">
+                                        <p>
+                                            {locale === 'en'
+                                                ? 'Company: MORIDY SOANJARA VANILLE NOSY-BE'
+                                                : 'Société: MORIDY SOANJARA VANILLE NOSY-BE'}
+                                        </p>
+                                        <p>
+                                            {locale === 'en'
+                                                ? 'Origin: Nosy-Be, Madagascar'
+                                                : 'Origine: Nosy-Be, Madagascar'}
+                                        </p>
+                                        <p>
+                                            {locale === 'en'
+                                                ? `Direct phone: ${phoneDisplay}`
+                                                : `Téléphone direct: ${phoneDisplay}`}
+                                        </p>
+                                    </div>
+                                </div>
 
-                        <div className="mt-20 p-1 rounded-[3rem] bg-gradient-to-br from-gold-500/30 to-vanilla-300">
-                            <div className="rounded-[2.8rem] bg-jungle-900 p-10 lg:p-16 text-center text-vanilla-50 relative overflow-hidden">
-                                <div className="absolute inset-0 shine opacity-10"></div>
-                                <h3 className="font-display text-3xl sm:text-4xl italic mb-6">{locale === 'en' ? 'Ready to taste excellence?' : 'Prêt à goûter l&apos;excellence ?'}</h3>
-                                <p className="text-vanilla-100/70 mb-10 max-w-lg mx-auto">{locale === 'en' ? 'Discover our full range of Black TK and Gourmet vanilla directly from Nosy-Be.' : 'Découvrez notre gamme complète de vanille TK Noir et Gourmet directement depuis Nosy-Be.'}</p>
-                                <Link href={withLocale('/shop', locale)} className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-bold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition-all">
-                                    {locale === 'en' ? 'Enter the shop' : 'Accéder à la boutique'}
-                                    <ArrowRightIcon />
-                                </Link>
-                            </div>
+                                <div className="rounded-[2rem] border border-gold-200 bg-gold-50 p-8">
+                                    <p className="font-display text-2xl italic text-jungle-950">
+                                        {locale === 'en' ? 'Need a direct answer?' : 'Besoin d’une réponse directe ?'}
+                                    </p>
+                                    <p className="mt-4 text-sm leading-relaxed text-jungle-800">
+                                        {locale === 'en'
+                                            ? 'Before ordering, ask about grade, quantity, delivery timing or a professional request.'
+                                            : 'Avant commande, posez votre question sur le grade, la quantité, le délai de livraison ou une demande professionnelle.'}
+                                    </p>
+                                    <div className="mt-6 flex flex-col gap-3">
+                                        {whatsappHref ? (
+                                            <a
+                                                href={whatsappHref}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
+                                            >
+                                                {locale === 'en' ? 'Open WhatsApp' : 'Ouvrir WhatsApp'}
+                                            </a>
+                                        ) : null}
+                                        <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center rounded-full border border-vanilla-200 bg-white px-5 py-3 text-sm font-semibold text-jungle-900 transition hover:border-gold-500/40">
+                                            {locale === 'en' ? 'Open contact page' : 'Ouvrir la page contact'}
+                                        </Link>
+                                    </div>
+                                </div>
+                            </aside>
                         </div>
                     </div>
                 </section>

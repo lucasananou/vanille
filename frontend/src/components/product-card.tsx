@@ -19,6 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     const discountPercentage = hasDiscount
         ? Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100)
         : 0;
+    const hasVerifiedReviews = typeof product.averageRating === 'number' && typeof product.reviewsCount === 'number' && product.reviewsCount > 0;
 
     const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
@@ -43,13 +44,15 @@ export default function ProductCard({ product }: ProductCardProps) {
                         )}
 
                         {/* Rating Badge (Now on image) */}
-                        <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded-sm select-none">
-                            <svg className="w-3 h-3 text-amber-500 fill-current" viewBox="0 0 24 24">
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
-                            <span className="text-[10px] font-bold text-zinc-900">{(product as any).averageRating || 4.8}</span>
-                            <span className="text-[10px] text-zinc-400 font-medium">({(product as any).reviewsCount || 12})</span>
-                        </div>
+                        {hasVerifiedReviews ? (
+                            <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded-sm select-none">
+                                <svg className="w-3 h-3 text-amber-500 fill-current" viewBox="0 0 24 24">
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <span className="text-[10px] font-bold text-zinc-900">{product.averageRating}</span>
+                                <span className="text-[10px] text-zinc-400 font-medium">({product.reviewsCount})</span>
+                            </div>
+                        ) : null}
                     </div>
 
                     {/* Wishlist Button */}

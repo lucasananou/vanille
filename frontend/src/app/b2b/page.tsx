@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import { useState } from 'react';
 import { communicationsApi } from '@/lib/api/communications';
 import { useLocale } from '@/lib/locale-context';
+import { getContactPhoneDisplay, getWhatsappHref } from '@/lib/site';
 
 const ArrowRightIcon = () => (
     <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -22,6 +23,8 @@ const BuildingIcon = () => (
 
 export default function B2BPage() {
     const { locale } = useLocale();
+    const whatsappHref = getWhatsappHref(locale);
+    const phoneDisplay = getContactPhoneDisplay();
     const [status, setStatus] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
@@ -36,10 +39,10 @@ export default function B2BPage() {
 
         try {
             await communicationsApi.sendB2BLead(formData);
-            setStatus(locale === 'en' ? 'Quote request sent. Our sales team will contact you shortly.' : 'Demande de devis envoyée. Notre équipe commerciale vous recontactera.');
+            setStatus(locale === 'en' ? 'Quote request sent. Our team will contact you shortly.' : 'Demande de devis envoyée. Notre équipe vous recontactera rapidement.');
             setFormData({ company: '', email: '', need: '' });
-        } catch (error: any) {
-            setStatus(error?.message || (locale === 'en' ? 'We are unable to send your request right now.' : 'Impossible d’envoyer votre demande pour le moment.'));
+        } catch (error: unknown) {
+            setStatus(error instanceof Error ? error.message : (locale === 'en' ? 'We are unable to send your request right now.' : 'Impossible d’envoyer votre demande pour le moment.'));
         } finally {
             setIsSubmitting(false);
             setTimeout(() => setStatus(null), 3000);
@@ -47,138 +50,189 @@ export default function B2BPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-vanilla-50 text-jungle-950 font-sans antialiased">
+        <div className="flex min-h-screen flex-col bg-vanilla-50 font-sans antialiased text-jungle-950">
             <Header />
 
             <main className="flex-grow">
-                <section className="relative py-16 lg:py-24 overflow-hidden">
+                <section className="relative overflow-hidden py-16 lg:py-24">
                     <div className="absolute inset-0 grain opacity-20" aria-hidden="true"></div>
-                    <div className="mx-auto max-w-7xl px-4 relative">
-                        <div className="grid lg:grid-cols-2 gap-16 items-start">
-                            <div className="max-w-xl">
-                                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-tight">
-                                    {locale === 'en' ? <>Wholesale <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-jungle-800 italic">& fine food.</span></> : <>Professionnels <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-jungle-800 italic">& Gastronomie.</span></>}
+                    <div className="relative mx-auto max-w-7xl px-4">
+                        <div className="grid gap-14 lg:grid-cols-[1.15fr_0.85fr]">
+                            <div className="max-w-3xl">
+                                <div className="inline-flex items-center gap-2 rounded-full border border-gold-500/20 bg-gold-50 px-4 py-2 text-sm font-semibold text-jungle-900">
+                                    <BuildingIcon />
+                                    <span>{locale === 'en' ? 'B2B / Wholesale' : 'B2B / Professionnels'}</span>
+                                </div>
+
+                                <h1 className="mt-8 font-display text-4xl italic leading-tight sm:text-5xl lg:text-6xl">
+                                    {locale === 'en'
+                                        ? 'Vanilla for chefs, retailers and premium ingredient buyers.'
+                                        : 'Une vanille pour les chefs, revendeurs et acheteurs d’ingrédients premium.'}
                                 </h1>
-                                <p className="text-jungle-700 mt-6 text-lg">
-                                    {locale === 'en' ? 'Pastry chef, chocolatier or distributor? Access larger volumes and preferential pricing tailored to premium applications.' : 'Chef pâtissier, chocolatier ou distributeur ? Accédez à des volumes importants et des tarifs préférentiels pour sublimer vos créations.'}
+
+                                <p className="mt-6 text-lg leading-relaxed text-jungle-700">
+                                    {locale === 'en'
+                                        ? 'This page is designed to answer the practical questions of professional buyers: product type, volumes, packaging, contact method and quote request.'
+                                        : 'Cette page répond aux questions pratiques des acheteurs professionnels: types de produits, volumes, conditionnements, mode de contact et demande de devis.'}
                                 </p>
 
-                                <div className="mt-10 space-y-6">
-                                    <div className="rounded-xxl bg-white p-6 border border-vanilla-200 shadow-sm flex items-start gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-vanilla-50 border border-vanilla-100 flex items-center justify-center shrink-0">
-                                            <BuildingIcon />
+                                <div className="mt-10 grid gap-4 sm:grid-cols-3">
+                                    {[
+                                        locale === 'en' ? 'TK and Gourmet grades' : 'Grades TK et Gourmet',
+                                        locale === 'en' ? 'Retail or trade formats' : 'Formats détail ou professionnels',
+                                        locale === 'en' ? 'Direct response by WhatsApp or email' : 'Réponse directe par WhatsApp ou email',
+                                    ].map((item) => (
+                                        <div key={item} className="rounded-2xl border border-vanilla-200 bg-white p-4 text-sm font-semibold text-jungle-900 shadow-sm">
+                                            {item}
                                         </div>
-                                        <div>
-                                            <p className="font-display text-xl text-gold-600">MORIDY SOANJARA VANILLA NOSY-BE</p>
-                                            <p className="text-sm text-jungle-700 mt-2">
-                                                {locale === 'en' ? 'A Malagasy limited company specialised in the production, processing, storage and export of natural vanilla.' : 'SARL de droit malgache spécialisée dans la production, la transformation, le stockage et l’exportation de vanille naturelle.'}
+                                    ))}
+                                </div>
+
+                                <div className="mt-10 grid gap-6 lg:grid-cols-2">
+                                    <div className="rounded-[2rem] border border-vanilla-200 bg-white p-7 shadow-sm">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                            {locale === 'en' ? 'Products and grades' : 'Produits et grades'}
+                                        </p>
+                                        <div className="mt-5 space-y-4 text-sm leading-relaxed text-jungle-800">
+                                            <p>
+                                                <strong>{locale === 'en' ? 'Gourmet' : 'Gourmet'}</strong>
+                                                {locale === 'en'
+                                                    ? ': suited to premium pastry, retail presentation and gift-ready formats.'
+                                                    : ': adapté à la pâtisserie premium, à la revente et aux formats cadeaux.'}
                                             </p>
-                                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-jungle-600 border-t border-vanilla-100 pt-4">
-                                                <div>
-                                                    <p className="font-semibold text-jungle-900">{locale === 'en' ? 'Registered office' : 'Siège Social'}</p>
-                                                    <p>Lot n° 109B 0163, Befitina, Nosy-Be</p>
-                                                </div>
-                                                <div>
-                                                    <p className="font-semibold text-jungle-900">{locale === 'en' ? 'Registration details' : 'Identifiants'}</p>
-                                                    <p>RCS Nosy-Be : 2023 B 00054</p>
-                                                    <p>N° STAT : 46101 71 2023 0 10373</p>
-                                                </div>
-                                            </div>
+                                            <p>
+                                                <strong>{locale === 'en' ? 'TK' : 'TK'}</strong>
+                                                {locale === 'en'
+                                                    ? ': suited to processing, culinary use, extracts and larger-volume sourcing.'
+                                                    : ': adapté à la transformation, aux usages culinaires, aux extraits et aux besoins en volume.'}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <h3 className="font-display text-2xl italic text-jungle-900">{locale === 'en' ? 'What we do' : 'Notre activité'}</h3>
-                                        <ul className="grid grid-cols-2 gap-4">
-                                            {[
-                                                locale === 'en' ? { title: "Production", desc: "Controlled agriculture" } : { title: "Production", desc: "Maîtrise agricole" },
-                                                locale === 'en' ? { title: "Processing", desc: "Traditional curing" } : { title: "Transformation", desc: "Affinage traditionnel" },
-                                                locale === 'en' ? { title: "Storage", desc: "Controlled conditions" } : { title: "Stockage", desc: "Conditions contrôlées" },
-                                                locale === 'en' ? { title: "Export", desc: "International standards" } : { title: "Exportation", desc: "Normes internationales" }
-                                            ].map((item, i) => (
-                                                <li key={i} className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
-                                                    <p className="font-semibold text-gold-600">{item.title}</p>
-                                                    <p className="text-xs text-jungle-600">{item.desc}</p>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <h3 className="font-display text-2xl italic text-jungle-900">{locale === 'en' ? 'Our grades' : 'Nos Produits'}</h3>
-                                        <div className="grid gap-4">
-                                            <div className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
-                                                <p className="font-semibold text-gold-600">Grade GOURMET</p>
-                                                <p className="text-sm text-jungle-700">{locale === 'en' ? 'Fine dining and high-end pastry applications.' : 'Gastronomie fine et pâtisserie haut de gamme.'}</p>
-                                            </div>
-                                            <div className="rounded-xl bg-white p-4 border border-vanilla-200 shadow-sm">
-                                                <p className="font-semibold text-gold-600">Grade TK</p>
-                                                <p className="text-sm text-jungle-700">{locale === 'en' ? 'Food industry and processing applications.' : 'Industrie agroalimentaire et transformation.'}</p>
-                                            </div>
+                                    <div className="rounded-[2rem] border border-vanilla-200 bg-white p-7 shadow-sm">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                            {locale === 'en' ? 'Volumes and packaging' : 'Volumes et conditionnements'}
+                                        </p>
+                                        <div className="mt-5 space-y-4 text-sm leading-relaxed text-jungle-800">
+                                            <p>
+                                                {locale === 'en'
+                                                    ? 'Retail-ready tubes, vacuum-sealed packs and quote-based volumes can be discussed depending on your activity and cadence.'
+                                                    : 'Tubes prêts à la vente, packs sous-vide et volumes sur devis peuvent être étudiés selon votre activité et votre cadence d’approvisionnement.'}
+                                            </p>
+                                            <p>
+                                                {locale === 'en'
+                                                    ? 'If you need recurring supply, the fastest route is to describe your format, estimated quantity and frequency.'
+                                                    : 'Si vous avez besoin d’un réassort récurrent, le plus simple est d’indiquer votre format, la quantité estimée et la fréquence souhaitée.'}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <h3 className="font-display text-2xl italic text-jungle-900">{locale === 'en' ? 'Target partners' : 'Partenaires Cibles'}</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {(locale === 'en' ? ["Importers", "Manufacturers", "Pastry chefs", "Confectioners", "Traders"] : ["Importateurs", "Industriels", "Pâtissiers", "Confiseurs", "Négociants"]).map((tag, i) => (
-                                                <span key={i} className="px-3 py-1 rounded-full bg-vanilla-100 border border-vanilla-200 text-xs text-jungle-700">
+                                    <div className="rounded-[2rem] border border-vanilla-200 bg-white p-7 shadow-sm">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                            {locale === 'en' ? 'Who this page is for' : 'Pour qui'}
+                                        </p>
+                                        <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold text-jungle-800">
+                                            {(locale === 'en'
+                                                ? ['Pastry chefs', 'Restaurants', 'Retailers', 'Importers', 'Fine food buyers']
+                                                : ['Pâtissiers', 'Restaurants', 'Revendeurs', 'Importateurs', 'Acheteurs premium']
+                                            ).map((tag) => (
+                                                <span key={tag} className="rounded-full border border-vanilla-200 bg-vanilla-50 px-3 py-2">
                                                     {tag}
                                                 </span>
                                             ))}
                                         </div>
                                     </div>
+
+                                    <div className="rounded-[2rem] border border-vanilla-200 bg-white p-7 shadow-sm">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold-700">
+                                            {locale === 'en' ? 'Trust markers' : 'Repères de confiance'}
+                                        </p>
+                                        <div className="mt-5 space-y-3 text-sm leading-relaxed text-jungle-800">
+                                            <p>{locale === 'en' ? 'Company: MORIDY SOANJARA VANILLE NOSY-BE' : 'Société: MORIDY SOANJARA VANILLE NOSY-BE'}</p>
+                                            <p>{locale === 'en' ? 'Origin: Nosy-Be, Madagascar' : 'Origine: Nosy-Be, Madagascar'}</p>
+                                            <p>{locale === 'en' ? `Direct phone: ${phoneDisplay}` : `Téléphone direct: ${phoneDisplay}`}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="lg:sticky lg:top-24 rounded-3xl bg-white shadow-2xl border border-vanilla-200 p-8 relative">
-                                <h2 className="font-display text-3xl italic text-jungle-900">{locale === 'en' ? 'Request a quote' : 'Demande de devis'}</h2>
-                                <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
-                                    <div className="grid sm:grid-cols-2 gap-5">
+                            <div className="lg:sticky lg:top-24">
+                                <div className="rounded-[2rem] border border-vanilla-200 bg-white p-8 shadow-2xl">
+                                    <h2 className="font-display text-3xl italic text-jungle-900">
+                                        {locale === 'en' ? 'Request a quote' : 'Demande de devis'}
+                                    </h2>
+                                    <p className="mt-3 text-sm leading-relaxed text-jungle-700">
+                                        {locale === 'en'
+                                            ? 'Tell us who you are, what format you need and roughly what volume you expect.'
+                                            : 'Indiquez votre activité, le format recherché et le volume estimé pour obtenir une réponse adaptée.'}
+                                    </p>
+
+                                    {whatsappHref ? (
+                                        <a
+                                            href={whatsappHref}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#25D366] px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
+                                        >
+                                            {locale === 'en' ? 'Discuss on WhatsApp first' : 'Échanger d’abord sur WhatsApp'}
+                                        </a>
+                                    ) : null}
+
+                                    <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-jungle-700" htmlFor="company">{locale === 'en' ? 'Company / Restaurant' : 'Entreprise / Restaurant'}</label>
+                                            <label className="text-sm font-medium text-jungle-700" htmlFor="company">
+                                                {locale === 'en' ? 'Company / Restaurant' : 'Entreprise / Restaurant'}
+                                            </label>
                                             <input
                                                 id="company"
                                                 required
-                                                className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
+                                                className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm text-jungle-900 placeholder:text-jungle-300 focus:outline-none focus:ring-2 focus:ring-gold-500"
                                                 placeholder={locale === 'en' ? 'Business name' : 'Nom de l’établissement'}
                                                 value={formData.company}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, company: e.target.value }))}
                                             />
                                         </div>
+
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-jungle-700" htmlFor="b2bemail">{locale === 'en' ? 'Business email' : 'Email pro'}</label>
+                                            <label className="text-sm font-medium text-jungle-700" htmlFor="b2bemail">
+                                                {locale === 'en' ? 'Business email' : 'Email professionnel'}
+                                            </label>
                                             <input
                                                 id="b2bemail"
                                                 type="email"
                                                 required
-                                                className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
+                                                className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm text-jungle-900 placeholder:text-jungle-300 focus:outline-none focus:ring-2 focus:ring-gold-500"
                                                 placeholder={locale === 'en' ? 'contact@company.com' : 'contact@entreprise.fr'}
                                                 value={formData.email}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                                             />
                                         </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-jungle-700" htmlFor="need">{locale === 'en' ? 'Your needs (volumes, formats...)' : 'Votre besoin (Volumes, Types...)'}</label>
-                                        <textarea
-                                            id="need"
-                                            rows={5}
-                                            required
-                                            className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all placeholder:text-jungle-300 text-jungle-900"
-                                            placeholder={locale === 'en' ? 'Ex: 5kg TK pods, monthly delivery...' : 'Ex: 5kg Gousses TK, Livraison mensuelle...'}
-                                            value={formData.need}
-                                            onChange={(e) => setFormData(prev => ({ ...prev, need: e.target.value }))}
-                                        />
-                                    </div>
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-4 text-sm font-bold text-jungle-900 hover:opacity-90 transition-all shadow-lg"
-                                    >
-                                        {isSubmitting ? (locale === 'en' ? 'Sending...' : 'Envoi en cours...') : (locale === 'en' ? 'Submit request' : 'Envoyer ma demande')} <ArrowRightIcon />
-                                    </button>
-                                </form>
+
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-jungle-700" htmlFor="need">
+                                                {locale === 'en' ? 'Need details' : 'Détail du besoin'}
+                                            </label>
+                                            <textarea
+                                                id="need"
+                                                rows={5}
+                                                required
+                                                className="w-full rounded-2xl border border-vanilla-200 bg-vanilla-50 px-4 py-3 text-sm text-jungle-900 placeholder:text-jungle-300 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                                                placeholder={locale === 'en' ? 'Example: TK pods, 5 kg, monthly delivery, France.' : 'Exemple : gousses TK, 5 kg, livraison mensuelle, France.'}
+                                                value={formData.need}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, need: e.target.value }))}
+                                            />
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-b from-gold-500 to-gold-600 px-8 py-4 text-sm font-bold text-jungle-900 shadow-lg transition-all hover:opacity-90"
+                                        >
+                                            {isSubmitting ? (locale === 'en' ? 'Sending...' : 'Envoi en cours...') : (locale === 'en' ? 'Send request' : 'Envoyer ma demande')}
+                                            <ArrowRightIcon />
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -187,15 +241,14 @@ export default function B2BPage() {
 
             <Footer />
 
-            {/* Toast */}
-            {status && (
-                <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 rounded-full bg-jungle-900 border border-gold-500/20 text-vanilla-50 text-sm animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-2xl">
+            {status ? (
+                <div className="fixed bottom-10 left-1/2 z-[100] -translate-x-1/2 rounded-full border border-gold-500/20 bg-jungle-900 px-6 py-4 text-sm text-vanilla-50 shadow-2xl">
                     <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-gold-500 animate-pulse"></div>
+                        <div className="h-2 w-2 animate-pulse rounded-full bg-gold-500"></div>
                         {status}
                     </div>
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }

@@ -9,6 +9,7 @@ import { BLOG_POSTS } from '@/lib/data/blog-posts';
 import { normalizeProductRef } from '@/lib/product-refs';
 import { useLocale } from '@/lib/locale-context';
 import { withLocale } from '@/lib/i18n';
+import { getWhatsappHref } from '@/lib/site';
 
 const SparklesIcon = () => (
   <svg className="w-4 h-4 text-gold-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -115,6 +116,7 @@ const CheckCircleIcon = () => (
 export default function HomePage() {
   const { locale } = useLocale();
   const featuredProduct = CATALOG[1];
+  const whatsappHref = getWhatsappHref(locale);
 
   return (
     <div className="bg-jungle-900 text-vanilla-50 font-sans antialiased">
@@ -180,6 +182,16 @@ export default function HomePage() {
                     {locale === 'en' ? 'Discover the shop' : 'Découvrir la boutique'}
                     <ArrowRightIcon />
                   </Link>
+                  {whatsappHref ? (
+                    <a
+                      href={whatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white bg-[#25D366] hover:opacity-90 transition rm-anim focus-ring"
+                    >
+                      {locale === 'en' ? 'Ask on WhatsApp' : 'Question sur WhatsApp'}
+                    </a>
+                  ) : null}
                   <Link href="#collection" className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring">
                     {locale === 'en' ? 'View the collection' : 'Voir la sélection'}
                     <CompassIcon />
@@ -474,33 +486,33 @@ export default function HomePage() {
               <div>
                 <p className="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
                   <QuoteIcon />
-                  {locale === 'en' ? 'Social proof' : 'Preuve sociale'}
+                  {locale === 'en' ? 'Customer reassurance' : 'Réassurance client'}
                 </p>
-                <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">{locale === 'en' ? 'When vanilla becomes unforgettable.' : 'Quand la vanille devient une addiction.'}</h2>
+                <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">{locale === 'en' ? 'Everything is designed to make ordering feel clear and reassuring.' : 'Tout est pensé pour que la commande soit claire et rassurante.'}</h2>
               </div>
             </div>
 
             <div className="mt-10 grid md:grid-cols-3 gap-6">
               {[
                 {
-                  text: locale === 'en' ? '"Incredible aroma. You notice the difference from the very first custard."' : '“Parfum incroyable. On sent la différence dès la première crème.”',
-                  author: locale === 'en' ? 'Client #1' : 'Client(e) #1',
-                  category: locale === 'en' ? 'Home pastry' : 'Pâtisserie maison'
+                  text: locale === 'en' ? 'Clear product grades, practical formats and packaging adapted to everyday pastry or gifting.' : 'Des grades lisibles, des formats pratiques et un conditionnement adapté à la pâtisserie comme au cadeau gourmand.',
+                  author: locale === 'en' ? 'Product clarity' : 'Clarté produit',
+                  category: locale === 'en' ? 'Grade / format / packaging' : 'Grade / format / conditionnement'
                 },
                 {
-                  text: locale === 'en' ? '"The tube feels like a real premium gift. Impeccable service."' : '“Le tube fait vraiment cadeau premium. Service impeccable.”',
-                  author: locale === 'en' ? 'Client #2' : 'Client(e) #2',
-                  category: locale === 'en' ? 'Gourmet gift' : 'Cadeau gourmand'
+                  text: locale === 'en' ? 'A direct contact route by email, phone and WhatsApp for any question before ordering or for trade requests.' : 'Un contact direct par email, téléphone et WhatsApp pour répondre rapidement avant commande ou pour le B2B.',
+                  author: locale === 'en' ? 'Human support' : 'Accompagnement humain',
+                  category: locale === 'en' ? 'Contact / WhatsApp / trade' : 'Contact / WhatsApp / pro'
                 },
                 {
-                  text: locale === 'en' ? '"Perfect for homemade extract. Powerful result, beautifully rounded."' : '“Idéal pour extrait maison. Résultat puissant, très rond.”',
-                  author: locale === 'en' ? 'Client #3' : 'Client(e) #3',
-                  category: locale === 'en' ? 'Extract / infused rum' : 'Extrait / rhum arrangé'
+                  text: locale === 'en' ? 'Delivery, storage and usage information are highlighted to reduce hesitation and help visitors convert faster.' : 'Les informations de livraison, de conservation et d’usage sont mises en avant pour lever les freins avant achat.',
+                  author: locale === 'en' ? 'Conversion essentials' : 'Essentiels conversion',
+                  category: locale === 'en' ? 'Delivery / storage / usage' : 'Livraison / conservation / usage'
                 }
               ].map((review, idx) => (
                 <article key={idx} className="rounded-xxl glass p-6 border border-vanilla-100/10 hover:bg-vanilla-50/5 transition rm-anim">
                   <p className="text-sm text-vanilla-100/85">{review.text}</p>
-                  <p className="mt-4 text-sm font-semibold text-white">— {review.author}</p>
+                  <p className="mt-4 text-sm font-semibold text-white">{review.author}</p>
                   <p className="text-xs text-vanilla-100/60 mt-1">{review.category}</p>
                 </article>
               ))}
@@ -630,10 +642,28 @@ export default function HomePage() {
 
               <div className="relative">
                 <div className="absolute inset-0 bg-gold-500/5 blur-3xl rounded-full"></div>
-                <div className="relative grid grid-cols-2 gap-4">
-                  {[1, 2, 3, 4].map(idx => (
-                    <div key={idx} className="aspect-video rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 flex items-center justify-center p-6 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 group">
-                      <span className="text-xs font-bold tracking-[0.2em] uppercase text-vanilla-100/30 group-hover:text-gold-500 transition-colors">{locale === 'en' ? 'Future partner' : 'Futur Partenaire'}</span>
+                <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    {
+                      title: locale === 'en' ? 'Wholesale formats' : 'Formats professionnels',
+                      text: locale === 'en' ? 'Adapted packs for pastry shops, restaurants and importers.' : 'Conditionnements pensés pour les pâtissiers, restaurateurs et importateurs.'
+                    },
+                    {
+                      title: locale === 'en' ? 'Responsive contact' : 'Contact réactif',
+                      text: locale === 'en' ? 'Direct exchange by WhatsApp or email to confirm needs and timing.' : 'Échange direct par WhatsApp ou email pour cadrer les besoins et délais.'
+                    },
+                    {
+                      title: locale === 'en' ? 'Controlled origin' : 'Origine contrôlée',
+                      text: locale === 'en' ? 'A clear sourcing story centered on Nosy-Be and Madagascar vanilla.' : 'Une histoire produit claire autour de Nosy-Be et de la vanille de Madagascar.'
+                    },
+                    {
+                      title: locale === 'en' ? 'Fast quote request' : 'Demande de devis rapide',
+                      text: locale === 'en' ? 'A dedicated path for volume requests and recurring supply.' : 'Un parcours dédié pour les volumes, réassorts et demandes récurrentes.'
+                    }
+                  ].map((item) => (
+                    <div key={item.title} className="rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 p-6">
+                      <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500">{item.title}</p>
+                      <p className="mt-3 text-sm text-vanilla-100/70">{item.text}</p>
                     </div>
                   ))}
                 </div>
@@ -669,9 +699,20 @@ export default function HomePage() {
                       {locale === 'en' ? 'Shop now' : 'Acheter maintenant'}
                       <ArrowRightIcon />
                     </Link>
-                    <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring text-white">
-                      {locale === 'en' ? 'Need advice?' : 'Besoin d’un conseil ?'}
-                    </Link>
+                    {whatsappHref ? (
+                      <a
+                        href={whatsappHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white bg-[#25D366] hover:opacity-90 transition rm-anim focus-ring"
+                      >
+                        {locale === 'en' ? 'Talk on WhatsApp' : 'Parler sur WhatsApp'}
+                      </a>
+                    ) : (
+                      <Link href={withLocale('/contact', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold glass hover:bg-vanilla-50/10 transition rm-anim focus-ring text-white">
+                        {locale === 'en' ? 'Need advice?' : 'Besoin d’un conseil ?'}
+                      </Link>
+                    )}
                   </div>
                 </div>
 
