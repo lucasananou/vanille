@@ -16,10 +16,10 @@ export default async function MentionsLegales() {
                     <h2>1. Éditeur du site</h2>
                     <p>
                         Le site <strong>M.S.V-NOSY BE</strong> (ci-après dénommé « le Site ») est édité par :<br />
-                        <strong>MORIDY SOANJARA VANILLE NOSY-BE (M.S.V – NOSY BE)</strong><br />
+                        <strong>MORIDY SOANJARA VANILLE NOSY-BE (M.S.V - NOSY BE)</strong><br />
                         Siège social : Lot n°109B 0163 à Befitina, Hell-Ville, Nosy-Be, Madagascar<br />
                         Email : <a href="mailto:contact@vanille-nosybe.fr">contact@vanille-nosybe.fr</a><br />
-                        Tél : +261 32 98 595 50<br />
+                        Tél : +33 6 81 82 64 78<br />
                         RCS Nosy-Be 2023 B 00054<br />
                         Directeur de la publication : ABOU MORIDY
                     </p>
@@ -35,12 +35,12 @@ export default async function MentionsLegales() {
 
                     <h2>3. Propriété intellectuelle</h2>
                     <p>
-                        L’ensemble de ce site relève de la législation française et internationale sur le droit d’auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
+                        L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
                     </p>
 
                     <h2>4. Données personnelles</h2>
                     <p>
-                        Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d’un droit d’accès, de rectification et de suppression des données vous concernant. Pour exercer ce droit, veuillez consulter notre <a href={withLocale('/legal/politique-de-confidentialite', locale)}>Politique de Confidentialité</a>.
+                        Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Pour exercer ce droit, veuillez consulter notre <a href={withLocale('/legal/politique-de-confidentialite', locale)}>Politique de Confidentialité</a>.
                     </p>
                 </div>
             </main>

@@ -1,8 +1,8 @@
 export const DEFAULT_SITE_URL = 'https://msv-nosy-bemada.fr';
 export const DEFAULT_API_URL = 'https://vanille-production.up.railway.app';
 export const DEFAULT_CONTACT_EMAIL = 'contact@vanille-nosybe.fr';
-export const DEFAULT_CONTACT_PHONE_DISPLAY = '+261 32 98 595 50';
-export const DEFAULT_CONTACT_PHONE_RAW = '261329859550';
+export const DEFAULT_CONTACT_PHONE_DISPLAY = '+33 6 81 82 64 78';
+export const DEFAULT_CONTACT_PHONE_RAW = '33681826478';
 export const DEFAULT_CONTACT_HOURS_FR = 'Lundi au samedi, 8h à 18h (heure de Madagascar)';
 export const DEFAULT_CONTACT_HOURS_EN = 'Monday to Saturday, 8 AM to 6 PM (Madagascar time)';
 export const DEFAULT_WHATSAPP_MESSAGE_FR = 'Bonjour, j’ai une question avant de commander sur M.S.V-NOSY BE.';

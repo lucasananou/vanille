@@ -17,6 +17,7 @@ import type { Product } from '@/lib/types';
 import { trackBeginCheckout } from '@/lib/analytics';
 import { useLocale } from '@/lib/locale-context';
 import { withLocale } from '@/lib/i18n';
+import { getWhatsappHref } from '@/lib/site';
 
 // Initialize Stripe outside of component
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
@@ -69,10 +70,7 @@ const SHIPPING_FALLBACKS: Record<string, ShippingRate[]> = {
     ],
 };
 
-const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, '') || '';
-const whatsappHref = whatsappNumber
-    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Bonjour, j’ai besoin d’aide pour finaliser ma commande M.S.V-NOSY BE.')}`
-    : null;
+const whatsappHref = getWhatsappHref('fr');
 
 type AddressSuggestion = {
     properties: {
@@ -747,3 +745,4 @@ export default function CheckoutPage() {
         </div>
     );
 }
+
