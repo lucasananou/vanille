@@ -220,40 +220,50 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                             {isAdding ? (locale === 'en' ? 'Adding...' : 'Ajout en cours...') : isOutOfStock ? (locale === 'en' ? 'Unavailable' : 'Indisponible') : (locale === 'en' ? 'Add to cart' : 'Ajouter au panier')}
                         </button>
 
-                        <p className="text-[10px] text-center text-zinc-500 font-medium flex items-center justify-center gap-2">
-                            <span className="opacity-80">{locale === 'en' ? '💳 Split payment available from €80' : '💳 Paiement en 3x sans frais dès 80€'}</span>
-                        </p>
-
-                        <div className="flex items-center justify-center gap-2 text-[11px] text-zinc-600 font-medium pt-1 border-b border-zinc-100 pb-4 mb-2">
-                            <svg className="w-3.5 h-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>{locale === 'en' ? <>In stock <span className="text-zinc-900">ships within 24h</span></> : <>En stock — <span className="text-zinc-900">expédié sous 24h</span></>}</span>
+                        <div className="rounded-md border border-amber-100 bg-amber-50 p-4">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">
+                                {locale === 'en' ? 'Before you order' : 'Avant votre achat'}
+                            </p>
+                            <div className="mt-3 grid gap-2 text-[11px] font-semibold text-zinc-800">
+                                {[
+                                    locale === 'en' ? 'Prepared within 24-48h' : 'Préparation sous 24–48h',
+                                    locale === 'en' ? 'France & international delivery' : 'Livraison France & international',
+                                    locale === 'en' ? 'Tracked order' : 'Suivi de commande',
+                                ].map((item) => (
+                                    <div key={item} className="flex items-center gap-2">
+                                        <svg className="h-3.5 w-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span>{item}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         {/* Mini Trust Badges */}
-                        <div className="grid grid-cols-3 gap-2 py-2">
+                        <div className="grid grid-cols-3 gap-2 border-t border-zinc-100 py-2">
                             {[
-                                { title: locale === 'en' ? '2-4 day delivery' : 'Livraison 2-4j', icon: '🚚' },
-                                { title: locale === 'en' ? '30-day returns' : 'Retours 30j', icon: 'Rw' },
-                                { title: locale === 'en' ? 'Secure payment' : 'Paiement Sûr', icon: '🔒' }
+                                { title: locale === 'en' ? 'Secure payment' : 'Paiement sécurisé', icon: 'payment' },
+                                { title: locale === 'en' ? 'Quality guarantee' : 'Garantie qualité', icon: 'quality' },
+                                { title: locale === 'en' ? 'Nosy-Be origin' : 'Origine Nosy-Be', icon: 'origin' }
                             ].map((badge, idx) => (
                                 <div key={idx} className="flex flex-col items-center text-center">
                                     {/* Using SVGs for cleaner look matching ProductActions */}
                                     <div className="mb-1 text-zinc-900 scale-75 origin-bottom">
                                         {idx === 0 && (
                                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2Zm10-10V7a4 4 0 0 0-8 0v4h8Z" />
                                             </svg>
                                         )}
                                         {idx === 1 && (
                                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016Z" />
                                             </svg>
                                         )}
                                         {idx === 2 && (
                                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                                <circle cx="12" cy="10" r="3" />
                                             </svg>
                                         )}
                                     </div>

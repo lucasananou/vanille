@@ -17,6 +17,7 @@ import { useLocale } from '@/lib/locale-context';
 import { getLocalizedProduct } from '@/lib/localized-content';
 import { withLocale } from '@/lib/i18n';
 import { getContactPhoneDisplay, getContactPhoneHref, getWhatsappHref } from '@/lib/site';
+import { CATALOG } from '@/lib/products-data';
 
 const CheckIcon = () => (
     <svg className="w-4 h-4 text-gold-500 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -146,6 +147,67 @@ function getPackHighlights(product: Product) {
         .slice(0, 3);
 }
 
+function getSelectedOfferLabel(product: Product, currentVariant: ProductVariant | null, locale: 'fr' | 'en') {
+    if (currentVariant) {
+        const optionLabel = Object.values(currentVariant.options || {}).filter(Boolean).join(' · ');
+        return currentVariant.title || optionLabel || (locale === 'en' ? 'Selected format' : 'Format sélectionné');
+    }
+
+    const optionLabel = product.options?.map((option) => option.values[0]).filter(Boolean).join(' · ');
+    return optionLabel || (locale === 'en' ? 'Default product format' : 'Format produit par défaut');
+}
+
+function getFallbackProduct(ref: string, locale: 'fr' | 'en'): Product | null {
+    const normalizedRef = normalizeProductRef(ref);
+    const catalogItem = CATALOG.find((item) => normalizeProductRef(item.id) === normalizedRef || item.id === ref);
+    if (!catalogItem) return null;
+
+    const prices = (catalogItem.variants || []).map((variant) => variant.price).filter((price) => price > 0);
+    const price = prices.length ? Math.min(...prices) : 0;
+    const product: Product = {
+        id: normalizedRef,
+        title: catalogItem.title,
+        description: catalogItem.description || [catalogItem.subtitle, ...catalogItem.bullets].join('\n'),
+        sku: normalizedRef.toUpperCase(),
+        slug: normalizedRef,
+        price,
+        stock: 50,
+        images: catalogItem.images,
+        tags: [catalogItem.grade, catalogItem.size].filter(Boolean),
+        published: true,
+        createdAt: new Date(0).toISOString(),
+        updatedAt: new Date(0).toISOString(),
+        subtitle: catalogItem.subtitle,
+        size: catalogItem.size,
+        grade: catalogItem.grade,
+        packaging_options: catalogItem.packaging,
+        bullets: catalogItem.bullets,
+        price_label: catalogItem.price_label,
+        options: catalogItem.variants?.length ? [{
+            id: `${normalizedRef}-format`,
+            productId: normalizedRef,
+            name: 'Format',
+            values: catalogItem.variants.map((variant) => `${variant.packaging} · ${variant.quantity}`),
+            position: 0,
+        }] : [],
+        variants: (catalogItem.variants || []).map((variant, index) => ({
+            id: `${normalizedRef}-variant-${index}`,
+            productId: normalizedRef,
+            sku: `${normalizedRef}-${index + 1}`,
+            title: `${variant.packaging} · ${variant.quantity}`,
+            price: variant.price,
+            stock: 50,
+            options: { Format: `${variant.packaging} · ${variant.quantity}` },
+            createdAt: new Date(0).toISOString(),
+            updatedAt: new Date(0).toISOString(),
+        })),
+        averageRating: 0,
+        reviewsCount: 0,
+    };
+
+    return getLocalizedProduct(product, locale);
+}
+
 export default function ProductDetailPage() {
     const { locale } = useLocale();
     const whatsappHref = getWhatsappHref(locale);
@@ -193,6 +255,15 @@ export default function ProductDetailPage() {
                 setSelectedOptions(getInitialSelectedOptions(response));
             } catch (err) {
                 console.error('Failed to fetch product:', err);
+                const fallback = getFallbackProduct(id, locale);
+                if (fallback) {
+                    setProduct(fallback);
+                    setSelectedImageIndex(0);
+                    setSelectedOptions(getInitialSelectedOptions(fallback));
+                    setError(null);
+                    return;
+                }
+
                 setError(err instanceof Error ? err.message : locale === 'en' ? 'Product not found' : 'Produit non trouvé');
                 setProduct(null);
             } finally {
@@ -283,6 +354,7 @@ export default function ProductDetailPage() {
     const seoHeading = getSeoHeading(product, productSize);
     const seoDescription = getSeoDescription(product, productSize, productGrade, locale);
     const packHighlights = getPackHighlights(product);
+    const selectedOfferLabel = getSelectedOfferLabel(product, selectedVariant, locale);
     const reviewStats = reviewsData?.stats;
     const topReviews = reviewsData?.reviews?.slice(0, 3) || [];
     const hasReviews = (reviewStats?.totalReviews || 0) > 0;
@@ -404,6 +476,7 @@ export default function ProductDetailPage() {
                                                     {isOnRequest ? (locale === 'en' ? 'On request' : 'Sur demande') : `${(currentPrice / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })}`}
                                                 </p>
                                             </div>
+                                            <p className="mt-2 text-sm font-semibold text-jungle-700">{selectedOfferLabel}</p>
                                         </div>
                                         <div className="rounded-2xl bg-vanilla-50 border border-vanilla-200 p-4">
                                             <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 text-center">{locale === 'en' ? 'Availability' : 'Disponibilité'}</p>
@@ -497,10 +570,28 @@ export default function ProductDetailPage() {
                                         </div>
                                     </div>
 
+                                    <div className="mt-6 rounded-[2rem] border border-gold-200 bg-gold-50 p-5">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-gold-700">
+                                            {locale === 'en' ? 'Before you order' : 'Avant votre achat'}
+                                        </p>
+                                        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                                            {[
+                                                locale === 'en' ? 'Prepared within 24-48h' : 'Préparation sous 24–48h',
+                                                locale === 'en' ? 'France & international delivery' : 'Livraison France & international',
+                                                locale === 'en' ? 'Tracked order' : 'Suivi de commande'
+                                            ].map((item) => (
+                                                <div key={item} className="flex items-start gap-2 text-sm font-semibold text-jungle-900">
+                                                    <CheckIcon />
+                                                    <span>{item}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     <div className="mt-6 grid gap-3 sm:grid-cols-3">
                                         {[
-                                            locale === 'en' ? 'Secure Stripe payment' : 'Paiement sécurisé Stripe',
-                                            locale === 'en' ? 'Tracked shipping in 24 to 72h' : 'Expédition suivie sous 24 à 72h',
+                                            locale === 'en' ? 'Secure Stripe / PayPal payment' : 'Paiement sécurisé Stripe / PayPal',
+                                            locale === 'en' ? 'Quality guarantee' : 'Garantie qualité',
                                             locale === 'en' ? 'Verified Nosy-Be origin' : 'Origine contrôlée Nosy-Be'
                                         ].map((item) => (
                                             <div key={item} className="rounded-2xl border border-vanilla-200 bg-white px-4 py-4 text-center text-xs font-semibold text-jungle-800">
@@ -694,8 +785,26 @@ export default function ProductDetailPage() {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="mt-8 rounded-[2rem] border border-dashed border-vanilla-300 bg-vanilla-50 px-6 py-8 text-sm leading-relaxed text-jungle-800/75">
-                                            {locale === 'en' ? 'Client reviews will appear here as orders are completed and verified.' : 'Les avis clients apparaîtront ici à mesure que les premières commandes seront confirmées et vérifiées.'}
+                                        <div className="mt-8 grid gap-4 md:grid-cols-3">
+                                            {[
+                                                {
+                                                    title: locale === 'en' ? 'Controlled quality' : 'Qualité contrôlée',
+                                                    text: locale === 'en' ? 'Pods are selected for suppleness, aroma and clean presentation before shipping.' : 'Les gousses sont sélectionnées pour leur souplesse, leur parfum et leur présentation avant expédition.'
+                                                },
+                                                {
+                                                    title: locale === 'en' ? 'Tracked orders' : 'Commandes suivies',
+                                                    text: locale === 'en' ? 'Every order is prepared carefully and shipped with tracking information.' : 'Chaque commande est préparée avec soin et expédiée avec les informations de suivi.'
+                                                },
+                                                {
+                                                    title: locale === 'en' ? 'Direct contact' : 'Contact direct',
+                                                    text: locale === 'en' ? 'WhatsApp and email are available for format, grade or delivery questions.' : 'WhatsApp et email restent disponibles pour les questions de format, grade ou livraison.'
+                                                }
+                                            ].map((item) => (
+                                                <article key={item.title} className="rounded-[2rem] border border-vanilla-200 bg-vanilla-50 p-6">
+                                                    <p className="text-sm font-bold text-jungle-950">{item.title}</p>
+                                                    <p className="mt-3 text-sm leading-relaxed text-jungle-800/75">{item.text}</p>
+                                                </article>
+                                            ))}
                                         </div>
                                     )}
                                 </div>

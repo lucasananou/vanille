@@ -15,7 +15,6 @@ export class StorefrontService {
         sortBy?: 'price_asc' | 'price_desc' | 'newest' | 'title';
         search?: string;
     }) {
-        console.log('[DEBUG] getProducts called with:', params);
         try {
             const {
                 skip = 0,
@@ -34,15 +33,11 @@ export class StorefrontService {
 
             // Filter by collection
             if (collectionSlug) {
-                console.log('[DEBUG] Finding collection:', collectionSlug);
                 const collection = await this.prisma.collection.findUnique({
                     where: { slug: collectionSlug },
                 });
                 if (collection) {
-                    console.log('[DEBUG] Collection found:', collection.id);
                     where.collectionId = collection.id;
-                } else {
-                    console.warn('[DEBUG] Collection NOT found:', collectionSlug);
                 }
             }
 
@@ -91,8 +86,6 @@ export class StorefrontService {
                     orderBy.createdAt = 'desc';
                     break;
             }
-
-            console.log('[DEBUG] Executing Prisma Query with where:', JSON.stringify(where));
 
             const [products, total] = await Promise.all([
                 this.prisma.product.findMany({
@@ -148,15 +141,32 @@ export class StorefrontService {
                                 slug: true,
                             },
                         },
+                        reviews: {
+                            where: { status: 'APPROVED' },
+                            select: { rating: true },
+                        },
                     },
                 }),
                 this.prisma.product.count({ where }),
             ]);
 
-            console.log(`[DEBUG] Found ${products.length} products, total: ${total}`);
+            const productsWithStats = products.map((product) => {
+                const reviews = product.reviews || [];
+                const reviewsCount = reviews.length;
+                const averageRating = reviewsCount > 0
+                    ? Math.round((reviews.reduce((sum, review) => sum + review.rating, 0) / reviewsCount) * 10) / 10
+                    : 0;
+                const { reviews: _reviews, ...rest } = product;
+
+                return {
+                    ...rest,
+                    reviewsCount,
+                    averageRating,
+                };
+            });
 
             return {
-                data: products,
+                data: productsWithStats,
                 pagination: {
                     total,
                     page: Math.floor(skip / take) + 1,
@@ -172,7 +182,6 @@ export class StorefrontService {
 
     async getProductBySlug(slug: string) {
         const decodedSlug = decodeURIComponent(slug).trim();
-        console.log(`[DEBUG] StorefrontService: Fetching product by slug: "${decodedSlug}"`);
 
         const product = await this.prisma.product.findFirst({
             where: { slug: decodedSlug, published: true },
@@ -186,6 +195,10 @@ export class StorefrontService {
                         slug: true,
                     },
                 },
+                reviews: {
+                    where: { status: 'APPROVED' },
+                    select: { rating: true },
+                },
             },
         });
 
@@ -193,7 +206,18 @@ export class StorefrontService {
             throw new NotFoundException(`Product not found`);
         }
 
-        return product;
+        const reviews = product.reviews || [];
+        const reviewsCount = reviews.length;
+        const averageRating = reviewsCount > 0
+            ? Math.round((reviews.reduce((sum, review) => sum + review.rating, 0) / reviewsCount) * 10) / 10
+            : 0;
+        const { reviews: _reviews, ...rest } = product;
+
+        return {
+            ...rest,
+            reviewsCount,
+            averageRating,
+        };
     }
 
     async getCollections() {

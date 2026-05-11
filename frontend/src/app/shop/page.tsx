@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { productsApi } from '@/lib/api/products';
 import type { Product } from '@/lib/types';
@@ -12,6 +12,8 @@ import { useLocale } from '@/lib/locale-context';
 import { getLocalizedProduct } from '@/lib/localized-content';
 import { withLocale } from '@/lib/i18n';
 import { getWhatsappHref } from '@/lib/site';
+import { CATALOG } from '@/lib/products-data';
+import { normalizeProductRef } from '@/lib/product-refs';
 
 const SearchIcon = () => (
     <svg className="w-5 h-5 text-vanilla-100/70" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -50,7 +52,14 @@ type ShopProduct = Product & {
     uiSubtitle: string;
     uiPackaging: string[];
     uiPriceLabel: string;
+    uiOfferLines: string[];
+    uiUnitLabel?: string;
+    isRecommended?: boolean;
 };
+
+function formatPriceCents(price: number, locale: 'fr' | 'en') {
+    return (price / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' });
+}
 
 function extractSize(product: Product) {
     const fromDetails = product.size;
@@ -70,6 +79,7 @@ function extractPackaging(product: Product) {
     if (product.options?.length) {
         return product.options.flatMap((option) => option.values).filter(Boolean);
     }
+    if (product.packaging_options?.length) return product.packaging_options;
     return ['Vacuum-sealed'];
 }
 
@@ -94,6 +104,98 @@ function getPriceLabel(product: Product, locale: 'fr' | 'en') {
     return (product.price / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' });
 }
 
+function getVariantLabels(product: Product, locale: 'fr' | 'en') {
+    return (product.variants || []).slice(0, 3).map((variant) => {
+        const optionLabel = Object.values(variant.options || {}).filter(Boolean).join(' · ');
+        const label = variant.title || optionLabel || (locale === 'en' ? 'Selected format' : 'Format sélectionné');
+        const price = variant.price ?? product.price;
+        return `${label} · ${formatPriceCents(price, locale)}`;
+    });
+}
+
+function getUnitLabel(product: Product, locale: 'fr' | 'en') {
+    const podVariant = (product.variants || []).find((variant) => /gousse/i.test(`${variant.title} ${Object.values(variant.options || {}).join(' ')}`));
+    if (!podVariant) return undefined;
+
+    const label = `${podVariant.title} ${Object.values(podVariant.options || {}).join(' ')}`;
+    const match = label.match(/(\d+)\s*gousses?/i);
+    const podCount = match ? Number(match[1]) : 0;
+    const price = podVariant.price ?? product.price;
+    if (!podCount || price <= 0) return undefined;
+
+    return locale === 'en'
+        ? `${formatPriceCents(Math.round(price / podCount), locale)} / pod`
+        : `${formatPriceCents(Math.round(price / podCount), locale)} / gousse`;
+}
+
+function catalogToProducts(locale: 'fr' | 'en'): Product[] {
+    return CATALOG.map((item) => {
+        const slug = normalizeProductRef(item.id);
+        const prices = (item.variants || []).map((variant) => variant.price).filter((price) => price > 0);
+        const price = prices.length ? Math.min(...prices) : 0;
+        const product: Product = {
+            id: slug,
+            title: item.title,
+            description: item.description || [item.subtitle, ...item.bullets].join('\n'),
+            sku: slug.toUpperCase(),
+            slug,
+            price,
+            stock: 50,
+            images: item.images,
+            tags: [item.grade, item.size].filter(Boolean),
+            published: true,
+            createdAt: new Date(0).toISOString(),
+            updatedAt: new Date(0).toISOString(),
+            subtitle: item.subtitle,
+            size: item.size,
+            grade: item.grade,
+            packaging_options: item.packaging,
+            bullets: item.bullets,
+            price_label: item.price_label,
+            options: item.variants?.length ? [{
+                id: `${slug}-format`,
+                productId: slug,
+                name: 'Format',
+                values: item.variants.map((variant) => `${variant.packaging} · ${variant.quantity}`),
+                position: 0,
+            }] : [],
+            variants: (item.variants || []).map((variant, index) => ({
+                id: `${slug}-variant-${index}`,
+                productId: slug,
+                sku: `${slug}-${index + 1}`,
+                title: `${variant.packaging} · ${variant.quantity}`,
+                price: variant.price,
+                stock: 50,
+                options: { Format: `${variant.packaging} · ${variant.quantity}` },
+                createdAt: new Date(0).toISOString(),
+                updatedAt: new Date(0).toISOString(),
+            })),
+            averageRating: 0,
+            reviewsCount: 0,
+        };
+
+        return getLocalizedProduct(product, locale);
+    });
+}
+
+function toShopProduct(rawProduct: Product, locale: 'fr' | 'en', recommendedSlug: string): ShopProduct {
+    const product = getLocalizedProduct(rawProduct, locale);
+    const slug = normalizeProductRef(product.slug || product.id);
+
+    return {
+        ...product,
+        slug,
+        uiGrade: extractGrade(product),
+        uiSize: extractSize(product),
+        uiSubtitle: extractSubtitle(product),
+        uiPackaging: extractPackaging(product),
+        uiPriceLabel: getPriceLabel(product, locale),
+        uiOfferLines: getVariantLabels(product, locale),
+        uiUnitLabel: getUnitLabel(product, locale),
+        isRecommended: slug === recommendedSlug,
+    };
+}
+
 function getSeoCategory(product: ShopProduct, locale: 'fr' | 'en') {
     if (/poivre/i.test(product.title)) {
         return locale === 'en' ? 'Madagascar wild pepper' : 'Poivre sauvage de Madagascar';
@@ -113,6 +215,7 @@ export default function ShopPage() {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [notice, setNotice] = useState<string | null>(null);
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -120,34 +223,42 @@ export default function ShopPage() {
         setSearch(params.get('search') || '');
     }, []);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const response = await productsApi.getProducts({ take: 100 });
-                const normalized = (response.data || []).map((rawProduct) => {
-                    const product = getLocalizedProduct(rawProduct, locale);
-                    return {
-                    ...product,
-                    uiGrade: extractGrade(product),
-                    uiSize: extractSize(product),
-                    uiSubtitle: extractSubtitle(product),
-                    uiPackaging: extractPackaging(product),
-                    uiPriceLabel: getPriceLabel(product, locale),
-                    };
-                });
-                setProducts(normalized);
-            } catch (err) {
-                console.error('Failed to fetch shop products:', err);
-                setError(err instanceof Error ? err.message : locale === 'en' ? 'Unable to load the shop.' : 'Impossible de charger la boutique.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const loadProducts = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+        setNotice(null);
 
-        fetchProducts();
+        const fallbackProducts = catalogToProducts(locale);
+        const recommendedSlug = normalizeProductRef(fallbackProducts.find((product) => product.slug === 'pack-decouverte')?.slug || fallbackProducts[0]?.slug);
+
+        try {
+            const response = await productsApi.getProducts({ take: 100 });
+            const apiProducts = response.data || [];
+
+            if (apiProducts.length === 0) {
+                setProducts(fallbackProducts.map((product) => toShopProduct(product, locale, recommendedSlug)));
+                setNotice(locale === 'en'
+                    ? 'The live catalogue is empty right now, so the MSV Nosy-Be reference selection remains available.'
+                    : 'Le catalogue publié est vide pour le moment, la sélection de référence MSV Nosy-Be reste affichée.');
+                return;
+            }
+
+            setProducts(apiProducts.map((product) => toShopProduct(product, locale, recommendedSlug)));
+        } catch (err) {
+            console.error('Failed to fetch shop products:', err);
+            setProducts(fallbackProducts.map((product) => toShopProduct(product, locale, recommendedSlug)));
+            setError(err instanceof Error ? err.message : locale === 'en' ? 'Unable to load the live shop.' : 'Impossible de charger la boutique en direct.');
+            setNotice(locale === 'en'
+                ? 'We are showing the reference catalogue so visitors can keep browsing.'
+                : 'Le catalogue de référence reste affiché pour permettre la navigation.');
+        } finally {
+            setIsLoading(false);
+        }
     }, [locale]);
+
+    useEffect(() => {
+        loadProducts();
+    }, [loadProducts]);
 
     const allGrades = useMemo(() => Array.from(new Set(products.map((p) => p.uiGrade))), [products]);
     const allSizes = useMemo(() => Array.from(new Set(products.map((p) => p.uiSize))), [products]);
@@ -181,6 +292,8 @@ export default function ShopPage() {
         setSearch('');
         setSortBy('featured');
     };
+
+    const hasActiveFilters = search.trim() || selectedGrades.length > 0 || selectedSizes.length > 0 || selectedPack.length > 0;
 
     return (
         <div className="flex flex-col min-h-screen bg-jungle-900 text-vanilla-50 font-sans antialiased">
@@ -237,7 +350,7 @@ export default function ShopPage() {
                                         </div>
                                         <div className="sm:w-24 text-center sm:text-left">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-vanilla-100/40 ml-1">{locale === 'en' ? 'Results' : 'Résultats'}</label>
-                                            <p className="mt-1 text-2xl font-display italic text-vanilla-50">{filteredProducts.length}</p>
+                                            <p className="mt-1 text-2xl font-display italic text-vanilla-50">{isLoading ? '...' : filteredProducts.length}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -376,6 +489,22 @@ export default function ShopPage() {
                                     </button>
                                 </div>
 
+                                {(notice || error) && !isLoading ? (
+                                    <div className={`mb-6 rounded-2xl border px-5 py-4 text-sm ${error ? 'border-gold-200 bg-gold-50 text-jungle-900' : 'border-vanilla-200 bg-white text-jungle-800'}`}>
+                                        <p className="font-semibold">{notice || error}</p>
+                                        {error ? (
+                                            <div className="mt-3 flex flex-wrap gap-3">
+                                                <button onClick={loadProducts} className="rounded-full bg-jungle-900 px-4 py-2 text-xs font-bold uppercase tracking-widest text-vanilla-50">
+                                                    {locale === 'en' ? 'Retry' : 'Réessayer'}
+                                                </button>
+                                                <button onClick={resetFilters} className="rounded-full border border-jungle-900/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-jungle-800">
+                                                    {locale === 'en' ? 'Reset filters' : 'Réinitialiser les filtres'}
+                                                </button>
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                ) : null}
+
                                 {isLoading ? (
                                     <div className="py-20 text-center">
                                         <div className="inline-flex w-16 h-16 rounded-full bg-vanilla-100 items-center justify-center mb-6 animate-pulse">
@@ -383,18 +512,13 @@ export default function ShopPage() {
                                         </div>
                                         <p className="text-jungle-700/60">{locale === 'en' ? 'Loading the shop…' : 'Chargement de la boutique…'}</p>
                                     </div>
-                                ) : error ? (
-                                    <div className="py-20 text-center">
-                                        <h3 className="font-display text-2xl">{locale === 'en' ? 'Loading error' : 'Erreur de chargement'}</h3>
-                                        <p className="text-jungle-700/60 mt-2">{error}</p>
-                                    </div>
                                 ) : filteredProducts.length === 0 ? (
                                     <div className="py-20 text-center">
                                         <div className="inline-flex w-16 h-16 rounded-full bg-vanilla-100 items-center justify-center mb-6">
                                             <SearchIcon />
                                         </div>
-                                        <h3 className="font-display text-2xl">{locale === 'en' ? 'No results' : 'Aucun résultat'}</h3>
-                                        <p className="text-jungle-700/60 mt-2">{locale === 'en' ? 'Try removing some filters or changing your search.' : 'Essayez de retirer certains filtres ou changez votre recherche.'}</p>
+                                        <h3 className="font-display text-2xl">{hasActiveFilters ? (locale === 'en' ? 'No matching product' : 'Aucun produit correspondant') : (locale === 'en' ? 'No published product' : 'Aucun produit publié')}</h3>
+                                        <p className="text-jungle-700/60 mt-2">{hasActiveFilters ? (locale === 'en' ? 'Try removing some filters or changing your search.' : 'Essayez de retirer certains filtres ou changez votre recherche.') : (locale === 'en' ? 'The catalogue is temporarily unavailable.' : 'Le catalogue est temporairement indisponible.')}</p>
                                         <button onClick={resetFilters} className="mt-6 text-sm font-bold uppercase tracking-widest text-gold-600 hover:underline">{locale === 'en' ? 'Reset all' : 'Réinitialiser tout'}</button>
                                     </div>
                                 ) : (
@@ -419,6 +543,13 @@ export default function ShopPage() {
                                                             {p.uiGrade}
                                                         </span>
                                                     </div>
+                                                    {p.isRecommended ? (
+                                                        <div className="absolute bottom-4 left-4">
+                                                            <span className="bg-gold-500 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-jungle-900 shadow-sm">
+                                                                {locale === 'en' ? 'Recommended pack' : 'Pack recommandé'}
+                                                            </span>
+                                                        </div>
+                                                    ) : null}
                                                 </div>
 
                                                 <div className="p-5">
@@ -427,6 +558,12 @@ export default function ShopPage() {
                                                         <span className="text-gold-500"><ArrowRightIcon /></span>
                                                     </div>
                                                     <p className="text-sm text-jungle-700/70 line-clamp-1 mb-4">{p.uiSubtitle}</p>
+                                                    {typeof p.averageRating === 'number' && typeof p.reviewsCount === 'number' && p.reviewsCount > 0 ? (
+                                                        <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-gold-200 bg-gold-50 px-3 py-1 text-[11px] font-bold text-jungle-900">
+                                                            <svg className="h-3.5 w-3.5 text-gold-600" viewBox="0 0 24 24" fill="currentColor"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+                                                            {p.averageRating.toFixed(1)}/5 · {p.reviewsCount} {locale === 'en' ? 'reviews' : 'avis'}
+                                                        </div>
+                                                    ) : null}
                                                     <div className="mb-4 flex flex-wrap gap-2">
                                                         <span className="rounded-full bg-vanilla-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-jungle-700">
                                                             {p.uiSize}
@@ -435,9 +572,19 @@ export default function ShopPage() {
                                                             {p.uiPackaging.slice(0, 2).join(' / ')}
                                                         </span>
                                                     </div>
+                                                    {p.uiOfferLines.length > 0 ? (
+                                                        <div className="mb-4 space-y-2 rounded-2xl border border-vanilla-200 bg-vanilla-50 p-3">
+                                                            {p.uiOfferLines.map((line) => (
+                                                                <p key={line} className="text-xs font-semibold text-jungle-800">{line}</p>
+                                                            ))}
+                                                        </div>
+                                                    ) : null}
 
                                                     <div className="flex items-center justify-between pt-4 border-t border-vanilla-100">
-                                                        <p className="font-display text-xl text-jungle-950">{p.uiPriceLabel}</p>
+                                                        <div>
+                                                            <p className="font-display text-xl text-jungle-950">{p.uiPriceLabel}</p>
+                                                            {p.uiUnitLabel ? <p className="mt-1 text-[11px] font-semibold text-jungle-500">{p.uiUnitLabel}</p> : null}
+                                                        </div>
                                                         <span className="text-[10px] font-bold uppercase tracking-widest text-gold-600 group-hover:translate-x-1 transition-transform">{locale === 'en' ? 'Details' : 'Détails'}</span>
                                                     </div>
                                                 </div>

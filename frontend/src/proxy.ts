@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { LOCALE_COOKIE_NAME, delocalizeVisiblePath, normalizeLocale, stripLocalePrefix, withLocale } from '@/lib/i18n';
+import { LOCALE_COOKIE_NAME, delocalizeVisiblePath, normalizeLocale, withLocale } from '@/lib/i18n';
 
 export function proxy(request: NextRequest) {
     const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
@@ -27,6 +27,11 @@ export function proxy(request: NextRequest) {
     }
 
     const localeMatch = pathname.match(/^\/(fr|en)(?=\/|$)/);
+    const internalLocale = request.headers.get('x-locale');
+
+    if (!localeMatch && internalLocale) {
+        return NextResponse.next();
+    }
 
     if (!localeMatch) {
         const redirectUrl = new URL(`${withLocale(pathname, 'fr')}${search}`, request.url);
