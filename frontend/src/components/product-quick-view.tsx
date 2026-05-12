@@ -105,12 +105,12 @@ export default function ProductQuickView({ product, isOpen, onClose }: ProductQu
                 <div className="w-full md:w-1/2 bg-zinc-100 relative h-full flex flex-col p-4">
                     {product.images && product.images.length > 0 ? (
                         <>
-                            <div className="relative aspect-[4/5] bg-zinc-50 rounded-md overflow-hidden flex-grow mb-4">
+                            <div className="relative mb-4 aspect-[16/11] overflow-hidden rounded-md bg-zinc-50 md:aspect-[4/5]">
                                 <Image
                                     src={getImageUrl(product.images[selectedImage])}
                                     alt={product.title}
                                     fill
-                                    className="object-cover object-center"
+                                    className="object-contain object-center p-3 md:object-cover md:p-0"
                                     sizes="(max-width: 1024px) 100vw, 50vw"
                                 />
                             </div>

@@ -7,7 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class PaymentsService {
-    private stripe: Stripe | null = null;
+    private stripe: ReturnType<typeof Stripe> | null = null;
     private stripeSecretKey: string | null = null;
     private paypalClientId: string | null = null;
     private paypalClientSecret: string | null = null;
@@ -25,7 +25,7 @@ export class PaymentsService {
         this.paypalEnvironment = this.configService.get<string>('PAYPAL_ENV', 'sandbox');
     }
 
-    private getStripe(): Stripe {
+    private getStripe(): ReturnType<typeof Stripe> {
         if (!this.stripeSecretKey) {
             throw new ServiceUnavailableException(
                 'Stripe is not configured: missing STRIPE_SECRET_KEY environment variable.',
@@ -34,7 +34,7 @@ export class PaymentsService {
 
         if (!this.stripe) {
             this.stripe = new Stripe(this.stripeSecretKey, {
-                apiVersion: '2025-12-15.clover' as any,
+                apiVersion: '2026-04-22.dahlia',
                 typescript: true,
             });
         }

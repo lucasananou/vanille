@@ -28,15 +28,10 @@ export function LocaleProvider({
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
-    const fromStorage = normalizeLocale(window.localStorage.getItem(LOCALE_COOKIE_NAME));
-    if (fromStorage !== locale) {
-      setLocaleState(fromStorage);
-      document.documentElement.lang = fromStorage;
-      return;
-    }
-
-    document.documentElement.lang = locale;
-  }, []);
+    // The URL / server-selected locale is authoritative on first render.
+    // Persist it so mobile reloads and cross-page navigations stay aligned.
+    persistLocale(initialLocale);
+  }, [initialLocale]);
 
   const setLocale = (nextLocale: Locale) => {
     const normalized = normalizeLocale(nextLocale);

@@ -397,11 +397,11 @@ export default function ProductDetailPage() {
                         <div className="mt-8 grid lg:grid-cols-12 gap-10 items-start">
                             <div className="lg:col-span-7">
                                 <div className="rounded-[2.5rem] border border-vanilla-200 bg-white overflow-hidden">
-                                    <div className="aspect-[4/3] relative bg-vanilla-100/30 flex items-center justify-center">
+                                    <div className="relative flex aspect-[16/11] items-center justify-center bg-vanilla-100/30 sm:aspect-[4/3]">
                                         <Image
                                             src={getImageUrl(product.images[selectedImageIndex] || product.images[0])}
                                             alt={locale === 'en' ? `${seoHeading} - image ${selectedImageIndex + 1}` : `${seoHeading} - visuel ${selectedImageIndex + 1}`}
-                                            className="absolute inset-0 h-full w-full object-contain"
+                                            className="absolute inset-0 h-full w-full object-contain p-4 sm:p-0"
                                             fill
                                             priority
                                             sizes="(max-width: 1024px) 100vw, 58vw"

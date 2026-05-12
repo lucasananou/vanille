@@ -15,12 +15,13 @@ import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @ApiTags('Admin - Orders')
 @Controller('admin/orders')
-// @UseGuards(JwtAuthGuard, RolesGuard)
-// @Roles('ADMIN' as any, 'STAFF' as any)
-// @ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.ADMIN, Role.STAFF)
+@ApiBearerAuth()
 export class AdminOrdersController {
     constructor(private readonly ordersService: OrdersService) { }
 

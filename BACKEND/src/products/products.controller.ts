@@ -22,8 +22,8 @@ import { Role } from '@prisma/client';
 
 @ApiTags('Admin - Products')
 @Controller('admin/products')
-// @UseGuards(JwtAuthGuard, RolesGuard)
-// @ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth()
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) { }
 

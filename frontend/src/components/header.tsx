@@ -55,7 +55,7 @@ export default function Header() {
                 </nav>
 
                 <div className="flex items-center gap-2">
-                    <div className="hidden sm:block">
+                    <div className="block">
                         <LocaleSwitcher />
                     </div>
                     <Link href={withLocale('/shop', locale)} className="hidden sm:inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">

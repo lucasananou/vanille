@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 
 import { AppController } from './app.controller';
@@ -31,6 +33,12 @@ import { PaymentsModule } from './payments/payments.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60_000,
+        limit: 120,
+      },
+    ]),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'public'),
       serveRoot: '/public',
@@ -57,6 +65,12 @@ import { PaymentsModule } from './payments/payments.module';
     PaymentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule { }

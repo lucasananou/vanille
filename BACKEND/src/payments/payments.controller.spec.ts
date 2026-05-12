@@ -1,12 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PaymentsController } from './payments.controller';
+import { PaymentsService } from './payments.service';
 
 describe('PaymentsController', () => {
   let controller: PaymentsController;
+  const paymentsServiceMock = {
+    createPaymentIntent: jest.fn(),
+    createPayPalOrder: jest.fn(),
+    finalizePayPalOrder: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PaymentsController],
+      providers: [
+        {
+          provide: PaymentsService,
+          useValue: paymentsServiceMock,
+        },
+      ],
     }).compile();
 
     controller = module.get<PaymentsController>(PaymentsController);

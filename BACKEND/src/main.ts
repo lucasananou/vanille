@@ -2,11 +2,20 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  const isProduction = configService.get<string>('NODE_ENV') === 'production';
+
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      contentSecurityPolicy: false,
+    }),
+  );
 
   // Enable CORS
   const corsOrigins = configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
@@ -50,8 +59,8 @@ async function bootstrap() {
 
     try {
       const { hostname } = new URL(origin);
-      // Allow Vercel preview/prod domains by default
-      if (hostname.endsWith('.vercel.app')) {
+      // Keep preview deployments usable outside production, but lock prod to configured domains.
+      if (!isProduction && hostname.endsWith('.vercel.app')) {
         return true;
       }
     } catch {
@@ -85,27 +94,27 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger documentation
-  const config = new DocumentBuilder()
-    .setTitle('E-Commerce API')
-    .setDescription('Professional e-commerce backend API')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .addTag('Authentication')
-    .addTag('Admin - Products')
-    .addTag('Storefront')
-    .addTag('Cart')
-    .addTag('Orders')
-    .addTag('Admin - Analytics')
-    .build();
+  if (!isProduction || configService.get<string>('ENABLE_SWAGGER') === 'true') {
+    const config = new DocumentBuilder()
+      .setTitle('E-Commerce API')
+      .setDescription('Professional e-commerce backend API')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .addTag('Authentication')
+      .addTag('Admin - Products')
+      .addTag('Storefront')
+      .addTag('Cart')
+      .addTag('Orders')
+      .addTag('Admin - Analytics')
+      .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document);
+  }
 
   const port = configService.get<number>('PORT', 3001);
   await app.listen(port);
 
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(`📚 Swagger docs available at: http://localhost:${port}/docs`);
+  console.log(`Application is running on port ${port}`);
 }
 bootstrap();

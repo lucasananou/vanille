@@ -10,7 +10,7 @@ import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class OrdersService {
-    private stripe: Stripe | null = null;
+    private stripe: ReturnType<typeof Stripe> | null = null;
     private stripeSecretKey: string | null = null;
     private readonly shippingLaunchDiscountRate = 0.5;
 
@@ -24,7 +24,7 @@ export class OrdersService {
         this.stripeSecretKey = this.configService.get<string>('STRIPE_SECRET_KEY') || null;
     }
 
-    private getStripe(): Stripe {
+    private getStripe(): ReturnType<typeof Stripe> {
         if (!this.stripeSecretKey) {
             throw new ServiceUnavailableException(
                 'Stripe is not configured: missing STRIPE_SECRET_KEY environment variable.',
@@ -32,7 +32,7 @@ export class OrdersService {
         }
         if (!this.stripe) {
             this.stripe = new Stripe(this.stripeSecretKey, {
-                apiVersion: '2025-12-15.clover',
+                apiVersion: '2026-04-22.dahlia',
             });
         }
         return this.stripe;
