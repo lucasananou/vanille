@@ -239,7 +239,10 @@ export const VANILLE_PRODUCTS: VanilleProductSeed[] = [
     sku: 'POIVRE-SAUVAGE',
     price: 1000,
     stock: 60,
-    images: ['/photos-produit-vanille/poivre-sauvage-madagascar.jpg'],
+    images: [
+      '/photos-produit-vanille/poivre-sauvage-madagascar-100g-fr.png',
+      '/photos-produit-vanille/poivre-sauvage-madagascar-100g-en.png',
+    ],
     tags: ['poivre', 'sauvage', 'madagascar'],
     collectionSlug: 'poivres-de-madagascar',
     collectionName: 'Poivres de Madagascar',

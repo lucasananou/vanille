@@ -17,13 +17,31 @@ import { useLocale } from '@/lib/locale-context';
 import { getLocalizedProduct } from '@/lib/localized-content';
 import { withLocale } from '@/lib/i18n';
 import { getContactPhoneDisplay, getContactPhoneHref, getWhatsappHref } from '@/lib/site';
-import { CATALOG } from '@/lib/products-data';
+import { CATALOG, PEPPER_IMAGE_EN, PEPPER_IMAGE_FR } from '@/lib/products-data';
 
 const CheckIcon = () => (
     <svg className="w-4 h-4 text-gold-500 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="20 6 9 17 4 12" />
     </svg>
 );
+
+function isWildPepperProduct(product: Pick<Product, 'title' | 'slug' | 'sku' | 'id'>) {
+    return /poivre|pepper/i.test(`${product.title} ${product.slug} ${product.sku} ${product.id}`);
+}
+
+function getDisplayImages(product: Product, locale: 'fr' | 'en') {
+    if (!isWildPepperProduct(product)) return product.images;
+    return locale === 'en'
+        ? [PEPPER_IMAGE_EN, PEPPER_IMAGE_FR]
+        : [PEPPER_IMAGE_FR, PEPPER_IMAGE_EN];
+}
+
+function withDisplayImages(product: Product, locale: 'fr' | 'en'): Product {
+    return {
+        ...product,
+        images: getDisplayImages(product, locale),
+    };
+}
 
 function getVariantOptions(product: Product) {
     return product.options || [];
@@ -205,7 +223,7 @@ function getFallbackProduct(ref: string, locale: 'fr' | 'en'): Product | null {
         reviewsCount: 0,
     };
 
-    return getLocalizedProduct(product, locale);
+    return withDisplayImages(getLocalizedProduct(product, locale), locale);
 }
 
 export default function ProductDetailPage() {
@@ -250,7 +268,8 @@ export default function ProductDetailPage() {
                     response = await productsApi.getProductBySlug(matched.slug);
                 }
 
-                setProduct(getLocalizedProduct(response, locale));
+                const localizedProduct = getLocalizedProduct(response, locale);
+                setProduct(withDisplayImages(localizedProduct, locale));
                 setSelectedImageIndex(0);
                 setSelectedOptions(getInitialSelectedOptions(response));
             } catch (err) {
@@ -355,6 +374,10 @@ export default function ProductDetailPage() {
     const seoDescription = getSeoDescription(product, productSize, productGrade, locale);
     const packHighlights = getPackHighlights(product);
     const selectedOfferLabel = getSelectedOfferLabel(product, selectedVariant, locale);
+    const isWildPepper = isWildPepperProduct(product);
+    const pepperTransportLines = locale === 'en'
+        ? ['Price: 10 € incl. VAT / 100 g', '+ shipping costs', '50% of shipping costs offered for launch']
+        : ['Prix : 10 € TTC / 100 g', '+ frais de transport', '50 % des frais de livraison offerts pour le lancement'];
     const reviewStats = reviewsData?.stats;
     const topReviews = reviewsData?.reviews?.slice(0, 3) || [];
     const hasReviews = (reviewStats?.totalReviews || 0) > 0;
@@ -477,6 +500,13 @@ export default function ProductDetailPage() {
                                                 </p>
                                             </div>
                                             <p className="mt-2 text-sm font-semibold text-jungle-700">{selectedOfferLabel}</p>
+                                            {isWildPepper ? (
+                                                <div className="mt-4 space-y-1 rounded-2xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm font-bold text-jungle-900">
+                                                    {pepperTransportLines.map((line) => (
+                                                        <p key={line}>{line}</p>
+                                                    ))}
+                                                </div>
+                                            ) : null}
                                         </div>
                                         <div className="rounded-2xl bg-vanilla-50 border border-vanilla-200 p-4">
                                             <p className="text-[10px] font-bold uppercase tracking-widest text-jungle-400 text-center">{locale === 'en' ? 'Availability' : 'Disponibilité'}</p>

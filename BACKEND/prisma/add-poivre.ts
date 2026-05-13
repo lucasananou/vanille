@@ -53,7 +53,10 @@ Offrez à votre table la noblesse d’un poivre sauvage de Madagascar, authentiq
             description: description,
             price: 1000, // Default price 10€ for 100g (in cents)
             stock: 50,
-            images: ['/photos-produit-vanille/poivre-sauvage-madagascar.jpg'],
+            images: [
+                '/photos-produit-vanille/poivre-sauvage-madagascar-100g-fr.png',
+                '/photos-produit-vanille/poivre-sauvage-madagascar-100g-en.png',
+            ],
             tags: ['poivre', 'sauvage', 'madagascar', 'epice'],
             published: true,
             collectionId: collection.id,

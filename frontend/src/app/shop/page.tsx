@@ -12,7 +12,7 @@ import { useLocale } from '@/lib/locale-context';
 import { getLocalizedProduct } from '@/lib/localized-content';
 import { withLocale } from '@/lib/i18n';
 import { getWhatsappHref } from '@/lib/site';
-import { CATALOG } from '@/lib/products-data';
+import { CATALOG, PEPPER_IMAGE_EN, PEPPER_IMAGE_FR } from '@/lib/products-data';
 import { normalizeProductRef } from '@/lib/product-refs';
 
 const SearchIcon = () => (
@@ -81,6 +81,17 @@ function extractPackaging(product: Product) {
     }
     if (product.packaging_options?.length) return product.packaging_options;
     return ['Vacuum-sealed'];
+}
+
+function isWildPepperProduct(product: Pick<Product, 'title' | 'slug' | 'sku' | 'id'>) {
+    return /poivre|pepper/i.test(`${product.title} ${product.slug} ${product.sku} ${product.id}`);
+}
+
+function getDisplayImages(product: Product, locale: 'fr' | 'en') {
+    if (!isWildPepperProduct(product)) return product.images;
+    return locale === 'en'
+        ? [PEPPER_IMAGE_EN, PEPPER_IMAGE_FR]
+        : [PEPPER_IMAGE_FR, PEPPER_IMAGE_EN];
 }
 
 function extractSubtitle(product: Product) {
@@ -182,8 +193,11 @@ function toShopProduct(rawProduct: Product, locale: 'fr' | 'en', recommendedSlug
     const product = getLocalizedProduct(rawProduct, locale);
     const slug = normalizeProductRef(product.slug || product.id);
 
+    const displayImages = getDisplayImages(product, locale);
+
     return {
         ...product,
+        images: displayImages,
         slug,
         uiGrade: extractGrade(product),
         uiSize: extractSize(product),
@@ -534,7 +548,7 @@ export default function ShopPage() {
                                                     <Image
                                                         src={getImageUrl(p.images[0])}
                                                         alt={`${getSeoCategory(p, locale)} - ${p.title}`}
-                                                        className="absolute inset-0 h-full w-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                        className={`absolute inset-0 h-full w-full transform transition-transform duration-700 ${isWildPepperProduct(p) ? 'object-contain p-3 group-hover:scale-105' : 'object-cover group-hover:scale-110'}`}
                                                         fill
                                                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                                                     />
@@ -577,6 +591,13 @@ export default function ShopPage() {
                                                             {p.uiOfferLines.map((line) => (
                                                                 <p key={line} className="text-xs font-semibold text-jungle-800">{line}</p>
                                                             ))}
+                                                        </div>
+                                                    ) : null}
+                                                    {isWildPepperProduct(p) ? (
+                                                        <div className="mb-4 rounded-2xl border border-gold-200 bg-gold-50 p-3 text-xs font-bold text-jungle-900">
+                                                            <p>{locale === 'en' ? 'Price: 10 € incl. VAT / 100 g' : 'Prix : 10 € TTC / 100 g'}</p>
+                                                            <p>{locale === 'en' ? '+ shipping costs' : '+ frais de transport'}</p>
+                                                            <p>{locale === 'en' ? '50% shipping discount for launch' : '50 % des frais de livraison offerts pour le lancement'}</p>
                                                         </div>
                                                     ) : null}
 

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { PEPPER_IMAGE_FR } from '@/lib/products-data';
 
 export default function CategoryGrid() {
     const categories = [
@@ -20,7 +21,7 @@ export default function CategoryGrid() {
         {
             title: "Poivre Sauvage",
             href: "/produit/poivre-sauvage",
-            image: "/photos-produit-vanille/poivre-sauvage-madagascar.jpg",
+            image: PEPPER_IMAGE_FR,
             description: "L'or noir de Madagascar"
         }
     ];

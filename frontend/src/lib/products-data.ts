@@ -18,6 +18,10 @@ export interface ProductData {
     images: string[];
 }
 
+export const PEPPER_IMAGE_FR = "/photos-produit-vanille/poivre-sauvage-madagascar-100g-fr.png";
+export const PEPPER_IMAGE_EN = "/photos-produit-vanille/poivre-sauvage-madagascar-100g-en.png";
+export const PEPPER_IMAGES = [PEPPER_IMAGE_FR, PEPPER_IMAGE_EN];
+
 export const CATALOG: ProductData[] = [
     {
         id: "tk-noir-10-13",
@@ -130,6 +134,21 @@ export const CATALOG: ProductData[] = [
         images: ["/photos-produit-vanille/poivre-sauvage-madagascar.jpg"]
     }
 ];
+
+const pepperProduct = CATALOG.find((product) => product.id === "poivre-sauvage");
+if (pepperProduct) {
+    pepperProduct.price_label = "10 EUR TTC / 100 g + frais de transport";
+    pepperProduct.size = "100 g / 1 kg";
+    pepperProduct.packaging = ["Sachet 100 g"];
+    pepperProduct.bullets = [
+        "Prix : 10 EUR TTC / 100 g",
+        "+ frais de transport",
+        "50 % des frais de livraison offerts pour le lancement",
+    ];
+    pepperProduct.images = PEPPER_IMAGES;
+    if (pepperProduct.variants?.[0]) pepperProduct.variants[0].quantity = "100 g";
+    if (pepperProduct.variants?.[1]) pepperProduct.variants[1].quantity = "1 kg";
+}
 
 export function findProduct(id: string) {
     return CATALOG.find(p => p.id === id) || null;
