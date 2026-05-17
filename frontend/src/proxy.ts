@@ -26,6 +26,16 @@ export function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
+    const localizedAdminMatch = pathname.match(/^\/(fr|en)(\/admin(?:\/.*)?|\/admin)$/);
+    if (localizedAdminMatch) {
+        const redirectUrl = new URL(`${localizedAdminMatch[2]}${search}`, request.url);
+        return NextResponse.redirect(redirectUrl);
+    }
+
+    if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+        return NextResponse.next();
+    }
+
     const localeMatch = pathname.match(/^\/(fr|en)(?=\/|$)/);
     const internalLocale = request.headers.get('x-locale');
 

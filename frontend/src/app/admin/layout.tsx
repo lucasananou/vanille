@@ -9,12 +9,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const pathname = usePathname();
     const { isAuthenticated, isLoading, admin, logout } = useAdminAuth();
+    const isLoginPage = pathname === '/admin/login' || pathname === '/fr/admin/login' || pathname === '/en/admin/login';
 
     useEffect(() => {
-        if (!isLoading && !isAuthenticated && pathname !== '/admin/login') {
+        if (!isLoading && !isAuthenticated && !isLoginPage) {
             router.push('/admin/login');
         }
-    }, [isAuthenticated, isLoading, pathname, router]);
+    }, [isAuthenticated, isLoading, isLoginPage, router]);
 
     // Show loading while checking auth
     if (isLoading) {
@@ -26,7 +27,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     }
 
     // Don't show layout on login page
-    if (pathname === '/admin/login') {
+    if (isLoginPage) {
         return <>{children}</>;
     }
 
