@@ -18,6 +18,11 @@ export interface AdminAuthResponse {
     };
 }
 
+export interface ChangeAdminPasswordDto {
+    currentPassword: string;
+    newPassword: string;
+}
+
 export const adminAuthApi = {
     /**
      * Admin login
@@ -31,5 +36,12 @@ export const adminAuthApi = {
      */
     getProfile: async (token: string) => {
         return api.get('/admin/auth/profile', token);
+    },
+
+    /**
+     * Change current admin password
+     */
+    changePassword: async (data: ChangeAdminPasswordDto, token: string) => {
+        return api.patch<{ message: string }>('/admin/auth/password', data, token);
     },
 };

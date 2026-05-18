@@ -1,9 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -67,6 +68,38 @@ export class AuthService {
         }
 
         return admin;
+    }
+
+    async changePassword(adminId: string, changePasswordDto: ChangePasswordDto) {
+        const { currentPassword, newPassword } = changePasswordDto;
+
+        const admin = await this.prisma.admin.findUnique({
+            where: { id: adminId },
+        });
+
+        if (!admin) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        const isCurrentPasswordValid = await bcrypt.compare(currentPassword, admin.password);
+        if (!isCurrentPasswordValid) {
+            throw new UnauthorizedException('Current password is incorrect');
+        }
+
+        const isSamePassword = await bcrypt.compare(newPassword, admin.password);
+        if (isSamePassword) {
+            throw new BadRequestException('New password must be different from the current password');
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await this.prisma.admin.update({
+            where: { id: adminId },
+            data: { password: hashedPassword },
+        });
+
+        return {
+            message: 'Password updated successfully',
+        };
     }
 
     async refreshToken(refreshToken: string) {
