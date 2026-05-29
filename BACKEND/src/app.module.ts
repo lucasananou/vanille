@@ -27,6 +27,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
 import { SegmentsModule } from './segments/segments.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PaymentsModule } from './payments/payments.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { PaymentsModule } from './payments/payments.module';
     SegmentsModule,
     DashboardModule,
     PaymentsModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [

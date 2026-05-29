@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { BLOG_POSTS } from '@/lib/data/blog-posts';
+import { NEWS_ARTICLES } from '@/lib/data/news-articles';
 import { withLocale, type Locale } from '@/lib/i18n';
 import { getApiUrl, getSiteUrl } from '@/lib/site';
 
@@ -17,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/faq',
         '/b2b',
         '/vanille-bourbon-madagascar',
+        '/actualites',
         '/blog',
         '/legal/mentions-legales',
         '/legal/conditions-generales-de-vente',
@@ -86,5 +88,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         })),
     );
 
-    return [...staticPages, ...productUrls, ...collectionUrls, ...blogUrls];
+    const newsUrls = NEWS_ARTICLES.flatMap((article) =>
+        locales.map((locale) => ({
+            url: `${baseUrl}${withLocale(`/actualites/${article.slug}`, locale)}`,
+            lastModified: new Date(article.updatedAt || article.date).toISOString(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.75,
+        })),
+    );
+
+    return [...staticPages, ...productUrls, ...collectionUrls, ...blogUrls, ...newsUrls];
 }

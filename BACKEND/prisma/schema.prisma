@@ -429,3 +429,44 @@ model PaymentIntent {
 
   @@map("payment_intents")
 }
+
+model NewsArticle {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  category       String   @default("official")
+  coverImage     String?
+  documentUrl    String?
+  sourceName     String
+  published      Boolean  @default(false)
+  publishedAt    DateTime @default(now())
+
+  titleFr        String
+  titleEn        String
+  excerptFr      String
+  excerptEn      String
+  categoryLabelFr String?
+  categoryLabelEn String?
+  readTimeFr     String?
+  readTimeEn     String?
+  heroEyebrowFr  String?
+  heroEyebrowEn  String?
+  sourceLabelFr  String?
+  sourceLabelEn  String?
+  pdfLabelFr     String?
+  pdfLabelEn     String?
+  keyPointsTitleFr String?
+  keyPointsTitleEn String?
+  keyPointsFr    String[]
+  keyPointsEn    String[]
+  paragraphsFr   String[]
+  paragraphsEn   String[]
+  ctaTitleFr     String?
+  ctaTitleEn     String?
+  ctaTextFr      String?
+  ctaTextEn      String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("news_articles")
+}

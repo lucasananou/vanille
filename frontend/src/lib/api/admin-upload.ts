@@ -41,5 +41,25 @@ export const adminUploadApi = {
         }
 
         return response.json();
-    }
+    },
+
+    uploadDocument: async (file: File, token: string) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch(`${API_URL}/admin/upload/document`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.message || 'Document upload failed');
+        }
+
+        return response.json() as Promise<{ url: string; publicId: string }>;
+    },
 };

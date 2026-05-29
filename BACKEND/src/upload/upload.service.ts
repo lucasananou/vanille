@@ -84,6 +84,27 @@ export class UploadService {
         return Promise.all(uploadPromises);
     }
 
+    async uploadDocument(file: Express.Multer.File, folder = 'documents'): Promise<{ url: string; publicId: string }> {
+        if (!file) {
+            throw new BadRequestException('No file provided');
+        }
+
+        if (file.mimetype !== 'application/pdf') {
+            throw new BadRequestException('Invalid file type. Only PDF files are allowed.');
+        }
+
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            throw new BadRequestException('File size exceeds 10MB limit');
+        }
+
+        const upload = await this.uploadRawToCloudinary(file.buffer, folder, 'pdf');
+        return {
+            url: upload.secure_url,
+            publicId: upload.public_id,
+        };
+    }
+
     async deleteImage(publicId: string): Promise<void> {
         try {
             await cloudinary.uploader.destroy(publicId);
@@ -152,6 +173,29 @@ export class UploadService {
 
             const readable = Readable.from(buffer);
             readable.pipe(uploadStream);
+        });
+    }
+
+    private async uploadRawToCloudinary(
+        buffer: Buffer,
+        folder: string,
+        suffix: string,
+    ): Promise<UploadApiResponse> {
+        return new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: `ecommerce/${folder}`,
+                    resource_type: 'raw',
+                    public_id: `${Date.now()}-${suffix}`,
+                },
+                (error, result) => {
+                    if (error) return reject(error);
+                    if (!result) return reject(new Error('Upload failed - no result'));
+                    resolve(result);
+                },
+            );
+
+            Readable.from(buffer).pipe(uploadStream);
         });
     }
 }

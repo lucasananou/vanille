@@ -3,6 +3,8 @@ export type Locale = 'fr' | 'en';
 export const LOCALE_COOKIE_NAME = 'site_locale';
 
 const EN_ROUTE_MAP: Array<[string, string]> = [
+  ['/actualites/', '/news/'],
+  ['/actualites', '/news'],
   ['/produit/', '/product/'],
   ['/produit', '/product'],
   ['/b2b', '/wholesale'],
@@ -19,6 +21,8 @@ const EN_ROUTE_MAP: Array<[string, string]> = [
 ];
 
 const FR_ROUTE_MAP: Array<[string, string]> = [
+  ['/news/', '/actualites/'],
+  ['/news', '/actualites'],
   ['/product/', '/produit/'],
   ['/product', '/produit'],
   ['/wholesale', '/b2b'],
@@ -102,6 +106,7 @@ export const commonCopy = {
     nav: {
       home: 'Accueil',
       shop: 'Boutique',
+      news: 'Actualites',
       blog: 'Blog',
       about: 'À propos',
       professionals: 'Professionnels',
@@ -158,6 +163,7 @@ export const commonCopy = {
     nav: {
       home: 'Home',
       shop: 'Shop',
+      news: 'News',
       blog: 'Journal',
       about: 'About',
       professionals: 'Wholesale',

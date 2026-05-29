@@ -5,7 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { CATALOG } from '@/lib/products-data';
-import { BLOG_POSTS } from '@/lib/data/blog-posts';
+import { NEWS_ARTICLES, getLocalizedNewsArticle } from '@/lib/data/news-articles';
 import { normalizeProductRef } from '@/lib/product-refs';
 import { useLocale } from '@/lib/locale-context';
 import { withLocale } from '@/lib/i18n';
@@ -117,6 +117,7 @@ export default function HomePage() {
   const { locale } = useLocale();
   const featuredProduct = CATALOG[1];
   const whatsappHref = getWhatsappHref(locale);
+  const newsArticles = NEWS_ARTICLES.map((article) => getLocalizedNewsArticle(article, locale));
 
   return (
     <div className="bg-jungle-900 text-vanilla-50 font-sans antialiased">
@@ -581,36 +582,44 @@ export default function HomePage() {
         </section>
 
         {/* ACTUALITÉS */}
-        {BLOG_POSTS.length > 0 && (
+        {newsArticles.length > 0 && (
           <section id="actualites" className="bg-vanilla-50 text-cacao-900 overflow-hidden">
             <div className="mx-auto max-w-7xl px-4 py-16 lg:py-24">
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-gold-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-gold-700 border border-gold-500/20 mb-4">
                     <SparklesIcon />
-                    {locale === 'en' ? 'News' : 'Actualités'}
+                    {locale === 'en' ? 'Industry news' : 'Actualites filiere'}
                   </div>
-                  <h2 className="font-display text-3xl sm:text-4xl">{locale === 'en' ? 'Latest news from the plantation' : 'Dernières nouvelles de la plantation'}</h2>
+                  <h2 className="font-display text-3xl sm:text-4xl">{locale === 'en' ? 'Madagascar vanilla market updates' : 'Actualites de la vanille de Madagascar'}</h2>
+                  <p className="mt-3 max-w-2xl text-sm leading-6 text-cacao-600">
+                    {locale === 'en'
+                      ? 'Official orders, export information and global market trends for customers and professional partners.'
+                      : 'Arretes officiels, informations export et tendances marche pour informer clients et partenaires professionnels.'}
+                  </p>
                 </div>
-                <Link href={withLocale('/blog', locale)} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
-                  {locale === 'en' ? 'All news' : 'Toute l&apos;actualité'}
+                <Link href={withLocale('/actualites', locale)} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-jungle-800 hover:text-gold-600 transition-colors">
+                  {locale === 'en' ? 'All news' : 'Toutes les actualites'}
                   <ArrowRightIcon />
                 </Link>
               </div>
 
               <div className="grid md:grid-cols-3 gap-8">
-                {BLOG_POSTS.slice(0, 3).map((news, i) => (
-                  <Link key={i} href={withLocale(`/blog/${news.slug}`, locale)} className="group cursor-pointer block">
+                {newsArticles.slice(0, 3).map((news) => (
+                  <Link key={news.slug} href={withLocale(`/actualites/${news.slug}`, locale)} className="group cursor-pointer block">
                     <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 border border-vanilla-200">
-                      <img src={news.coverImage} alt={news.title} className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={news.coverImage} alt={news.title} fill className="object-cover transform group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 768px) 100vw, 33vw" />
                       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-jungle-900 uppercase">
-                        {news.date}
+                        {news.categoryLabel}
                       </div>
                     </div>
                     <h3 className="font-display text-xl mb-3 group-hover:text-gold-600 transition-colors">{news.title}</h3>
                     <p className="text-sm text-cacao-600 line-clamp-2 mb-4">{news.excerpt}</p>
+                    <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.18em] text-cacao-500">
+                      {news.sourceName}
+                    </p>
                     <span className="text-xs font-bold uppercase tracking-tighter text-gold-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                      {locale === 'en' ? 'Read more' : 'Lire la suite'} <ArrowRightIcon />
+                      {locale === 'en' ? 'Read update' : 'Lire l actualite'} <ArrowRightIcon />
                     </span>
                   </Link>
                 ))}

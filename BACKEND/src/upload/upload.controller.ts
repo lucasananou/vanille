@@ -62,6 +62,17 @@ export class UploadController {
         return this.uploadService.uploadMultipleImages(files);
     }
 
+    @Post('document')
+    @ApiOperation({ summary: 'Upload single PDF document' })
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+    async uploadDocument(@UploadedFile() file: Express.Multer.File) {
+        if (!file) {
+            throw new BadRequestException('No file uploaded');
+        }
+        return this.uploadService.uploadDocument(file);
+    }
+
     @Delete('image/:publicId')
     @ApiOperation({ summary: 'Delete image' })
     async deleteImage(@Param('publicId') publicId: string) {

@@ -45,9 +45,10 @@ export default function Header() {
                     </div>
                 </Link>
 
-                <nav className="hidden md:flex items-center gap-8">
+                <nav className="hidden md:flex items-center gap-5 lg:gap-8">
                     <Link href={withLocale('/', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.home}</Link>
                     <Link href={withLocale('/shop', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.shop}</Link>
+                    <Link href={withLocale('/actualites', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.news}</Link>
                     <Link href={withLocale('/blog', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.blog}</Link>
                     <Link href={withLocale('/about', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.about}</Link>
                     <Link href={withLocale('/b2b', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.professionals}</Link>
@@ -75,6 +76,13 @@ export default function Header() {
                     </button>
                 </div>
             </div>
+            <nav className="mx-auto mt-2 flex max-w-7xl gap-4 overflow-x-auto px-4 pb-1 text-xs font-bold uppercase tracking-[0.18em] text-vanilla-100/78 md:hidden">
+                <Link href={withLocale('/shop', locale)} className="shrink-0 py-2 hover:text-gold-500">{copy.nav.shop}</Link>
+                <Link href={withLocale('/actualites', locale)} className="shrink-0 py-2 hover:text-gold-500">{copy.nav.news}</Link>
+                <Link href={withLocale('/blog', locale)} className="shrink-0 py-2 hover:text-gold-500">{copy.nav.blog}</Link>
+                <Link href={withLocale('/b2b', locale)} className="shrink-0 py-2 hover:text-gold-500">{copy.nav.professionals}</Link>
+                <Link href={withLocale('/contact', locale)} className="shrink-0 py-2 hover:text-gold-500">{copy.nav.contact}</Link>
+            </nav>
         </header>
     );
 }

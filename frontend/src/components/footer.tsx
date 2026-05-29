@@ -34,6 +34,7 @@ export default function Footer() {
                         <p className="text-sm font-semibold">{copy.footer.links}</p>
                         <ul className="mt-3 space-y-2 text-sm text-vanilla-100/70">
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/shop', locale)}>{copy.nav.shop}</Link></li>
+                            <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/actualites', locale)}>{copy.nav.news}</Link></li>
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/blog', locale)}>{copy.nav.blog}</Link></li>
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/about', locale)}>{copy.nav.about}</Link></li>
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/contact', locale)}>{copy.nav.contact}</Link></li>
