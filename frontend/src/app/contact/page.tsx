@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import { useState } from 'react';
 import { communicationsApi } from '@/lib/api/communications';
 import { useLocale } from '@/lib/locale-context';
+import { trackFormSubmit } from '@/lib/analytics';
 import {
     getContactEmail,
     getContactHours,
@@ -67,6 +68,7 @@ export default function ContactPage() {
 
         try {
             await communicationsApi.sendContactMessage(formData);
+            trackFormSubmit('contact');
             setStatus(locale === 'en' ? 'Message sent. We will reply shortly.' : 'Message envoyé. Nous vous répondrons rapidement.');
             setFormData({ name: '', email: '', message: '' });
         } catch (error: unknown) {

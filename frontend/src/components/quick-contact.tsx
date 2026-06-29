@@ -2,6 +2,7 @@
 
 import { useLocale } from '@/lib/locale-context';
 import { getContactPhoneRaw, getWhatsappHref } from '@/lib/site';
+import { trackWhatsAppClick } from '@/lib/analytics';
 
 export default function QuickContact() {
     const { locale } = useLocale();
@@ -16,6 +17,7 @@ export default function QuickContact() {
             href={getWhatsappHref(locale)}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick('floating_button')}
             className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-4 z-[80] inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#25D366]/20 bg-[#25D366] text-sm font-bold text-white shadow-lg transition hover:scale-[1.02] hover:shadow-xl md:bottom-5 md:right-5 md:h-auto md:w-auto md:gap-3 md:px-5 md:py-3"
             aria-label={locale === 'en' ? 'Contact M.S.V-NOSY BE on WhatsApp' : 'Contacter M.S.V-NOSY BE sur WhatsApp'}
         >

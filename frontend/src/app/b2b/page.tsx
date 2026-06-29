@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import { useState } from 'react';
 import { communicationsApi } from '@/lib/api/communications';
 import { useLocale } from '@/lib/locale-context';
+import { trackFormSubmit } from '@/lib/analytics';
 import { getContactPhoneDisplay, getWhatsappHref } from '@/lib/site';
 
 const ArrowRightIcon = () => (
@@ -39,6 +40,7 @@ export default function B2BPage() {
 
         try {
             await communicationsApi.sendB2BLead(formData);
+            trackFormSubmit('b2b_quote');
             setStatus(locale === 'en' ? 'Quote request sent. Our team will contact you shortly.' : 'Demande de devis envoyée. Notre équipe vous recontactera rapidement.');
             setFormData({ company: '', email: '', need: '' });
         } catch (error: unknown) {

@@ -90,6 +90,16 @@ export function trackBeginCheckout(args: {
     });
 }
 
+export function trackFormSubmit(formName: string, params: Record<string, unknown> = {}) {
+    trackEvent('form_submit', { form_name: formName, ...params });
+    // Generic conversion-friendly alias so it is easy to flag as a key event in GA4.
+    trackEvent('generate_lead', { form_name: formName, ...params });
+}
+
+export function trackWhatsAppClick(location: string) {
+    trackEvent('whatsapp_click', { link_location: location });
+}
+
 export function trackPurchase(order: Order) {
     const items = order.items.map((item) => ({
         item_id: item.product?.sku || item.productId,
