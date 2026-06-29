@@ -1,6 +1,13 @@
+// Inject Cloudinary auto format/quality so delivered assets stay light (WebP/AVIF, smart compression).
+function withCloudinaryOptimization(url: string) {
+    if (!/res\.cloudinary\.com\/.+\/upload\//.test(url)) return url;
+    if (/\/upload\/(?:[^/]*[,_])?(?:f_auto|q_auto)/.test(url)) return url; // already optimized
+    return url.replace('/upload/', '/upload/f_auto,q_auto/');
+}
+
 export function getImageUrl(path: string | undefined | null) {
     if (!path) return '/placeholder.png';
-    if (path.startsWith('http')) return path;
+    if (path.startsWith('http')) return withCloudinaryOptimization(path);
 
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
 

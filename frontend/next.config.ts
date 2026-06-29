@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Serve modern formats (AVIF/WebP) and cache optimized variants aggressively.
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2678400, // 31 days
     remotePatterns: [
       {
         protocol: 'https',

@@ -19,6 +19,11 @@ type ProductSeoData = {
     seoTitle?: string;
     seoMetaDescription?: string;
     images?: string[];
+    sku?: string;
+    price?: number; // stored in cents
+    stock?: number;
+    averageRating?: number;
+    reviewsCount?: number;
 };
 
 async function getProductSeoData(id: string): Promise<ProductSeoData | null> {
@@ -114,6 +119,92 @@ export async function generateMetadata({ params }: ProductLayoutProps): Promise<
     };
 }
 
-export default async function ProductLayout({ children }: ProductLayoutProps) {
-    return children;
+export default async function ProductLayout({ children, params }: ProductLayoutProps) {
+    const { id } = await params;
+    const product = await getProductSeoData(id);
+    const siteUrl = getSiteUrl();
+    const requestHeaders = await headers();
+    const locale = normalizeLocale(requestHeaders.get('x-locale'));
+
+    if (!product) {
+        return children;
+    }
+
+    const productUrl = `${siteUrl}${withLocale(`/produit/${product.slug}`, locale)}`;
+    const images = (product.images || []).map((src) =>
+        src?.startsWith('http') ? src : `${siteUrl}${src}`,
+    );
+    const hasPrice = typeof product.price === 'number' && product.price > 0;
+
+    const productSchema: Record<string, unknown> = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.title,
+        description: product.seoMetaDescription || product.description || product.title,
+        image: images.length ? images : [`${siteUrl}/logo_msv.png`],
+        sku: product.sku || product.slug,
+        brand: { '@type': 'Brand', name: 'M.S.V-NOSY BE' },
+        category: locale === 'en' ? 'Madagascar vanilla' : 'Vanille de Madagascar',
+    };
+
+    if (hasPrice) {
+        productSchema.offers = {
+            '@type': 'Offer',
+            url: productUrl,
+            priceCurrency: 'EUR',
+            price: ((product.price as number) / 100).toFixed(2),
+            availability:
+                (product.stock ?? 1) > 0
+                    ? 'https://schema.org/InStock'
+                    : 'https://schema.org/OutOfStock',
+            seller: { '@type': 'Organization', name: 'M.S.V-NOSY BE' },
+        };
+    }
+
+    if (product.averageRating && product.reviewsCount) {
+        productSchema.aggregateRating = {
+            '@type': 'AggregateRating',
+            ratingValue: product.averageRating,
+            reviewCount: product.reviewsCount,
+        };
+    }
+
+    const breadcrumbSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: locale === 'en' ? 'Home' : 'Accueil',
+                item: `${siteUrl}${withLocale('/', locale)}`,
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: locale === 'en' ? 'Shop' : 'Boutique',
+                item: `${siteUrl}${withLocale('/shop', locale)}`,
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: product.title,
+                item: productUrl,
+            },
+        ],
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            {children}
+        </>
+    );
 }
