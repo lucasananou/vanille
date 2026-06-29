@@ -11,6 +11,19 @@ import { useLocale } from '@/lib/locale-context';
 import { withLocale } from '@/lib/i18n';
 import { getWhatsappHref } from '@/lib/site';
 
+// Chiffres clés — à renseigner dès réception des informations client (mail en attente).
+// Les repères qualitatifs sont toujours affichés ; une statistique chiffrée n'apparaît
+// QUE si sa valeur est renseignée ici (laisser `null` masque simplement la carte).
+const KEY_FIGURES: {
+  foundingYear: number | null;
+  plantations: number | null;
+  exporterLicense: string | null;
+} = {
+  foundingYear: null,
+  plantations: null,
+  exporterLicense: null,
+};
+
 const SparklesIcon = () => (
   <svg className="w-4 h-4 text-gold-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
@@ -323,6 +336,151 @@ export default function HomePage() {
                   <p className="mt-2 text-sm text-cacao-600">{item.desc}</p>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* POURQUOI CHOISIR M.S.V */}
+        <section id="pourquoi-msv" className="bg-jungle-950 text-vanilla-50 border-y border-vanilla-100/5">
+          <div className="mx-auto max-w-7xl px-4 py-16">
+            <div className="max-w-3xl">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-vanilla-100/80">
+                <ShieldStarIcon />
+                {locale === 'en' ? 'Why choose M.S.V?' : 'Pourquoi choisir M.S.V ?'}
+              </p>
+              <h2 className="mt-3 font-display text-3xl sm:text-4xl text-white">
+                {locale === 'en'
+                  ? 'A real Madagascar producer, from the plantation to your kitchen.'
+                  : 'Un véritable producteur malgache, de la plantation à votre cuisine.'}
+              </h2>
+              <p className="mt-4 text-vanilla-100/75">
+                {locale === 'en'
+                  ? 'M.S.V-Nosy Be is not a reseller: we grow, cure and export our own vanilla. Here is what that means for you.'
+                  : "M.S.V-Nosy Be n'est pas un revendeur : nous produisons, préparons et exportons notre propre vanille. Voici ce que cela change pour vous."}
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                {
+                  title: locale === 'en' ? 'Grower, curer & exporter' : 'Producteur, préparateur & exportateur',
+                  desc: locale === 'en' ? 'We control the full chain ourselves, with no intermediary.' : "Nous maîtrisons toute la chaîne nous-mêmes, sans intermédiaire.",
+                },
+                {
+                  title: locale === 'en' ? 'Plantation-to-export traceability' : 'Traçabilité plantation → export',
+                  desc: locale === 'en' ? 'Every pod can be traced from the field to the shipment.' : "Chaque gousse est traçable du champ jusqu'à l'expédition.",
+                },
+                {
+                  title: locale === 'en' ? 'Premium Nosy-Be vanilla' : 'Vanille premium de Nosy-Be',
+                  desc: locale === 'en' ? 'The unique terroir of Nosy-Be, for a warm, intense aroma.' : "Le terroir unique de Nosy-Be, pour un arôme chaud et intense.",
+                },
+                {
+                  title: locale === 'en' ? 'Food-grade vacuum packaging' : 'Conditionnement sous vide alimentaire',
+                  desc: locale === 'en' ? 'Stability and freshness preserved all the way to you.' : "Stabilité et fraîcheur préservées jusque chez vous.",
+                },
+                {
+                  title: locale === 'en' ? 'Rigorous quality control' : 'Contrôle qualité rigoureux',
+                  desc: locale === 'en' ? 'Hand-sorting and selection, lot by lot.' : 'Tri et sélection à la main, lot par lot.',
+                },
+                {
+                  title: locale === 'en' ? 'International shipping' : 'Livraison internationale',
+                  desc: locale === 'en' ? 'France, Europe and the USA, carefully packed.' : 'France, Europe et USA, emballage soigné.',
+                },
+                {
+                  title: locale === 'en' ? 'Fast B2B response' : 'Réponse rapide aux demandes B2B',
+                  desc: locale === 'en' ? 'A dedicated, responsive contact for professionals.' : 'Un contact dédié et réactif pour les professionnels.',
+                },
+              ].map((item) => (
+                <article key={item.title} className="rounded-2xl border border-vanilla-100/10 bg-vanilla-50/5 p-5 transition hover:bg-vanilla-50/10">
+                  <p className="flex items-start gap-2 font-semibold text-white">
+                    <CheckCircleIcon />
+                    <span>{item.title}</span>
+                  </p>
+                  <p className="mt-2 pl-6 text-sm text-vanilla-100/70">{item.desc}</p>
+                </article>
+              ))}
+            </div>
+
+            {/* CHIFFRES CLÉS / REPÈRES */}
+            <div className="mt-12">
+              <h3 className="font-display text-2xl text-white">
+                {locale === 'en' ? 'Key facts' : 'Chiffres clés'}
+              </h3>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  {
+                    value: 'Nosy-Be',
+                    label: locale === 'en' ? 'Madagascar origin' : 'Origine Madagascar',
+                  },
+                  {
+                    value: 'Plantation → Export',
+                    label: locale === 'en' ? 'Full traceability' : 'Traçabilité totale',
+                  },
+                  {
+                    value: 'France · Europe · USA',
+                    label: locale === 'en' ? 'Markets served' : 'Marchés desservis',
+                  },
+                  {
+                    value: locale === 'en' ? 'Grower-Exporter' : 'Producteur-Exportateur',
+                    label: locale === 'en' ? 'Our status' : 'Notre statut',
+                  },
+                  ...(KEY_FIGURES.foundingYear
+                    ? [{ value: String(KEY_FIGURES.foundingYear), label: locale === 'en' ? 'Founded' : 'Année de création' }]
+                    : []),
+                  ...(KEY_FIGURES.plantations
+                    ? [{ value: `${KEY_FIGURES.plantations}+`, label: locale === 'en' ? 'Plantations' : 'Plantations' }]
+                    : []),
+                  ...(KEY_FIGURES.exporterLicense
+                    ? [{ value: KEY_FIGURES.exporterLicense, label: locale === 'en' ? 'Exporter licence' : "N° d'agrément exportateur" }]
+                    : []),
+                ].map((figure) => (
+                  <div key={figure.label} className="rounded-2xl border border-gold-500/20 bg-gold-500/5 p-5">
+                    <p className="font-display text-xl text-gold-400">{figure.value}</p>
+                    <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-vanilla-100/60">{figure.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* RÉSERVER LA RÉCOLTE 2026 */}
+        <section id="recolte-2026" className="relative overflow-hidden bg-gradient-to-br from-gold-600 via-gold-500 to-gold-600 text-jungle-950">
+          <div className="absolute inset-0 grain opacity-20" aria-hidden="true" />
+          <div className="relative mx-auto max-w-7xl px-4 py-14">
+            <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+              <div className="max-w-2xl">
+                <p className="text-sm font-bold uppercase tracking-[0.22em] text-jungle-900/70">
+                  {locale === 'en' ? 'New 2026 harvest' : 'Nouvelle récolte 2026'}
+                </p>
+                <h2 className="mt-3 font-display text-3xl sm:text-4xl">
+                  {locale === 'en' ? 'Reserve the 2026 harvest now.' : 'Réservez dès maintenant la récolte 2026.'}
+                </h2>
+                <p className="mt-4 text-jungle-900/80">
+                  {locale === 'en'
+                    ? 'Secure your volumes of premium Nosy-Be vanilla from the new 2026 harvest. Priority is given to early reservations — talk to us about your needs.'
+                    : "Sécurisez vos volumes de vanille premium de Nosy-Be issus de la nouvelle récolte 2026. Les réservations anticipées sont prioritaires — parlons de vos besoins."}
+                </p>
+              </div>
+              <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto lg:flex-col">
+                <Link
+                  href={withLocale('/b2b', locale)}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-jungle-900 px-7 py-4 text-sm font-bold text-vanilla-50 transition hover:bg-jungle-800 focus-ring"
+                >
+                  {locale === 'en' ? 'Reserve the 2026 harvest' : 'Réserver la récolte 2026'}
+                  <ArrowRightIcon />
+                </Link>
+                {whatsappHref ? (
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-jungle-900/20 bg-white/30 px-7 py-4 text-sm font-bold text-jungle-900 transition hover:bg-white/50 focus-ring"
+                  >
+                    {locale === 'en' ? 'Ask on WhatsApp' : 'Demander sur WhatsApp'}
+                  </a>
+                ) : null}
+              </div>
             </div>
           </div>
         </section>

@@ -37,6 +37,7 @@ export default function Footer() {
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/actualites', locale)}>{copy.nav.news}</Link></li>
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/blog', locale)}>{copy.nav.blog}</Link></li>
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/about', locale)}>{copy.nav.about}</Link></li>
+                            <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/engagements', locale)}>{copy.nav.commitments}</Link></li>
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/contact', locale)}>{copy.nav.contact}</Link></li>
                             <li><Link className="transition-colors hover:text-vanilla-50" href={withLocale('/b2b', locale)}>{locale === 'en' ? 'B2B / Quote' : 'B2B / Devis'}</Link></li>
                         </ul>

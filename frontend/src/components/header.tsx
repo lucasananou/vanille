@@ -51,6 +51,7 @@ export default function Header() {
                     <Link href={withLocale('/actualites', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.news}</Link>
                     <Link href={withLocale('/blog', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.blog}</Link>
                     <Link href={withLocale('/about', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.about}</Link>
+                    <Link href={withLocale('/engagements', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.commitments}</Link>
                     <Link href={withLocale('/b2b', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.professionals}</Link>
                     <Link href={withLocale('/contact', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.contact}</Link>
                 </nav>
