@@ -11,17 +11,11 @@ import { useLocale } from '@/lib/locale-context';
 import { withLocale } from '@/lib/i18n';
 import { getWhatsappHref } from '@/lib/site';
 
-// Chiffres clés — à renseigner dès réception des informations client (mail en attente).
-// Les repères qualitatifs sont toujours affichés ; une statistique chiffrée n'apparaît
-// QUE si sa valeur est renseignée ici (laisser `null` masque simplement la carte).
-const KEY_FIGURES: {
-  foundingYear: number | null;
-  plantations: number | null;
-  exporterLicense: string | null;
-} = {
-  foundingYear: null,
-  plantations: null,
-  exporterLicense: null,
+// Chiffres clés M.S.V (source : infos client, mail du 29/06/2026).
+const KEY_FIGURES = {
+  foundingYear: 2023,
+  vanillaPlants: 7000, // ~7 000 pieds de vanilliers (Marodoka, Ambanoro Marodoka, Befitina)
+  exporterSince: 2025, // agrément exportateur obtenu le 24/12/2025
 };
 
 const SparklesIcon = () => (
@@ -409,30 +403,29 @@ export default function HomePage() {
               <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {[
                   {
-                    value: 'Nosy-Be',
-                    label: locale === 'en' ? 'Madagascar origin' : 'Origine Madagascar',
+                    value: String(KEY_FIGURES.foundingYear),
+                    label: locale === 'en' ? 'Founded' : 'Année de création',
+                  },
+                  {
+                    value: `~${KEY_FIGURES.vanillaPlants.toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR')}`,
+                    label: locale === 'en' ? 'Vanilla plants in Nosy-Be' : 'Pieds de vanilliers à Nosy-Be',
+                  },
+                  {
+                    value: locale === 'en' ? `Approved exporter ${KEY_FIGURES.exporterSince}` : `Agréé exportateur ${KEY_FIGURES.exporterSince}`,
+                    label: locale === 'en' ? 'Export licence' : 'Agrément exportateur',
                   },
                   {
                     value: 'Plantation → Export',
                     label: locale === 'en' ? 'Full traceability' : 'Traçabilité totale',
                   },
                   {
-                    value: 'France · Europe · USA',
+                    value: locale === 'en' ? 'Europe · USA · Asia · Gulf' : 'Europe · USA · Asie · Golfe',
                     label: locale === 'en' ? 'Markets served' : 'Marchés desservis',
                   },
                   {
                     value: locale === 'en' ? 'Grower-Exporter' : 'Producteur-Exportateur',
                     label: locale === 'en' ? 'Our status' : 'Notre statut',
                   },
-                  ...(KEY_FIGURES.foundingYear
-                    ? [{ value: String(KEY_FIGURES.foundingYear), label: locale === 'en' ? 'Founded' : 'Année de création' }]
-                    : []),
-                  ...(KEY_FIGURES.plantations
-                    ? [{ value: `${KEY_FIGURES.plantations}+`, label: locale === 'en' ? 'Plantations' : 'Plantations' }]
-                    : []),
-                  ...(KEY_FIGURES.exporterLicense
-                    ? [{ value: KEY_FIGURES.exporterLicense, label: locale === 'en' ? 'Exporter licence' : "N° d'agrément exportateur" }]
-                    : []),
                 ].map((figure) => (
                   <div key={figure.label} className="rounded-2xl border border-gold-500/20 bg-gold-500/5 p-5">
                     <p className="font-display text-xl text-gold-400">{figure.value}</p>
@@ -593,6 +586,9 @@ export default function HomePage() {
                 <div className="mt-8 flex flex-col sm:flex-row gap-3">
                   <Link href={withLocale('/about', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-cacao-900 bg-white border border-vanilla-200 hover:bg-vanilla-100 transition rm-anim focus-ring">
                     {locale === 'en' ? 'Read the story' : 'Lire l’histoire'}
+                  </Link>
+                  <Link href={withLocale('/notre-plantation', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-cacao-900 bg-white border border-vanilla-200 hover:bg-vanilla-100 transition rm-anim focus-ring">
+                    {locale === 'en' ? 'Our plantation' : 'Notre plantation'}
                   </Link>
                   <Link href={withLocale('/shop', locale)} className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-jungle-900 bg-gradient-to-b from-gold-500 to-gold-600 hover:opacity-90 transition rm-anim focus-ring">
                     {locale === 'en' ? 'Shop now' : 'Acheter maintenant'}

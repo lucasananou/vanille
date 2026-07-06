@@ -3,6 +3,9 @@ export const DEFAULT_API_URL = 'https://vanille-production.up.railway.app';
 export const DEFAULT_CONTACT_EMAIL = 'contact@vanille-nosybe.fr';
 export const DEFAULT_CONTACT_PHONE_DISPLAY = '+33 6 81 82 64 78';
 export const DEFAULT_CONTACT_PHONE_RAW = '33681826478';
+// WhatsApp principal M.S.V (Madagascar). Le numéro français reste dispo pour les appels.
+export const DEFAULT_WHATSAPP_NUMBER_RAW = '261329859550';
+export const DEFAULT_WHATSAPP_DISPLAY = '+261 32 98 595 50';
 export const DEFAULT_CONTACT_HOURS_FR = 'Lundi au samedi, 8h à 18h (heure de Madagascar)';
 export const DEFAULT_CONTACT_HOURS_EN = 'Monday to Saturday, 8 AM to 6 PM (Madagascar time)';
 export const DEFAULT_WHATSAPP_MESSAGE_FR = 'Bonjour, j’ai une question avant de commander sur M.S.V-NOSY BE.';
@@ -40,8 +43,17 @@ export function getContactPhoneHref() {
     return `tel:+${getContactPhoneRaw()}`;
 }
 
+export function getWhatsappNumberRaw() {
+    // WhatsApp = Madagascar par défaut ; surchargeable via NEXT_PUBLIC_WHATSAPP_NUMBER.
+    return normalizePhone(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || DEFAULT_WHATSAPP_NUMBER_RAW);
+}
+
+export function getWhatsappDisplay() {
+    return (process.env.NEXT_PUBLIC_WHATSAPP_DISPLAY || DEFAULT_WHATSAPP_DISPLAY).trim();
+}
+
 export function getWhatsappHref(locale: 'fr' | 'en' = 'fr') {
-    const phone = getContactPhoneRaw();
+    const phone = getWhatsappNumberRaw();
     const message = locale === 'en'
         ? (process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE_EN || DEFAULT_WHATSAPP_MESSAGE_EN)
         : (process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE_FR || DEFAULT_WHATSAPP_MESSAGE_FR);
