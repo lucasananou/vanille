@@ -201,6 +201,35 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </section>
+
+                {/* LOCALISATION */}
+                <section className="bg-vanilla-50 text-cacao-900">
+                    <div className="mx-auto max-w-6xl px-4 py-14">
+                        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+                            <div>
+                                <p className="inline-flex items-center gap-2 text-sm font-semibold text-cacao-800/80">
+                                    {locale === 'en' ? 'Find us' : 'Nous situer'}
+                                </p>
+                                <h2 className="mt-3 font-display text-3xl">{locale === 'en' ? 'Based in Nosy-Be, Madagascar' : 'Basés à Nosy-Be, Madagascar'}</h2>
+                                <p className="mt-4 text-cacao-600">
+                                    {locale === 'en'
+                                        ? 'M.S.V – Nosy Be Madagascar. Head office in Hell-Ville, Nosy-Be. Approved vanilla exporter, shipping to Europe, the USA, Asia and the Gulf.'
+                                        : 'M.S.V – Nosy Be Madagascar. Siège social à Hell-Ville, Nosy-Be. Exportateur de vanille agréé, expédition vers l’Europe, les USA, l’Asie et le Golfe.'}
+                                </p>
+                                <p className="mt-4 text-sm font-semibold text-jungle-900">Hell-Ville, Nosy-Be — Madagascar</p>
+                            </div>
+                            <div className="overflow-hidden rounded-3xl border border-vanilla-200">
+                                <iframe
+                                    title={locale === 'en' ? 'M.S.V location in Nosy-Be' : 'Localisation M.S.V à Nosy-Be'}
+                                    src="https://www.google.com/maps?q=Hell-Ville,%20Nosy-Be,%20Madagascar&output=embed"
+                                    className="h-[340px] w-full"
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </main>
 
             <Footer />
