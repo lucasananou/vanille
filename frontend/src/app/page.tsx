@@ -473,6 +473,12 @@ export default function HomePage() {
                     {locale === 'en' ? 'Ask on WhatsApp' : 'Demander sur WhatsApp'}
                   </a>
                 ) : null}
+                <Link
+                  href={withLocale('/telechargements', locale)}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-jungle-900/20 bg-white/30 px-7 py-4 text-sm font-bold text-jungle-900 transition hover:bg-white/50 focus-ring"
+                >
+                  {locale === 'en' ? 'Download the catalogue' : 'Télécharger le catalogue'}
+                </Link>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLocale } from '@/lib/locale-context';
 import { withLocale } from '@/lib/i18n';
+import NewsletterSignup from '@/components/newsletter-signup';
 
 export default function Footer() {
     const { copy, locale } = useLocale();
@@ -10,6 +11,9 @@ export default function Footer() {
     return (
         <footer className="border-t border-vanilla-100/10 bg-jungle-900 text-vanilla-50">
             <div className="mx-auto max-w-7xl px-4 py-10">
+                <div className="mb-10">
+                    <NewsletterSignup />
+                </div>
                 <div className="grid gap-8 md:grid-cols-4">
                     <div className="flex flex-col gap-4">
                         <Link href={withLocale('/', locale)} className="group flex items-center gap-3">

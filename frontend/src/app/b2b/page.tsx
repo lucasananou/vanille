@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import { communicationsApi } from '@/lib/api/communications';
 import { useLocale } from '@/lib/locale-context';
 import { trackFormSubmit } from '@/lib/analytics';
 import { getContactPhoneDisplay, getWhatsappHref } from '@/lib/site';
+import { withLocale } from '@/lib/i18n';
 
 const ArrowRightIcon = () => (
     <svg className="w-5 h-5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -152,6 +154,7 @@ export default function B2BPage() {
                                         <div className="mt-5 space-y-3 text-sm leading-relaxed text-jungle-800">
                                             <p>{locale === 'en' ? 'Company: MORIDY SOANJARA VANILLE NOSY-BE' : 'Société: MORIDY SOANJARA VANILLE NOSY-BE'}</p>
                                             <p>{locale === 'en' ? 'Origin: Nosy-Be, Madagascar' : 'Origine: Nosy-Be, Madagascar'}</p>
+                                            <p>{locale === 'en' ? 'Approved vanilla exporter (2025)' : 'Exportateur de vanille agréé (2025)'}</p>
                                             <p>{locale === 'en' ? `Direct phone: ${phoneDisplay}` : `Téléphone direct: ${phoneDisplay}`}</p>
                                         </div>
                                     </div>
@@ -179,6 +182,13 @@ export default function B2BPage() {
                                             {locale === 'en' ? 'Discuss on WhatsApp first' : 'Échanger d’abord sur WhatsApp'}
                                         </a>
                                     ) : null}
+
+                                    <Link
+                                        href={withLocale('/telechargements', locale)}
+                                        className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-vanilla-200 bg-vanilla-50 px-5 py-3 text-sm font-bold text-jungle-900 transition hover:bg-vanilla-100"
+                                    >
+                                        {locale === 'en' ? 'Download the catalogue' : 'Télécharger le catalogue'}
+                                    </Link>
 
                                     <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
                                         <div className="space-y-2">

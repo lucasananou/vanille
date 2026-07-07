@@ -16,6 +16,8 @@ import { normalizeLocale, stripLocalePrefix, withLocale } from '@/lib/i18n';
 
 const googleAnalyticsId = normalizeGaMeasurementId(process.env.NEXT_PUBLIC_GA_ID || 'G-R6KF4N6CCF');
 const googleTagManagerId = process.env.NEXT_PUBLIC_GTM_ID?.trim() || '';
+// Live chat (Crisp). Set NEXT_PUBLIC_CRISP_WEBSITE_ID to enable — nothing loads otherwise.
+const crispWebsiteId = process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID?.trim() || '';
 const siteUrl = getSiteUrl();
 
 const inter = Inter({
@@ -145,6 +147,11 @@ export default async function RootLayout({
           </Script>
         ) : null}
         {googleAnalyticsId ? <GoogleAnalytics gaId={googleAnalyticsId} /> : null}
+        {crispWebsiteId ? (
+          <Script id="crisp-chat" strategy="afterInteractive">
+            {`window.$crisp=[];window.CRISP_WEBSITE_ID="${crispWebsiteId}";(function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();`}
+          </Script>
+        ) : null}
         <Script id="global-structured-data" type="application/ld+json" strategy="afterInteractive">
           {JSON.stringify([
             {
