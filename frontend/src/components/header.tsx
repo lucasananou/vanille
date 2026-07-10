@@ -31,8 +31,8 @@ export default function Header() {
             style={{ backgroundColor: '#0a2c1d' }}
         >
             <div className="mx-auto max-w-7xl px-4 flex items-center justify-between gap-3">
-                <Link href={withLocale('/', locale)} className="flex items-center gap-3 rounded-2xl px-1 py-1 focus-ring group">
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden transition-all duration-300">
+                <Link href={withLocale('/', locale)} className="flex shrink-0 items-center gap-2.5 rounded-2xl px-1 py-1 focus-ring group">
+                    <div className="w-12 h-12 rounded-2xl overflow-hidden transition-all duration-300">
                         <img
                             src="/logo_msv.png"
                             alt="MSV Nosy-Be logo"
@@ -40,12 +40,12 @@ export default function Header() {
                         />
                     </div>
                     <div className="leading-tight">
-                        <p className="font-display text-lg">M.S.V-NOSY BE</p>
-                        <p className="text-xs text-vanilla-100/70">{copy.footer.baseline}</p>
+                        <p className="font-display text-base whitespace-nowrap">M.S.V-NOSY BE</p>
+                        <p className="text-[11px] text-vanilla-100/70 whitespace-nowrap">{copy.footer.baseline}</p>
                     </div>
                 </Link>
 
-                <nav className="hidden md:flex items-center gap-5 lg:gap-8">
+                <nav className="hidden md:flex items-center gap-3.5 lg:gap-5 whitespace-nowrap">
                     <Link href={withLocale('/', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.home}</Link>
                     <Link href={withLocale('/shop', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.shop}</Link>
                     <Link href={withLocale('/actualites', locale)} className="text-sm font-semibold hover:text-gold-500 transition-colors">{copy.nav.news}</Link>

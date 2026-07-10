@@ -43,10 +43,6 @@ function withDisplayImages(product: Product, locale: 'fr' | 'en'): Product {
     };
 }
 
-function getVariantOptions(product: Product) {
-    return product.options || [];
-}
-
 function findMatchingVariant(product: Product, selectedOptions: Record<string, string>) {
     if (!product.variants?.length) return null;
     return product.variants.find((variant) => {
@@ -65,47 +61,6 @@ function getInitialSelectedOptions(product: Product) {
         if (option.values.length > 0) acc[option.name] = option.values[0];
         return acc;
     }, {});
-}
-
-function resolveSelectedOptions(product: Product, previous: Record<string, string>, optionName: string, value: string) {
-    if (!product.variants?.length) {
-        return { ...previous, [optionName]: value };
-    }
-
-    const attempted = { ...previous, [optionName]: value };
-    const exact = findMatchingVariant(product, attempted);
-    if (exact) {
-        return exact.options as Record<string, string>;
-    }
-
-    const partialMatch = product.variants.find((variant) => {
-        const variantOptions = (variant.options || {}) as Record<string, string>;
-        if (variantOptions[optionName] !== value) return false;
-
-        return Object.entries(previous).every(([key, currentValue]) => {
-            if (key === optionName) return true;
-            return variantOptions[key] === currentValue;
-        });
-    });
-
-    if (partialMatch) {
-        return partialMatch.options as Record<string, string>;
-    }
-
-    const fallback = product.variants.find((variant) => {
-        const variantOptions = (variant.options || {}) as Record<string, string>;
-        return variantOptions[optionName] === value;
-    });
-
-    return (fallback?.options as Record<string, string> | undefined) || attempted;
-}
-
-function getOptionValuePrice(product: Product, selectedOptions: Record<string, string>, optionName: string, value: string) {
-    if (!product.variants?.length) return null;
-
-    const resolvedOptions = resolveSelectedOptions(product, selectedOptions, optionName, value);
-    const variant = findMatchingVariant(product, resolvedOptions);
-    return variant?.price ?? null;
 }
 
 function extractGrade(product: Product) {
@@ -136,12 +91,14 @@ function getDescriptionParagraphs(product: Product) {
     return (product.description || '').split(/\n+/).map((text) => text.trim()).filter(Boolean);
 }
 
-function getSeoHeading(product: Product, size: string) {
+function getSeoHeading(product: Product, size: string, locale: 'fr' | 'en') {
     if (/poivre/i.test(product.title)) {
-        return 'Premium wild Madagascar pepper';
+        return locale === 'en' ? 'Premium wild Madagascar pepper' : 'Poivre sauvage de Madagascar premium';
     }
 
-    return `Premium Madagascar Bourbon vanilla ${size}`;
+    return locale === 'en'
+        ? `Premium Madagascar Bourbon vanilla ${size}`
+        : `Vanille Bourbon de Madagascar premium ${size}`;
 }
 
 function getSeoDescription(product: Product, size: string, grade: string, locale: 'fr' | 'en') {
@@ -154,15 +111,6 @@ function getSeoDescription(product: Product, size: string, grade: string, locale
     return locale === 'en'
         ? `Premium ${grade} vanilla pods selected in Nosy-Be, Madagascar, ${size} format, created for pastry, homemade extract and refined gifting.`
         : `Gousses de vanille premium ${grade}, sélectionnées à Nosy-Be à Madagascar, format ${size}, pour pâtisserie, extrait maison et cadeaux gourmands.`;
-}
-
-function getPackHighlights(product: Product) {
-    if (!product.variants?.length) return [];
-
-    return product.variants
-        .map((variant) => variant.title || Object.values(variant.options || {}).join(' • '))
-        .filter(Boolean)
-        .slice(0, 3);
 }
 
 function getSelectedOfferLabel(product: Product, currentVariant: ProductVariant | null, locale: 'fr' | 'en') {
@@ -366,13 +314,13 @@ export default function ProductDetailPage() {
     const currentPrice = selectedVariant?.price ?? product.price;
     const isOnRequest = currentPrice <= 0;
     const stock = selectedVariant?.stock ?? product.stock;
+    const galleryImages = product.images.filter(Boolean);
     const productGrade = extractGrade(product);
     const productSize = extractSize(product);
     const packagingLabel = getUiPackaging(product, selectedVariant);
     const descriptionParagraphs = getDescriptionParagraphs(product);
-    const seoHeading = getSeoHeading(product, productSize);
+    const seoHeading = getSeoHeading(product, productSize, locale);
     const seoDescription = getSeoDescription(product, productSize, productGrade, locale);
-    const packHighlights = getPackHighlights(product);
     const selectedOfferLabel = getSelectedOfferLabel(product, selectedVariant, locale);
     const isWildPepper = isWildPepperProduct(product);
     const pepperTransportLines = locale === 'en'
@@ -422,7 +370,7 @@ export default function ProductDetailPage() {
                                 <div className="rounded-[2.5rem] border border-vanilla-200 bg-white overflow-hidden">
                                     <div className="relative flex aspect-[16/11] items-center justify-center bg-vanilla-100/30 sm:aspect-[4/3]">
                                         <Image
-                                            src={getImageUrl(product.images[selectedImageIndex] || product.images[0])}
+                                            src={getImageUrl(galleryImages[selectedImageIndex] || galleryImages[0])}
                                             alt={locale === 'en' ? `${seoHeading} - image ${selectedImageIndex + 1}` : `${seoHeading} - visuel ${selectedImageIndex + 1}`}
                                             className="absolute inset-0 h-full w-full object-contain p-4 sm:p-0"
                                             fill
@@ -442,25 +390,27 @@ export default function ProductDetailPage() {
                                         </div>
                                     </div>
 
-                                    <div className="p-4 border-t border-vanilla-100">
-                                        <div className="grid grid-cols-4 gap-4">
-                                            {product.images.map((img, i) => (
-                                                <button
-                                                    key={i}
-                                                    onClick={() => setSelectedImageIndex(i)}
-                                                    className="rounded-2xl bg-vanilla-50 border border-vanilla-200 overflow-hidden focus-ring aspect-square flex items-center justify-center hover:bg-white hover:border-gold-500/30 transition-all"
-                                                >
-                                                    <Image
-                                                        src={getImageUrl(img)}
-                                                        alt={locale === 'en' ? `${seoHeading} - detail ${i + 1}` : `${seoHeading} - détail ${i + 1}`}
-                                                        className="h-full w-full object-cover"
-                                                        fill
-                                                        sizes="(max-width: 1024px) 25vw, 12vw"
-                                                    />
-                                                </button>
-                                            ))}
+                                    {galleryImages.length > 1 && (
+                                        <div className="p-4 border-t border-vanilla-100">
+                                            <div className="grid grid-cols-4 gap-4">
+                                                {galleryImages.map((img, i) => (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => setSelectedImageIndex(i)}
+                                                        className={`relative rounded-2xl bg-vanilla-50 border overflow-hidden focus-ring aspect-square flex items-center justify-center transition-all ${selectedImageIndex === i ? 'border-gold-500' : 'border-vanilla-200 hover:bg-white hover:border-gold-500/30'}`}
+                                                    >
+                                                        <Image
+                                                            src={getImageUrl(img)}
+                                                            alt={locale === 'en' ? `${seoHeading} - detail ${i + 1}` : `${seoHeading} - détail ${i + 1}`}
+                                                            className="h-full w-full object-cover"
+                                                            fill
+                                                            sizes="(max-width: 1024px) 25vw, 12vw"
+                                                        />
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -526,54 +476,32 @@ export default function ProductDetailPage() {
                                         </ul>
                                     </div>
 
-                                    {packHighlights.length > 0 ? (
-                                        <div className="mt-6 rounded-[2rem] border border-gold-200 bg-gold-50 p-6">
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-gold-700">{locale === 'en' ? 'Available packs and formats' : 'Packs et formats disponibles'}</p>
-                                            <div className="mt-4 flex flex-wrap gap-2">
-                                                {packHighlights.map((pack) => (
-                                                    <span key={pack} className="rounded-full border border-gold-200 bg-white px-4 py-2 text-xs font-semibold text-jungle-800">
-                                                        {pack}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ) : null}
-
-                                    {getVariantOptions(product).length > 0 && (
+                                    {product.variants && product.variants.length > 1 && (
                                         <div className="mt-8">
-                                            <p className="text-sm font-bold uppercase tracking-widest text-jungle-400 ml-1">{locale === 'en' ? 'Select your format' : 'Options de sélection'}</p>
-                                            <div className="mt-3 space-y-4">
-                                                {getVariantOptions(product).map((option) => (
-                                                    <div key={option.id}>
-                                                        <p className="text-xs font-semibold uppercase tracking-widest text-jungle-500 mb-2">{option.name}</p>
-                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                            {option.values.map((value) => {
-                                                                const selected = selectedOptions[option.name] === value;
-                                                                const optionPrice = getOptionValuePrice(product, selectedOptions, option.name, value);
-                                                                return (
-                                                                    <button
-                                                                        key={value}
-                                                                        onClick={() => setSelectedOptions((prev) => resolveSelectedOptions(product, prev, option.name, value))}
-                                                                        className={`inline-flex flex-col items-start justify-center gap-1 rounded-2xl px-5 py-4 text-sm font-bold border transition-all ${selected
-                                                                            ? 'bg-jungle-900 text-vanilla-50 border-jungle-900'
-                                                                            : 'bg-vanilla-50 border-vanilla-200 text-jungle-700 hover:bg-white hover:border-gold-500/30'
-                                                                            }`}
-                                                                    >
-                                                                        <div className="flex items-center justify-between w-full">
-                                                                            <span className="truncate">{value}</span>
-                                                                            {selected && <svg className="w-4 h-4 text-gold-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>}
-                                                                        </div>
-                                                                        {optionPrice !== null && (
-                                                                            <div className={`text-[11px] font-medium ${selected ? 'text-vanilla-100/60' : 'text-jungle-700/50'}`}>
-                                                                                {(optionPrice / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
-                                                                            </div>
-                                                                        )}
-                                                                    </button>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                            <p className="text-sm font-bold uppercase tracking-widest text-jungle-400 ml-1">{locale === 'en' ? 'Choose your format' : 'Choisissez votre format'}</p>
+                                            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                {product.variants.map((variant) => {
+                                                    const selected = selectedVariant?.id === variant.id;
+                                                    const variantLabel = variant.title || Object.values(variant.options || {}).filter(Boolean).join(' · ') || (locale === 'en' ? 'Format' : 'Format');
+                                                    const variantPrice = variant.price ?? product.price;
+                                                    return (
+                                                        <button
+                                                            key={variant.id}
+                                                            onClick={() => setSelectedOptions((variant.options as Record<string, string>) || {})}
+                                                            className={`flex flex-col items-start gap-1 rounded-2xl px-5 py-3.5 text-sm font-bold border text-left transition-all ${selected
+                                                                ? 'bg-jungle-900 text-vanilla-50 border-jungle-900'
+                                                                : 'bg-vanilla-50 border-vanilla-200 text-jungle-700 hover:bg-white hover:border-gold-500/30'
+                                                                }`}
+                                                        >
+                                                            <span className="leading-snug">{variantLabel}</span>
+                                                            <span className={selected ? 'text-gold-400' : 'text-gold-600'}>
+                                                                {variantPrice > 0
+                                                                    ? (variantPrice / 100).toLocaleString(locale === 'en' ? 'en-US' : 'fr-FR', { style: 'currency', currency: 'EUR' })
+                                                                    : (locale === 'en' ? 'On request' : 'Sur demande')}
+                                                            </span>
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     )}
@@ -850,7 +778,7 @@ export default function ProductDetailPage() {
                                                 <p className="font-bold text-sm uppercase tracking-widest">{locale === 'en' ? 'Natural curing' : 'Affinage naturel'}</p>
                                             </div>
                                             <p className="text-sm text-jungle-750 leading-relaxed">
-                                                {locale === 'en' ? 'We do not rush the process. Aroma develops naturally over several months in our wooden curing chests.' : 'Nous ne brûlons aucune étape. L&apos;arôme se développe naturellement au fil des mois dans nos malles de bois.'}
+                                                {locale === 'en' ? 'We do not rush the process. Aroma develops naturally over several months in our wooden curing chests.' : 'Nous ne brûlons aucune étape. L’arôme se développe naturellement au fil des mois dans nos malles de bois.'}
                                             </p>
                                         </div>
                                         <div className="group">
