@@ -2,88 +2,76 @@
 
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { useLocale } from '@/lib/locale-context';
+import { CGV_FR, CGV_EN, type CgvContent } from '@/lib/data/cgv';
+
+function Blocks({ items }: { items: CgvContent['articles'][number]['c'] }) {
+    return (
+        <>
+            {items.map((item, i) =>
+                Array.isArray(item) ? (
+                    <ul key={i} className="mt-2 ml-1 space-y-1.5">
+                        {item.map((li, j) => (
+                            <li key={j} className="flex gap-2">
+                                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-500" />
+                                <span>{li}</span>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p key={i} className="mt-3 first:mt-0">{item}</p>
+                ),
+            )}
+        </>
+    );
+}
 
 export default function CGVPage() {
+    const { locale } = useLocale();
+    const cgv: CgvContent = locale === 'en' ? CGV_EN : CGV_FR;
+
     return (
         <div className="flex flex-col min-h-screen bg-vanilla-50 text-jungle-950 font-sans antialiased">
             <Header />
 
             <main className="flex-grow py-16 lg:py-24">
                 <div className="mx-auto max-w-4xl px-4">
-                    <h1 className="font-display text-4xl sm:text-5xl italic leading-tight mb-12 text-center text-jungle-900">
-                        Conditions Générales de Vente <br />
-                        <span className="text-jungle-700/60 text-2xl not-italic">General Terms and Conditions of Sale</span>
-                    </h1>
+                    <header className="text-center">
+                        <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-600">
+                            {locale === 'en' ? '2026 Version' : 'Version 2026'}
+                        </p>
+                        <h1 className="mt-3 font-display text-4xl sm:text-5xl italic leading-tight text-jungle-900">
+                            {cgv.title}
+                        </h1>
+                        <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-jungle-500">{cgv.subtitle}</p>
+                    </header>
 
-                    <div className="space-y-16 bg-white shadow-xl p-8 sm:p-12 rounded-[2rem] border border-vanilla-200 text-sm leading-relaxed text-jungle-800">
-                        <section className="grid sm:grid-cols-2 gap-8 border-b border-vanilla-100 pb-12">
-                            <div>
-                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 1 - Parties (FR)</h2>
-                                <p>La société MORIDY SOANJARA VANILLE NOSY-BE (M.S.V - NOSY BE), SARL de droit malgache.</p>
-                                <ul className="mt-2 space-y-1">
-                                    <li>Siège social : Lot n°109B 0163 à Befitina, Hell-Ville, Nosy-Be, Madagascar</li>
-                                    <li>Tél : +33 6 81 82 64 78</li>
-                                    <li>Immatriculée : RCS Nosy-Be 2023 B 00054</li>
-                                    <li>STAT : 46101 71 2023 0 10373</li>
-                                    <li>Représentée par : ABOU MORIDY, Directeur Général</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 1 - Parties (EN)</h2>
-                                <p>MORIDY SOANJARA VANILLA NOSY-BE (M.S.V - NOSY BE), a limited liability company under Malagasy law.</p>
-                                <ul className="mt-2 space-y-1 text-jungle-600">
-                                    <li>Registered office: Lot No. 109B 0163, Befitina, Hell-Ville, Nosy-Be, Madagascar</li>
-                                    <li>Phone: +33 6 81 82 64 78</li>
-                                    <li>Registered under No.: RCS Nosy-Be 2023 B 00054</li>
-                                    <li>STAT No.: 46101 71 2023 0 10373</li>
-                                    <li>Represented by: ABOU MORIDY, Managing Director</li>
-                                </ul>
-                            </div>
+                    <div className="mt-12 rounded-[2rem] border border-vanilla-200 bg-white p-6 shadow-xl sm:p-10 text-sm leading-relaxed text-jungle-800">
+                        {/* Parties */}
+                        <section className="border-b border-vanilla-100 pb-8">
+                            <Blocks items={cgv.intro} />
                         </section>
 
-                        <section className="grid sm:grid-cols-2 gap-8 border-b border-vanilla-100 pb-12">
-                            <div>
-                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 2 - Objet (FR)</h2>
-                                <p>Définir les conditions de commercialisation, coordination, assistance logistique et facilitation à l'exportation de vanille naturelle originaire de Nosy Be. Toute commande implique l'acceptation pleine et entière des présentes CGV.</p>
-                            </div>
-                            <div>
-                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 2 - Purpose (EN)</h2>
-                                <p className="text-jungle-600">Define the terms under which M.S.V - Nosy Be markets and facilitates the export of natural vanilla. Any order implies full and unconditional acceptance of these GTC.</p>
-                            </div>
-                        </section>
+                        {/* Articles */}
+                        <div className="mt-8 space-y-8">
+                            {cgv.articles.map((article) => (
+                                <section key={article.t} className="scroll-mt-24">
+                                    <h2 className="font-display text-lg text-gold-700">{article.t}</h2>
+                                    <div className="mt-2">
+                                        <Blocks items={article.c} />
+                                    </div>
+                                </section>
+                            ))}
+                        </div>
 
-                        <section className="bg-vanilla-50 p-6 rounded-2xl border border-gold-600/10">
-                            <div className="grid sm:grid-cols-2 gap-8">
-                                <div>
-                                    <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4 text-xs">Paiement & Prix</h2>
-                                    <p className="font-semibold text-jungle-900 mb-2">Acompte de 30% à la commande.</p>
-                                    <p className="mb-4 italic opacity-70 border-l-2 border-gold-500 pl-4">Solde de 70% avant expédition.</p>
-                                    <p className="text-lg font-display text-gold-600">267,555 EUR / kg</p>
-                                </div>
-                                <div className="text-jungle-600">
-                                    <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4 text-xs">Payment & Price</h2>
-                                    <p className="font-semibold text-jungle-900 mb-2">30% deposit upon confirmation.</p>
-                                    <p className="mb-4 italic opacity-70 border-l-2 border-gold-500 pl-4">70% balance before shipment.</p>
-                                    <p className="text-lg font-display text-gold-600">EUR267.555 / kg</p>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section className="grid sm:grid-cols-2 gap-8 border-b border-vanilla-100 pb-12">
-                            <div>
-                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 14 - Prix de vente global de référence (FR)</h2>
-                                <p>Le prix de vente global de référence est fixé à 267,555 EUR / kg, incluant l'ensemble des coûts directs et indirects liés à la production, à la transformation, à la conservation, à la logistique, à l'exportation ainsi qu'aux obligations réglementaires. Ce prix est pleinement et objectivement justifié sur le plan économique.</p>
-                            </div>
-                            <div>
-                                <h2 className="text-gold-600 font-bold uppercase tracking-wider mb-4">Article 14 - Global Reference Selling Price (EN)</h2>
-                                <p className="text-jungle-600">The global reference selling price is set at EUR267.555 / kg, including all direct and indirect costs related to production, processing, storage, logistics, export, and regulatory obligations. This price is fully and objectively justified on economic grounds.</p>
-                            </div>
-                        </section>
-
-                        <div className="text-center pt-12">
-                            <p className="text-xs uppercase tracking-widest text-jungle-400">Fait à Nosy Be - Madagascar, le 29 décembre 2025</p>
-                            <p className="mt-4 font-display text-xl text-gold-600 italic">ABOU MORIDY</p>
-                            <p className="text-xs opacity-60">Directeur Général / Managing Director</p>
+                        {/* Signature */}
+                        <div className="mt-12 border-t border-vanilla-100 pt-8 text-center">
+                            {cgv.signature.map((line, i) => (
+                                <p key={i} className={i === 0 ? 'text-xs uppercase tracking-widest text-jungle-400' : 'mt-2 text-jungle-700'}>
+                                    {line}
+                                </p>
+                            ))}
+                            <p className="mt-6 text-[11px] uppercase tracking-widest text-jungle-400">{cgv.footerNote}</p>
                         </div>
                     </div>
                 </div>
