@@ -1,4 +1,4 @@
-import { Controller, Post, Headers, Req, HttpCode, ServiceUnavailableException } from '@nestjs/common';
+import { Controller, Post, Headers, Req, HttpCode, ServiceUnavailableException, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
@@ -55,7 +55,8 @@ export class WebhooksController {
             );
         } catch (err: any) {
             console.error('Webhook signature verification failed:', err.message);
-            return { error: 'Invalid signature' };
+            // 400 pour que Stripe réessaie et signale l'échec (un 200 masquait les paiements non enregistrés).
+            throw new BadRequestException('Invalid signature');
         }
 
         // Handle the event
